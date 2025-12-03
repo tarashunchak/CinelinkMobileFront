@@ -1,4 +1,4 @@
-import { EmailVerificationRequest } from "@/api/emailVerificationApi";
+import { EmailVerificationRequest } from "@/api/auth/emailVerificationApi";
 import LeafyContinueButton from "@/components/ui/leafy-continue-button";
 import LeafyCodeInput from "@/components/ui/leafy-digit-code-input";
 import LeafyReturnArrowButton from "@/components/ui/leafy-return-arrow-btn";

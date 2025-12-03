@@ -1,4 +1,4 @@
-import { LoginRequest } from "@/api/loginPageApi";
+import { LoginRequest } from "@/api/auth/loginPageApi";
 import LeafyButton from "@/components/ui/leafy-button";
 import LeafyContinueButton from "@/components/ui/leafy-continue-button";
 import LeafyReturnArrowButton from "@/components/ui/leafy-return-arrow-btn";

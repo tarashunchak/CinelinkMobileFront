@@ -6,11 +6,11 @@ import { bottomBar } from "./styles";
 export default function BottomBar() {
   return (
     <View style={bottomBar.view} >
+      <BottomBarIconButton source="library" navigateTo="SearchScreen" />
+      <BottomBarIconButton source="search" navigateTo="SearchScreen" />
       <BottomBarIconButton source="home" navigateTo="HomePageScreen" />
-      <BottomBarIconButton source="compass" navigateTo="ExploreScreen" />
-      <BottomBarIconButton source="newContent" />
-      <BottomBarIconButton source="chats" />
-      <BottomBarIconButton source="profile" navigateTo="UserProfileScreen" isCurrentUser={false} />
+      <BottomBarIconButton source="social" navigateTo="SocialScreen" />
+      <BottomBarIconButton source="profile" navigateTo="CurrentUserProfileScreen" />
     </View>
   );
 }

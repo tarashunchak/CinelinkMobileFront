@@ -17,6 +17,7 @@
       "UIViewControllerBasedStatusBarAppearance": false,
       "UIStatusBarHidden": true,
       "UIRequiresFullScreen": true,
+      "bundleIdentifier": "com.leafy.app"
     },
     "android": {
       "package": "com.leafy.app",

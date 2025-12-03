@@ -1,4 +1,4 @@
-import { LoginRequest } from "@/api/loginPageApi";
+import { LoginRequest } from "@/api/auth/loginPageApi";
 import { backgroundStyle } from "@/styles/backgroundStyle";
 import { buttonStyle } from "@/styles/buttonStyle";
 import { inputStyle } from "@/styles/inputStyle";

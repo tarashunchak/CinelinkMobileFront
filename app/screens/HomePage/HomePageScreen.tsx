@@ -7,6 +7,7 @@ import React from "react";
 import { Image, ImageBackground, ScrollView, Text, TextInput } from "react-native";
 import { heightPercentageToDP } from "react-native-responsive-screen";
 import PremiereCarousel from "./components/PremiereCarousel";
+import HorizontalMoviesList from "./components/HorizontalFilmList";
 
 export default function HomePageScreen({ navigation }: any) {
   const [selectedGenre, setSelectedGenre] = React.useState<number>(0);
@@ -24,13 +25,16 @@ export default function HomePageScreen({ navigation }: any) {
         <Text style={[textStyle.homePageTrandingText, { marginTop: "5%" }]}>Now in cinemas</Text>
         <PremiereCarousel />
 
+        <Text style={[textStyle.homePageTrandingText, { marginTop: "5%" }]}>Trending</Text>
+        <HorizontalMoviesList />
+
         <Text style={[textStyle.homePageTrandingText, { marginTop: "5%" }]}>Genres</Text>
         <GenresList setSelectedGenre={setSelectedGenre} />
 
-        <Text style={[textStyle.homePageTrandingText, { marginTop: "5%" }]}>Trending</Text>
-        <FilmCardList selectedGenre={selectedGenre} />
       </ScrollView>
       <BottomBar />
     </ImageBackground >
   );
 }
+
+//<FilmCardList selectedGenre={selectedGenre} />

@@ -4,7 +4,7 @@ export let CURRENT_USER = {
   firstName: "",
   lastName: "",
   username: "",
-  UID: 0,
+  UID: 1,
 };
 
 export async function updateCurrentUserData() {

@@ -6,7 +6,7 @@ export const bottomBar = {
       flexDirection: "row",
       justifyContent: "space-evenly",
       alignItems: "center",
-      backgroundColor: "rgba(19, 18, 34, 0.98)",
+      backgroundColor: "rgba(13, 12, 28, 0.90)",
       height: Platform.OS === "ios" ? "10%" : "7%",
       width: "100%",
       position: "absolute",

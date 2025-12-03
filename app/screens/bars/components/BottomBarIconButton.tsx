@@ -1,13 +1,13 @@
 import { useNavigation } from "expo-router";
 import React from "react";
-import { Image, Pressable } from "react-native";
+import { Image, TouchableOpacity } from "react-native";
 
 const icons = {
-  home: require('@/assets/images/HomeBtn.png'),
-  compass: require('@/assets/images/Compass.png'),
-  profile: require('@/assets/images/Profile.png'),
-  newContent: require('@/assets/images/addNewContent.png'),
-  chats: require('@/assets/images/chats.png'),
+  home: require('@/app/screens/bars/assets/home.png'),
+  search: require('@/app/screens/bars/assets/search.png'),
+  profile: require('@/app/screens/bars/assets/profile.png'),
+  social: require('@/app/screens/bars/assets/social.png'),
+  library: require('@/app/screens/bars/assets/bookmark.png'),
 };
 
 const styles = {
@@ -17,8 +17,8 @@ const styles = {
 export default function BottomBarIconButton({ source, navigateTo, style }: { source: any, navigateTo: string, style: any }) {
   const navigator = useNavigation();
   return (
-    <Pressable onPress={() => navigator.navigate(navigateTo)} style={style || styles}>
-      <Image source={icons[source]}></Image>
-    </Pressable>
+    <TouchableOpacity onPress={() => navigator.navigate(navigateTo)} style={style || styles}>
+      <Image source={icons[source]} style={{ width: 30, height: 30 }}></Image>
+    </TouchableOpacity>
   )
 }

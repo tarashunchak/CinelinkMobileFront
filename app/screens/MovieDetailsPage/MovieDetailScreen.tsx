@@ -14,6 +14,8 @@ import ActorCard from "./components/CreditsCard";
 import DetailRow from "./components/DetailRow";
 import { movieDetailScreenStyle } from "./styles";
 import { Movie } from "./types";
+import { AddWatchlistItem, WatchlistItem } from "@/api/watchlist/watchlist";
+import { CURRENT_USER } from "@/api/currentUser";
 
 
 const { width: screenW, height: screenH } = Dimensions.get("window");
@@ -21,14 +23,14 @@ const { width: screenW, height: screenH } = Dimensions.get("window");
 export default function MovieDetailScreen({ route }: any) {
   const navigation = useNavigation();
   const [movie, setMovie] = useState<Movie | null>(null);
-  console.log("Movie ID in moviedetailsscreen: ", route.params?.currentMovieID || 13);
+  console.log("Movie ID in moviedetailsscreen: ", route.params?.movieId || 13);
 
   const inCinemas: boolean = route.params?.inCinemas;
   const maximum = route.params?.maximum;
 
   useEffect(() => {
     async function loadMovieDetails() {
-      const data: Movie = await getDetailedMovieByID(route.params?.currentMovieID || 13);
+      const data: Movie = await getDetailedMovieByID(route.params?.movieId || 13);
       if (!data) return;
       data.directors = data.credits.crew?.filter(member => member.job === "Director").map(member => member.name);
       setMovie(data);
@@ -132,17 +134,21 @@ export default function MovieDetailScreen({ route }: any) {
 
 
           <View style={movieDetailScreenStyle.actionRow.view}>
-            <Pressable style={movieDetailScreenStyle.actionRow.saveBtn}>
-              <Text style={[textStyle.white18, { width: "100%", textAlign: "center" }]}>Save</Text>
-            </Pressable>
+            <TouchableOpacity style={movieDetailScreenStyle.actionRow.markAsWatchedBtn}
+              onPress={() => {
+                const item: WatchlistItem = {
+                  id: 0,
+                  movie_id: movie?.imdb_id,
+                  user_id: CURRENT_USER.UID
+                };
+                AddWatchlistItem(item);
+              }}>
+              <Text style={[textStyle.white18, { width: "100%", textAlign: "center" }]}>Add to Watchlist</Text>
+            </TouchableOpacity>
 
-            <Pressable style={movieDetailScreenStyle.actionRow.markAsWatchedBtn}>
-              <Text style={[textStyle.white18, { width: "100%", textAlign: "center" }]}>Mark as Watched</Text>
-            </Pressable>
-
-            <Pressable style={movieDetailScreenStyle.actionRow.shareBtn}>
+            <TouchableOpacity style={movieDetailScreenStyle.actionRow.shareBtn}>
               <Text style={[textStyle.white18, { width: "100%", textAlign: "center" }]}>Share</Text>
-            </Pressable>
+            </TouchableOpacity>
           </View>
 
           <View style={movieDetailScreenStyle.sectionView}>

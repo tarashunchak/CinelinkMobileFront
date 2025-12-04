@@ -1,0 +1,117 @@
+import { textStyle } from "@/styles/textStyles";
+import React from "react";
+import { TouchableOpacity, View, Text, Image } from "react-native";
+import { heightPercentageToDP as hp } from "react-native-responsive-screen";
+
+export default function RecommendationCard({ item }: { item: RecommendedMovie }) {
+  return (
+    <TouchableOpacity style={styles.card.view}>
+      <Image style={styles.card.content.poster} source={{ uri: "https://image.tmdb.org/t/p/w300/ngl2FKBlU4fhbdsrtdom9LVLBXw.jpg" }} />
+      <View style={styles.card.content.columnInfo.view}>
+        <Text style={styles.card.content.columnInfo.title}
+          pointerEvents="none"
+          numberOfLines={1}
+          ellipsizeMode="tail">Ant-Man and the Wasp: Quantumania</Text>
+        <View style={styles.card.content.columnInfo.imdb.view}>
+          <Text style={styles.card.content.columnInfo.imdb.text}>
+            IMDb: 8.2
+          </Text>
+        </View>
+        <View style={styles.card.content.columnInfo.recommendedBy.view}>
+          <Text style={styles.card.content.columnInfo.recommendedBy.header}>
+            Recommended by:
+          </Text>
+          <View style={styles.card.content.columnInfo.recommendedBy.avatars.view}>
+            <Image style={styles.card.content.columnInfo.recommendedBy.avatars.item} />
+            <Image style={styles.card.content.columnInfo.recommendedBy.avatars.item} />
+            <Image style={styles.card.content.columnInfo.recommendedBy.avatars.item} />
+            <Text style={textStyle.gray14}>+10</Text>
+          </View>
+        </View>
+      </View>
+    </TouchableOpacity>
+  );
+};
+
+type RecommendedMovie = {
+  movie_id: number;
+  movie_title: string;
+  users: {
+
+  };
+};
+
+const styles = {
+  card: {
+    view: {
+      flexDirection: "row",
+      gap: 10,
+      width: "100%",
+      height: hp("14.5%"),
+      backgroundColor: "rgba(255, 255, 255, 0.05)",
+      borderColor: "rgba(255, 255, 255, 0.2)",
+      borderWidth: 0.5,
+      borderRadius: 4,
+      paddingLeft: "3%",
+    },
+    content: {
+      poster: {
+        height: "98%",
+        aspectRatio: 2.2 / 3,
+        backgroundColor: "white",
+        alignSelf: "center",
+      },
+      columnInfo: {
+        view: {
+          flexDirection: "column",
+          justifyContent: "space-evenly",
+        },
+        title: [textStyle.white20, {
+          maxWidth: "85%",
+        }],
+        imdb: {
+          view: {
+            backgroundColor: "#DEB522",
+            width: 54,
+            height: 18,
+            borderRadius: 4,
+            alignItems: "center",
+            justifyContent: "center",
+          },
+          text: [textStyle.black12, {
+            alignSelf: "center",
+            textAlign: "center",
+          }]
+        },
+        recommendedBy: {
+          view: {
+            height: "40%",
+            width: 130,
+            flexDirection: "column",
+            justifyContent: "space-evenly",
+            backgroundColor: "rgba(255, 255, 255, 0.1)",
+            borderRadius: 2,
+            paddingLeft: "1%",
+          },
+          header: [textStyle.gray12, {
+
+          }],
+          avatars: {
+            view: {
+              flexDirection: "row",
+              justifyContent: "space-evenly",
+              gap: 5,
+              paddingLeft: "2%",
+            },
+            item: {
+              minHeight: 28,
+              aspectRatio: 1 / 1,
+              borderRadius: 999,
+              backgroundColor: "white",
+            }
+          }
+        }
+      }
+    }
+  }
+};

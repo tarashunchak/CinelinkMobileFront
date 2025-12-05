@@ -12,6 +12,7 @@ import { userProfileScreen } from "./new_styles";
 const { width: screenW, height: screenH } = Dimensions.get("window");
 
 export default function CurrentUserProfileScreen() {
+
   return (
     <View style={{ flex: 1 }}>
 

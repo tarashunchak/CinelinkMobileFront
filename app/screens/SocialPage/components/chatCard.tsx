@@ -1,23 +1,21 @@
-import { textStyle } from "@/styles/textStyles";
 import React from "react";
-import { heightPercentageToDP as hp } from "react-native-responsive-screen";
+import { textStyle } from "@/styles/textStyles";
 import { TouchableOpacity, View, Text, Image } from "react-native";
+import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 
-export default function FriendCard({ friend }: { friend: any }) {
+export default function ChatCard() {
   return (
     <TouchableOpacity style={styles.card.view}>
       <View style={styles.card.info.view}>
-        <Image style={styles.card.info.avatar} source={require("@/assets/images/giggaNigga.png")} />
+        <Image style={styles.card.info.image} source={require("@/assets/images/giggaNigga.png")} />
         <View style={styles.card.info.text.view}>
-          <Text style={styles.card.info.text.name}>{friend.full_name}</Text>
-          <Text style={styles.card.info.text.rank}>{`#${friend.rank} user globally`}</Text>
-          <Text style={styles.card.info.text.lastWatched}>{`Last watched: ${friend.last_watched}`}</Text>
+          <Text style={styles.card.info.text.name}>{"Gigga Nigga"}</Text>
+          <Text style={styles.card.info.text.last_message}>{"Go v minecraft"}</Text>
         </View>
       </View>
-      <Image style={styles.card.chatIcon} source={require("@/app/screens/SocialPage/assets/chatIcon.png")} />
     </TouchableOpacity>
   );
-};
+}
 
 const styles = {
   card: {
@@ -38,7 +36,7 @@ const styles = {
         flexDirection: "row",
         gap: 10,
       },
-      avatar: {
+      image: {
         width: 60,
         height: 60,
         alignSelf: "center",
@@ -53,10 +51,7 @@ const styles = {
         },
         name: [textStyle.yellow18, {
         }],
-        rank: [textStyle.gray12, {
-
-        }],
-        lastWatched: [textStyle.white14, {
+        last_message: [textStyle.gray16, {
 
         }],
       },

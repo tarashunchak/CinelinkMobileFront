@@ -3,7 +3,7 @@ import React from "react";
 import { TouchableOpacity, View, Text, Image } from "react-native";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 
-export default function RecommendationCard({ item }: { item: RecommendedMovie }) {
+export default function RecommendationCard({ item }: { item: any }) {
   return (
     <TouchableOpacity style={styles.card.view}>
       <Image style={styles.card.content.poster} source={{ uri: "https://image.tmdb.org/t/p/w300/ngl2FKBlU4fhbdsrtdom9LVLBXw.jpg" }} />
@@ -33,7 +33,7 @@ export default function RecommendationCard({ item }: { item: RecommendedMovie })
   );
 };
 
-type RecommendedMovie = {
+export type RecommendedMovie = {
   movie_id: number;
   movie_title: string;
   users: {
@@ -53,6 +53,7 @@ const styles = {
       borderWidth: 0.5,
       borderRadius: 4,
       paddingLeft: "3%",
+      marginBottom: 5,
     },
     content: {
       poster: {

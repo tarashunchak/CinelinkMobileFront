@@ -43,6 +43,7 @@ const styles = {
       paddingLeft: 20,
       flexDirection: "row",
       justifyContent: "space-between",
+      marginBottom: 5,
     },
     poster: {
       height: 72,

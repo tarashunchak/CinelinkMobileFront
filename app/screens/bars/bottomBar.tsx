@@ -10,7 +10,7 @@ export default function BottomBar() {
       <BottomBarIconButton source="search" navigateTo="SearchScreen" />
       <BottomBarIconButton source="home" navigateTo="HomePageScreen" />
       <BottomBarIconButton source="social" navigateTo="SocialScreen" />
-      <BottomBarIconButton source="profile" navigateTo="CurrentUserProfileScreen" />
+      <BottomBarIconButton source="profile" navigateTo="UserProfileScreen" />
     </View>
   );
 }

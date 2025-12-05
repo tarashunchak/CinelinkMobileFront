@@ -1,4 +1,5 @@
 import { UserProfile } from "@/app/screens/UserPage/types";
+import { API_URL } from "./API_CONFIG";
 
 export let CURRENT_USER = {
   firstName: "",
@@ -12,9 +13,12 @@ export async function updateCurrentUserData() {
 }
 
 export async function getUserProfileData(userID: number): Promise<UserProfile> {
-  //const response = await fetch(`${API_URL}/userProfile?userID=${userID}`);
-  //const data: UserProfile = await response.json();
-  return {
+  const response = await fetch(`${API_URL}/user/profile?userID=${userID}`);
+  const json = await response.json();
+  const data: UserProfile = json.results;
+  console.warn("UserProfile: ", data);
+  return data;
+  /*return {
     first_name: "c",
     last_name: "c",
     username: "c",
@@ -25,5 +29,5 @@ export async function getUserProfileData(userID: number): Promise<UserProfile> {
     followings: 0,
     is_following: false,
     posts: 0,
-  };
+  }*/;
 }

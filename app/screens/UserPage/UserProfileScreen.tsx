@@ -13,7 +13,7 @@ export default async function UserProfileScreen({ navigator, userID, isCurrentUs
 
   useEffect(() => {
     async function loadUserInfo() {
-      const data: UserProfile = await getUserProfileData(userID);
+      const data: UserProfile = await getUserProfileData(1);
       if (!data) return;
 
       setUserInfo(data);
@@ -21,7 +21,7 @@ export default async function UserProfileScreen({ navigator, userID, isCurrentUs
       console.log("");
     }
     loadUserInfo()
-  }, []);
+  }, [userID]);
 
   mainButtons = (isCurrentUser === true) ? (
     <Pressable style={userPage.mainButtons.editButton.pressable}>
@@ -55,7 +55,7 @@ export default async function UserProfileScreen({ navigator, userID, isCurrentUs
           </View>
 
           <Text style={textStyle.white20}>{userInfo ? `${userInfo?.first_name} ${userInfo?.last_name}` : "Gigga Nigga"}</Text>
-          <Text style={textStyle.grey12}>{userInfo?.username || "@username"}</Text>
+          <Text style={textStyle.gray12}>{userInfo?.username || "@username"}</Text>
 
           <Text style={userPage.bio}>{userInfo?.bio}</Text>
 

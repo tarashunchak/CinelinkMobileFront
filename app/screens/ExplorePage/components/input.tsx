@@ -8,6 +8,5 @@ export default function SearchInput() {
       <Image style={searchScreen.input.icon} source={require("@/app/screens/ExplorePage/assets/search.png")} />
       <TextInput style={searchScreen.input.textInput} placeholderTextColor={"rgba(255, 255, 255, 0.6)"} placeholder="Search movies, people, genders..." />
     </View >
-  )
-
-}
+  );
+};

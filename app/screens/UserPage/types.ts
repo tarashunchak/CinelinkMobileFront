@@ -1,4 +1,4 @@
-export interface UserProfile {
+export type UserProfile = {
   first_name: string | null;
   last_name: string | null;
   username: string | null;

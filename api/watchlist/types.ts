@@ -5,10 +5,11 @@ export type WatchlistItem = {
   watchlist_id: number;
 };
 
-export type Watchlist = {
+export type WatchlistCard = {
   id: number;
   name: string;
   description: string;
+  creator_id: number;
   is_public: boolean;
   bg_img_path: string;
   fg_img_path: string;

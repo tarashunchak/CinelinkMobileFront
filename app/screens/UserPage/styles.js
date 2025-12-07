@@ -16,11 +16,12 @@ export const userPage = {
     view: {
       height: 100,
       width: 100,
-      borderRadius: 50,
+      borderRadius: 999,
       backgroundColor: "transparent"
     },
     picture: {
       width: "100%",
+      borderRadius: 999,
       height: "100%"
     }
   },

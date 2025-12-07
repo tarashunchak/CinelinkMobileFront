@@ -47,7 +47,7 @@ export default async function UserProfileScreen({ navigator, userID, isCurrentUs
         <View style={{ flexDirection: "column", gap: 5 }}>
           <View style={{ width: "100%", marginTop: "45%", height: 100, flexDirection: "row", justifyContent: "space-between" }}>
             <View style={userPage.profilPic.view}>
-              <Image source={require("@/assets/images/giggaNigga.png")} style={userPage.profilPic.picture} />
+              <Image source={{ uri: userInfo?.avatar_url }} style={userPage.profilPic.picture} />
             </View>
             {
               mainButtons

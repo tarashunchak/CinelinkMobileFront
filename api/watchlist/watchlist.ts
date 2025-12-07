@@ -1,6 +1,6 @@
 import { API_URL } from "@/api/API_CONFIG";
 import { CURRENT_USER } from "../currentUser";
-import { WatchlistItem, Watchlist } from "./types";
+import { WatchlistItem, WatchlistCard } from "./types";
 
 export async function AddWatchlistItem(item: WatchlistItem) {
   await fetch(`${API_URL}/user/watchlist`, {
@@ -15,30 +15,14 @@ export async function AddWatchlistItem(item: WatchlistItem) {
   console.log("AddWatchlistItem");
 };
 
-export async function GetUserWatchlists() {
-  let response: Watchlist[] | any;
-  await fetch(`${API_URL}/user/watchlist&userID=${CURRENT_USER.UID}`)
-    .then(res => res.json)
-    .then(data => {
-      console.log(data)
-      response = data;
-    })
-    .catch(err => console.error(err));
-
-  console.log("GetUserWatchlists");
-  return response;
+export async function GetUserWatchlists(userID: number) {
+  const response = await fetch(`${API_URL}/watchlist?userID=${userID}`)
+  return response.json();
 };
 
-export async function GetWatchlistItems(watchlistID: number) {
-  let response: WatchlistItem[] | any;
-  await fetch(`${API_URL}/user/watchlist&=${CURRENT_USER.UID}`)
-    .then(res => res.json)
-    .then(data => {
-      console.log(data)
-      response = data;
-    })
-    .catch(err => console.error(err));
-
-  console.log("GetUserWatchlists");
+export async function GetWatchlistMovies(watchlistID: number) {
+  console.log("watchlist id: ", watchlistID);
+  const response = await fetch(`${API_URL}/watchlist?watchlistID=${watchlistID}`)
+  console.log("GetUserWatchlists: ", response.json());
   return response;
 };

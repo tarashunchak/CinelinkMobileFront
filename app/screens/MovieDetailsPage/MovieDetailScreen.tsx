@@ -138,7 +138,7 @@ export default function MovieDetailScreen({ route }: any) {
               onPress={() => {
                 const item: WatchlistItem = {
                   id: 0,
-                  movie_id: movie?.imdb_id,
+                  movie_id: movie?.id,
                   user_id: CURRENT_USER.UID
                 };
                 AddWatchlistItem(item);

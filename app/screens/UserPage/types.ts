@@ -4,7 +4,7 @@ export type UserProfile = {
   username: string | null;
   joined_at: string | null;
   bio: string | null;
-  image_url: string | null;
+  avatar_url: string | null;
   followers: number | null;
   followings: number | null;
   is_following: boolean | null;

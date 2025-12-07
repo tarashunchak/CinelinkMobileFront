@@ -21,6 +21,9 @@ import CurrentUserProfileScreen from "../screens/UserPage/CurrentUserProfileScre
 import UserProfileScreen from "../screens/UserPage/UserProfileScreen";
 import SocialScreen from "../screens/SocialPage/SocialScreen";
 
+import WatchlistsLibraryScreen from "../screens/WatchlistsLibraryPage/WatchlistsLibraryScreen";
+import WatchlistDetailsScreen from "../screens/WatchlistDetailsPage/WatchlistDetailsScreen";
+
 const Stack = createNativeStackNavigator();
 
 export default function LeafyNavigator() {
@@ -47,6 +50,8 @@ export default function LeafyNavigator() {
         <Stack.Screen name="MovieCreditsScreen" component={MovieCreditsScreen} options={{ headerShown: false }} />
         <Stack.Screen name="ActorProfileScreen" component={ActorProfileScreen} options={{ headerShown: false }} />
 
+        <Stack.Screen name="WatchlistsLibraryScreen" component={WatchlistsLibraryScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="WatchlistDetailsScreen" component={WatchlistDetailsScreen} options={{ headerShown: false }} />
 
         <Stack.Screen name="SocialScreen" component={SocialScreen} options={{ headerShown: false }} />
       </Stack.Navigator>

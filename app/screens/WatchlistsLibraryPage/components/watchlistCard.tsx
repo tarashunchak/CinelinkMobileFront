@@ -10,8 +10,8 @@ export type Watchlist = {
   description: string;
   creator_id: number;
   creator_username: string;
-  fg_image_url: string;
-  bg_image_url: string;
+  fg_img_url: string;
+  bg_img_url: string;
   is_public: boolean;
   movies_quantity: number;
 };
@@ -20,8 +20,8 @@ export default function WatchlistCard({ watchlist }: { watchlist: Watchlist }) {
   const navigator = useNavigation();
   return (
     <TouchableOpacity style={styles.card.view}
-      onPress={() => navigator.navigate("WatchlistDetailsScreen", { watchlist: watchlist })}>
-      <Image source={{ uri: watchlist?.fg_image_url }} style={styles.card.image} />
+      onPress={() => { navigator.navigate("WatchlistDetailsScreen", { watchlist: watchlist }) }}>
+      <Image source={watchlist?.fg_img_url ? { uri: watchlist?.fg_img_url } : require("@/app/screens/WatchlistsLibraryPage/assets/NoFgWatchlist.png")} style={styles.card.image} />
       <View style={styles.card.text.view}>
         <Text style={styles.card.text.name}>{watchlist.name}</Text>
         <Text style={styles.card.text.description}

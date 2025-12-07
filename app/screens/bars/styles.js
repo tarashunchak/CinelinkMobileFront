@@ -11,7 +11,7 @@ export const bottomBar = {
       width: "100%",
       position: "absolute",
       bottom: 0,
-      borderWidth: 0.3,
+      borderWidth: 0.4,
       borderColor: "rgba(180, 190, 210, 0.1)"
     }
   ]

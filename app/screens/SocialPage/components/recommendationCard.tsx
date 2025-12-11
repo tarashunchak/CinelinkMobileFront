@@ -3,18 +3,34 @@ import React from "react";
 import { TouchableOpacity, View, Text, Image } from "react-native";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 
-export default function RecommendationCard({ item }: { item: any }) {
+type RecommendedBy_T = {
+  user_id: number;
+  username: string;
+  avatar_url: string;
+  message: string;
+}
+
+export type RecommendedCard_T = {
+  movie_id: number;
+  imdb_id: number;
+  poster_path: string;
+  title: string;
+  imdb_rating: number;
+  recommended_by: RecommendedBy_T[];
+};
+
+export default function RecommendedCard({ item }: { item: any }) {
   return (
     <TouchableOpacity style={styles.card.view}>
-      <Image style={styles.card.content.poster} source={{ uri: "https://image.tmdb.org/t/p/w300/ngl2FKBlU4fhbdsrtdom9LVLBXw.jpg" }} />
+      <Image style={styles.card.content.poster} source={{ uri: `https://image.tmdb.org/t/p/w300/${item?.poster_path}` }} />
       <View style={styles.card.content.columnInfo.view}>
         <Text style={styles.card.content.columnInfo.title}
           pointerEvents="none"
           numberOfLines={1}
-          ellipsizeMode="tail">Ant-Man and the Wasp: Quantumania</Text>
+          ellipsizeMode="tail">{item?.title}</Text>
         <View style={styles.card.content.columnInfo.imdb.view}>
           <Text style={styles.card.content.columnInfo.imdb.text}>
-            IMDb: 8.2
+            {`IMDb: ${item?.imdb_rating}`}
           </Text>
         </View>
         <View style={styles.card.content.columnInfo.recommendedBy.view}>
@@ -31,14 +47,6 @@ export default function RecommendationCard({ item }: { item: any }) {
       </View>
     </TouchableOpacity>
   );
-};
-
-export type RecommendedMovie = {
-  movie_id: number;
-  movie_title: string;
-  users: {
-
-  };
 };
 
 const styles = {

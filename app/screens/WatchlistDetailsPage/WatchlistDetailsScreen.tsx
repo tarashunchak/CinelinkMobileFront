@@ -2,7 +2,7 @@ import MovieCardList from "@/components/ui/leafy-film-list";
 import LeafyReturnArrowButton from "@/components/ui/leafy-return-arrow-btn";
 import { useNavigation } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { Text, Image, ImageBackground, ScrollView, View } from "react-native";
+import { Text, Image, ImageBackground, ScrollView, View, TouchableOpacity } from "react-native";
 import { heightPercentageToDP } from "react-native-responsive-screen";
 import BottomBar from "../bars/bottomBar";
 import { GetWatchlistMovies } from "@/api/watchlist/watchlist";
@@ -50,23 +50,32 @@ export default function WatchlistDetailsScreen({ route }: any) {
   return (
     <ImageBackground source={require("@/assets/images/background.png")} style={{ flex: 1 }}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <ImageBackground source={require("@/app/screens/WatchlistsLibraryPage/assets/NoBgWatchlist.jpeg")} style={{ justifyContent: "flex-end", height: heightPercentageToDP("45%"), width: "100%" }} >
-          <View style={styles.info.view}>
-            <Image source={watchlist?.fg_img_url ? { uri: watchlist?.fg_img_url } : require("@/app/screens/WatchlistsLibraryPage/assets/NoFgWatchlist_2.png")} style={styles.info.image} />
-            <View style={styles.card.text.view}>
-              <Text style={styles.card.text.name}>{watchlist?.name}</Text>
-              <Text style={styles.card.text.description}
-                pointerEvents="none"
-                numberOfLines={2}
-                ellipsizeMode="tail"
-              >
-                {watchlist?.description}
-              </Text>
-              <View style={styles.card.text.creator.view}>
-                <Text style={styles.card.text.creator.header}>Creator:</Text>
-                <Text style={styles.card.text.creator.name}>{watchlist?.creator_username}</Text>
+        <ImageBackground source={require("@/app/screens/WatchlistsLibraryPage/assets/NoBgWatchlist.jpeg")} style={{ height: hp("45%"), width: "100%" }} >
+          <TouchableOpacity style={{ flexDirection: "row", justifyContent: "flex-end", alignItems: "flex-start" }}>
+            <Image source={require("@/app/screens/WatchlistDetailsPage/assets/InfoIcon.png")}
+              style={[{ height: 26, width: 26, margin: hp("2%") }]} />
+          </TouchableOpacity>
+          <View style={{ justifyContent: "flex-end", height: hp("41%") - 26 }}>
+            <View style={[{ flexDirection: "row", justifyContent: "space-between" }]}>
+              <View style={[styles.info.view]}>
+                <Image source={watchlist?.fg_img_url ? { uri: watchlist?.fg_img_url } : require("@/app/screens/WatchlistsLibraryPage/assets/NoFgWatchlist_2.png")} style={styles.info.image} />
+
+                <View style={styles.card.text.view}>
+                  <Text style={styles.card.text.name}>{watchlist?.name}</Text>
+                  <Text style={styles.card.text.description}
+                    pointerEvents="none"
+                    numberOfLines={2}
+                    ellipsizeMode="tail"
+                  >
+                    {watchlist?.description}
+                  </Text>
+                  <View style={styles.card.text.creator.view}>
+                    <Text style={styles.card.text.creator.header}>Creator:</Text>
+                    <Text style={styles.card.text.creator.name}>{watchlist?.creator_username}</Text>
+                  </View>
+                </View>
               </View>
-              <Text style={textStyle.gray14}>
+              <Text style={[textStyle.gray14, {}]}>
                 {`${watchlist?.movies_quantity} ${watchlist?.movies_quantity === 1 ? "movie" : "movies"}`}
               </Text>
             </View>
@@ -85,21 +94,23 @@ export default function WatchlistDetailsScreen({ route }: any) {
 const styles = {
   info: {
     view: {
-      height: "40%",
-      width: "100%",
+      height: hp("15%"),
+      width: wp("100%"),
       backgroundColor: "rgba(255,255, 255, 0.05)",
       borderColor: "rgba(255,255, 255, 0.2)",
       borderWidth: 0.8,
       borderTopLeftRadius: 8,
       borderTopRightRadius: 8,
-      padding: "2%",
-      gap: "4%",
+      padding: hp("1%"),
+      gap: hp("2%"),
       flexDirection: "row",
+      alignItems: "flex-start",
+      justifyContent: "flex-start",
     },
     image: {
-      height: 130,
-      width: 130,
-      resizeMode: "cover",
+      width: hp("13%"),
+      aspectRatio: 1,
+      borderRadius: 4,
     }
   },
   card: {
@@ -129,6 +140,7 @@ const styles = {
       }],
       description: [textStyle.gray16, {
         maxWidth: "75%",
+        minWidth: "75%",
       }],
       creator: {
         view: {

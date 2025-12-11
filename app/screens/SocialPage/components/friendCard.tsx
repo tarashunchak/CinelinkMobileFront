@@ -3,15 +3,25 @@ import React from "react";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { TouchableOpacity, View, Text, Image } from "react-native";
 
-export default function FriendCard({ friend }: { friend: any }) {
+export type FriendCard_T = {
+  user_id: number;
+  username: string;
+  level: number;
+  level_name: string;
+  avatar_url: string;
+  is_following_back: boolean;
+  mutual_friends_count: number;
+};
+
+export default function FriendCard({ friend }: { friend: FriendCard_T }) {
+  console.warn("Friend: ", friend);
   return (
     <TouchableOpacity style={styles.card.view}>
       <View style={styles.card.info.view}>
-        <Image style={styles.card.info.avatar} source={require("@/assets/images/giggaNigga.png")} />
+        <Image style={styles.card.info.avatar} source={friend?.avatar_url ? { uri: friend?.avatar_url } : require("@/assets/images/giggaNigga.png")} />
         <View style={styles.card.info.text.view}>
-          <Text style={styles.card.info.text.name}>{friend.full_name}</Text>
-          <Text style={styles.card.info.text.rank}>{`#${friend.rank} user globally`}</Text>
-          <Text style={styles.card.info.text.lastWatched}>{`Last watched: ${friend.last_watched}`}</Text>
+          <Text style={styles.card.info.text.name}>{friend?.username}</Text>
+          <Text style={styles.card.info.text.rank}>{`Lvl: ${friend?.level} '${friend?.level_name}'`}</Text>
         </View>
       </View>
       <Image style={styles.card.chatIcon} source={require("@/app/screens/SocialPage/assets/chatIcon.png")} />
@@ -53,7 +63,7 @@ const styles = {
         },
         name: [textStyle.yellow18, {
         }],
-        rank: [textStyle.gray12, {
+        rank: [textStyle.gray14, {
 
         }],
         lastWatched: [textStyle.white14, {

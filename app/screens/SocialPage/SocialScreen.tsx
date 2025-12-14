@@ -3,24 +3,27 @@ import { TouchableOpacity, Text, ImageBackground, ScrollView, View } from "react
 import BottomBar from "../bars/bottomBar";
 import SocialPageTopBar from "./components/topBar";
 import FriendCard, { FriendCard_T } from "./components/friendCard";
-import RecommendationCard, { RecommendationCard_T } from "./components/recommendationCard";
-import { RecommendedMovie } from "./components/recommendationCard";
+import RecommendationCard, { RecommendedCard_T } from "./components/recommendationCard";
 import ChatCard from "./components/chatCard";
 import { getActiveTab } from "./components/topBar";
 import { textStyle } from "@/styles/textStyles";
 import { GetUserFollowers } from "@/api/followers/followers";
 import { CURRENT_USER } from "@/api/currentUser";
+import { GetUserRecommendations } from "@/api/recommendations/recommendations";
 
 export default function SocialScreen() {
   const tabs = ["Friends", "Recommendations", "Activity", "Chats"];
   const [activeTab, setActiveTab] = useState("Friends");
   const [friends, setFriends] = useState<FriendCard_T>();
+  const [recommendations, setRecommendatoins] = useState<RecommendedCard_T>();
 
   useEffect(() => {
     async function loadFriendsCards() {
-      const data = await GetUserFollowers(CURRENT_USER.UID);
+      const friendsData = await GetUserFollowers(CURRENT_USER.UID);
+      const recommendationsData = await GetUserRecommendations(CURRENT_USER.UID);
 
-      setFriends(data.results);
+      if (friendsData) setFriends(friendsData.results);
+      if (recommendationsData) setRecommendatoins(recommendationsData.results);
     };
 
     loadFriendsCards();
@@ -46,15 +49,16 @@ export default function SocialScreen() {
           }
         </View>
         <ScrollView style={{ padding: "1%" }}>
-          {
+          {[
             activeTab === "Friends" &&
             friends?.map((friend: FriendCard_T, index: number) =>
               (<FriendCard key={index} friend={friend} />))
-          }
-          {
+
+            ,
             activeTab === "Recommendations" &&
-            friends?.map((item: RecommendedCard_T, index: number) =>
-              (<FriendCard key={index} friend={{ item }} />))
+            recommendations?.map((item: RecommendedCard_T, index: number) =>
+              <RecommendationCard key={index} item={item} />)
+          ]
           }
 
         </ScrollView>

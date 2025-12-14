@@ -1,4 +1,5 @@
 import { textStyle } from "@/styles/textStyles";
+import { useNavigation } from "expo-router";
 import React from "react";
 import { TouchableOpacity, View, Text, Image } from "react-native";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
@@ -19,10 +20,12 @@ export type RecommendedCard_T = {
   recommended_by: RecommendedBy_T[];
 };
 
-export default function RecommendedCard({ item }: { item: any }) {
+export default function RecommendedCard({ item }: { item: RecommendedCard_T }) {
+  const navigation = useNavigation();
   return (
-    <TouchableOpacity style={styles.card.view}>
-      <Image style={styles.card.content.poster} source={{ uri: `https://image.tmdb.org/t/p/w300/${item?.poster_path}` }} />
+    <TouchableOpacity style={styles.card.view}
+      onPress={() => navigation?.navigate("MovieDetailScreen", { movieId: item?.movie_id })} >
+      <Image style={styles.card.content.poster} source={{ uri: `https://image.tmdb.org/t/p/w300${item?.poster_path}` }} />
       <View style={styles.card.content.columnInfo.view}>
         <Text style={styles.card.content.columnInfo.title}
           pointerEvents="none"
@@ -30,7 +33,7 @@ export default function RecommendedCard({ item }: { item: any }) {
           ellipsizeMode="tail">{item?.title}</Text>
         <View style={styles.card.content.columnInfo.imdb.view}>
           <Text style={styles.card.content.columnInfo.imdb.text}>
-            {`IMDb: ${item?.imdb_rating}`}
+            {`IMDb: ${item?.imdb_rating.toFixed(1)}`}
           </Text>
         </View>
         <View style={styles.card.content.columnInfo.recommendedBy.view}>
@@ -38,14 +41,15 @@ export default function RecommendedCard({ item }: { item: any }) {
             Recommended by:
           </Text>
           <View style={styles.card.content.columnInfo.recommendedBy.avatars.view}>
-            <Image style={styles.card.content.columnInfo.recommendedBy.avatars.item} />
-            <Image style={styles.card.content.columnInfo.recommendedBy.avatars.item} />
-            <Image style={styles.card.content.columnInfo.recommendedBy.avatars.item} />
-            <Text style={textStyle.gray14}>+10</Text>
+            {
+              item?.recommended_by?.slice(0, 3)?.map((user: any, index: number) => (
+                <Image key={index} style={styles.card.content.columnInfo.recommendedBy.avatars.item} source={{ uri: user?.avatar_url }} />
+              ))
+            }
           </View>
         </View>
       </View>
-    </TouchableOpacity>
+    </ TouchableOpacity>
   );
 };
 
@@ -77,6 +81,7 @@ const styles = {
         },
         title: [textStyle.white20, {
           maxWidth: "85%",
+          minWidth: "85%",
         }],
         imdb: {
           view: {
@@ -108,7 +113,6 @@ const styles = {
           avatars: {
             view: {
               flexDirection: "row",
-              justifyContent: "space-evenly",
               gap: 5,
               paddingLeft: "2%",
             },

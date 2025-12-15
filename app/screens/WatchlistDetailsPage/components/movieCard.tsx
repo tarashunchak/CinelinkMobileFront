@@ -5,6 +5,8 @@ import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { WatchlistMovie } from "../WatchlistDetailsScreen";
 import { Movie } from "../../MovieDetailsPage/types";
 import { useNavigation } from "expo-router";
+import GenresList from "@/components/ui/leafy-genres-list";
+import GenresLayout from "./genresLayout";
 
 export default function MovieCard({ movie }: { movie: Movie }) {
   const navigator = useNavigation();
@@ -22,17 +24,11 @@ export default function MovieCard({ movie }: { movie: Movie }) {
             {`IMDb: ${movie?.imdb_rating?.toFixed(1)}`}
           </Text>
         </View>
+
+        <GenresLayout genres={movie?.genres} />
       </View>
     </TouchableOpacity >
   );
-};
-
-export type RecommendedMovie = {
-  movie_id: number;
-  movie_title: string;
-  users: {
-
-  };
 };
 
 const styles = {
@@ -41,7 +37,7 @@ const styles = {
       flexDirection: "row",
       gap: 10,
       width: "100%",
-      height: hp("14.5%"),
+      height: hp("13%"),
       backgroundColor: "rgba(255, 255, 255, 0.03)",
       borderColor: "rgba(255, 255, 255, 0.2)",
       borderWidth: 0.5,
@@ -61,7 +57,7 @@ const styles = {
           flexDirection: "column",
           justifyContent: "space-evenly",
         },
-        title: [textStyle.white20, {
+        title: [textStyle.white18, {
           maxWidth: "85%",
           minWidth: "85%",
         }],

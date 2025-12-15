@@ -22,7 +22,7 @@ export default function ActorCard({ cast }: { cast: Cast }) {
         alignItems: "center",
         padding: 0.5,
       }]}
-      onPress={() => { navigator?.push("ActorProfileScreen", { personID: cast.id }) }}>
+      onPress={() => navigator?.push("ActorProfileScreen", { personID: cast.id })}>
       <Image source={cast.profile_path ? { uri: "https://image.tmdb.org/t/p/w200" + cast?.profile_path } : require("@/assets/images/noPhoto.png")}
         style={{ height: "70%", width: "100%", borderTopLeftRadius: 6, borderTopRightRadius: 6 }} />
       <Text style={movieDetailScreenStyle.white12}>{cast?.name}</Text>

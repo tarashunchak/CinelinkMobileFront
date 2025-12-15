@@ -1,6 +1,7 @@
 import { getDetailedMovieByID } from "@/api/tmdbApi";
 import BottomBar from "@/app/screens/bars/bottomBar";
 import { MONTH } from "@/app/utils/month";
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import MovieCardList from "@/components/ui/leafy-film-list";
 import LeafyReturnArrowButton from "@/components/ui/leafy-return-arrow-btn";
 import { genresInfo } from "@/styles/genreStyle";
@@ -12,9 +13,8 @@ import { heightPercentageToDP } from "react-native-responsive-screen";
 import YoutubePlayer from "react-native-youtube-iframe";
 import ActorCard from "./components/CreditsCard";
 import DetailRow from "./components/DetailRow";
-import { movieDetailScreenStyle } from "./styles";
 import { Movie } from "./types";
-import { AddWatchlistItem, WatchlistItem_T } from "@/api/watchlist/watchlist";
+import { AddWatchlistItem } from "@/api/watchlist/watchlist";
 import { CURRENT_USER } from "@/api/currentUser";
 
 
@@ -51,23 +51,23 @@ export default function MovieDetailScreen({ route }: any) {
 
           <ImageBackground
             source={{ uri: "https://image.tmdb.org/t/p/w500" + movie?.images?.backdrops[movie?.images?.backdrops?.length - 1]?.file_path }}
-            style={movieDetailScreenStyle.ImageBackground}>
+            style={styles.ImageBackground}>
             <View style={{ backgroundColor: "rgba(0, 0, 0, 0.75)", marginRight: "-2%", marginTop: "1%", height: heightPercentageToDP("40%") }}>
 
               <View style={{ flexDirection: "column", marginLeft: "3%", marginTop: "20%", justifyContent: "space-between" }}>
 
-                <Text style={movieDetailScreenStyle.mainView.movieBasicInfo.title}
+                <Text style={styles.mainView.movieBasicInfo.title}
                   numberOfLines={1}
                   ellipsizeMode="tail"
                 >
                   {movie?.title}
                 </Text>
 
-                <View style={movieDetailScreenStyle.mainView.movieBasicInfo.view}>
+                <View style={styles.mainView.movieBasicInfo.view}>
 
-                  <View style={movieDetailScreenStyle.mainView.movieBasicInfo.posterView}>
+                  <View style={styles.mainView.movieBasicInfo.posterView}>
                     <Image
-                      source={{ uri: "https://image.tmdb.org/t/p/w500" + movie?.poster_path }}
+                      source={{ uri: "https://image.tmdb.org/t/p/w300" + movie?.poster_path }}
                       style={{ height: "100%", width: "100%" }} />
                     {
                       inCinemas ? (
@@ -78,25 +78,25 @@ export default function MovieDetailScreen({ route }: any) {
                     }
                   </View>
 
-                  <View style={movieDetailScreenStyle.mainView.movieBasicInfo.infoView.view}>
-                    <View style={movieDetailScreenStyle.mainView.movieBasicInfo.infoView.textInfoView}>
-                      <View style={movieDetailScreenStyle.mainView.movieBasicInfo.infoView.yearView}>
+                  <View style={styles.mainView.movieBasicInfo.infoView.view}>
+                    <View style={styles.mainView.movieBasicInfo.infoView.textInfoView}>
+                      <View style={styles.mainView.movieBasicInfo.infoView.yearView}>
                         <Text style={textStyle.yellow16}>{"Year"}</Text>
                         <Text style={textStyle.white16}>{`: ${movie?.release_date.slice(0, 4)}`}</Text>
                       </View>
 
-                      <View style={movieDetailScreenStyle.mainView.movieBasicInfo.infoView.directorView}>
+                      <View style={styles.mainView.movieBasicInfo.infoView.directorView}>
                         <Text style={textStyle.yellow16}>{"Director"}</Text>
                         <Text style={textStyle.white16}>{`: ${movie?.directors[0]}`}</Text>
                       </View>
 
-                      <View style={movieDetailScreenStyle.mainView.movieBasicInfo.infoView.starsView}>
+                      <View style={styles.mainView.movieBasicInfo.infoView.starsView}>
                         <Text style={textStyle.yellow16}>{"Stars: "}</Text>
                         {
                           movie?.credits?.cast?.slice(0, Math.min(4, movie?.credits?.cast?.length)).map((star, index) =>
                             <Text key={index} style={
                               [textStyle.white16,
-                              movieDetailScreenStyle.mainView.movieBasicInfo.infoView.stars]
+                              styles.mainView.movieBasicInfo.infoView.stars]
                             }>
                               {`${star.name}`}
                             </Text>
@@ -110,7 +110,7 @@ export default function MovieDetailScreen({ route }: any) {
                         <Text style={textStyle.yellow16}>min</Text>
                       </View>
 
-                      <TouchableOpacity style={movieDetailScreenStyle.mainView.movieBasicInfo.infoView.imdbText.view}
+                      <TouchableOpacity style={styles.mainView.movieBasicInfo.infoView.imdbText.view}
                         onPress={async () => {
                           const url = `https://www.imdb.com/title/${movie?.imdb_id}`;
                           const sup = await Linking.canOpenURL(url);
@@ -118,7 +118,7 @@ export default function MovieDetailScreen({ route }: any) {
                         }}
                       >
 
-                        <Text style={movieDetailScreenStyle.mainView.movieBasicInfo.infoView.imdbText.text}>
+                        <Text style={styles.mainView.movieBasicInfo.infoView.imdbText.text}>
                           {
                             `IMDb: ${movie?.vote_average.toFixed(1)}`
                           }
@@ -133,8 +133,8 @@ export default function MovieDetailScreen({ route }: any) {
           </ImageBackground>
 
 
-          <View style={movieDetailScreenStyle.actionRow.view}>
-            <TouchableOpacity style={movieDetailScreenStyle.actionRow.markAsWatchedBtn}
+          <View style={styles.actionRow.view}>
+            <TouchableOpacity style={styles.actionRow.markAsWatchedBtn}
               onPress={() => {
                 const item: WatchlistItem_T = {
                   id: 0,
@@ -146,15 +146,15 @@ export default function MovieDetailScreen({ route }: any) {
               <Text style={[textStyle.white18, { width: "100%", textAlign: "center" }]}>Add to Watchlist</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={movieDetailScreenStyle.actionRow.shareBtn}>
+            <TouchableOpacity style={styles.actionRow.shareBtn}>
               <Text style={[textStyle.white18, { width: "100%", textAlign: "center" }]}>Recommend</Text>
             </TouchableOpacity>
           </View>
 
-          <View style={movieDetailScreenStyle.sectionView}>
+          <View style={styles.sectionView}>
             <Text style={[textStyle.yellow18, { padding: 0, marginBottom: 5 }]}>Genres</Text>
             <ScrollView horizontal={true}
-              style={movieDetailScreenStyle.genreCellView}
+              style={styles.genreCellView}
               contentContainerStyle={{ paddingHorizontal: 10 }}
               showsHorizontalScrollIndicator={false}
             >
@@ -165,14 +165,14 @@ export default function MovieDetailScreen({ route }: any) {
                     <Pressable key={index}
                       style={
                         [
-                          movieDetailScreenStyle.genreCell,
+                          styles.genreCell,
                           {
                             backgroundColor: genresInfo[name]?.color,
                             borderColor: genresInfo[name]?.borderColor
                           }
                         ]
                       }>
-                      <Text style={[movieDetailScreenStyle.genreCellText]}>{name}</Text>
+                      <Text style={[styles.genreCellText]}>{name}</Text>
                     </Pressable>
                   )
                 })
@@ -182,10 +182,10 @@ export default function MovieDetailScreen({ route }: any) {
 
           {
             movie?.providers?.["US"]?.length &&
-            (<View style={movieDetailScreenStyle.sectionView}>
+            (<View style={styles.sectionView}>
               <Text style={[textStyle.yellow18]}>Providers</Text>
               <ScrollView horizontal={true}
-                style={[movieDetailScreenStyle.genreCellView, { height: 40 }]}
+                style={[styles.genreCellView, { height: 40 }]}
                 contentContainerStyle={{ paddingHorizontal: 10 }}
                 showsHorizontalScrollIndicator={false}
               >
@@ -204,7 +204,7 @@ export default function MovieDetailScreen({ route }: any) {
             <YoutubePlayer height={250} width={"100%"} play={false} videoId={trailerKey} />
           </View>
 
-          <View style={[movieDetailScreenStyle.sectionView, { flexDirection: "column" }]}>
+          <View style={[styles.sectionView, { flexDirection: "column" }]}>
             <Text style={textStyle.yellow20}>Overview</Text>
             <Text style={[{ width: "100%", textAlign: "justify" }, textStyle.white16]}>   {movie?.overview}</Text>
           </View>
@@ -224,20 +224,18 @@ export default function MovieDetailScreen({ route }: any) {
 
           <View style={{ width: "100%", marginTop: "5%" }}>
 
-            <Text style={movieDetailScreenStyle.credits.text}>Cast</Text>
-            <ScrollView horizontal={true} style={movieDetailScreenStyle.credits.view}>
+            <Text style={styles.credits.text}>Cast</Text>
+            <ScrollView horizontal={true} style={styles.credits.view}>
               {[
-                movie?.credits?.cast?.slice(0, Math.min(6, movie.credits.cast.length - 1)).map((person, index) => {
-                  return (
-                    <ActorCard key={index} cast={person} />
-                  )
-                }),
+                movie?.credits?.cast?.slice(0, Math.min(6, movie.credits.cast.length - 1)).map((person, index) =>
+                  <ActorCard key={index} cast={person} />
+                ),
                 emptyCreditCard(movie?.credits, movie?.poster_path)
               ]}
             </ScrollView>
 
-            <Text style={movieDetailScreenStyle.credits.text}>Crew</Text>
-            <ScrollView horizontal={true} style={movieDetailScreenStyle.credits.view}>
+            <Text style={styles.credits.text}>Crew</Text>
+            <ScrollView horizontal={true} style={styles.credits.view}>
               {[
                 movie?.credits?.crew?.slice(0, Math.min(6, movie.credits.crew.length - 1))?.map((person: any, index: any) => {
                   return (
@@ -263,7 +261,7 @@ function emptyCreditCard(credits: any, poster_path: any) {
   const navigation = useNavigation();
   return (<TouchableOpacity
     key={7}
-    onPress={() => navigation.navigate("FilmCreditsScreen", { credits: credits, poster: poster_path })}
+    onPress={() => navigation.push("MovieCreditsScreen", { credits: credits, poster: poster_path })}
     style={[{
       flexDirection: "column",
       height: 175,
@@ -284,3 +282,191 @@ function emptyCreditCard(credits: any, poster_path: any) {
   </TouchableOpacity>
   )
 }
+
+const styles = {
+  mainScrollView: {
+    flex: 1,
+    padding: "2.5%",
+    paddingTop: 0,
+  },
+  sectionView: {
+    backgroundColor: "rgba(255, 255, 255, 0.05)",
+    padding: 6,
+    paddingTop: 0,
+    borderWidth: 0.5,
+    borderColor: "rgba(255, 255, 255, 0.2)",
+    borderRadius: 12,
+    marginTop: "3%",
+  },
+  ImageBackground: {
+    height: hp("40%"),
+    width: "104%",
+    marginLeft: "-3%",
+    marginRight: "-3%",
+    marginTop: "-25%"
+  },
+  mainView: {
+    movieBasicInfo: {
+      title: {
+        fontFamily: "sans-serif-condensed",
+        fontSize: 26,
+        color: "white",
+        maxWidth: "100%",
+        alignSelf: "left",
+        marginTop: "5%",
+      },
+      view: {
+        flexDirection: "row",
+        marginTop: "3%",
+        width: "90%",
+        height: 220,
+        justifyContent: "space-between"
+      },
+      posterView: {
+        width: "42%",
+        height: "100%",
+        backgroundColor: "white",
+        position: "relative",
+      },
+      infoView: {
+        view: {
+          flexDirection: "column",
+          marginLeft: "3%",
+          width: "62%",
+          height: "100%",
+          backgroundColor: "rgba(255, 255, 255, 0.05)",
+          borderWidth: 1,
+          borderColor: "rgba(255, 255, 255, 0.10)",
+          borderRadius: 5,
+          padding: "1.5%",
+        },
+        textInfoView: {
+          flexDirection: "column",
+          justifyContent: "space-evenly",
+          height: "100%",
+          backgroundColor: "rgba(255, 255, 255, 0.03)",
+          borderRadius: 4,
+          padding: "1%",
+        },
+        yearView: {
+          flexDirection: "row",
+        },
+        directorView: {
+          flexDirection: "row",
+          maxWidth: "100%",
+        },
+        starsView: {
+          flexDirection: "column",
+          maxWidth: "100%",
+        },
+        stars: {
+          marginLeft: 15,
+          fontSize: 14,
+        },
+        imdbText: {
+          view: {
+            backgroundColor: "#deb522",
+            height: 24,
+            borderRadius: 5,
+            width: 76,
+            flexDirection: "column",
+            justifyContent: "center"
+          },
+          text: {
+            textAlign: "center",
+            fontSize: 14,
+            color: "black",
+            fontWeight: "bold",
+          }
+        },
+      },
+    },
+  },
+  genreCellView: {
+    height: 30,
+    width: "100%",
+    alignSelf: "left",
+  },
+  genreCell: {
+    flexDirection: "column",
+    height: 26,
+    borderRadius: 6,
+    minWidth: 50,
+    alignItems: "center",
+    paddingLeft: 6,
+    paddingRight: 6,
+    marginRight: 8,
+    borderWidth: 1,
+    justifyContent: "center",
+  },
+  genreCellText: {
+    fontFamily: "sans-serif-condensed",
+    color: "white",
+    fontSize: 14,
+    alignSelf: "center",
+  },
+  actionRow: {
+    view: {
+      marginBottom: "5%",
+      marginTop: "15%",
+      flexDirection: "row",
+      paddingLeft: 2,
+      paddingRight: 2,
+      height: 42,
+      width: "100%",
+      justifyContent: "space-between",
+      alignItems: "center",
+      backgroundColor: "rgba(255, 255, 255, 0.05)",
+      borderWidth: 0.5,
+      borderColor: "rgba(255, 255, 255, 0.2)",
+      borderRadius: 12,
+    },
+    saveBtn: {
+      borderRadius: 10,
+      borderColor: "rgba(254, 211, 48, 0.3)",
+      backgroundColor: "#deb522",
+      borderWidth: 0.5,
+      height: 36,
+      width: 64,
+      flexDirection: "row",
+      alignItems: "center",
+    },
+    markAsWatchedBtn: {
+      //borderRadius: 5,
+      borderColor: "rgba(0, 92, 77, 0.4)",
+      backgroundColor: "rgba(0, 92, 77, 0.7)",
+      borderWidth: 0.5,
+      height: 36,
+      width: "48%",
+      flexDirection: "row",
+      alignItems: "center",
+      borderRadius: 10,
+    },
+    shareBtn: {
+      borderRadius: 5,
+      borderColor: "rgba(48, 130, 254, 0.3)",
+      backgroundColor: "rgba(48, 130, 254, 1)",
+      //backgroundColor: "rgba(48, 130, 254, 0.6)",
+      borderWidth: 0.5,
+      height: 36,
+      width: "48%",
+      flexDirection: "row",
+      alignItems: "center",
+      //borderRadius: 10,
+    }
+  },
+  credits: {
+    view: {
+      borderColor: "rgba(255, 255, 255, 0.1)",
+      borderRadius: 10,
+      borderWidth: 1,
+    },
+    text: [
+      textStyle.yellow20,
+      {
+        marginLeft: "2%",
+        marginTop: "5%",
+      }
+    ],
+  }
+};

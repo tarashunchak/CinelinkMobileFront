@@ -6,7 +6,7 @@ import { heightPercentageToDP } from "react-native-responsive-screen";
 import BottomBar from "../bars/bottomBar";
 import ActorCard from "./components/CreditsCard";
 
-export default function FilmCreditsScreen({ route, navigation }: any) {
+export default function MovieCreditsScreen({ route, navigation }: any) {
   const { credits, poster } = route.params;
 
   return (

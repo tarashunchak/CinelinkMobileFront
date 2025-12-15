@@ -94,5 +94,5 @@ export type Movie = {
   },
   directors: any;
   images: any;
-  providers: any;
+  providers: any | null;
 };

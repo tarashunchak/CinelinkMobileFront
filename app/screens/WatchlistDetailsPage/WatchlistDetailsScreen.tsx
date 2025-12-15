@@ -30,7 +30,7 @@ export type WatchlistDetails = {
   bg_image_url: string;
   is_public: boolean;
   movies_quantity: number;
-  movies: WatchlistMovie[];
+  movies: Movie[];
 };
 
 export default function WatchlistDetailsScreen({ route }: any) {
@@ -39,10 +39,8 @@ export default function WatchlistDetailsScreen({ route }: any) {
 
   useEffect(() => {
     async function loadWatchlistMovies() {
-      const movies = GetWatchlistMovies(watchlist?.id);
-      const details = [watchlist, { movies }];
-      console.log("details: ", details);
-      setWatchlistMovies(details);
+      const movies = await GetWatchlistMovies(watchlist?.id);
+      setWatchlistMovies(movies?.results);
     }
     loadWatchlistMovies();
   }, []);
@@ -50,7 +48,7 @@ export default function WatchlistDetailsScreen({ route }: any) {
   return (
     <ImageBackground source={require("@/assets/images/background.png")} style={{ flex: 1 }}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <ImageBackground source={require("@/app/screens/WatchlistsLibraryPage/assets/NoBgWatchlist.jpeg")} style={{ height: hp("45%"), width: "100%" }} >
+        <ImageBackground source={require("@/app/screens/WatchlistsLibraryPage/assets/NoBgWatchlist.jpeg")} style={{ height: hp("45%"), width: "100%", marginBottom: hp("1%") }} >
           <TouchableOpacity style={{ flexDirection: "row", justifyContent: "flex-end", alignItems: "flex-start" }}>
             <Image source={require("@/app/screens/WatchlistDetailsPage/assets/InfoIcon.png")}
               style={[{ height: 26, width: 26, margin: hp("2%") }]} />
@@ -75,7 +73,7 @@ export default function WatchlistDetailsScreen({ route }: any) {
                   </View>
                 </View>
               </View>
-              <Text style={[textStyle.gray14, {}]}>
+              <Text style={[textStyle.gray14]}>
                 {`${watchlist?.movies_quantity} ${watchlist?.movies_quantity === 1 ? "movie" : "movies"}`}
               </Text>
             </View>

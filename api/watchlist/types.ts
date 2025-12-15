@@ -1,4 +1,4 @@
-export type WatchlistItem = {
+export type WatchlistItem_T = {
   id: number;
   user_id: number;
   movie_id: any;

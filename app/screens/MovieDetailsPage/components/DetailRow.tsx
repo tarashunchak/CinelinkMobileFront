@@ -7,7 +7,7 @@ interface DetailRowProps {
   label: string,
   items: any[],
   prop: string,
-  maxWidth: string | number,
+  maxW: string,
   item: any,
 }
 
@@ -19,9 +19,9 @@ export default function DetailRow({ label, items, prop, maxW, item }: DetailRowP
         <JoinedText maxWidth={maxW} items={items} prop={prop} />
       </View>
     ) : (
-      <View style={{ flexDirection: "row", maxWidth: maxW }}>
+      <View style={{ flexDirection: "row", maxWidth: maxW, minWidth: maxW }}>
         <Text style={movieDetailScreenStyle.yellow16}>{label}: </Text>
-        <Text style={[movieDetailScreenStyle.white16, { maxWidth: maxW }]}>{item}</Text>
+        <Text style={[movieDetailScreenStyle.white16]}>{item}</Text>
       </View>
     );
 

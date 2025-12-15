@@ -2,6 +2,7 @@ import { textStyle } from "@/styles/textStyles";
 import React from "react";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { TouchableOpacity, View, Text, Image } from "react-native";
+import { useNavigation } from "expo-router";
 
 export type FriendCard_T = {
   user_id: number;
@@ -15,8 +16,12 @@ export type FriendCard_T = {
 
 export default function FriendCard({ friend }: { friend: FriendCard_T }) {
   console.warn("Friend: ", friend);
+  const navigator = useNavigation();
   return (
-    <TouchableOpacity style={styles.card.view}>
+    <TouchableOpacity style={styles.card.view}
+      onPress={() => {
+        navigator.push("UserProfileScreen", { userID: friend?.user_id })
+      }}>
       <View style={styles.card.info.view}>
         <Image style={styles.card.info.avatar} source={friend?.avatar_url ? { uri: friend?.avatar_url } : require("@/assets/images/giggaNigga.png")} />
         <View style={styles.card.info.text.view}>

@@ -1,8 +1,6 @@
 import { textStyle } from "@/styles/textStyles";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 
-wp("100");
-
 export const userPage = {
   imageBackground: {
     margin: "-2%",
@@ -41,15 +39,15 @@ export const userPage = {
         height: "100%",
         justifyContent: "center",
         alignItems: "center",
-        borderRadius: 22
+        borderRadius: 22,
       },
       text: textStyle.white16
     },
     followButton: {
       pressable: {
         backgroundColor: "white",
-        width: 100,
-        height: "100%",
+        width: 110,
+        height: 52,
         justifyContent: "center",
         alignItems: "center",
         borderRadius: 22
@@ -58,9 +56,11 @@ export const userPage = {
     },
     editButton: {
       pressable: {
+        flexDirection: "row",
+        gap: 10,
         backgroundColor: "transparent",
         width: 100,
-        height: "100%",
+        height: 50,
         justifyContent: "center",
         alignItems: "center",
         borderRadius: 22,

@@ -14,7 +14,7 @@ import ActorCard from "./components/CreditsCard";
 import DetailRow from "./components/DetailRow";
 import { movieDetailScreenStyle } from "./styles";
 import { Movie } from "./types";
-import { AddWatchlistItem, WatchlistItem } from "@/api/watchlist/watchlist";
+import { AddWatchlistItem, WatchlistItem_T } from "@/api/watchlist/watchlist";
 import { CURRENT_USER } from "@/api/currentUser";
 
 
@@ -110,7 +110,7 @@ export default function MovieDetailScreen({ route }: any) {
                         <Text style={textStyle.yellow16}>min</Text>
                       </View>
 
-                      <Pressable style={movieDetailScreenStyle.mainView.movieBasicInfo.infoView.imdbText.view}
+                      <TouchableOpacity style={movieDetailScreenStyle.mainView.movieBasicInfo.infoView.imdbText.view}
                         onPress={async () => {
                           const url = `https://www.imdb.com/title/${movie?.imdb_id}`;
                           const sup = await Linking.canOpenURL(url);
@@ -123,7 +123,7 @@ export default function MovieDetailScreen({ route }: any) {
                             `IMDb: ${movie?.vote_average.toFixed(1)}`
                           }
                         </Text>
-                      </Pressable>
+                      </TouchableOpacity>
 
                     </View>
                   </View>
@@ -136,7 +136,7 @@ export default function MovieDetailScreen({ route }: any) {
           <View style={movieDetailScreenStyle.actionRow.view}>
             <TouchableOpacity style={movieDetailScreenStyle.actionRow.markAsWatchedBtn}
               onPress={() => {
-                const item: WatchlistItem = {
+                const item: WatchlistItem_T = {
                   id: 0,
                   movie_id: movie?.id,
                   user_id: CURRENT_USER.UID
@@ -147,7 +147,7 @@ export default function MovieDetailScreen({ route }: any) {
             </TouchableOpacity>
 
             <TouchableOpacity style={movieDetailScreenStyle.actionRow.shareBtn}>
-              <Text style={[textStyle.white18, { width: "100%", textAlign: "center" }]}>Share</Text>
+              <Text style={[textStyle.white18, { width: "100%", textAlign: "center" }]}>Recommend</Text>
             </TouchableOpacity>
           </View>
 
@@ -180,20 +180,24 @@ export default function MovieDetailScreen({ route }: any) {
             </ScrollView>
           </View>
 
-          <View style={movieDetailScreenStyle.sectionView}>
-            <Text style={[textStyle.yellow18]}>Providers</Text>
-            <ScrollView horizontal={true}
-              style={[movieDetailScreenStyle.genreCellView, { height: 40 }]}
-              contentContainerStyle={{ paddingHorizontal: 10 }}
-              showsHorizontalScrollIndicator={false}
-            >
-              {
-                movie?.providers?.["US"]?.flatrate?.map((flat: any, index: number) => (
-                  <Image key={index} source={{ uri: "https://image.tmdb.org/t/p/w500" + flat?.logo_path }} style={{ height: 32, width: 32, borderRadius: 4, marginRight: "4" }} />
-                ))
-              }
-            </ScrollView>
-          </View>
+          {
+            movie?.providers?.["US"]?.length &&
+            (<View style={movieDetailScreenStyle.sectionView}>
+              <Text style={[textStyle.yellow18]}>Providers</Text>
+              <ScrollView horizontal={true}
+                style={[movieDetailScreenStyle.genreCellView, { height: 40 }]}
+                contentContainerStyle={{ paddingHorizontal: 10 }}
+                showsHorizontalScrollIndicator={false}
+              >
+                {
+                  movie?.providers?.["US"]?.flatrate?.map((flat: any, index: number) => (
+                    <Image key={index} source={{ uri: "https://image.tmdb.org/t/p/w500" + flat?.logo_path }} style={{ height: 32, width: 32, borderRadius: 4, marginRight: "4" }} />
+                  ))
+                }
+              </ScrollView>
+            </View>
+            )
+          }
 
           <Text style={[{ width: "80%", marginTop: "5%" }, textStyle.yellow20]}>Trailer</Text>
           <View style={{ marginLeft: "0%", marginTop: "1%" }}>
@@ -209,7 +213,7 @@ export default function MovieDetailScreen({ route }: any) {
             <Text style={[textStyle.yellow20]}>Details</Text>
             <View style={{ flexDirection: "column" }}>
               <DetailRow label="Release date" item={movie?.release_date} maxW="75%" />
-              <DetailRow label="Spoken languages" items={movie?.spoken_languages} prop="english_name" maxW="75%" />
+              <DetailRow label="Spoken languages" item={movie?.spoken_languages} maxW="75%" />
               <DetailRow label="Countries" items={movie?.production_countries} prop="name" maxW="75%" />
               <DetailRow label="Companies" items={movie?.production_companies} prop="name" maxW="75%" />
               <DetailRow label="Revenue" item={movie?.revenue + "$"} maxW="75%" />

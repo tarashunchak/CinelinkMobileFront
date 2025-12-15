@@ -9,7 +9,7 @@ type RecommendedBy_T = {
   username: string;
   avatar_url: string;
   message: string;
-}
+};
 
 export type RecommendedCard_T = {
   movie_id: number;
@@ -45,6 +45,10 @@ export default function RecommendedCard({ item }: { item: RecommendedCard_T }) {
               item?.recommended_by?.slice(0, 3)?.map((user: any, index: number) => (
                 <Image key={index} style={styles.card.content.columnInfo.recommendedBy.avatars.item} source={{ uri: user?.avatar_url }} />
               ))
+            }
+            {
+              item?.recommended_by?.length > 3 &&
+              <Text style={[textStyle.gray14]}>{`+${item?.recommended_by?.length - 3}`}</Text>
             }
           </View>
         </View>

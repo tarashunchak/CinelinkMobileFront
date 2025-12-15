@@ -1,29 +1,34 @@
-import { getUserProfileData } from "@/api/currentUser";
+import { CURRENT_USER, getUserProfileData } from "@/api/currentUser";
 import LeafyReturnArrowButton from "@/components/ui/leafy-return-arrow-btn";
 import { textStyle } from "@/styles/textStyles";
 import React, { useEffect, useState } from "react";
 import { Image, ImageBackground, Pressable, ScrollView, Text, View } from "react-native";
 import BottomBar from "../bars/bottomBar";
 import { userPage } from "./styles";
-import { UserProfile } from "./types";
+import { UserProfile_T } from "./types";
+import { useNavigation } from "expo-router";
 
-export default async function UserProfileScreen({ navigator, userID, isCurrentUser }: { navigator: any, userID: number, isCurrentUser: boolean }) {
+export default async function UserProfileScreen({ route }: any) {
   let mainButtons;
-  const [userInfo, setUserInfo] = useState<UserProfile>();
+  const [userInfo, setUserInfo] = useState<UserProfile_T>();
+  const navigator = useNavigation();
 
+  let userID = route?.params?.["userID"];
+  userID = userID ? userID : CURRENT_USER?.UID;
+  const isCurrentUser = userID == CURRENT_USER?.UID;
   useEffect(() => {
     async function loadUserInfo() {
-      const data: UserProfile = await getUserProfileData(1);
+      console.log("USER ID: ", userID);
+      const data: UserProfile_T = await getUserProfileData(userID);
       if (!data) return;
 
       setUserInfo(data);
 
-      console.log("");
     }
     loadUserInfo()
-  }, [userID]);
+  }, []);
 
-  mainButtons = (isCurrentUser === true) ? (
+  mainButtons = (isCurrentUser == true) ? (
     <Pressable style={userPage.mainButtons.editButton.pressable}>
       <Text style={userPage.mainButtons.editButton.text}>Edit</Text>
     </Pressable>
@@ -42,12 +47,20 @@ export default async function UserProfileScreen({ navigator, userID, isCurrentUs
   return (
     <ImageBackground source={require("@/assets/images/background.png")} style={{ flex: 1 }}>
       <ScrollView style={[{ padding: "2%" }]}>
-        <ImageBackground source={require("@/assets/images/profileBackground.png")} style={userPage.imageBackground} />
-        <LeafyReturnArrowButton style={{ marginTop: "2%" }} onPress={() => navigator.goBack()} />
+        <ImageBackground
+          source={userInfo?.bg_img_url
+            ? { uri: userInfo?.bg_img_url }
+            : require("@/assets/images/profileBackground.png")}
+          style={userPage.imageBackground}
+        />
+        <LeafyReturnArrowButton onPress={() => navigator.goBack()} />
         <View style={{ flexDirection: "column", gap: 5 }}>
           <View style={{ width: "100%", marginTop: "45%", height: 100, flexDirection: "row", justifyContent: "space-between" }}>
             <View style={userPage.profilPic.view}>
-              <Image source={{ uri: userInfo?.avatar_url }} style={userPage.profilPic.picture} />
+              <Image
+                source={{ uri: userInfo?.avatar_url }}
+                style={userPage.profilPic.picture}
+              />
             </View>
             {
               mainButtons
@@ -55,7 +68,7 @@ export default async function UserProfileScreen({ navigator, userID, isCurrentUs
           </View>
 
           <Text style={textStyle.white20}>{userInfo ? `${userInfo?.first_name} ${userInfo?.last_name}` : "Gigga Nigga"}</Text>
-          <Text style={textStyle.gray12}>{userInfo?.username || "@username"}</Text>
+          <Text style={textStyle.gray12}>{`@${userInfo?.username}` || "@username"}</Text>
 
           <Text style={userPage.bio}>{userInfo?.bio}</Text>
 
@@ -83,8 +96,13 @@ export default async function UserProfileScreen({ navigator, userID, isCurrentUs
 
         <View style={userPage.post.view}>
           <View style={userPage.post.profilInfo.view}>
-            <Image style={userPage.post.profilInfo.picture} source={require("@/assets/images/giggaNigga.png")}></Image>
-            <Text style={userPage.post.profilInfo.name}>{"Gigga Nigga"}</Text>
+            <Image style={userPage.post.profilInfo.picture}
+              source={
+                userInfo?.avatar_url
+                  ? { uri: userInfo?.avatar_url }
+                  : require("@/assets/images/giggaNigga.png")}
+            />
+            <Text style={userPage.post.profilInfo.name}>{`${userInfo?.first_name} ${userInfo?.last_name}`}</Text>
           </View>
         </View>
       </ScrollView >

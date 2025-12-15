@@ -23,6 +23,5 @@ export async function GetUserWatchlists(userID: number) {
 export async function GetWatchlistMovies(watchlistID: number) {
   console.log("watchlist id: ", watchlistID);
   const response = await fetch(`${API_URL}/watchlist?watchlistID=${watchlistID}`)
-  console.log("GetUserWatchlists: ", response.json());
-  return response;
+  return response.json();
 };

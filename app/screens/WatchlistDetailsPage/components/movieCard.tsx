@@ -4,10 +4,13 @@ import { TouchableOpacity, View, Text, Image } from "react-native";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { WatchlistMovie } from "../WatchlistDetailsScreen";
 import { Movie } from "../../MovieDetailsPage/types";
+import { useNavigation } from "expo-router";
 
 export default function MovieCard({ movie }: { movie: Movie }) {
+  const navigator = useNavigation();
   return (
-    <TouchableOpacity style={styles.card.view}>
+    <TouchableOpacity style={styles.card.view}
+      onPress={() => navigator.push("MovieDetailScreen", { movieId: movie?.id })}>
       <Image style={styles.card.content.poster} source={{ uri: `https://image.tmdb.org/t/p/w300${movie?.poster_path}` }} />
       <View style={styles.card.content.columnInfo.view}>
         <Text style={styles.card.content.columnInfo.title}
@@ -16,7 +19,7 @@ export default function MovieCard({ movie }: { movie: Movie }) {
           ellipsizeMode="tail">{movie?.title}</Text>
         <View style={styles.card.content.columnInfo.imdb.view}>
           <Text style={styles.card.content.columnInfo.imdb.text}>
-            {`IMDb: ${movie?.vote_average}`}
+            {`IMDb: ${movie?.imdb_rating?.toFixed(1)}`}
           </Text>
         </View>
       </View>
@@ -39,7 +42,7 @@ const styles = {
       gap: 10,
       width: "100%",
       height: hp("14.5%"),
-      backgroundColor: "rgba(255, 255, 255, 0.05)",
+      backgroundColor: "rgba(255, 255, 255, 0.03)",
       borderColor: "rgba(255, 255, 255, 0.2)",
       borderWidth: 0.5,
       borderRadius: 4,
@@ -60,6 +63,7 @@ const styles = {
         },
         title: [textStyle.white20, {
           maxWidth: "85%",
+          minWidth: "85%",
         }],
         imdb: {
           view: {
@@ -67,8 +71,6 @@ const styles = {
             width: 54,
             height: 18,
             borderRadius: 4,
-            alignItems: "center",
-            justifyContent: "center",
           },
           text: [textStyle.black12, {
             alignSelf: "center",

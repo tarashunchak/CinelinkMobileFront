@@ -23,8 +23,9 @@ import SocialScreen from "../screens/SocialPage/SocialScreen";
 
 import WatchlistsLibraryScreen from "../screens/WatchlistsLibraryPage/WatchlistsLibraryScreen";
 import WatchlistDetailsScreen from "../screens/WatchlistDetailsPage/WatchlistDetailsScreen";
+import LibraryNavigatorStack from "./stacks/libraryNavigator";
 
-const Stack = createNativeStackNavigator();
+/*const Stack = createNativeStackNavigator();
 
 export default function LeafyNavigator() {
 
@@ -39,7 +40,6 @@ export default function LeafyNavigator() {
         <Stack.Screen name="CreatePasswordScreen" component={CreatePasswordScreen} options={{ headerShown: false }} />
         <Stack.Screen name="EmailVerifying" component={EmailVerifyingScreen} options={{ headerShown: false }} />
         <Stack.Screen name="Registration" component={RegistrationScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="CollectionScreen" component={CollectionScreen} options={{ headerShown: false }} />
         <Stack.Screen name="UserProfileScreen" component={UserProfileScreen} options={{ headerShown: false }} />
         <Stack.Screen name="SettingScreen" component={SettingScreen} options={{ headerShown: false }} />
         <Stack.Screen name="Error500Screen" component={Error500Screen} options={{ headerShown: false }} />
@@ -57,4 +57,4 @@ export default function LeafyNavigator() {
       </Stack.Navigator>
     </SafeAreaProvider>
   )
-}
+}*/

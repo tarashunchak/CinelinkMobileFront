@@ -1,11 +1,10 @@
 import { getNowPlayingMovies } from "@/api/tmdbApi";
-import { MONTH } from "@/app/utils/month";
-import { nowPlayingMoviesId } from "@/app/utils/nowPlaying";
+import { MONTH } from "@/utils/month";
+import { nowPlayingMoviesId } from "@/utils/nowPlaying";
 import { textStyle } from "@/styles/textStyles";
 import { useNavigation } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { Image, Pressable, ScrollView, Text, View } from "react-native";
-import { nowPlaying } from "./styles";
+import { TouchableOpacity, Image, ScrollView, Text, View } from "react-native";
 
 export default function PremiereCarousel() {
   const navigator = useNavigation();
@@ -25,20 +24,33 @@ export default function PremiereCarousel() {
   const maximum = movies?.dates?.maximum?.slice(5, 10);
 
   return (
-    <ScrollView style={[nowPlaying.scrollView]} horizontal={true} showsHorizontalScrollIndicator={false}>
+    <ScrollView
+      style={[styles.scrollView]}
+      horizontal={true}
+      showsHorizontalScrollIndicator={false}
+    >
       {
         movies?.results?.map((movie: any, index: number) => {
           nowPlayingMoviesId.push(movie?.id);
           return (
-            <Pressable key={index} style={[nowPlaying.item]}
-              onPress={() => navigator?.push("MovieDetailScreen", { movieId: movie?.id, inCinemas: true, maximum })}>
+            <TouchableOpacity key={index} style={styles.view}
+              onPress={() => navigator?.push("MovieDetailScreen",
+                {
+                  movieId: movie?.id,
+                  inCinemas: true,
+                  maximum
+                }
+              )}>
               <View>
-                <Image source={{ uri: "https://image.tmdb.org/t/p/w200" + movie?.poster_path }} style={{ width: "100%", height: "100%", borderRadius: 4 }} />
-                <View style={{ position: "absolute", top: "3%", width: "100%", backgroundColor: "rgba(50, 158, 79, 0.9)", borderWidth: 0.5, borderColor: "rgba(255, 255, 255, 0.4)" }}>
-                  <Text style={[textStyle.white10, { textTransform: "uppercase", textAlign: "center", alignSelf: "center" }]}>{`till ${(maximum.slice(3, 5) + ' ' + MONTH[maximum.slice(0, 2)])}`}</Text>
+                <Image style={styles.poster}
+                  source={{ uri: "https://image.tmdb.org/t/p/w200" + movie?.poster_path }} />
+                <View style={styles.info.view}>
+                  <Text style={styles.info.text}>
+                    {`till ${(maximum.slice(3, 5) + ' ' + MONTH[maximum.slice(0, 2)])}`}
+                  </Text>
                 </View>
               </View>
-            </Pressable>
+            </TouchableOpacity>
           )
         })
       }
@@ -46,3 +58,49 @@ export default function PremiereCarousel() {
   )
 }
 
+const styles: object = {
+  scrollView: {
+    height: 160,
+    backgroundColor: "rgba(255, 255, 255, 0.05)",
+    padding: 4,
+    borderWidth: 0.5,
+    borderColor: "rgba(255, 255, 255, 0.2)",
+    borderRadius: 12,
+    marginTop: "3%",
+    marginLeft: "-1%",
+    marginRight: "-1%",
+  },
+  view: {
+    marginRight: 5,
+    width: 100,
+    height: "99%",
+    backgroundColor: "rgba(255, 255, 255, 0.03)",
+    borderRadius: 6,
+    borderWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.05)",
+    padding: 4,
+  },
+  poster: {
+    width: "100%",
+    height: "100%",
+    borderRadius: 4
+  },
+  info: {
+    view: {
+      position: "absolute",
+      top: "3%",
+      width: "100%",
+      backgroundColor: "rgba(50, 158, 79, 0.9)",
+      borderWidth: 0.5,
+      borderColor: "rgba(255, 255, 255, 0.4)"
+    },
+    text: [
+      textStyle.white10,
+      {
+        textTransform: "uppercase",
+        textAlign: "center",
+        alignSelf: "center"
+      }
+    ]
+  }
+}

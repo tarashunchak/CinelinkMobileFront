@@ -1,23 +1,28 @@
-import { getPopularMovies } from "@/api/tmdbApi";
-import { useNavigation } from "expo-router";
 import { textStyle } from "@/styles/textStyles";
+import { useNavigation } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { Image, TouchableOpacity, ScrollView } from "react-native";
+import { TouchableOpacity, Image, ScrollView, Text, View } from "react-native";
 
-export default function HorizontalMoviesList() {
+export type WatchlistCard = {
+  id: number;
+  fg_img_url: string;
+}
+
+export default function WatchlistsCarousel() {
   const navigator = useNavigation();
-  const [movies, setMovies] = useState<any>();
+  const [watchlists, setWatchlists] = useState();
 
-  useEffect(() => {
-    async function loadmovies() {
-      const data = await getPopularMovies();
-      setMovies(data);
-      return;
+  /*useEffect(() => {
+    async function loadMovies() {
+      const data = await getNowPlayingMovies();
+      if (data) {
+        setMovies(data.results)
+        nowPlayingMoviesId.length = 0;
+      }
     }
-    console.log("same genre pressed — no reload");
+    loadMovies();
+  }, []);*/
 
-    loadmovies();
-  }, []);
 
   return (
     <ScrollView
@@ -25,26 +30,23 @@ export default function HorizontalMoviesList() {
       horizontal={true}
       showsHorizontalScrollIndicator={false}
     >
-      {
-        movies?.map((movie: any, index: number) =>
-        (
-          <TouchableOpacity
-            key={index}
-            style={[styles.item]}
-            onPress={() => {
-              navigator.navigate("MovieDetailScreen",
-                {
-                  movieId: movie?.id
-                }
-              )
-            }}
-          >
-            <Image style={styles.poster}
-              source={{ uri: "https://image.tmdb.org/t/p/w200" + movie?.poster_path }} />
-          </TouchableOpacity>
-        )
-        )
-      }
+      <TouchableOpacity key={index} style={styles.view}
+        onPress={() => navigator?.push("MovieDetailScreen",
+          {
+            movieId: movie?.id,
+            inCinemas: true,
+            maximum
+          }
+        )}>
+        <View>
+          <Image style={styles.poster}
+            source={{ uri: "https://image.tmdb.org/t/p/w200" + movie?.poster_path }} />
+          <View style={styles.info.view}>
+            <Text style={styles.info.text}>
+            </Text>
+          </View>
+        </View>
+      </TouchableOpacity>
     </ScrollView >
   )
 }

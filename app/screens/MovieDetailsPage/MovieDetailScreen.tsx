@@ -1,6 +1,6 @@
 import { getDetailedMovieByID } from "@/api/tmdbApi";
 import BottomBar from "@/app/screens/bars/bottomBar";
-import { MONTH } from "@/app/utils/month";
+import { MONTH } from "@/utils/month";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import MovieCardList from "@/components/ui/leafy-film-list";
 import LeafyReturnArrowButton from "@/components/ui/leafy-return-arrow-btn";

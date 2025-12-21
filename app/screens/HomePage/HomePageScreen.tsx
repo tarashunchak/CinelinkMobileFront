@@ -1,5 +1,4 @@
 import BottomBar from "@/app/screens/bars/bottomBar";
-import FilmCardList from "@/components/ui/leafy-film-list";
 import GenresList from "@/components/ui/leafy-genres-list";
 import { inputStyle } from "@/styles/inputStyle";
 import { textStyle } from "@/styles/textStyles";
@@ -8,9 +7,12 @@ import { Image, ImageBackground, ScrollView, Text, TextInput } from "react-nativ
 import { heightPercentageToDP } from "react-native-responsive-screen";
 import PremiereCarousel from "./components/PremiereCarousel";
 import HorizontalMoviesList from "./components/HorizontalFilmList";
+import { useNavigation } from "expo-router";
 
-export default function HomePageScreen({ navigation }: any) {
+export default function HomePageScreen() {
   const [selectedGenre, setSelectedGenre] = React.useState<number>(0);
+
+  const navigation = useNavigation();
 
   return (
 
@@ -20,15 +22,23 @@ export default function HomePageScreen({ navigation }: any) {
 
         <Image source={require("@/assets/images/filmTape.png")} style={{ position: "absolute", opacity: 0.15, width: "104%", height: heightPercentageToDP("50%"), borderRadius: 20, margin: "-4%" }} />
 
-        <TextInput onPressIn={() => { }} style={[inputStyle.defaultInput, { marginTop: heightPercentageToDP("25%") }]} placeholderTextColor={"rgba(255, 255, 255, 0.6)"} placeholder="Search for some movies, actors ..." />
-
-        <Text style={[textStyle.homePageTrandingText, { marginTop: "5%" }]}>Now in cinemas</Text>
+        {'---start-of-block---'}
+        <Text style={styles.text}>
+          Now in cinemas
+        </Text>
         <PremiereCarousel />
+        {'---end-of-block---'}
 
-        <Text style={[textStyle.homePageTrandingText, { marginTop: "5%" }]}>Trending</Text>
+        {'---start-of-block---'}
+        <Text style={styles.text}>
+          Trending
+        </Text>
         <HorizontalMoviesList />
+        {'---end-of-block---'}
 
-        <Text style={[textStyle.homePageTrandingText, { marginTop: "5%" }]}>Genres</Text>
+        <Text style={styles.text}>
+          Genres
+        </Text>
         <GenresList setSelectedGenre={setSelectedGenre} />
 
       </ScrollView>
@@ -37,4 +47,10 @@ export default function HomePageScreen({ navigation }: any) {
   );
 }
 
+const styles: object = {
+  text: [
+    textStyle.white22,
+    { marginTop: "5%" }
+  ]
+}
 //<FilmCardList selectedGenre={selectedGenre} />

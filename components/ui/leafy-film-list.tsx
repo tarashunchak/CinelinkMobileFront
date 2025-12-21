@@ -1,6 +1,6 @@
 import { getMoviesByGenre, getPopularMovies, getSimilarMovies } from "@/api/tmdbApi";
-import { getCurrentGenre, setCurrentGenre } from "@/app/utils/homePage";
-import { nowPlayingMoviesId } from "@/app/utils/nowPlaying";
+import { getCurrentGenre, setCurrentGenre } from "@/utils/homePage";
+import { nowPlayingMoviesId } from "@/utils/nowPlaying";
 import { movieCardStyle } from "@/styles/movieCardStyle";
 import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";

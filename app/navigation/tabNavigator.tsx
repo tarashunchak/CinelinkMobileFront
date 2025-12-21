@@ -6,6 +6,7 @@ import UserProfileScreen from "../screens/UserPage/UserProfileScreen";
 import WatchlistsScreen from "../screens/WatchlistsLibraryPage/WatchlistsLibraryScreen";
 import ProfileNavigatorStack from "./stacks/profileNavigation";
 import HomeNavigatorStack from "./stacks/homeNavigation";
+import SearchNavigatorStack from "./stacks/searchNavigation";
 
 const Tab = createBottomTabNavigator();
 
@@ -17,6 +18,7 @@ export default function TabNavigator() {
       <Tab.Screen name="Social" component={SocialNavigatorStack} />
       <Tab.Screen name="Library" component={LibraryNavigatorStack} />
       <Tab.Screen name="Profile" component={ProfileNavigatorStack} />
+      <Tab.Screen name="Search" component={SearchNavigatorStack} />
     </Tab.Navigator>
   );
 }

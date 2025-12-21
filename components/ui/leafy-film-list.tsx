@@ -65,58 +65,58 @@ export default function MovieCardList({ selectedGenre, movieID, movieGenre }: Mo
   return (
     <View style={{ position: "relative", backgroundColor: "transparent", marginTop: "2%", marginBottom: heightPercentageToDP(Platform.OS === "ios" ? "10%" : "7.8%") }}>
       {
-        (movies || [])?.map((movie, index) => {
-          return (
-            nowPlayingMoviesId.includes(movie?.id) ?
-              null
-              :
-              (<TouchableOpacity key={index} style={[movieCardStyle?.backgroundStyle]} onPress={() => {
-                const id = movie.id;
-                console.log("MovieID pre: ", id);
-                navigation?.push("FilmDetailScreen", { currentMovieID: id });
-              }}>
-                <Image
-                  source={{ uri: "https://image.tmdb.org/t/p/w500" + movie.poster_path }}
-                  style={movieCardStyle.moviePosterStyle}
-                  pointerEvents="none"
-                />
-                <View style={{ flexDirection: "column", height: "100%", marginLeft: "6%", justifyContent: "space-evenly" }}>
-                  <View style={{ flexDirection: "column", height: "30%" }}>
-                    <View style={{ flexDirection: "row", justifyContent: "flex-start" }}>
-                      <Text style={movieCardStyle.movieTitleStyle}
-                        pointerEvents="none"
-                        numberOfLines={1}
-                        ellipsizeMode="tail">{movie?.title}</Text>
-                      <Text style={[movieCardStyle.movieYearStyle, textStyle.gray16]} pointerEvents="none">{` (${movie?.release_date.slice(0, 4)})`}</Text>
-                    </View>
-                    <Text style={movieCardStyle.movieDirectorStyle} pointerEvents="none">{movie?.directors?.at(0)}</Text>
+        movies?.map((movie, index) =>
+        (
+          nowPlayingMoviesId.includes(movie?.id) ?
+            null
+            :
+            (<TouchableOpacity key={index} style={[movieCardStyle?.backgroundStyle]} onPress={() => {
+              const id = movie.id;
+              console.log("MovieID pre: ", id);
+              navigation?.push("FilmDetailScreen", { currentMovieID: id });
+            }}>
+              <Image
+                source={{ uri: "https://image.tmdb.org/t/p/w500" + movie.poster_path }}
+                style={movieCardStyle.moviePosterStyle}
+                pointerEvents="none"
+              />
+              <View style={{ flexDirection: "column", height: "100%", marginLeft: "6%", justifyContent: "space-evenly" }}>
+                <View style={{ flexDirection: "column", height: "30%" }}>
+                  <View style={{ flexDirection: "row", justifyContent: "flex-start" }}>
+                    <Text style={movieCardStyle.movieTitleStyle}
+                      pointerEvents="none"
+                      numberOfLines={1}
+                      ellipsizeMode="tail">{movie?.title}</Text>
+                    <Text style={[movieCardStyle.movieYearStyle, textStyle.gray16]} pointerEvents="none">{` (${movie?.release_date.slice(0, 4)})`}</Text>
                   </View>
-                  <View style={{ flexDirection: "row", gap: "2%", height: 20 }}>
-                    {
-                      movie?.providers?.["US"]?.flatrate?.slice(0, (Math.min(8, movie?.providers?.["US"]?.flatrate?.length)))?.map((flat: any, index: number) => (
-                        <Image key={index} source={{ uri: "https://image.tmdb.org/t/p/w200" + movie?.providers?.["US"]?.flatrate?.[index]?.logo_path }} style={{ height: 20, width: 20 }} />
-                      ))
-                    }
-                  </View>
-
-                  <TouchableOpacity style={movieCardStyle.imdbText.view}
-                    onPress={async () => {
-                      const url = `https://www.imdb.com/title/${movie?.imdb_id}`;
-                      const sup = await Linking.canOpenURL(url);
-                      if (sup) Linking.openURL(url);
-                    }}
-                  >
-                    <Text style={movieCardStyle.imdbText.text}>
-                      {
-                        `IMDb: ${movie?.vote_average.toFixed(1)}`
-                      }
-                    </Text>
-                  </TouchableOpacity>
+                  <Text style={movieCardStyle.movieDirectorStyle} pointerEvents="none">{movie?.directors?.at(0)}</Text>
                 </View>
-              </TouchableOpacity>
-              )
-          )
-        })}
+                <View style={{ flexDirection: "row", gap: "2%", height: 20 }}>
+                  {
+                    movie?.providers?.["US"]?.flatrate?.slice(0, (Math.min(8, movie?.providers?.["US"]?.flatrate?.length)))?.map((flat: any, index: number) => (
+                      <Image key={index} source={{ uri: "https://image.tmdb.org/t/p/w200" + movie?.providers?.["US"]?.flatrate?.[index]?.logo_path }} style={{ height: 20, width: 20 }} />
+                    ))
+                  }
+                </View>
+
+                <TouchableOpacity style={movieCardStyle.imdbText.view}
+                  onPress={async () => {
+                    const url = `https://www.imdb.com/title/${movie?.imdb_id}`;
+                    const sup = await Linking.canOpenURL(url);
+                    if (sup) Linking.openURL(url);
+                  }}
+                >
+                  <Text style={movieCardStyle.imdbText.text}>
+                    {
+                      `IMDb: ${movie?.vote_average.toFixed(1)}`
+                    }
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </TouchableOpacity>
+            )
+        )
+        )}
     </View>
   )
 };

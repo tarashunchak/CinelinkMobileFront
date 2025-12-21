@@ -9,13 +9,13 @@ import { nowPlaying } from "./styles";
 
 export default function PremiereCarousel() {
   const navigator = useNavigation();
-  const [movies, setMovies] = useState<any>();
+  const [movies, setMovies] = useState();
 
   useEffect(() => {
     async function loadMovies() {
       const data = await getNowPlayingMovies();
       if (data) {
-        setMovies(data)
+        setMovies(data.results)
         nowPlayingMoviesId.length = 0;
       }
     }

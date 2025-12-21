@@ -6,6 +6,7 @@ import ActorProfileScreen from "../../screens/ActorPage/ActorProfileScreen";
 import MovieCreditsScreen from "../../screens/MovieDetailsPage/MovieCreditsScreen";
 import MovieDetailScreen from "../../screens/MovieDetailsPage/MovieDetailScreen";
 import UserProfileScreen from "../../screens/UserPage/UserProfileScreen";
+import SocialScreen from "@/app/screens/SocialPage/SocialScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -15,6 +16,7 @@ export default function SocialNavigatorStack() {
     <SafeAreaProvider style={{ flex: 1 }}>
       <StatusBar hidden={true} />
       <Stack.Navigator>
+        <Stack.Screen name="SocialScreen" component={SocialScreen} options={{ headerShown: false }} />
         <Stack.Screen name="UserProfileScreen" component={UserProfileScreen} options={{ headerShown: false }} />
         <Stack.Screen name="ActorProfileScreen" component={ActorProfileScreen} options={{ headerShown: false }} />
         <Stack.Screen name="MovieCreditsScreen" component={MovieCreditsScreen} options={{ headerShown: false }} />

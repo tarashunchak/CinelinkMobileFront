@@ -1,4 +1,4 @@
-import { UserProfile_T } from "@/app/screens/UserPage/types";
+import { UserProfile_T } from "@/app/profile/types";
 import { API_URL } from "./API_CONFIG";
 
 export let CURRENT_USER = {

@@ -1,11 +1,13 @@
 import { API_URL } from "@/api/API_CONFIG";
 import { CURRENT_USER } from "@/api/currentUser";
+import { useNavigation } from "expo-router";
 
-export async function LoginRequest(email: string, password: string, navigation: any) {
+export async function LoginRequest(email: string, password: string) {
+  const navigation = useNavigation();
 
   console.log("Trying to login")
   try {
-    const res = await fetch(`${API_URL}/login`, {
+    const res = await fetch(`${API_URL}/auth/login/user`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -24,7 +26,7 @@ export async function LoginRequest(email: string, password: string, navigation: 
         CURRENT_USER.username = user.username;
         CURRENT_USER.UID = user.userID;
       }
-      navigation.replace("HomePageScreen");
+      navigation.navigate("HomePageScreen");
     }
 
     if (data.code === 403) {

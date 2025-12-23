@@ -47,7 +47,7 @@ export const textStyle = StyleSheet.create({
   },
 });
 
-for (let i = 10; i <= 36; ++i) {
+for (let i = 10; i <= 40; ++i) {
   textStyle[`yellow${i}`] = [yellow, { fontSize: i }];
   textStyle[`white${i}`] = [white, { fontSize: i }];
   textStyle[`black${i}`] = [black, { fontSize: i }];

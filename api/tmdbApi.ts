@@ -1,5 +1,11 @@
 import { API_URL } from "@/api/API_CONFIG";
 
+export async function getMovieOfTheDay() {
+  const response = await fetch(`${API_URL}/movie_of_the_day`);
+  const data = await response.json();
+  return data?.results;
+}
+
 export async function getPopularMovies() {
   const response = await fetch(`${API_URL}/movie/popular`);
   const data = await response.json();

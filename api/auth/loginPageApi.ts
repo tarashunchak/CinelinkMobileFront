@@ -1,36 +1,35 @@
 import { API_URL } from "@/api/API_CONFIG";
-import { CURRENT_USER } from "@/api/currentUser";
+import { useAuthStore } from "@/local_storage/user/asyncStorage/store";
 import { useNavigation } from "expo-router";
 
-export async function LoginRequest(email: string, password: string) {
-  const navigation = useNavigation();
-
+export async function LoginRequest(login: string, password: string) {
   console.log("Trying to login")
   try {
-    const res = await fetch(`${API_URL}/auth/login/user`, {
+    const res = await fetch(`${API_URL}/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        email,
+        login,
         password,
       })
     });
 
     const data = await res.json();
+    console.log("DATA: ", data)
 
-    if (data.code === 200) {
-      if (data.data && data.data.user) {
-        const user = data.data.user;
-        CURRENT_USER.firstName = user.firstName;
-        CURRENT_USER.lastName = user.lastName;
-        CURRENT_USER.username = user.username;
-        CURRENT_USER.UID = user.userID;
+    if (data.status === 200) {
+      console.log("SUCCESS LOGIN");
+      if (data.results && data.results) {
+        const user = data.results;
+        useAuthStore.getState().logIn(user, '1234567890');
       }
-      navigation.navigate("HomePageScreen");
     }
 
-    if (data.code === 403) {
-      navigation.navigate("Error500Screen");
+    if (data.status === 401) {
+      const navigator = useNavigation();
+      navigator.navigate("Registration");
     }
-  } catch { }
+  } catch {
+
+  }
 }

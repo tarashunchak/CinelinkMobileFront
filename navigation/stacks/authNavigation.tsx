@@ -5,6 +5,7 @@ import LoginScreen from "@/app/auth/LoginScreen";
 import ForgotPasswordScreen from "@/app/auth/ForgotPasswordScreen1";
 import CreatePasswordScreen from "@/app/auth/CreatePasswordScreen";
 import React from "react";
+import RegistrationScreen from "@/app/auth/RegistrationScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -16,6 +17,7 @@ export default function AuthNavigatorStack() {
         <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
         <Stack.Screen name="PasswordRecovery" component={ForgotPasswordScreen} options={{ headerShown: false }} />
         <Stack.Screen name="CreateNewPassword" component={CreatePasswordScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="Registration" component={RegistrationScreen} options={{ headerShown: false }} />
       </Stack.Navigator>
     </SafeAreaProvider>
   );

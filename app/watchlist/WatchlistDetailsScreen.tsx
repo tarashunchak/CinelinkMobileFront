@@ -40,7 +40,7 @@ export default function WatchlistDetailsScreen({ route }: any) {
   useEffect(() => {
     async function loadWatchlistMovies() {
       const movies = await GetWatchlistMovies(watchlist?.id);
-      setWatchlistMovies(movies?.results);
+      setWatchlistMovies(movies);
     }
     loadWatchlistMovies();
   }, []);

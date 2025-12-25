@@ -30,12 +30,9 @@ export default function HorizontalMoviesList() {
         (
           <TouchableOpacity
             key={index}
-            style={[styles.item]}
+            style={[styles.view]}
             onPress={() => {
-              navigator.navigate("MovieDetailScreen",
-                {
-                  movieId: movie?.id
-                }
+              navigator.navigate("MovieDetailScreen", { movieId: movie?.id }
               )
             }}
           >

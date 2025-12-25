@@ -1,26 +1,18 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useState } from "react";
+import React from "react";
 import TabNavigator from "../navigation/tabNavigator";
 import AuthNavigator from "@/navigation/AuthNavigator";
-//import LeafyNavigator from './navigation/navigator';
-
-let CorrectLogin;
+import { useAuthStore } from "@/local_storage/user/asyncStorage/store"
 
 export default function App() {
-  const [login, setLogin] = useState<boolean>(false);
+  //useAuthStore.getState().init();
+  const isAuthenticated = useAuthStore(state => state.isAuthenticated);
+  const isHydrated = useAuthStore(state => state.isHydrated);
 
-  if (!login)
-    return (
-      <>
-        <StatusBar hidden={true} />
-        <TabNavigator />
-      </>
-    );
-  else
-    return (
-      <>
-        <StatusBar hidden={true} />
-        <AuthNavigator />
-      </>
-    );
-}
+  return (
+    <>
+      <StatusBar hidden={true} />
+      {isAuthenticated ? <TabNavigator /> : <AuthNavigator />}
+    </>
+  );
+};

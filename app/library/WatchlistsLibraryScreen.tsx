@@ -14,9 +14,9 @@ export default function WatchlistsScreen({ navigation }: any) {
 
   useEffect(() => {
     async function loadWatchlists() {
-      const data = await GetUserWatchlists(CURRENT_USER.UID);
+      const data = await GetUserWatchlists(1);
       if (!data) return;
-      setWatchlists(data?.results);
+      setWatchlists(data);
     }
 
     loadWatchlists();

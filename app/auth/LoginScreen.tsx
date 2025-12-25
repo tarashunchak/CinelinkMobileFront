@@ -12,7 +12,7 @@ import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-nat
 WebBrowser.maybeCompleteAuthSession();
 
 export default function LoginScreen({ navigation }: any) {
-  const [email, setEmail] = useState<string>("");
+  const [login, setLogin] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
   return (
@@ -32,7 +32,7 @@ export default function LoginScreen({ navigation }: any) {
 
           <View style={{ flexDirection: "column", marginTop: "10%" }}>
             <Text style={[textStyle.white18, { marginLeft: "1%" }]}>Username</Text>
-            <TextInput onChangeText={(text) => { setEmail(text) }}
+            <TextInput onChangeText={(text) => { setLogin(text) }}
               style={[
                 inputStyle.defaultInput,
                 {
@@ -57,7 +57,7 @@ export default function LoginScreen({ navigation }: any) {
           </View>
 
           <TouchableOpacity style={[buttonStyle.continueButton, { borderRadius: 8, marginTop: "5%" }]}
-            onPress={() => { LoginRequest(email, password) }}>
+            onPress={() => { LoginRequest(login, password) }}>
             <Text style={[textStyle.white20]}>
               Continue
             </Text>

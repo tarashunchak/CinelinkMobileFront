@@ -1,8 +1,8 @@
 import { API_URL } from "@/api/API_CONFIG";
 import { CURRENT_USER } from "../currentUser";
-import { WatchlistItem, WatchlistCard } from "./types";
+import { WatchlistItem_T, WatchlistCard } from "./types";
 
-export async function AddWatchlistItem(item: WatchlistItem) {
+export async function AddWatchlistItem(item: WatchlistItem_T) {
   await fetch(`${API_URL}/user/watchlist`, {
     method: "POST",
     headers: { 'Content-Type': 'application/json' },
@@ -16,12 +16,13 @@ export async function AddWatchlistItem(item: WatchlistItem) {
 };
 
 export async function GetUserWatchlists(userID: number) {
-  const response = await fetch(`${API_URL}/watchlist?userID=${userID}`)
-  return response.json();
+  const response = await fetch(`${API_URL}/users/${userID}/watchlists`);
+  const data = await response.json();
+  return data?.results;
 };
 
 export async function GetWatchlistMovies(watchlistID: number) {
-  console.log("watchlist id: ", watchlistID);
-  const response = await fetch(`${API_URL}/watchlist?watchlistID=${watchlistID}`)
-  return response.json();
+  const response = await fetch(`${API_URL}/watchlists/${watchlistID}`)
+  const data = await response.json();
+  return data?.results;
 };

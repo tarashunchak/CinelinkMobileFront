@@ -8,6 +8,7 @@ import { textStyle } from "@/styles/textStyles";
 import { CURRENT_USER } from "@/api/currentUser";
 import { GetUserWatchlists } from "@/api/watchlist/watchlist";
 import WatchlistCard from "./components/watchlistCard";
+import LibraryHeader from "./components/header";
 
 export default function WatchlistsScreen({ navigation }: any) {
   const [watchlists, setWatchlists] = useState<any>(null);
@@ -26,11 +27,14 @@ export default function WatchlistsScreen({ navigation }: any) {
     <View style={{ flex: 1 }}>
       <ImageBackground source={require("@/assets/images/background.png")} style={viewStyle.imageBackground}>
         <ScrollView>
-          {
-            watchlists?.map((item: any, index: number) => (
-              <WatchlistCard key={index} watchlist={item} />
-            ))
-          }
+          <LibraryHeader />
+          <View style={{ gap: 5 }}>
+            {
+              watchlists?.map((item: any, index: number) => (
+                <WatchlistCard key={index} watchlist={item} />
+              ))
+            }
+          </View>
         </ScrollView>
       </ImageBackground>
       <BottomBar />

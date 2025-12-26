@@ -53,12 +53,14 @@ const styles = {
     view: {
       gap: 10,
       height: hp("15%"),
+      width: "98%",
       backgroundColor: "rgba(255, 255, 255, 0.03)",
       borderRadius: 6,
       borderWidth: 1,
       borderColor: "rgba(255, 255, 255, 0.05)",
       padding: hp("0.5%"),
       flexDirection: "row",
+      alignSelf: "center",
     },
     image: {
       height: "100%",

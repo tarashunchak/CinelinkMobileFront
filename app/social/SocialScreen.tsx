@@ -5,7 +5,6 @@ import SocialPageTopBar from "./components/topBar";
 import FriendCard, { FriendCard_T } from "./components/friendCard";
 import RecommendationCard, { RecommendedCard_T } from "./components/recommendationCard";
 import ChatCard from "./components/chatCard";
-import { getActiveTab } from "./components/topBar";
 import { textStyle } from "@/styles/textStyles";
 import { GetUserFollowers } from "@/api/followers/followers";
 import { CURRENT_USER } from "@/api/currentUser";
@@ -22,8 +21,9 @@ export default function SocialScreen() {
       const friendsData = await GetUserFollowers(CURRENT_USER.UID);
       const recommendationsData = await GetUserRecommendations(CURRENT_USER.UID);
 
-      if (friendsData) setFriends(friendsData.results);
-      if (recommendationsData) setRecommendatoins(recommendationsData.results);
+      if (friendsData) setFriends(friendsData);
+      if (recommendationsData) setRecommendatoins(recommendationsData);
+      console.log("RECOMMENDATIONS: ", recommendationsData);
     };
 
     loadFriendsCards();

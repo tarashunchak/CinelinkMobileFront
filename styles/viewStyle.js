@@ -13,6 +13,5 @@ export const viewStyle = {
   imageBackground: {
     flex: 1,
     //padding: "2%",
-    paddingTop: "10%",
   }
 };

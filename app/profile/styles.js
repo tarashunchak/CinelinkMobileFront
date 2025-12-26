@@ -43,39 +43,7 @@ export const userPage = {
       },
       text: textStyle.white16
     },
-    followButton: {
-      pressable: {
-        backgroundColor: "white",
-        width: 110,
-        height: 52,
-        justifyContent: "center",
-        alignItems: "center",
-        borderRadius: 22
-      },
-      text: textStyle.black16
-    },
-    editButton: {
-      pressable: {
-        flexDirection: "row",
-        gap: 10,
-        backgroundColor: "transparent",
-        width: 100,
-        height: 50,
-        justifyContent: "center",
-        alignItems: "center",
-        borderRadius: 22,
-        borderWidth: 1,
-        borderColor: "white",
-      },
-      text: textStyle.white16
-    }
   },
-  bio: [
-    textStyle.white18, {
-      marginTop: 10,
-      textAlign: "left"
-    }
-  ],
   joinedAt: {
     view: {
       marginTop: 10,

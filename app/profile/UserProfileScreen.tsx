@@ -2,54 +2,53 @@ import { CURRENT_USER, getUserProfileData } from "@/api/currentUser";
 import LeafyReturnArrowButton from "@/components/ui/leafy-return-arrow-btn";
 import { textStyle } from "@/styles/textStyles";
 import React, { useEffect, useState } from "react";
-import { Image, ImageBackground, Pressable, ScrollView, Text, View } from "react-native";
+import { TouchableOpacity, Image, ImageBackground, Pressable, ScrollView, Text, View } from "react-native";
 import BottomBar from "../bars/bottomBar";
 import { userPage } from "./styles";
 import { UserProfile_T } from "./types";
 import { useNavigation } from "expo-router";
+import { useAuthStore } from "@/local_storage/user/asyncStorage/store";
 
 export default async function UserProfileScreen({ route }: any) {
   let mainButtons;
-  const [userInfo, setUserInfo] = useState<UserProfile_T>();
-  const navigator = useNavigation();
+  const [user, setUser] = useState<any>();
+  const navigator = useNavigation()
 
-  let userID = route?.params?.["userID"];
-  userID = userID ? userID : CURRENT_USER?.UID;
-  const isCurrentUser = userID == CURRENT_USER?.UID;
+  const userID = route.params?.userID;
   useEffect(() => {
-    async function loadUserInfo() {
-      console.log("USER ID: ", userID);
-      const data: UserProfile_T = await getUserProfileData(userID);
-      if (!data) return;
-
-      setUserInfo(data);
-
+    async function loadUser() {
+      if (userID == CURRENT_USER.UID) {
+        setUser(useAuthStore.getState().user)
+        return
+      } else {
+        const data = await getUserProfileData(userID);
+        if (!data) return;
+        data.created_at = new Date(data.created_at).toLocaleDateString('ua-UA')
+      }
+      setUser(data);
     }
-    loadUserInfo()
+    loadUser()
   }, []);
 
-  mainButtons = (isCurrentUser == true) ? (
-    <Pressable style={userPage.mainButtons.editButton.pressable}>
-      <Text style={userPage.mainButtons.editButton.text}>Edit</Text>
-    </Pressable>
-  )
+  mainButtons = (userID == CURRENT_USER.UID) ?
+    (
+      <Pressable style={styles.editBtn}>
+        <Text style={textStyle.white18}>Edit</Text>
+      </Pressable>
+    )
     :
-    (<View style={userPage.mainButtons.view}>
-      <Pressable style={userPage.mainButtons.optionButton.pressable}>
-        <Text style={userPage.mainButtons.optionButton.text}>...</Text>
-      </Pressable>
-      <Pressable style={userPage.mainButtons.followButton.pressable}>
-        <Text style={userPage.mainButtons.followButton.text}>Follow</Text>
-      </Pressable>
-    </View>
+    (
+      <TouchableOpacity style={styles.followBtn}>
+        <Text style={textStyle.black18}>Follow</Text>
+      </TouchableOpacity>
     )
 
   return (
     <ImageBackground source={require("@/assets/images/background.png")} style={{ flex: 1 }}>
       <ScrollView style={[{ padding: "2%" }]}>
         <ImageBackground
-          source={userInfo?.bg_img_url
-            ? { uri: userInfo?.bg_img_url }
+          source={user?.bg_img_url
+            ? { uri: user?.bg_img_url }
             : require("@/assets/images/profileBackground.png")}
           style={userPage.imageBackground}
         />
@@ -58,7 +57,7 @@ export default async function UserProfileScreen({ route }: any) {
           <View style={{ width: "100%", marginTop: "45%", height: 100, flexDirection: "row", justifyContent: "space-between" }}>
             <View style={userPage.profilPic.view}>
               <Image
-                source={{ uri: userInfo?.avatar_url }}
+                source={{ uri: user?.avatar_url }}
                 style={userPage.profilPic.picture}
               />
             </View>
@@ -67,27 +66,27 @@ export default async function UserProfileScreen({ route }: any) {
             }
           </View>
 
-          <Text style={textStyle.white20}>{userInfo ? `${userInfo?.first_name} ${userInfo?.last_name}` : "Gigga Nigga"}</Text>
-          <Text style={textStyle.gray12}>{`@${userInfo?.username}` || "@username"}</Text>
+          <Text style={textStyle.white20}>{user ? `${user?.first_name} ${user?.last_name}` : "Gigga Nigga"}</Text>
+          <Text style={textStyle.gray12}>{`@${user?.username}` || "@username"}</Text>
 
-          <Text style={userPage.bio}>{userInfo?.bio}</Text>
+          <Text style={styles.bio}>{user?.bio}</Text>
 
           <View style={userPage.joinedAt.view}>
             <Image source={require("@/assets/images/Calendar.png")}></Image>
-            <Text style={userPage.joinedAt.joined}>Joined {userInfo?.joined_at}</Text>
+            <Text style={textStyle.gray14}>Joined {user?.created_at}</Text>
           </View>
 
           <View style={userPage.stats.view}>
             <View style={userPage.stats.item}>
-              <Text style={userPage.stats.itemText}>{userInfo?.followings}</Text>
+              <Text style={userPage.stats.itemText}>{user?.followings}</Text>
               <Text style={userPage.stats.itemText}>Following</Text>
             </View>
             <View style={userPage.stats.item}>
-              <Text style={userPage.stats.itemText}>{userInfo?.followers}</Text>
+              <Text style={userPage.stats.itemText}>{user?.followers}</Text>
               <Text style={userPage.stats.itemText}>Followers</Text>
             </View>
             <View style={userPage.stats.item}>
-              <Text style={userPage.stats.itemText}>{userInfo?.posts}</Text>
+              <Text style={userPage.stats.itemText}>{user?.posts}</Text>
               <Text style={userPage.stats.itemText}>Posts</Text>
             </View>
           </View>
@@ -98,15 +97,45 @@ export default async function UserProfileScreen({ route }: any) {
           <View style={userPage.post.profilInfo.view}>
             <Image style={userPage.post.profilInfo.picture}
               source={
-                userInfo?.avatar_url
-                  ? { uri: userInfo?.avatar_url }
+                user?.avatar_url
+                  ? { uri: user?.avatar_url }
                   : require("@/assets/images/giggaNigga.png")}
             />
-            <Text style={userPage.post.profilInfo.name}>{`${userInfo?.first_name} ${userInfo?.last_name}`}</Text>
+            <Text style={userPage.post.profilInfo.name}>{`${user?.first_name} ${user?.last_name}`}</Text>
           </View>
         </View>
       </ScrollView >
       <BottomBar />
     </ImageBackground >
-  )
-}
+  );
+};
+
+
+const styles = {
+  editBtn: {
+    flexDirection: "row",
+    gap: 10,
+    backgroundColor: "transparent",
+    width: 100,
+    height: 50,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 22,
+    borderWidth: 1,
+    borderColor: "white",
+  },
+  followBtn: {
+    backgroundColor: "white",
+    width: 110,
+    height: 52,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 22
+  },
+  bio: [
+    textStyle.white16, {
+      marginTop: 10,
+      marginLeft: 10,
+      textAlign: "left"
+    }],
+};

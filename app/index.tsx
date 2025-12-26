@@ -5,14 +5,14 @@ import AuthNavigator from "@/navigation/AuthNavigator";
 import { useAuthStore } from "@/local_storage/user/asyncStorage/store"
 
 export default function App() {
-  //useAuthStore.getState().init();
+  useAuthStore.getState().init();
   const isAuthenticated = useAuthStore(state => state.isAuthenticated);
   const isHydrated = useAuthStore(state => state.isHydrated);
 
   return (
     <>
       <StatusBar hidden={true} />
-      {isAuthenticated ? <TabNavigator /> : <AuthNavigator />}
+      {isHydrated ? (isAuthenticated ? <TabNavigator /> : <AuthNavigator />) : null}
     </>
   );
 };

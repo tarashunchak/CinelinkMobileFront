@@ -8,7 +8,7 @@ import { genresInfo } from "@/styles/genreStyle";
 import { textStyle } from "@/styles/textStyles";
 import { useNavigation } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { Dimensions, Image, ImageBackground, Linking, Pressable, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { Dimensions, Image, ImageBackground, Linking, Platform, Pressable, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { heightPercentageToDP } from "react-native-responsive-screen";
 import YoutubePlayer from "react-native-youtube-iframe";
 import ActorCard from "./components/CreditsCard";
@@ -201,7 +201,7 @@ export default function MovieDetailScreen({ route }: any) {
 
           <Text style={[{ width: "80%", marginTop: "5%" }, textStyle.yellow20]}>Trailer</Text>
           <View style={{ marginLeft: "0%", marginTop: "1%" }}>
-            <YoutubePlayer height={250} width={"100%"} play={false} videoId={trailerKey} />
+            <YoutubePlayer height={250} width={"100%"} play={false} videoId={trailerKey} /> && {Platform.OS != "web"}
           </View>
 
           <View style={[styles.sectionView, { flexDirection: "column" }]}>

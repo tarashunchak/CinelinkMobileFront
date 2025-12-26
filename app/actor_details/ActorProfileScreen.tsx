@@ -12,8 +12,6 @@ import { actorDetailScreen } from "./styles";
 
 const { width: screenW, height: screenH } = Dimensions.get("window");
 
-
-
 export default function ActorProfileScreen({ route }: any) {
   const navigation = useNavigation();
   const [actor, setActor] = useState<any>(null);
@@ -66,7 +64,7 @@ export default function ActorProfileScreen({ route }: any) {
 
                   <View style={actorDetailScreen.mainView.actorBasicInfo.posterView}>
                     <Image
-                      source={actor?.profile_path ? { uri: "https://image.tmdb.org/t/p/w200" + actor?.profile_path } : require("@/assets/images/noPhoto.png")}
+                      source={actor?.profile_path ? { uri: ("https://image.tmdb.org/t/p/w200" + actor?.profile_path) || "https://i.pinimg.com/736x/b9/bb/27/b9bb27a7fc1941680ce9f75481df60bb.jpg" } : require("@/assets/images/noPhoto.png")}
                       style={{ height: "100%", width: "100%" }} />
                   </View>
 

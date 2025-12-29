@@ -1,33 +1,51 @@
 import { textStyle } from "@/styles/textStyles";
 import React from "react";
-import { TouchableOpacity, View, Text, Image } from "react-native";
+import { Platform, TouchableOpacity, View, Text, Image } from "react-native";
+import { movieCardStyle } from "@/styles/movieCardStyle";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
-import { WatchlistMovie } from "../WatchlistDetailsScreen";
 import { Movie } from "../../movie_details/types";
 import { useNavigation } from "expo-router";
 import GenresList from "@/components/ui/leafy-genres-list";
 import GenresLayout from "./genresLayout";
 
+
 export default function MovieCard({ movie }: { movie: Movie }) {
   const navigator = useNavigation();
   return (
-    <TouchableOpacity style={styles.card.view}
-      onPress={() => navigator.push("MovieDetailScreen", { movieId: movie?.id })}>
-      <Image style={styles.card.content.poster} source={{ uri: `https://image.tmdb.org/t/p/w300${movie?.poster_path}` }} />
-      <View style={styles.card.content.columnInfo.view}>
-        <Text style={styles.card.content.columnInfo.title}
-          pointerEvents="none"
-          numberOfLines={1}
-          ellipsizeMode="tail">{movie?.title}</Text>
-        <View style={styles.card.content.columnInfo.imdb.view}>
-          <Text style={styles.card.content.columnInfo.imdb.text}>
-            {`IMDb: ${movie?.imdb_rating?.toFixed(1)}`}
-          </Text>
+    <TouchableOpacity style={[movieCardStyle?.backgroundStyle]} onPress={() => {
+      navigator?.push("MovieDetailScreen", { movieId: movie?.movie_id });
+    }}>
+      <Image
+        source={{ uri: "https://image.tmdb.org/t/p/w300" + movie.poster_path }}
+        style={movieCardStyle.moviePosterStyle}
+        pointerEvents="none"
+      />
+      <View style={{ flexDirection: "column", height: "100%", marginLeft: "4%", justifyContent: "space-evenly" }}>
+        <View style={{ flexDirection: "row", justifyContent: "flex-start" }}>
+          <Text style={movieCardStyle.movieTitleStyle}
+            pointerEvents="none"
+            numberOfLines={1}
+            ellipsizeMode="tail">{movie?.title}</Text>
+          <Text style={[movieCardStyle.movieYearStyle, textStyle.gray16]} pointerEvents="none">{` (${movie?.release_date?.slice(0, 4)})`}</Text>
         </View>
+
+        <TouchableOpacity style={movieCardStyle.imdbText.view}
+          onPress={async () => {
+            const url = `https://www.imdb.com/title/${movie?.imdb_id}`;
+            const sup = await Linking.canOpenURL(url);
+            if (sup) Linking.openURL(url);
+          }}
+        >
+          <Text style={movieCardStyle.imdbText.text}>
+            {
+              `IMDb: ${movie?.imdb_rating?.toFixed(1)}`
+            }
+          </Text>
+        </TouchableOpacity>
 
         <GenresLayout genres={movie?.genres} />
       </View>
-    </TouchableOpacity >
+    </TouchableOpacity>
   );
 };
 
@@ -36,7 +54,7 @@ const styles = {
     view: {
       flexDirection: "row",
       gap: 10,
-      width: "100%",
+      width: "98%",
       height: hp("13%"),
       backgroundColor: "rgba(255, 255, 255, 0.03)",
       borderColor: "rgba(255, 255, 255, 0.2)",
@@ -44,6 +62,7 @@ const styles = {
       borderRadius: 4,
       paddingLeft: "3%",
       marginBottom: 5,
+      alignSelf: "center",
     },
     content: {
       poster: {
@@ -105,3 +124,21 @@ const styles = {
     }
   }
 };
+
+/* <TouchableOpacity style={styles.card.view}
+        onPress={() => navigator.push("MovieDetailScreen", { movieId: movie?.movie_id })}>
+        <Image style={styles.card.content.poster} source={{ uri: `https://image.tmdb.org/t/p/w300${movie?.poster_path}` }} />
+        <View style={styles.card.content.columnInfo.view}>
+          <Text style={styles.card.content.columnInfo.title}
+            pointerEvents="none"
+            numberOfLines={1}
+            ellipsizeMode="tail">{movie?.title}</Text>
+          <View style={styles.card.content.columnInfo.imdb.view}>
+            <Text style={styles.card.content.columnInfo.imdb.text}>
+              {`IMDb: ${movie?.imdb_rating?.toFixed(1)}`}
+            </Text>
+          </View>
+
+          <GenresLayout genres={movie?.genres} />
+        </View>
+      </TouchableOpacity >*/

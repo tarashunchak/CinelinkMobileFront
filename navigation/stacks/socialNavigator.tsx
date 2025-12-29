@@ -13,7 +13,7 @@ const Stack = createNativeStackNavigator();
 export default function SocialNavigatorStack() {
 
   return (
-    <SafeAreaProvider style={{ flex: 1 }}>
+    <>
       <StatusBar hidden={true} />
       <Stack.Navigator>
         <Stack.Screen name="SocialScreen" component={SocialScreen} options={{ headerShown: false }} />
@@ -22,6 +22,6 @@ export default function SocialNavigatorStack() {
         <Stack.Screen name="MovieCreditsScreen" component={MovieCreditsScreen} options={{ headerShown: false }} />
         <Stack.Screen name="MovieDetailScreen" component={MovieDetailScreen} options={{ headerShown: false }} />
       </Stack.Navigator>
-    </SafeAreaProvider>
+    </>
   )
 }

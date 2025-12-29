@@ -1,7 +1,7 @@
 import { getMovieOfTheDay } from "@/api/tmdbApi";
 import { textStyle } from "@/styles/textStyles";
-import { useNavigation } from "expo-router";
-import React, { useEffect, useState } from "react";
+import { useFocusEffect, useNavigation } from "expo-router";
+import React, { useCallback, useState } from "react";
 import { TouchableOpacity, Text, View, Image, ImageBackground } from "react-native";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 
@@ -9,14 +9,16 @@ export default function MovieOfTheDay() {
   const navigator = useNavigation();
   const [movie, setMovie] = useState();
 
-  useEffect(() => {
-    async function loadMovie() {
-      const data = await getMovieOfTheDay();
-      setMovie(data);
-    }
+  useFocusEffect(
+    useCallback(() => {
+      async function loadMovie() {
+        const data = await getMovieOfTheDay();
+        setMovie(data);
+      }
 
-    loadMovie();
-  }, [])
+      loadMovie();
+    }, [])
+  )
 
   return (
     <ImageBackground
@@ -26,9 +28,12 @@ export default function MovieOfTheDay() {
         <Text style={[textStyle.white38, styles.text]}>{"Movie of the day"}</Text>
         <TouchableOpacity style={{}}
           onPress={() => navigator.navigate("MovieDetailScreen", { movieId: movie?.movie_id })}>
-          <Text style={[textStyle.white24, { textAlign: "center", alignSelf: "center", maxWidth: wp("80%"), minWidth: wp("70%") }]}
-            numberOfLines={1}
-            ellipsizeMode="tail">{movie?.title}</Text>
+          <View style={{ flexDirection: "row", alignSelf: "center", gap: 5 }}>
+            <Text style={[textStyle.white24, { textAlign: "center", alignSelf: "center", maxWidth: wp("80%") }]}
+              numberOfLines={1}
+              ellipsizeMode="tail">{movie?.title}</Text>
+            <Text style={textStyle.white24}>{`(${movie?.release_date?.slice(0, 4)})`}</Text>
+          </View>
           <Image source={{ uri: `https://image.tmdb.org/t/p/w300${movie?.poster_path}` }} style={styles.poster} />
         </TouchableOpacity>
       </View>

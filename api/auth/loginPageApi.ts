@@ -1,6 +1,7 @@
 import { API_URL } from "@/api/API_CONFIG";
 import { useAuthStore } from "@/local_storage/user/asyncStorage/store";
 import { useNavigation } from "expo-router";
+import { Alert } from "react-native";
 
 export async function LoginRequest(login: string, password: string) {
   console.log("Trying to login")
@@ -23,11 +24,19 @@ export async function LoginRequest(login: string, password: string) {
         const user = data.results;
         useAuthStore.getState().logIn(user, '1234567890');
       }
+      return
+    }
+
+    if (data.status === 403) {
+      Alert.alert("Login failed", "Incorrect password, try again")
+      return
     }
 
     if (data.status === 401) {
-      const navigator = useNavigation();
-      navigator.navigate("Registration");
+      Alert.alert("Login failed", "User not found, try again")
+      //const navigator = useNavigation();
+      //navigator.navigate("Registration");
+      return
     }
   } catch {
 

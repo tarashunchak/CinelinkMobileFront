@@ -73,10 +73,10 @@ export default function MovieCardList({ selectedGenre, movieID, movieGenre }: Mo
             (<TouchableOpacity key={index} style={[movieCardStyle?.backgroundStyle]} onPress={() => {
               const id = movie.id;
               console.log("MovieID pre: ", id);
-              navigation?.push("FilmDetailScreen", { currentMovieID: id });
+              navigation?.push("MovieDetailScreen", { movieId: id });
             }}>
               <Image
-                source={{ uri: "https://image.tmdb.org/t/p/w500" + movie.poster_path }}
+                source={{ uri: "https://image.tmdb.org/t/p/w300" + movie.poster_path }}
                 style={movieCardStyle.moviePosterStyle}
                 pointerEvents="none"
               />

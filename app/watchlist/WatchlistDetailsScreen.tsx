@@ -12,31 +12,11 @@ import { Watchlist } from "@/app/library/components/watchlistCard";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen"
 import { textStyle } from "@/styles/textStyles";
 
-export type WatchlistMovie = {
-  imdb_id: string;
-  title: string;
-  imdb_rating: number;
-  poster_path: string;
-  genres: number[];
-}
-
-export type WatchlistDetails = {
-  id: number;
-  name: string;
-  description: string;
-  creator_id: number;
-  creator_username: string;
-  fg_image_url: string;
-  bg_image_url: string;
-  is_public: boolean;
-  movies_quantity: number;
-  movies: Movie[];
-};
-
 export default function WatchlistDetailsScreen({ route }: any) {
   const [watchlistMovies, setWatchlistMovies] = useState<any>();
   const watchlist = route?.params?.watchlist;
 
+  const navigator = useNavigation();
   useEffect(() => {
     async function loadWatchlistMovies() {
       const movies = await GetWatchlistMovies(watchlist?.id);
@@ -49,14 +29,15 @@ export default function WatchlistDetailsScreen({ route }: any) {
     <ImageBackground source={require("@/assets/images/background.png")} style={{ flex: 1 }}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <ImageBackground source={require("@/app/library/assets/NoBgWatchlist.jpeg")} style={{ height: hp("45%"), width: "100%", marginBottom: hp("1%") }} >
-          <TouchableOpacity style={{ flexDirection: "row", justifyContent: "flex-end", alignItems: "flex-start" }}>
+          <TouchableOpacity style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", padding: hp(1.5), paddingLeft: hp(0.5), paddingBottom: 0 }}>
+            <LeafyReturnArrowButton onPress={() => navigator.goBack()} />
             <Image source={require("@/app/watchlist/assets/InfoIcon.png")}
-              style={[{ height: 26, width: 26, margin: hp("2%") }]} />
+              style={[{ height: 26, width: 26 }]} />
           </TouchableOpacity>
           <View style={{ justifyContent: "flex-end", height: hp("41%") - 26 }}>
             <View style={[{ flexDirection: "row", justifyContent: "space-between" }]}>
               <View style={[styles.info.view]}>
-                <Image source={watchlist?.fg_img_url ? { uri: watchlist?.fg_img_url } : require("@/app/library/assets/NoFgWatchlist_2.png")} style={styles.info.image} />
+                <Image source={watchlist?.fg_img_url ? { uri: watchlist?.fg_img_url } : require("@/app/library/assets/NoFgWatchlist.png")} style={styles.info.image} />
 
                 <View style={styles.card.text.view}>
                   <Text style={styles.card.text.name}>{watchlist?.name}</Text>
@@ -67,10 +48,12 @@ export default function WatchlistDetailsScreen({ route }: any) {
                   >
                     {watchlist?.description}
                   </Text>
-                  <View style={styles.card.text.creator.view}>
+                  <TouchableOpacity
+                    style={styles.card.text.creator.view}
+                    onPress={() => navigator.navigate("UserProfileScreen", { userID: watchlist?.creator_id })}>
                     <Text style={styles.card.text.creator.header}>Creator:</Text>
                     <Text style={styles.card.text.creator.name}>{watchlist?.creator_username}</Text>
-                  </View>
+                  </TouchableOpacity>
                 </View>
               </View>
               <Text style={[textStyle.gray14]}>
@@ -80,7 +63,9 @@ export default function WatchlistDetailsScreen({ route }: any) {
           </View>
         </ImageBackground>
         {
-          watchlistMovies?.map((item: Movie, index: number) => <MovieCard key={index} movie={item} />)
+          watchlistMovies ? watchlistMovies?.map((item: Movie, index: number) => <MovieCard key={index} movie={item} />)
+            :
+            <Text style={[textStyle.gray32, { alignSelf: "center", opacity: 0.4, marginTop: hp("20%") }]}>Watchlist is empty</Text>
         }
       </ScrollView >
       <BottomBar />

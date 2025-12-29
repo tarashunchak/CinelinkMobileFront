@@ -28,7 +28,7 @@ export default function ActorCard({ cast }: { cast: Cast }) {
       <Text style={movieDetailScreenStyle.white12}>{cast?.name}</Text>
       <Text style={movieDetailScreenStyle.grey12} numberOfLines={1}
         ellipsizeMode="tail">{cast?.character}</Text>
-      <Text style={movieDetailScreenStyle.grey12} >{cast?.known_for_department}</Text>
+      <Text style={movieDetailScreenStyle.yellow12} >{cast?.known_for_department}</Text>
     </TouchableOpacity>
   );
 }

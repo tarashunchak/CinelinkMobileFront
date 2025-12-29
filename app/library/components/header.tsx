@@ -1,20 +1,24 @@
+import { CURRENT_USER } from "@/api/currentUser";
+import { useAuthStore } from "@/local_storage/user/asyncStorage/store";
 import { textStyle } from "@/styles/textStyles";
+import { useNavigation } from "expo-router";
 import React from "react";
 import { View, Text, Image, TouchableOpacity, Platform } from "react-native";
 import { heightPercentageToDP as hp, widthPercentageToDP } from "react-native-responsive-screen";
 
 export default function LibraryHeader() {
+  const navigator = useNavigation();
   return (
     <View style={styles.view}>
       <View style={styles.left.view}>
-        <Image style={styles.left.avatar} />
+        <Image style={styles.left.avatar} source={{ uri: useAuthStore.getState().user?.avatar_url }} />
         <Text style={styles.left.text}>Your watchlists</Text>
       </View>
       <View style={styles.right.view}>
         <TouchableOpacity>
           <Image style={styles.right.img} source={require("@/app/library/assets/icon.png")} />
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigator.navigate("AddWatchlist")}>
           <Image style={styles.right.img} source={require("@/app/library/assets/plus.png")} />
         </TouchableOpacity>
       </View>
@@ -51,7 +55,7 @@ const styles = {
   right: {
     view: {
       flexDirection: "row",
-      gap: 15,
+      gap: 20,
 
     },
     img: {

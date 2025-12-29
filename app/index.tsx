@@ -1,8 +1,10 @@
 import { StatusBar } from "expo-status-bar";
 import React from "react";
-import TabNavigator from "../navigation/tabNavigator";
+import TabNavigator from "@/navigation/tabNavigator";
 import AuthNavigator from "@/navigation/AuthNavigator";
 import { useAuthStore } from "@/local_storage/user/asyncStorage/store"
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaViewComponent } from "react-native";
 
 export default function App() {
   useAuthStore.getState().init();

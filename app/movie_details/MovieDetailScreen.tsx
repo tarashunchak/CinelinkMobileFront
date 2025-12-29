@@ -201,7 +201,7 @@ export default function MovieDetailScreen({ route }: any) {
 
           <Text style={[{ width: "80%", marginTop: "5%" }, textStyle.yellow20]}>Trailer</Text>
           <View style={{ marginLeft: "0%", marginTop: "1%" }}>
-            <YoutubePlayer height={250} width={"100%"} play={false} videoId={trailerKey} /> && {Platform.OS != "web"}
+            <YoutubePlayer height={250} width={"100%"} play={false} videoId={trailerKey} />
           </View>
 
           <View style={[styles.sectionView, { flexDirection: "column" }]}>
@@ -213,7 +213,7 @@ export default function MovieDetailScreen({ route }: any) {
             <Text style={[textStyle.yellow20]}>Details</Text>
             <View style={{ flexDirection: "column" }}>
               <DetailRow label="Release date" item={movie?.release_date} maxW="75%" />
-              <DetailRow label="Spoken languages" item={movie?.spoken_languages} maxW="75%" />
+              <DetailRow label="Spoken languages" items={movie?.spoken_languages} prop="english_name" maxW="75%" />
               <DetailRow label="Countries" items={movie?.production_countries} prop="name" maxW="75%" />
               <DetailRow label="Companies" items={movie?.production_companies} prop="name" maxW="75%" />
               <DetailRow label="Revenue" item={movie?.revenue + "$"} maxW="75%" />
@@ -443,7 +443,7 @@ const styles = {
       borderRadius: 10,
     },
     shareBtn: {
-      borderRadius: 5,
+      borderRadius: 10,
       borderColor: "rgba(48, 130, 254, 0.3)",
       backgroundColor: "rgba(48, 130, 254, 1)",
       //backgroundColor: "rgba(48, 130, 254, 0.6)",

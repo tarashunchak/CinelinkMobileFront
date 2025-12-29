@@ -1,4 +1,4 @@
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+/*import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
 import ActorProfileScreen from "@/app/actor_details/ActorProfileScreen";
 import CollectionScreen from "@/app/collection/CollectionScreen";
@@ -30,4 +30,4 @@ export default function AppNavigator() {
       <Stack.Screen name="ActorProfileScreen" component={ActorProfileScreen} options={{ headerShown: false }} />
     </Stack.Navigator>
   );
-}
+}*/

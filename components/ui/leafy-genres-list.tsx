@@ -1,7 +1,7 @@
 import { getMovieGenres } from "@/api/tmdbApi";
 import { genreStyle, genresInfo } from "@/styles/genreStyle";
 import React, { useEffect, useState } from "react";
-import { Pressable, ScrollView, Text, View } from "react-native";
+import { TouchableOpacity, Pressable, ScrollView, Text, View } from "react-native";
 
 
 export default function GenresList({ setSelectedGenre }: { setSelectedGenre: (icon: number) => void }) {
@@ -32,9 +32,12 @@ export default function GenresList({ setSelectedGenre }: { setSelectedGenre: (ic
           genreItems.map((genre, index) => {
             const name = genre.name;
             return (
-              <Pressable key={genre?.id || index} style={[genreStyle.genreCell, { backgroundColor: genresInfo[genre.name].color, borderColor: genresInfo[genre.name]?.borderColor }]} onPress={() => { console.log(`Genre: ${genre.id}\n`); setSelectedGenre(genre?.id); }}>
+              <TouchableOpacity key={genre?.id || index}
+                style={[genreStyle.genreCell, { backgroundColor: genresInfo[genre.name].color, borderColor: genresInfo[genre.name]?.borderColor }]}
+                onPress={() => { console.log(`Genre: ${genre.id}\n`); setSelectedGenre(genre?.id); }}
+              >
                 <Text style={[genreStyle.genreCellText]}>{name}</Text>
-              </Pressable>
+              </TouchableOpacity>
             )
           })
         ]}

@@ -1,7 +1,10 @@
+import { heightPercentageToDP } from "react-native-responsive-screen";
+
 export const genreStyle = {
   genreCellView: {
     margin: "-1%",
     marginTop: "2%",
+    marginBottom: heightPercentageToDP("8%"),
     height: 48,
     width: "102%",
     padding: 2,

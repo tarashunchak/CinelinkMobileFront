@@ -26,7 +26,6 @@ export default function FriendCard({ friend }: { friend: FriendCard_T }) {
         <Image style={styles.card.info.avatar} source={friend?.avatar_url ? { uri: friend?.avatar_url } : require("@/assets/images/giggaNigga.png")} />
         <View style={styles.card.info.text.view}>
           <Text style={styles.card.info.text.name}>{friend?.username}</Text>
-          <Text style={styles.card.info.text.rank}>{`Lvl: ${friend?.level} '${friend?.level_name}'`}</Text>
         </View>
       </View>
       <Image style={styles.card.chatIcon} source={require("@/app/social/assets/chatIcon.png")} />
@@ -66,7 +65,7 @@ const styles = {
           flexDirection: "column",
           justifyContent: "space-evenly",
         },
-        name: [textStyle.yellow18, {
+        name: [textStyle.white18, {
         }],
         rank: [textStyle.gray14, {
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { TouchableOpacity, Text, ImageBackground, ScrollView, View } from "react-native";
 import BottomBar from "../bars/bottomBar";
 import SocialPageTopBar from "./components/topBar";
@@ -9,6 +9,8 @@ import { textStyle } from "@/styles/textStyles";
 import { GetUserFollowers } from "@/api/followers/followers";
 import { CURRENT_USER } from "@/api/currentUser";
 import { GetUserRecommendations } from "@/api/recommendations/recommendations";
+import { useAuthStore } from "@/local_storage/user/asyncStorage/store";
+import { useFocusEffect } from "expo-router";
 
 export default function SocialScreen() {
   const tabs = ["Friends", "Recommendations", "Activity", "Chats"];
@@ -16,18 +18,23 @@ export default function SocialScreen() {
   const [friends, setFriends] = useState<FriendCard_T>();
   const [recommendations, setRecommendatoins] = useState<RecommendedCard_T>();
 
-  useEffect(() => {
-    async function loadFriendsCards() {
-      const friendsData = await GetUserFollowers(CURRENT_USER.UID);
-      const recommendationsData = await GetUserRecommendations(CURRENT_USER.UID);
+  useFocusEffect(
+    useCallback(() => {
+      async function loadContent() {
+        setActiveTab("Friends");
+        const currentUserID = useAuthStore.getState().user?.user_id;
+        const friendsData = await GetUserFollowers(currentUserID);
+        const recommendationsData = await GetUserRecommendations(currentUserID);
 
-      if (friendsData) setFriends(friendsData);
-      if (recommendationsData) setRecommendatoins(recommendationsData);
-      console.log("RECOMMENDATIONS: ", recommendationsData);
-    };
+        if (friendsData) setFriends(friendsData);
+        if (recommendationsData) setRecommendatoins(recommendationsData);
+        console.log("RECOMMENDATIONS: ", recommendationsData);
+      };
 
-    loadFriendsCards();
-  }, []);
+      loadContent();
+
+    }, [])
+  );
 
   return (
     <View style={{ flex: 1 }}>

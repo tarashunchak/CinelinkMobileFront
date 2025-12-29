@@ -10,6 +10,8 @@ import UserProfileScreen from "@/app/profile/UserProfileScreen";
 
 import WatchlistsLibraryScreen from "@/app/library/WatchlistsLibraryScreen";
 import WatchlistDetailsScreen from "@/app/watchlist/WatchlistDetailsScreen";
+import CreateWatchlist from "@/app/library/components/addWatchlist";
+import AddWatchlist from "@/app/library/components/addWatchlist";
 
 const Stack = createNativeStackNavigator();
 
@@ -26,6 +28,7 @@ export default function LibraryNavigatorStack() {
         <Stack.Screen name="MovieCreditsScreen" component={MovieCreditsScreen} options={{ headerShown: false }} />
         <Stack.Screen name="ActorProfileScreen" component={ActorProfileScreen} options={{ headerShown: false }} />
         <Stack.Screen name="WatchlistDetailsScreen" component={WatchlistDetailsScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="AddWatchlist" component={AddWatchlist} options={{ headerShown: false }} />
       </Stack.Navigator>
     </SafeAreaProvider>
   )

@@ -27,8 +27,8 @@ export const useAuthStore = create<AuthState>((set) => ({
     ]);
     set({
       user,
-      isHydrated: true,
       isAuthenticated: !!token,
+      isHydrated: true,
     });
 
   },
@@ -46,6 +46,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     set({
       user: user,
       isAuthenticated: true,
+      isHydrated: true,
     });
   },
 
@@ -56,7 +57,8 @@ export const useAuthStore = create<AuthState>((set) => ({
     ]);
     set({
       user: null,
-      isAuthenticated: false
+      isAuthenticated: false,
+      isHydrated: false,
     });
   },
 }));

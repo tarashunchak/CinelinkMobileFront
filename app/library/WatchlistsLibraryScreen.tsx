@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Image, ImageBackground, Pressable, ScrollView, Text, TextInput, Touchable, TouchableOpacity, View } from "react-native";
 import BottomBar from "../bars/bottomBar";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen"
@@ -9,19 +9,22 @@ import { CURRENT_USER } from "@/api/currentUser";
 import { GetUserWatchlists } from "@/api/watchlist/watchlist";
 import WatchlistCard from "./components/watchlistCard";
 import LibraryHeader from "./components/header";
+import { useFocusEffect } from "expo-router";
 
 export default function WatchlistsScreen({ navigation }: any) {
   const [watchlists, setWatchlists] = useState<any>(null);
 
-  useEffect(() => {
-    async function loadWatchlists() {
-      const data = await GetUserWatchlists(1);
-      if (!data) return;
-      setWatchlists(data);
-    }
+  useFocusEffect(
+    useCallback(() => {
+      async function loadWatchlists() {
+        const data = await GetUserWatchlists(1);
+        if (!data) return;
+        setWatchlists(data);
+      }
 
-    loadWatchlists();
-  }, [])
+      loadWatchlists();
+    }, [])
+  )
 
   return (
     <View style={{ flex: 1 }}>
@@ -30,7 +33,7 @@ export default function WatchlistsScreen({ navigation }: any) {
           <LibraryHeader />
           <View style={{ gap: 5 }}>
             {
-              watchlists?.map((item: any, index: number) => (
+              watchlists?.sort((a: any, b: any) => { return a.movies_quantity > b.movies_quantity }).map((item: any, index: number) => (
                 <WatchlistCard key={index} watchlist={item} />
               ))
             }

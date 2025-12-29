@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useActionState } from "react";
 import { View } from "react-native";
 import BottomBarIconButton from "./components/BottomBarIconButton";
 import { bottomBar } from "./styles";
+import { useAuthStore } from "@/local_storage/user/asyncStorage/store";
 
 export default function BottomBar() {
   return (

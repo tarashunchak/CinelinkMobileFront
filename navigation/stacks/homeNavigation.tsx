@@ -11,6 +11,7 @@ import UserProfileScreen from "@/app/profile/UserProfileScreen";
 import WatchlistsLibraryScreen from "@/app/library/WatchlistsLibraryScreen";
 import WatchlistDetailsScreen from "@/app/watchlist/WatchlistDetailsScreen";
 import HomePageScreen from "@/app/home/HomeScreen";
+import ChatScreen from "@/app/chat/ChatScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -20,6 +21,7 @@ export default function HomeNavigatorStack() {
     <SafeAreaProvider style={{ flex: 1 }}>
       <StatusBar hidden={true} />
       <Stack.Navigator>
+        <Stack.Screen name="ChatScreen" component={ChatScreen} options={{ headerShown: false }} />
         <Stack.Screen name="HomePage" component={HomePageScreen} options={{ headerShown: false }} />
         <Stack.Screen name="MovieDetailScreen" component={MovieDetailScreen} options={{ headerShown: false }} />
         <Stack.Screen name="MovieCreditsScreen" component={MovieCreditsScreen} options={{ headerShown: false }} />

@@ -27,7 +27,7 @@ export default function WatchlistDetailsScreen({ route }: any) {
 
   return (
     <ImageBackground source={require("@/assets/images/background.png")} style={{ flex: 1 }}>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView style={{}} showsVerticalScrollIndicator={false}>
         <ImageBackground source={require("@/app/library/assets/NoBgWatchlist.jpeg")} style={{ height: hp("45%"), width: "100%", marginBottom: hp("1%") }} >
           <TouchableOpacity style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", padding: hp(1.5), paddingLeft: hp(0.5), paddingBottom: 0 }}>
             <LeafyReturnArrowButton onPress={() => navigator.goBack()} />
@@ -63,9 +63,16 @@ export default function WatchlistDetailsScreen({ route }: any) {
           </View>
         </ImageBackground>
         {
-          watchlistMovies ? watchlistMovies?.map((item: Movie, index: number) => <MovieCard key={index} movie={item} />)
-            :
-            <Text style={[textStyle.gray32, { alignSelf: "center", opacity: 0.4, marginTop: hp("20%") }]}>Watchlist is empty</Text>
+          (
+            <>
+              {
+                watchlistMovies ? watchlistMovies?.map((item: Movie, index: number) => <MovieCard key={index} movie={item} />)
+                  :
+                  <Text style={[textStyle.gray32, { alignSelf: "center", opacity: 0.4, marginTop: hp("20%") }]}>Watchlist is empty</Text>
+              }
+              <View style={{ height: hp(8) }}></View>
+            </>
+          )
         }
       </ScrollView >
       <BottomBar />

@@ -1,6 +1,7 @@
 import { GetChat, GetUserChats } from "@/api/chats/chats";
 import LeafyReturnArrowButton from "@/components/ui/leafy-return-arrow-btn";
 import { textStyle } from "@/styles/textStyles";
+import { getCurrentUserID, isCurrentUser } from "@/utils/utils";
 import { useFocusEffect, useNavigation } from "expo-router";
 import React, { useCallback, useState } from "react";
 import { View, Text, Image, TouchableOpacity } from "react-native";
@@ -24,20 +25,30 @@ const defaultChat: Chat = {
 };
 
 export default function Header({ info }: { info: any }) {
-
   const navigator = useNavigation();
+
+  const isGroupChat = info?.members.length > 2;
+  const notMe = info?.members?.filter((item: any) => getCurrentUserID() != item?.user_id)[0];
 
   return (
     <View style={styles.view}>
-      <View style={{ flexDirection: "row", gap: "10%" }}>
+      <View style={{ flexDirection: "row", gap: "5%" }}>
         <LeafyReturnArrowButton
           onPress={
             () => navigator.goBack()
           } />
 
         <View style={styles.chatInfo.view}>
-          <TouchableOpacity>
-            <Image style={styles.chatInfo.img} source={{ uri: "https://i.pinimg.com/1200x/da/64/c9/da64c942e735c2e5d25b544979e96288.jpg" }} />
+          <TouchableOpacity
+            style={styles.chatInfo.img}
+            onPress={() => {
+              navigator.push("UserProfileScreen", { userID: notMe?.user_id })
+            }}
+          >
+            <Image style={{ width: 53, height: 53, borderRadius: 999 }}
+              source={isGroupChat ?
+                { uri: "https://i.pinimg.com/1200x/da/64/c9/da64c942e735c2e5d25b544979e96288.jpg" }
+                : { uri: notMe?.avatar_url }} />
           </TouchableOpacity>
 
           <View style={styles.chatInfo.text.view}>
@@ -58,13 +69,13 @@ export default function Header({ info }: { info: any }) {
 
 const styles = {
   view: {
-    height: hp(10),
-    backgroundColor: "rgba(255, 255, 255, 0.05)",
+    height: hp(12),
+    backgroundColor: "rgba(20, 20, 20, 1)",
     flexDirection: "row",
     alignItems: "flex-end",
     justifyContent: "space-between",
     paddingLeft: "2%",
-    paddingRight: "5%",
+    paddingRight: "3%",
     paddingBottom: "2%",
     zIndex: 2,
   },
@@ -76,10 +87,14 @@ const styles = {
       alignItems: "center",
     },
     img: {
-      backgroundColor: "white",
-      height: 54,
-      width: 54,
+      height: 58,
+      width: 58,
       borderRadius: 999,
+      borderColor: "white",
+      borderWidth: 0.5,
+      padding: 2,
+      alignItems: "center",
+      justifyContent: "center",
     },
     text: {
       view: {

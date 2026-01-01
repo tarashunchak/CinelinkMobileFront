@@ -10,6 +10,7 @@ import { useFocusEffect, useNavigation } from "expo-router";
 import { useAuthStore } from "@/local_storage/user/asyncStorage/store";
 import { FollowUser } from "@/api/followers/followers";
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
+import { getCurrentUserID, isCurrentUser } from "@/utils/utils";
 
 export default async function UserProfileScreen({ route }: any) {
   let mainButtons;
@@ -17,7 +18,7 @@ export default async function UserProfileScreen({ route }: any) {
   const [followed, setFollowed] = useState<boolean>(false);
   const navigator = useNavigation()
 
-  const userID = route.params?.userID ? route.params?.userID : useAuthStore.getState()?.user?.user_id;
+  const userID = route?.params?.userID ? route.params.userID : getCurrentUserID();
   useFocusEffect(
     useCallback(() => {
       async function loadUser() {
@@ -30,7 +31,7 @@ export default async function UserProfileScreen({ route }: any) {
     }, [])
   );
 
-  mainButtons = (userID == CURRENT_USER.UID) ?
+  mainButtons = (userID === getCurrentUserID()) ?
     (
       <Pressable style={styles.editBtn}>
         <Text style={textStyle.white18}>Edit</Text>
@@ -56,17 +57,20 @@ export default async function UserProfileScreen({ route }: any) {
         />
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
           <LeafyReturnArrowButton onPress={() => navigator.goBack()} />
-          {userID == CURRENT_USER.UID ? (<TouchableOpacity
-            onPress={() => useAuthStore.getState().logOut()}
-          >
-            <Image
-              style={{
-                height: 34,
-                width: 34,
-              }}
-              source={require("@/app/profile/assets/logOut.png")}
-            />
-          </TouchableOpacity>) : null}
+          {
+            isCurrentUser(userID) &&
+            <TouchableOpacity
+              onPress={() => useAuthStore.getState().logOut()}
+            >
+              <Image
+                style={{
+                  height: 34,
+                  width: 34,
+                }}
+                source={require("@/app/profile/assets/logOut.png")}
+              />
+            </TouchableOpacity>
+          }
         </View>
         <View style={{ flexDirection: "column", gap: 5 }}>
           <View style={{ width: "100%", marginTop: "45%", height: 100, flexDirection: "row", justifyContent: "space-between" }}>

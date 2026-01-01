@@ -1,18 +1,21 @@
+import { SendChatMessages } from "@/api/chats/messages";
 import { textStyle } from "@/styles/textStyles";
 import React, { useState } from "react";
 import { View, Text, Image, TouchableOpacity, TextInput } from "react-native";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 
-export default function Input() {
+export default function Input({ sendMessage }: { sendMessage: any }) {
   const [isFocused, setIsFocused] = useState(false);
   const [text, setText] = useState<string>();
+
+  //const sendMessage = route?.params?.sendMessage;
 
   function handleFocus() {
     setIsFocused(true);
   };
 
   function handleBlur() {
-    setIsFocused(false);
+    //setIsFocused(false);
   };
 
   return (
@@ -21,11 +24,10 @@ export default function Input() {
         value={text}
         onChangeText={setText}
         style={styles.input}
-        placeholder="Message"
+        placeholder="Message..."
         placeholderTextColor={"rgba(255, 255, 255, 0.3)"}
         onFocus={handleFocus}
         onBlur={handleBlur}
-        blurOnSubmit={false}
         multiline={true}
         numberOfLines={10}
       />
@@ -34,29 +36,36 @@ export default function Input() {
         (
           <TouchableOpacity
             style={styles.sendBtn.view}
-            onPress={() => { console.log("Message: ", text); setText("") }}>
+            onPress={() => {
+              sendMessage(text);
+              setText("")
+            }}>
             <Image style={styles.sendBtn.img}
               source={require("@/app/chat/assets/send-03.png")} />
           </TouchableOpacity>
         )
       }
-    </View>
+    </View >
   );
 };
 
 const styles = {
   view: {
     width: "94%",
+    position: "absolute",
+    bottom: "2%",
+    zIndex: 2,
     minHeight: hp(5.1),
-    backgroundColor: "rgba(255, 255, 255, 0.03)",
-    borderColor: "rgba(255, 255, 255, 0.2)",
-    borderWidth: 1,
+    //backgroundColor: "rgba(255, 255, 255, 0.03)",
+    backgroundColor: "rgba(20, 20, 20, 1)",
+    borderColor: "rgba(255, 255, 255, 0.5)",
+    borderWidth: 0.5,
     borderRadius: hp(2.8),
     paddingRight: 2,
     paddingBottom: 2,
     paddingLeft: "5%",
     alignSelf: "center",
-    marginBottom: "5%",
+    marginTop: "5%",
     flexDirection: "row",
   },
   input: [textStyle.white18, {

@@ -107,9 +107,12 @@ const styles = {
             width: 130,
             flexDirection: "column",
             justifyContent: "space-evenly",
-            backgroundColor: "rgba(255, 255, 255, 0.1)",
-            borderRadius: 2,
+            backgroundColor: "rgba(0, 0, 0, 0.2)",
+            borderColor: "rgba(255, 255, 255, 0.2)",
+            borderWidth: 0.5,
+            borderRadius: 4,
             paddingLeft: "1%",
+            paddingBottom: "1%",
           },
           header: [textStyle.gray12, {
 

@@ -1,3 +1,4 @@
+import { GetChat, GetUserChats } from "@/api/chats/chats";
 import LeafyReturnArrowButton from "@/components/ui/leafy-return-arrow-btn";
 import { textStyle } from "@/styles/textStyles";
 import { useFocusEffect, useNavigation } from "expo-router";
@@ -22,23 +23,9 @@ const defaultChat: Chat = {
   last_seen: "",
 };
 
-export default function Header({ chatID }: { chatID: number }) {
-  const [chat, setChat] = useState<Chat>(defaultChat);
+export default function Header({ info }: { info: any }) {
 
   const navigator = useNavigation();
-
-  useFocusEffect(
-    useCallback(() => {
-      if (chatID == 0)
-        return;
-
-      async function loadContent() {
-
-      }
-
-      loadContent();
-    }, [])
-  )
 
   return (
     <View style={styles.view}>
@@ -54,8 +41,8 @@ export default function Header({ chatID }: { chatID: number }) {
           </TouchableOpacity>
 
           <View style={styles.chatInfo.text.view}>
-            <Text style={styles.chatInfo.text.name}>{chat.name}</Text>
-            <Text style={styles.chatInfo.text.lastSeen}>{`last seen ${chat.last_seen}`}</Text>
+            <Text style={styles.chatInfo.text.name}>{info?.name}</Text>
+            <Text style={styles.chatInfo.text.lastSeen}>{`last seen ${info?.last_seen}`}</Text>
           </View>
         </View>
 
@@ -71,13 +58,15 @@ export default function Header({ chatID }: { chatID: number }) {
 
 const styles = {
   view: {
-    height: hp(10), backgroundColor: "rgba(255, 255, 255, 0.05)",
+    height: hp(10),
+    backgroundColor: "rgba(255, 255, 255, 0.05)",
     flexDirection: "row",
     alignItems: "flex-end",
     justifyContent: "space-between",
     paddingLeft: "2%",
     paddingRight: "5%",
     paddingBottom: "2%",
+    zIndex: 2,
   },
   chatInfo: {
     view: {

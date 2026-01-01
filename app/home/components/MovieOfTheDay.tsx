@@ -25,6 +25,12 @@ export default function MovieOfTheDay() {
       source={{ uri: `https://image.tmdb.org/t/p/w300${movie?.backdrop_path || movie?.poster_path}` }}
       style={styles.backdrop}>
       <View style={styles.background}>
+
+        <Image
+          style={{ height: "10%", width: "20%", marginLeft: "3%", marginTop: "3%" }}
+          source={require("@/app/home/assets/logo.png")}
+        />
+
         <Text style={[textStyle.white38, styles.text]}>{"Movie of the day"}</Text>
         <TouchableOpacity style={{}}
           onPress={() => navigator.navigate("MovieDetailScreen", { movieId: movie?.movie_id })}>
@@ -53,7 +59,6 @@ const styles = {
   },
   text: {
     alignSelf: "center",
-    marginTop: "8%"
   },
   poster: {
     marginTop: "2%",

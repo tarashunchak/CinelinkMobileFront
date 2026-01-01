@@ -11,12 +11,14 @@ import { CURRENT_USER } from "@/api/currentUser";
 import { GetUserRecommendations } from "@/api/recommendations/recommendations";
 import { useAuthStore } from "@/local_storage/user/asyncStorage/store";
 import { useFocusEffect } from "expo-router";
+import { GetUserChats } from "@/api/chats/chats";
 
 export default function SocialScreen() {
   const tabs = ["Friends", "Recommendations", "Activity", "Chats"];
   const [activeTab, setActiveTab] = useState("Friends");
   const [friends, setFriends] = useState<FriendCard_T>();
   const [recommendations, setRecommendatoins] = useState<RecommendedCard_T>();
+  const [chats, setChats] = useState();
 
   useFocusEffect(
     useCallback(() => {
@@ -25,10 +27,11 @@ export default function SocialScreen() {
         const currentUserID = useAuthStore.getState().user?.user_id;
         const friendsData = await GetUserFollowers(currentUserID);
         const recommendationsData = await GetUserRecommendations(currentUserID);
+        const chatsData = await GetUserChats(currentUserID);
 
+        if (chatsData) setChats(chatsData);
         if (friendsData) setFriends(friendsData);
         if (recommendationsData) setRecommendatoins(recommendationsData);
-        console.log("RECOMMENDATIONS: ", recommendationsData);
       };
 
       loadContent();
@@ -65,6 +68,10 @@ export default function SocialScreen() {
             activeTab === "Recommendations" &&
             recommendations?.map((item: RecommendedCard_T, index: number) =>
               <RecommendationCard key={index} item={item} />)
+            ,
+            activeTab === "Chats" &&
+            chats?.map((item: any, index: number) =>
+              <ChatCard key={index} item={item} />)
           ]
           }
 

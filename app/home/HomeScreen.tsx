@@ -17,8 +17,13 @@ export default function HomePageScreen() {
   return (
 
     <ImageBackground source={require("@/assets/images/background.png")} style={{ flex: 1 }}>
-      <ScrollView style={{ backgroundColor: "transparent", padding: "1%" }}
-        showsVerticalScrollIndicator={false}>
+      <ScrollView
+        style={{
+          backgroundColor: "transparent",
+          padding: "1%"
+        }}
+        showsVerticalScrollIndicator={false}
+      >
 
         <MovieOfTheDay />
 

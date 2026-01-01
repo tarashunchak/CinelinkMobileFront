@@ -1,4 +1,4 @@
-import { Dimensions, Image, Pressable, StyleSheet } from "react-native";
+import { TouchableOpacity, Dimensions, Image, StyleSheet } from "react-native";
 
 const { width: screenW, height: screenH } = Dimensions.get("window");
 
@@ -50,9 +50,9 @@ export default function LeafyReturnArrowButton(
     returnLeft: require('@/assets/images/ReturnArrow.png'),
   };
   return (
-    <Pressable style={finalStyle} onPress={onPress}>
+    <TouchableOpacity style={finalStyle} onPress={onPress}>
       <Image source={images["returnLeft"]} ></Image>
-    </Pressable >
+    </TouchableOpacity>
   );
 };
 

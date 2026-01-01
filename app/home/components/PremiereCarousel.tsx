@@ -66,7 +66,7 @@ export default function PremiereCarousel() {
 const styles: object = {
   text: [
     textStyle.white22,
-    { marginTop: "10%" }
+    { marginTop: "15%" }
   ],
   scrollView: {
     height: 160,

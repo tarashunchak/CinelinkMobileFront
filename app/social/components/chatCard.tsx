@@ -2,14 +2,20 @@ import React from "react";
 import { textStyle } from "@/styles/textStyles";
 import { TouchableOpacity, View, Text, Image } from "react-native";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
+import { useNavigation } from "expo-router";
 
-export default function ChatCard() {
+export default function ChatCard({ item }: { item: any }) {
+  const navigator = useNavigation();
+
   return (
-    <TouchableOpacity style={styles.card.view}>
+    <TouchableOpacity
+      style={styles.card.view}
+      onPress={() => navigator.push("ChatScreen", { chatID: item?.chat_id })}
+    >
       <View style={styles.card.info.view}>
         <Image style={styles.card.info.image} source={require("@/assets/images/giggaNigga.png")} />
         <View style={styles.card.info.text.view}>
-          <Text style={styles.card.info.text.name}>{"Gigga Nigga"}</Text>
+          <Text style={styles.card.info.text.name}>{item.name}</Text>
           <Text style={styles.card.info.text.last_message}>{"Go v minecraft"}</Text>
         </View>
       </View>

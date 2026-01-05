@@ -3,7 +3,7 @@ import LeafyReturnArrowButton from "@/components/ui/leafy-return-arrow-btn";
 import { textStyle } from "@/styles/textStyles";
 import { getCurrentUserID, isCurrentUser } from "@/utils/utils";
 import { useFocusEffect, useNavigation } from "expo-router";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { View, Text, Image, TouchableOpacity } from "react-native";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { useSafeAreaFrame } from "react-native-safe-area-context";

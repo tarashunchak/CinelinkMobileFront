@@ -3,18 +3,22 @@ import { textStyle } from "@/styles/textStyles";
 import React, { useState } from "react";
 import { View, Text, Image, TouchableOpacity, TextInput } from "react-native";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
+import { RTChat } from "../rt_chat/rt_chat";
+import { getCurrentUserID } from "@/utils/utils";
 
-export default function Input({ sendMessage }: { sendMessage: any }) {
+export default function Input({ sendMessage, chatID }: { sendMessage: any, chatID: number }) {
   const [isFocused, setIsFocused] = useState(false);
   const [text, setText] = useState<string>();
 
   //const sendMessage = route?.params?.sendMessage;
 
   function handleFocus() {
+    RTChat.setTyping(chatID, getCurrentUserID(), true);
     setIsFocused(true);
   };
 
   function handleBlur() {
+    RTChat.setTyping(chatID, getCurrentUserID(), false);
     //setIsFocused(false);
   };
 

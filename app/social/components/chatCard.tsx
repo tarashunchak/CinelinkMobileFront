@@ -10,7 +10,7 @@ export default function ChatCard({ item }: { item: any }) {
   return (
     <TouchableOpacity
       style={styles.card.view}
-      onPress={() => navigator.push("ChatScreen", { chatID: item?.chat_id })}
+      onPress={() => navigator?.navigate("ChatScreen", { chatID: item?.chat_id })}
     >
       <View style={styles.card.info.view}>
         <Image style={styles.card.info.image} source={require("@/assets/images/giggaNigga.png")} />

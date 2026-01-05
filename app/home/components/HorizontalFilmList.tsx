@@ -32,7 +32,8 @@ export default function HorizontalMoviesList() {
             key={index}
             style={[styles.view]}
             onPress={() => {
-              navigator.navigate("MovieDetailScreen", { movieId: movie?.id }
+              navigator.push("MovieDetailScreen",
+                { movieId: movie?.id }
               )
             }}
           >
@@ -46,7 +47,7 @@ export default function HorizontalMoviesList() {
   )
 }
 
-const styles: object = {
+const styles = {
   scrollView: {
     height: 160,
     backgroundColor: "rgba(255, 255, 255, 0.05)",

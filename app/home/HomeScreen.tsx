@@ -4,7 +4,7 @@ import { inputStyle } from "@/styles/inputStyle";
 import { textStyle } from "@/styles/textStyles";
 import React, { useCallback, useEffect } from "react";
 import { Image, ImageBackground, ScrollView, Text, TextInput } from "react-native";
-import { heightPercentageToDP } from "react-native-responsive-screen";
+import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import PremiereCarousel from "./components/PremiereCarousel";
 import HorizontalMoviesList from "./components/HorizontalFilmList";
 import { useFocusEffect, useNavigation } from "expo-router";

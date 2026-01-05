@@ -9,32 +9,53 @@ import { textStyle } from "@/styles/textStyles";
 import { SendChatMessages } from "@/api/chats/messages";
 import { useAuthStore } from "@/local_storage/user/asyncStorage/store";
 import { isCurrentUser } from "@/utils/utils";
+import { RTChat } from "./rt_chat/rt_chat";
+
+type Message = {
+  message_id: number;
+  chat_id: number;
+  sender_id: number;
+  content: {
+    message_type: string;
+    message: any;
+  };
+};
 
 export default function ChatScreen({ route }: any) {
-  const [chat, setChat] = useState();
-  const [messages, setMessages] = useState();
-
   const chatID = route?.params?.chatID;
 
-  async function loadChat() {
-    const chat = await GetChat(chatID);
-    if (chat) setChat(chat);
-  }
-  async function loadMessages() {
-    const messages = await GetChatMessages(chatID);
-    if (messages) setMessages(messages);
-  };
+  const [chat, setChat] = useState();
+  const [messages, setMessages] = useState();
+  const [online, setOnline] = useState();
+  const [isTyping, setIsTyping] = useState();
 
-  async function timestamp(date: Date) {
+  RTChat.setOnMessageCallBack(chatID, setMessages);
+  RTChat.setOnTypingCallBack(chatID, setIsTyping);
+  RTChat.setOnOnlineCallBack(chatID, setOnline);
+
+  /* async function loadChat() {
+     const chat = await GetChat(chatID);
+     if (chat) setChat(chat);
+   }*/
+  if (isTyping) console.warn("user_is typing");
+
+  function timestamp(date: Date) {
     return `${date.getHours()}:${date.getMinutes() > 9 ? date.getMinutes() : `0${date.getMinutes()}`}`
   }
 
-  useFocusEffect(
-    useCallback(() => {
-      loadChat();
-      loadMessages();
-    }, [])
-  );
+  useFocusEffect(useCallback(() => {
+    async function loadContent() {
+      await RTChat.connect(chatID);
+      setChat(await RTChat.getChat(chatID));
+      //await loadChat();
+
+      return () => {
+        console.log("Screen unfocused");
+        RTChat.disconnect(chatID);
+      }
+    }
+    loadContent();
+  }, []));
 
   return (
     <KeyboardAvoidingView style={{ flexGrow: 1 }} enabled={true} behavior="padding">
@@ -42,7 +63,7 @@ export default function ChatScreen({ route }: any) {
         <Header info={chat} />
         <ScrollView style={{}}
           keyboardShouldPersistTaps="always"
-          contentContainerStyle={{ flexGrow: 1, justifyContent: "flex-end" }}>
+          contentContainerStyle={{ flexGrow: 1 }}>
           {[
             messages?.map((item: any, index: number) => (
               <View key={index}
@@ -77,11 +98,11 @@ export default function ChatScreen({ route }: any) {
                 </Text>
               </View>
             )),
-            <View key={0} style={{ height: "8%" }}></View>
+            <View key={0} style={{ height: hp(8) }}></View>
           ]}
 
         </ScrollView>
-        <Input sendMessage={async (text: string) => {
+        <Input sendMessage={(text: any) => RTChat.sendMessage(chatID, text)/*async (text: string) => {
           const res = await SendChatMessages({
             chat_id: chat?.chat_id,
             sender_id: useAuthStore.getState()?.user?.user_id,
@@ -91,7 +112,7 @@ export default function ChatScreen({ route }: any) {
             }
           });
           if (res) await loadMessages();
-        }} />
+        }*/} />
 
       </ImageBackground>
     </KeyboardAvoidingView>

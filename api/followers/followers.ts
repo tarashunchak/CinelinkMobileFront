@@ -1,5 +1,6 @@
 import { API_URL } from "@/api/API_CONFIG";
 import { useAuthStore } from "@/local_storage/user/asyncStorage/store";
+import { jwtHeaders } from "@/utils/utils";
 
 export async function GetUserFollowers(userID: number) {
   console.log("USER ID followers: ", userID)
@@ -16,5 +17,15 @@ export async function FollowUser(userID: number) {
     body: JSON.stringify({ follower_id: useAuthStore.getState().user?.user_id })
   })
   const data = await response.json();
-  return data?.status;
+  return data?.status === 200;
+};
+
+export async function UnfollowUser(userID: number) {
+  const jwt = useAuthStore.getState().user?.jwt;
+  const response = await fetch(`${API_URL}/users/${userID}/followers`, {
+    method: "DELETE",
+    headers: jwtHeaders(jwt)
+  })
+  const data = await response.json();
+  return data.status == 200;
 };

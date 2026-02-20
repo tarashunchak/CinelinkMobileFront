@@ -1,15 +1,15 @@
 export type UserProfile_T = {
-  first_name: string | null;
-  last_name: string | null;
-  username: string | null;
-  joined_at: string | null;
-  bio: string | null;
-  avatar_url: string | null;
-  bg_img_url: string | null;
-  followers: number | null;
-  followings: number | null;
-  is_following: boolean | null;
-  posts: number | null;
+  first_name: string;
+  last_name: string;
+  username: string;
+  joined_at: string;
+  bio: string;
+  avatar_url: string;
+  bg_img_url: string;
+  followers: number;
+  followings: number;
+  is_following: boolean;
+  posts: number;
 };
 
 export interface Post {

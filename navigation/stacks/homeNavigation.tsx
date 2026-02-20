@@ -11,7 +11,7 @@ import UserProfileScreen from "@/app/profile/UserProfileScreen";
 import WatchlistsLibraryScreen from "@/app/library/WatchlistsLibraryScreen";
 import WatchlistDetailsScreen from "@/app/watchlist/WatchlistDetailsScreen";
 import HomePageScreen from "@/app/home/HomeScreen";
-import ChatScreen from "@/app/chat/ChatScreen";
+import ChatScreen from "@/app/direct_chat/DirectChatScreen";
 
 const Stack = createNativeStackNavigator();
 

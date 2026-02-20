@@ -3,23 +3,23 @@ import { textStyle } from "@/styles/textStyles";
 import React, { useState } from "react";
 import { View, Text, Image, TouchableOpacity, TextInput } from "react-native";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
-import { RTChat } from "../rt_chat/rt_chat";
+import { RTChat } from "../../rt_client/rt_client";
 import { getCurrentUserID } from "@/utils/utils";
 
-export default function Input({ sendMessage, chatID }: { sendMessage: any, chatID: number }) {
+export default function Input({ chatID }: { chatID: number }) {
   const [isFocused, setIsFocused] = useState(false);
   const [text, setText] = useState<string>();
 
   //const sendMessage = route?.params?.sendMessage;
 
-  function handleFocus() {
-    RTChat.setTyping(chatID, getCurrentUserID(), true);
+  async function handleFocus() {
+    await RTChat.setTyping(chatID, getCurrentUserID(), true);
     setIsFocused(true);
   };
 
-  function handleBlur() {
-    RTChat.setTyping(chatID, getCurrentUserID(), false);
-    //setIsFocused(false);
+  async function handleBlur() {
+    await RTChat.setTyping(chatID, getCurrentUserID(), false);
+    setIsFocused(false);
   };
 
   return (
@@ -41,11 +41,20 @@ export default function Input({ sendMessage, chatID }: { sendMessage: any, chatI
           <TouchableOpacity
             style={styles.sendBtn.view}
             onPress={() => {
-              sendMessage(text);
+              RTChat.sendMessage(chatID,
+                {
+                  message_id: 0,
+                  chat_id: chatID,
+                  sender_id: getCurrentUserID(),
+                  content: {
+                    message_type: "text",
+                    message: text,
+                  }
+                })
               setText("")
             }}>
             <Image style={styles.sendBtn.img}
-              source={require("@/app/chat/assets/send-03.png")} />
+              source={require("@/app/direct_chat/assets/send-03.png")} />
           </TouchableOpacity>
         )
       }

@@ -9,53 +9,11 @@ import { textStyle } from "@/styles/textStyles";
 import { SendChatMessages } from "@/api/chats/messages";
 import { useAuthStore } from "@/local_storage/user/asyncStorage/store";
 import { isCurrentUser } from "@/utils/utils";
-import { RTChat } from "./rt_chat/rt_chat";
+import { RTChat } from "../rt_client/rt_client";
 
-type Message = {
-  message_id: number;
-  chat_id: number;
-  sender_id: number;
-  content: {
-    message_type: string;
-    message: any;
-  };
-};
 
-export default function ChatScreen({ route }: any) {
-  const chatID = route?.params?.chatID;
 
-  const [chat, setChat] = useState();
-  const [messages, setMessages] = useState();
-  const [online, setOnline] = useState();
-  const [isTyping, setIsTyping] = useState();
-
-  RTChat.setOnMessageCallBack(chatID, setMessages);
-  RTChat.setOnTypingCallBack(chatID, setIsTyping);
-  RTChat.setOnOnlineCallBack(chatID, setOnline);
-
-  /* async function loadChat() {
-     const chat = await GetChat(chatID);
-     if (chat) setChat(chat);
-   }*/
-  if (isTyping) console.warn("user_is typing");
-
-  function timestamp(date: Date) {
-    return `${date.getHours()}:${date.getMinutes() > 9 ? date.getMinutes() : `0${date.getMinutes()}`}`
-  }
-
-  useFocusEffect(useCallback(() => {
-    async function loadContent() {
-      await RTChat.connect(chatID);
-      setChat(await RTChat.getChat(chatID));
-      //await loadChat();
-
-      return () => {
-        console.log("Screen unfocused");
-        RTChat.disconnect(chatID);
-      }
-    }
-    loadContent();
-  }, []));
+export default function GroupChatScreen({ chat }: { chat: any }) {
 
   return (
     <KeyboardAvoidingView style={{ flexGrow: 1 }} enabled={true} behavior="padding">
@@ -117,10 +75,4 @@ export default function ChatScreen({ route }: any) {
       </ImageBackground>
     </KeyboardAvoidingView>
   );
-};
-
-const styles = {
-  view: {
-
-  }
 };

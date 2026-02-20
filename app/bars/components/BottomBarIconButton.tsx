@@ -1,6 +1,4 @@
-import { CommonActions } from "@react-navigation/native";
 import { useNavigation } from "expo-router";
-import { useRouteInfo } from "expo-router/build/hooks";
 import React from "react";
 import { Image, TouchableOpacity } from "react-native";
 

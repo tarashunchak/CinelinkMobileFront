@@ -3,13 +3,16 @@ import React from "react";
 import TabNavigator from "@/navigation/tabNavigator";
 import AuthNavigator from "@/navigation/AuthNavigator";
 import { useAuthStore } from "@/local_storage/user/asyncStorage/store"
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import { SafeAreaViewComponent } from "react-native";
+import { RTClient } from "./rt_client/rt_client";
+import MeetUpScreen from "./meetup/MeetUpScreen";
+import { getCurrentUser, getCurrentUserID } from "@/utils/utils";
 
 export default function App() {
   useAuthStore.getState().init();
   const isAuthenticated = useAuthStore(state => state.isAuthenticated);
   const isHydrated = useAuthStore(state => state.isHydrated);
+
+  RTClient.connect(getCurrentUserID());
 
   return (
     <>
@@ -18,3 +21,5 @@ export default function App() {
     </>
   );
 };
+
+//<MeetUpScreen />

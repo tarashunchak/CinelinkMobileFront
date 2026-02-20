@@ -1,5 +1,6 @@
 import { UserProfile_T } from "@/app/profile/types";
 import { API_URL } from "./API_CONFIG";
+import { jwtHeaders } from "@/utils/utils";
 import { useAuthStore } from "@/local_storage/user/asyncStorage/store";
 
 export let CURRENT_USER = {
@@ -19,9 +20,14 @@ export async function updateCurrentUserData() {
 }
 
 export async function getUserProfileData(userID: number): Promise<UserProfile_T> {
-  const response = await fetch(`${API_URL}/users/${userID}`);
-  const json = await response.json();
-  const data: UserProfile_T = json.results;
-  console.warn("UserProfile: ", data);
-  return data;
+  const jwt = useAuthStore.getState().user?.jwt;
+  const response = await fetch(`${API_URL}/users/${userID}`,
+    {
+      method: "GET",
+      headers: jwtHeaders(jwt)
+    }
+  );
+  const data = await response.json();
+  //console.warn("UserProfile: ", data);
+  return data.results;
 }

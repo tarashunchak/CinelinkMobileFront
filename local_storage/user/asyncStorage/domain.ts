@@ -8,4 +8,5 @@ export type User = {
   created_at: string;
   bio: string;
   followers: number;
+  jwt: string;
 };

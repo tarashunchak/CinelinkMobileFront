@@ -20,7 +20,7 @@ export default function FriendCard({ friend }: { friend: FriendCard_T }) {
   return (
     <TouchableOpacity style={styles.card.view}
       onPress={() => {
-        navigator.push("UserProfileScreen", { userID: friend?.user_id })
+        navigator?.push("UserProfileScreen", { userID: friend?.user_id })
       }}>
       <View style={styles.card.info.view}>
         <Image style={styles.card.info.avatar} source={friend?.avatar_url ? { uri: friend?.avatar_url } : require("@/assets/images/giggaNigga.png")} />

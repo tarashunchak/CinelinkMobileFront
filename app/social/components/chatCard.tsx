@@ -3,17 +3,29 @@ import { textStyle } from "@/styles/textStyles";
 import { TouchableOpacity, View, Text, Image } from "react-native";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { useNavigation } from "expo-router";
+import { RTClient } from "@/app/rt_client/rt_client";
+import { CURRENT_USER } from "@/api/currentUser";
+import { getCurrentUserID } from "@/utils/utils";
 
-export default function ChatCard({ item }: { item: any }) {
+export default async function ChatCard({ item }: { item: any }) {
   const navigator = useNavigation();
 
   return (
     <TouchableOpacity
       style={styles.card.view}
-      onPress={() => navigator?.navigate("ChatScreen", { chatID: item?.chat_id })}
+      onPress={() => {
+        navigator?.navigate("DirectChatScreen", { chatID: item?.chat_id });
+        RTClient.setChatEntering(item?.chat_id, getCurrentUserID());
+      }}
     >
       <View style={styles.card.info.view}>
-        <Image style={styles.card.info.image} source={require("@/assets/images/giggaNigga.png")} />
+        <Image
+          style={styles.card.info.image}
+          source={
+            item?.img_url ? { uri: item?.img_url } :
+              require("@/assets/images/giggaNigga.png")
+          }
+        />
         <View style={styles.card.info.text.view}>
           <Text style={styles.card.info.text.name}>{item.name}</Text>
           <Text style={styles.card.info.text.last_message}>{"Go v minecraft"}</Text>

@@ -12,36 +12,44 @@ import { GetUserRecommendations } from "@/api/recommendations/recommendations";
 import { useAuthStore } from "@/local_storage/user/asyncStorage/store";
 import { useFocusEffect } from "expo-router";
 import { GetUserChats } from "@/api/chats/chats";
+import { RTClient } from "../rt_client/rt_client";
+import { getCurrentUserID } from "@/utils/utils";
 
 export default function SocialScreen() {
   const tabs = ["Friends", "Recommendations", "Activity", "Chats"];
   const [activeTab, setActiveTab] = useState("Friends");
-  const [friends, setFriends] = useState<FriendCard_T>();
-  const [recommendations, setRecommendatoins] = useState<RecommendedCard_T>();
-  const [chats, setChats] = useState();
+  const [friends, setFriends] = useState<FriendCard_T[]>();
+  const [recommendations, setRecommendatoins] = useState<RecommendedCard_T[]>();
+  const [chats, setChats] = useState<any[]>();
+  const currentUserID = getCurrentUserID();
 
-  useFocusEffect(
-    useCallback(() => {
-      async function loadContent() {
-        setActiveTab("Friends");
-        const currentUserID = useAuthStore.getState().user?.user_id;
-        const friendsData = await GetUserFollowers(currentUserID);
-        const recommendationsData = await GetUserRecommendations(currentUserID);
-        const chatsData = await GetUserChats(currentUserID);
+  useFocusEffect(useCallback(() => {
+    async function loadContent() {
+      await RTClient.setPageEntering("social", getCurrentUserID());
 
-        if (chatsData) setChats(chatsData);
-        if (friendsData) setFriends(friendsData);
-        if (recommendationsData) setRecommendatoins(recommendationsData);
-      };
+      /*const [friendsData, recommendationsData, chatsData] = await Promise.all([
+        GetUserFollowers(currentUserID),
+        GetUserRecommendations(currentUserID),
+        GetUserChats(currentUserID)
+      ])*/
 
-      loadContent();
+      const chatsData = await GetUserChats(currentUserID);
+      const friendsData = await GetUserFollowers(currentUserID);
+      const recommendationsData = await GetUserRecommendations(currentUserID);
 
-    }, [])
-  );
+      if (chatsData) setChats(chatsData);
+      if (friendsData) setFriends(friendsData);
+      if (recommendationsData) setRecommendatoins(recommendationsData);
+    };
+
+    loadContent();
+  }, [currentUserID])
+  )
 
   return (
     <View style={{ flex: 1 }}>
-      <ImageBackground source={require("@/assets/images/background.png")} style={{ flex: 1, paddingTop: "10%" }}>
+      <ImageBackground source={require("@/assets/images/background.png")}
+        style={{ flex: 1, paddingTop: "10%" }}>
         <View style={styles.topBar.view}>
           {
             tabs.map(tab => (
@@ -50,7 +58,9 @@ export default function SocialScreen() {
                 onPress={() => setActiveTab(tab)}
                 style={[
                   styles.topBar.buttons.view,
-                  activeTab === tab && styles.topBar.activeButton.view
+                  activeTab === tab
+                  &&
+                  styles.topBar.activeButton.view
                 ]}
               >
                 <Text style={textStyle.white18}>{tab}</Text>
@@ -74,7 +84,6 @@ export default function SocialScreen() {
               <ChatCard key={index} item={item} />)
           ]
           }
-
         </ScrollView>
       </ImageBackground >
       <BottomBar />

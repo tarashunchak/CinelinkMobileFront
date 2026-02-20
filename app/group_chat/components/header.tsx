@@ -49,18 +49,27 @@ export default function Header({ info }: { info: any }) {
               source={isGroupChat ?
                 { uri: "https://i.pinimg.com/1200x/da/64/c9/da64c942e735c2e5d25b544979e96288.jpg" }
                 : { uri: notMe?.avatar_url }} />
+            <View style={styles.isOnline.dot}></View>
           </TouchableOpacity>
 
           <View style={styles.chatInfo.text.view}>
             <Text style={styles.chatInfo.text.name}>{info?.name}</Text>
-            <Text style={styles.chatInfo.text.lastSeen}>{`last seen ${info?.last_seen}`}</Text>
+            {false ? (
+              <Text style={styles.chatInfo.text.lastSeen}>{`last seen ${info?.last_seen}`}</Text>
+            ) :
+              (
+                <View style={styles.isOnline.view}>
+                  <Text style={styles.isOnline.text}>{`online`}</Text>
+                </View>
+              )
+            }
           </View>
         </View>
 
       </View>
 
       <TouchableOpacity style={{ height: 54, width: 54, alignItems: "center", justifyContent: "center" }}>
-        <Image source={require("@/app/chat/assets/dots-vertical.png")} style={{ height: "70%", width: "70%" }} />
+        <Image source={require("@/app/group_chat/assets/dots-vertical.png")} style={{ height: "70%", width: "70%" }} />
       </TouchableOpacity>
 
     </View>
@@ -68,6 +77,27 @@ export default function Header({ info }: { info: any }) {
 };
 
 const styles = {
+  isOnline: {
+    view: {
+      flexDirection: "row",
+      gap: 5,
+      alignItems: "center"
+    },
+    dot: {
+      height: 12,
+      width: 12,
+      backgroundColor: "#329E4F",
+      borderRadius: 10,
+      position: "absolute",
+      right: 3,
+      bottom: 3,
+      borderColor: "white",
+      borderWidth: 1,
+    },
+    text: [textStyle.white14, {
+      color: "#329E4F",
+    }],
+  },
   view: {
     height: hp(12),
     backgroundColor: "rgba(20, 20, 20, 1)",
@@ -96,6 +126,7 @@ const styles = {
       alignItems: "center",
       justifyContent: "center",
     },
+
     text: {
       view: {
         flexDirection: "column",

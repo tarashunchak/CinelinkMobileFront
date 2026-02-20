@@ -19,10 +19,10 @@ export async function LoginRequest(login: string, password: string) {
     console.log("DATA: ", data)
 
     if (data.status === 200) {
-      console.log("SUCCESS LOGIN");
-      if (data.results && data.results) {
+      if (data.results) {
         const user = data.results;
-        useAuthStore.getState().logIn(user, '1234567890');
+        useAuthStore.getState().logIn(user, user.jwt);
+        console.log(`SUCCESS LOGIN: username{${user.username}} token{${user.jwt}}`);
       }
       return
     }

@@ -15,7 +15,6 @@ export default function HomePageScreen() {
 
   const navigation = useNavigation();
   return (
-
     <ImageBackground source={require("@/assets/images/background.png")} style={{ flex: 1 }}>
       <ScrollView
         style={{

@@ -8,23 +8,34 @@ import { userPage } from "./styles";
 import { UserProfile_T } from "./types";
 import { useFocusEffect, useNavigation } from "expo-router";
 import { useAuthStore } from "@/local_storage/user/asyncStorage/store";
-import { FollowUser } from "@/api/followers/followers";
+import { FollowUser, UnfollowUser } from "@/api/followers/followers";
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { getCurrentUserID, isCurrentUser } from "@/utils/utils";
 
-export default async function UserProfileScreen({ route }: any) {
+interface UserProfile {
+  user_id: number;
+  username: string;
+  first_name: string;
+  last_name: string;
+  created_at: number;
+};
+
+export default function UserProfileScreen({ route }: any) {
   let mainButtons;
   const [user, setUser] = useState<any>();
   const [followed, setFollowed] = useState<boolean>(false);
   const navigator = useNavigation()
 
   const userID = route?.params?.userID ? route.params.userID : getCurrentUserID();
+
   useFocusEffect(
     useCallback(() => {
       async function loadUser() {
-        const data = await getUserProfileData(userID);
+        const data: UserProfile_T = await getUserProfileData(userID);
         if (!data) return;
-        data.created_at = new Date(data.created_at).toLocaleDateString('ua-UA')
+        console.warn(`User profile info: ${data.is_following} UserID: ${userID}`);
+        data.joined_at = new Date(data.joined_at).toLocaleDateString('ua-UA')
+        setFollowed(data.is_following);
         setUser(data);
       }
       loadUser()
@@ -39,8 +50,8 @@ export default async function UserProfileScreen({ route }: any) {
     )
     :
     (
-      <TouchableOpacity style={followed ? styles.editBtn : styles.followBtn} onPress={() => {
-        setFollowed(FollowUser(userID));
+      <TouchableOpacity style={followed ? styles.editBtn : styles.followBtn} onPress={async () => {
+        setFollowed(followed ? !await UnfollowUser(userID) : await FollowUser(userID));
       }}>
         <Text style={followed ? textStyle.white18 : textStyle.black18}>{followed ? "Unfollow" : "Follow"}</Text>
       </TouchableOpacity>

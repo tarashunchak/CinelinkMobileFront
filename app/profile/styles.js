@@ -40,15 +40,11 @@ export const userPage = {
         justifyContent: "center",
         alignItems: "center",
         borderRadius: 22,
-      },
-      text: textStyle.white16
+      }, text: textStyle.white16
     },
-  },
-  joinedAt: {
+  }, joinedAt: {
     view: {
-      marginTop: 10,
-      flexDirection: "row",
-      gap: 5
+      marginTop: 10, flexDirection: "row", gap: 5
     },
     joined: textStyle.grey16,
   },

@@ -3,32 +3,32 @@ import React from "react";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { TouchableOpacity, View, Text, Image } from "react-native";
 import { useNavigation } from "expo-router";
+import { UserCard_T } from "@/app/types/user";
 
-export type FriendCard_T = {
-  user_id: number;
-  username: string;
-  level: number;
-  level_name: string;
-  avatar_url: string;
-  is_following_back: boolean;
-  mutual_friends_count: number;
-};
-
-export default function FriendCard({ friend }: { friend: FriendCard_T }) {
-  console.warn("Friend: ", friend);
+export default function UserCard({ user }: { user: UserCard_T }) {
   const navigator = useNavigation();
   return (
     <TouchableOpacity style={styles.card.view}
       onPress={() => {
-        navigator?.push("UserProfileScreen", { userID: friend?.user_id })
+        navigator?.push("UserProfileScreen", { userID: user?.user_id })
       }}>
       <View style={styles.card.info.view}>
-        <Image style={styles.card.info.avatar} source={friend?.avatar_url ? { uri: friend?.avatar_url } : require("@/assets/images/giggaNigga.png")} />
+        <Image
+          style={styles.card.info.avatar}
+          source={user?.avatar_url
+            ? { uri: user?.avatar_url }
+            : require("@/assets/images/giggaNigga.png")}
+        />
         <View style={styles.card.info.text.view}>
-          <Text style={styles.card.info.text.name}>{friend?.username}</Text>
+          <Text style={styles.card.info.text.name}>
+            {user?.username}
+          </Text>
         </View>
       </View>
-      <Image style={styles.card.chatIcon} source={require("@/app/social/assets/chatIcon.png")} />
+      <Image
+        style={styles.card.chatIcon}
+        source={require("@/app/social/assets/chatIcon.png")}
+      />
     </TouchableOpacity>
   );
 };
@@ -39,7 +39,7 @@ const styles = {
       flexDirection: "row",
       width: "100%",
       height: hp("8.5%"),
-      backgroundColor: "rgba(255, 255, 255, 0.05)",
+      backgroundColor: "rgba(255, 255, 255, 0.03)",
       borderColor: "rgba(255, 255, 255, 0.2)",
       borderWidth: 0.5,
       borderRadius: 4,

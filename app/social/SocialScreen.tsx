@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from "react";
 import { TouchableOpacity, Text, ImageBackground, ScrollView, View } from "react-native";
 import BottomBar from "../bars/bottomBar";
 import SocialPageTopBar from "./components/topBar";
-import FriendCard, { FriendCard_T } from "./components/friendCard";
 import RecommendationCard, { RecommendedCard_T } from "./components/recommendationCard";
 import ChatCard from "./components/chatCard";
 import { textStyle } from "@/styles/textStyles";
@@ -14,11 +13,13 @@ import { useFocusEffect } from "expo-router";
 import { GetUserChats } from "@/api/chats/chats";
 import { RTClient } from "../rt_client/rt_client";
 import { getCurrentUserID } from "@/utils/utils";
+import { UserCard_T } from "../types/user";
+import UserCard from "@/components/userCard";
 
 export default function SocialScreen() {
   const tabs = ["Friends", "Recommendations", "Activity", "Chats"];
   const [activeTab, setActiveTab] = useState("Friends");
-  const [friends, setFriends] = useState<FriendCard_T[]>();
+  const [friends, setFriends] = useState<UserCard_T[]>();
   const [recommendations, setRecommendatoins] = useState<RecommendedCard_T[]>();
   const [chats, setChats] = useState<any[]>();
   const currentUserID = getCurrentUserID();
@@ -27,15 +28,15 @@ export default function SocialScreen() {
     async function loadContent() {
       await RTClient.setPageEntering("social", getCurrentUserID());
 
-      /*const [friendsData, recommendationsData, chatsData] = await Promise.all([
+      const [friendsData, recommendationsData, chatsData] = await Promise.all([
         GetUserFollowers(currentUserID),
         GetUserRecommendations(currentUserID),
         GetUserChats(currentUserID)
-      ])*/
+      ])
 
-      const chatsData = await GetUserChats(currentUserID);
-      const friendsData = await GetUserFollowers(currentUserID);
-      const recommendationsData = await GetUserRecommendations(currentUserID);
+      /*const chatsData = await GetUserChats(currentUserID);
+      const friendsData: UserCard_T[] = await GetUserFollowers(currentUserID);
+      const recommendationsData = await GetUserRecommendations(currentUserID);*/
 
       if (chatsData) setChats(chatsData);
       if (friendsData) setFriends(friendsData);
@@ -71,8 +72,8 @@ export default function SocialScreen() {
         <ScrollView style={{ padding: "1%" }}>
           {[
             activeTab === "Friends" &&
-            friends?.map((friend: FriendCard_T, index: number) =>
-              (<FriendCard key={index} friend={friend} />))
+            friends?.map((friend: UserCard_T, index: number) =>
+              (<UserCard key={index} user={friend} />))
 
             ,
             activeTab === "Recommendations" &&
@@ -90,10 +91,6 @@ export default function SocialScreen() {
     </View>
   )
 }
-
-/*{activeTab === "Recommendations" && <RecommendationCard item={{}} />}
-          {activeTab === "Activity" && <FriendCard friend={{}} />}
-          {activeTab === "Chats" && <ChatCard />}*/
 
 const styles = {
   topBar: {

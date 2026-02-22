@@ -9,6 +9,13 @@ export async function GetUserFollowers(userID: number) {
   return data?.results;
 };
 
+export async function GetUserFollowings(userID: number) {
+  console.log("USER ID followings: ", userID)
+  const response = await fetch(`${API_URL}/users/${userID}/followings`)
+  const data = await response.json();
+  return data?.results;
+};
+
 export async function FollowUser(userID: number) {
   console.log("USER ID following: ", userID)
   const response = await fetch(`${API_URL}/users/${userID}/followers`, {

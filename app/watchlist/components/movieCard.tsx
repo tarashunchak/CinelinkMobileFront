@@ -1,6 +1,6 @@
 import { textStyle } from "@/styles/textStyles";
 import React from "react";
-import { Platform, TouchableOpacity, View, Text, Image } from "react-native";
+import { Linking, Platform, TouchableOpacity, View, Text, Image } from "react-native";
 import { movieCardStyle } from "@/styles/movieCardStyle";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { Movie } from "../../movie_details/types";

@@ -1,32 +1,13 @@
-import { CURRENT_USER, getUserProfileData } from "@/api/currentUser";
+import { StyleSheet } from "react-native";
+import { useFocusEffect, useNavigation } from "expo-router";
 import LeafyReturnArrowButton from "@/components/ui/leafy-return-arrow-btn";
-import { textStyle } from "@/styles/textStyles";
 import React, { useCallback, useEffect, useState } from "react";
 import { TouchableOpacity, Image, ImageBackground, Pressable, ScrollView, Text, View } from "react-native";
-import BottomBar from "../bars/bottomBar";
+import { textStyle } from "@/styles/textStyles";
 import { userPage } from "./styles";
-import { UserProfile_T } from "./types";
-import { useFocusEffect, useNavigation } from "expo-router";
-import { useAuthStore } from "@/local_storage/user/asyncStorage/store";
-import { FollowUser, UnfollowUser } from "@/api/followers/followers";
-import { widthPercentageToDP as wp } from "react-native-responsive-screen";
-import { getCurrentUserID, isCurrentUser } from "@/utils/utils";
-import FollowingsList from "./components/followingsList";
-import FollowersList from "./components/followersList";
-import { useUserProfile } from "./hooks/useUserProfile";
-import { ActionButton } from "./components/actionButton";
 
-export default function UserProfileScreen({ route }: any) {
+export function UserProfileSceleton() {
   const navigator = useNavigation();
-  const userID = route?.params?.userID ? route.params.userID : getCurrentUserID();
-  const { user, loadUser } = useUserProfile(userID);
-  const isCurrentUser = userID === getCurrentUserID();
-
-  useFocusEffect(
-    useCallback(() => {
-      loadUser();
-    }, [loadUser])
-  )
 
   return (
     <ImageBackground
@@ -35,15 +16,13 @@ export default function UserProfileScreen({ route }: any) {
     >
       <View style={[{ padding: "2%" }]}>
         <ImageBackground
-          source={user?.bg_img_url
-            ? { uri: user?.bg_img_url }
-            : require("@/assets/images/profileBackground.png")}
+          source={require("@/assets/images/profileBackground.png")}
           style={userPage.imageBackground}
         />
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
           <LeafyReturnArrowButton onPress={() => navigator.goBack()} />
           {
-            isCurrentUser &&
+            isCurrentUser(userID) &&
             <TouchableOpacity
               onPress={() => useAuthStore.getState().logOut()}
             >
@@ -65,14 +44,9 @@ export default function UserProfileScreen({ route }: any) {
                 style={userPage.profilPic.picture}
               />
             </View>
-
-            <ActionButton
-              isCurrentUser={isCurrentUser}
-              isFollowed={false}
-              onEdit={() => { }}
-              onToggleFollow={() => { }}
-            />
-
+            {
+              mainButtons
+            }
           </View>
 
           <Text style={textStyle.white20}>{user ? `${user?.first_name} ${user?.last_name}` : "Gigga Nigga"}</Text>
@@ -121,60 +95,4 @@ export default function UserProfileScreen({ route }: any) {
       <BottomBar />
     </ImageBackground >
   );
-};
-
-/*
-        {
-          (list === "Followings") && <FollowingsList userID={userID} />
-        }
-        {
-          (list === "Followers") && <FollowersList userID={userID} />
-        }
-*/
-
-const styles = {
-  line: {
-    width: wp(96),
-    height: 0.5,
-    backgroundColor: "#ACACAC",
-    alignSelf: "center",
-    borderRadius: 2,
-    marginTop: 10,
-  },
-  editBtn: {
-    flexDirection: "row",
-    gap: 10,
-    backgroundColor: "transparent",
-    width: 100,
-    height: 50,
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 22,
-    borderWidth: 1,
-    borderColor: "white",
-    alignSelf: "flex-end",
-  },
-  followBtn: {
-    backgroundColor: "white",
-    width: 110,
-    height: 52,
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 22,
-    alignSelf: "flex-end",
-  },
-  bio: {
-    view: {
-      padding: 2,
-      backgroundColor: "rgba(255, 255, 255, 0.05)",
-      justifyContent: "center",
-      borderRadius: 6,
-      borderWidth: 0.5,
-      borderColor: "rgba(255, 255, 255, 0.2)"
-    },
-    text: [textStyle.white16, {
-      margin: 10,
-      textAlign: "left"
-    }],
-  },
-};
+}

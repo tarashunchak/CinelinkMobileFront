@@ -20,7 +20,7 @@ export default function ProfileNavigatorStack() {
     <SafeAreaProvider style={{ flex: 1 }}>
       <StatusBar hidden={true} />
       <Stack.Navigator>
-        <Stack.Screen name="ProfilePage" component={UserProfileScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="UserProfileScreen" component={UserProfileScreen} options={{ headerShown: false }} />
         <Stack.Screen name="MovieDetailScreen" component={MovieDetailScreen} options={{ headerShown: false }} />
         <Stack.Screen name="MovieCreditsScreen" component={MovieCreditsScreen} options={{ headerShown: false }} />
         <Stack.Screen name="ActorProfileScreen" component={ActorProfileScreen} options={{ headerShown: false }} />

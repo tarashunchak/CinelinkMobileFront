@@ -1,6 +1,6 @@
 export const movieCardStyle = {
   backgroundStyle: {
-    backgroundColor: "rgba(255, 255, 255, 0.05)",
+    backgroundColor: "rgba(255, 255, 255, 0.03)",
     borderWidth: 0.5,
     borderColor: "rgba(255, 255, 255, 0.20)",
     height: 118,

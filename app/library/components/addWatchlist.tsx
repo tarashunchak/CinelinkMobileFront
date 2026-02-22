@@ -1,5 +1,5 @@
 import { CreateWatchlist } from "@/api/watchlist/watchlist";
-import LeafyReturnArrowButton from "@/components/ui/leafy-return-arrow-btn";
+import LeafyReturnArrowButton from "@/components/ui/returnArrowButton";
 import { textStyle } from "@/styles/textStyles";
 import { useNavigation } from "expo-router";
 import React, { useEffect, useRef, useState } from "react";

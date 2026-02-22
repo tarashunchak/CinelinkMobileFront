@@ -1,4 +1,4 @@
-import LeafyReturnArrowButton from "@/components/ui/leafy-return-arrow-btn";
+import LeafyReturnArrowButton from "@/components/ui/returnArrowButton";
 import { textStyle } from "@/styles/textStyles";
 import React from "react";
 import { FlatList, ImageBackground, ScrollView, SectionList, Text, View } from "react-native";

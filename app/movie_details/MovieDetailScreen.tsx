@@ -3,7 +3,7 @@ import BottomBar from "@/app/bars/bottomBar";
 import { MONTH } from "@/utils/month";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import MovieCardList from "@/components/ui/leafy-film-list";
-import LeafyReturnArrowButton from "@/components/ui/leafy-return-arrow-btn";
+import LeafyReturnArrowButton from "@/components/ui/returnArrowButton";
 import { genresInfo } from "@/styles/genreStyle";
 import { textStyle } from "@/styles/textStyles";
 import { useNavigation } from "expo-router";

@@ -1,5 +1,5 @@
 import { GetChat, GetUserChats } from "@/api/chats/chats";
-import LeafyReturnArrowButton from "@/components/ui/leafy-return-arrow-btn";
+import LeafyReturnArrowButton from "@/components/ui/returnArrowButton";
 import { textStyle } from "@/styles/textStyles";
 import { getCurrentUserID, isCurrentUser } from "@/utils/utils";
 import { useFocusEffect, useNavigation } from "expo-router";

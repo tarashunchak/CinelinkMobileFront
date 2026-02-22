@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 import { useFocusEffect, useNavigation } from "expo-router";
-import LeafyReturnArrowButton from "@/components/ui/leafy-return-arrow-btn";
+import LeafyReturnArrowButton from "@/components/ui/returnArrowButton";
 import React, { useCallback, useEffect, useState } from "react";
 import { TouchableOpacity, Image, ImageBackground, Pressable, ScrollView, Text, View } from "react-native";
 import { textStyle } from "@/styles/textStyles";

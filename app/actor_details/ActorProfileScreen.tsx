@@ -1,6 +1,6 @@
 import { getFilmographyByPerson } from "@/api/tmdbApi";
 import BottomBar from "@/app/bars/bottomBar";
-import LeafyReturnArrowButton from "@/components/ui/leafy-return-arrow-btn";
+import LeafyReturnArrowButton from "@/components/ui/returnArrowButton";
 import { textStyle } from "@/styles/textStyles";
 import { useNavigation } from "expo-router";
 import React, { useEffect, useState } from "react";

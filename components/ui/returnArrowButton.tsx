@@ -2,7 +2,7 @@ import { TouchableOpacity, Dimensions, Image, StyleSheet } from "react-native";
 
 const { width: screenW, height: screenH } = Dimensions.get("window");
 
-export default function LeafyReturnArrowButton(
+export default function ReturnArrowButton(
   {
     onPress = () => { },
     rect = undefined,

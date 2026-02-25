@@ -1,0 +1,37 @@
+export const inputStyle = {
+  defaultInput: {
+    width: "100%",
+    color: "white",
+    fontSize: 16,
+    height: 48,
+    paddingLeft: 20,
+    backgroundColor: "rgba(255, 255,255, 0.03)",
+    borderRadius: 8,
+    padding: 0.5,
+    borderWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.08)",
+  },
+  inputWhiteText: {
+    color: "rgba(255, 255, 255, 0.6)",
+    fontFamily: "Inter",
+    fontSize: 14,
+    marginBottom: 3,
+    marginLeft: 3,
+  },
+  homePageSearchInputStyle: {
+    padding: 0,
+    margin: 0,
+    paddingLeft: 10,
+    color: "white",
+    backgroundColor: "rgba(44, 43, 56, 0.9)",
+    width: "90%",
+    height: "1.6%",
+    borderRadius: 10,
+    borderColor: "rgba(34, 33, 46, 1)",
+    borderWidth: 2,
+    position: "absolute",
+    left: "5%",
+    top: "2.4%",
+    zIndex: 1,
+  }
+};

@@ -5,9 +5,9 @@ import { GetChat } from "@/api/chats/chats";
 
 
 const WS_ADDRESS = (userID: UserID) =>
-  (`ws://192.168.0.188:8080/ws/${userID}`);
+  (`ws://192.168.0.187:8080/ws/${userID}`);
 const HTTP_ADDRESS = (chatID: ChatID) =>
-  (`http://192.168.0.188:8080/chats/${chatID}/messages`);
+  (`http://192.168.0.187:8080/chats/${chatID}/messages`);
 
 class RTChatClient {
   private conns: Map<UserID, WebSocket> = new Map();
@@ -190,13 +190,13 @@ class RTChatClient {
 
   public async setPageEntering(page: string, userID: UserID) {
     console.warn(`User: ${userID} is entering page ${page}`);
-    /*this.conns.get(userID)?.send(JSON.stringify({
+    this.conns.get(userID)?.send(JSON.stringify({
       type: "page_entering",
       content: {
         page: page,
         user_id: userID,
       }
-    }));*/
+    }));
   };
 
   public async setPageLeaving(page: string, userID: UserID) {

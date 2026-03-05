@@ -1,0 +1,2 @@
+
+export let nowPlayingMoviesId: number[] = [];

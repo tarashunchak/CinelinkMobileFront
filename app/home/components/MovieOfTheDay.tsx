@@ -22,25 +22,46 @@ export default function MovieOfTheDay() {
 
   return (
     <ImageBackground
-      source={{ uri: `https://image.tmdb.org/t/p/w300${movie?.backdrop_path || movie?.poster_path}` }}
+      source={{
+        uri: `https://image.tmdb.org/t/p/w300${movie?.backdrop_path
+          || movie?.poster_path}`
+      }}
       style={styles.backdrop}>
       <View style={styles.background}>
 
         <Image
-          style={{ height: "10%", width: "20%", marginLeft: "3%", marginTop: "3%" }}
+          style={styles.logo}
           source={require("@/app/home/assets/logo.png")}
         />
 
-        <Text style={[textStyle.white38, styles.text]}>{"Movie of the day"}</Text>
+        <Text
+          style={
+            [textStyle.white38,
+            styles.text]
+          }>
+          {"Movie of the day"}
+        </Text>
         <TouchableOpacity style={{}}
-          onPress={() => navigator.navigate("MovieDetailScreen", { movieId: movie?.movie_id })}>
-          <View style={{ flexDirection: "row", alignSelf: "center", gap: 5 }}>
-            <Text style={[textStyle.white24, { textAlign: "center", alignSelf: "center", maxWidth: wp("80%") }]}
+          onPress={() =>
+            navigator.jumpTo("MovieDetailScreen",
+              { movieId: movie?.movie_id }
+            )
+          }>
+          <View style={styles.view}>
+            <Text
+              style={[
+                textStyle.white24,
+                styles.text
+              ]}
               numberOfLines={1}
               ellipsizeMode="tail">{movie?.title}</Text>
-            <Text style={textStyle.white24}>{`(${movie?.release_date?.slice(0, 4)})`}</Text>
+            <Text style={textStyle.white24}>
+              {`(${movie?.release_date?.slice(0, 4)})`}
+            </Text>
           </View>
-          <Image source={{ uri: `https://image.tmdb.org/t/p/w300${movie?.poster_path}` }} style={styles.poster} />
+          <Image
+            source={{ uri: `https://image.tmdb.org/t/p/w300${movie?.poster_path}` }}
+            style={styles.poster} />
         </TouchableOpacity>
       </View>
     </ImageBackground>
@@ -48,6 +69,12 @@ export default function MovieOfTheDay() {
 }
 
 const styles = {
+  logo: {
+    height: "10%",
+    width: "20%",
+    marginLeft: "3%",
+    marginTop: "3%"
+  },
   backdrop: {
     height: hp("45%"),
     margin: "-2%",
@@ -57,8 +84,15 @@ const styles = {
     width: "100%",
     backgroundColor: "rgba(0, 0, 0, 0.75)"
   },
-  text: {
+  view: {
+    flexDirection: "row",
     alignSelf: "center",
+    gap: 5
+  },
+  text: {
+    textAlign: "center",
+    alignSelf: "center",
+    maxWidth: wp("80%")
   },
   poster: {
     marginTop: "2%",

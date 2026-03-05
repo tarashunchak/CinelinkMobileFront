@@ -3,6 +3,7 @@ import { useNavigation } from "expo-router";
 import { textStyle } from "@/styles/textStyles";
 import React, { useEffect, useState } from "react";
 import { Image, TouchableOpacity, ScrollView } from "react-native";
+import { GetHomeMovies } from "@/api/home/home";
 
 export default function HorizontalMoviesList() {
   const navigator = useNavigation();
@@ -10,8 +11,8 @@ export default function HorizontalMoviesList() {
 
   useEffect(() => {
     async function loadmovies() {
-      const data = await getPopularMovies();
-      setMovies(data);
+      const data = await GetHomeMovies();
+      setMovies(data?.popular);
       return;
     }
     console.log("same genre pressed — no reload");

@@ -5,6 +5,7 @@ import { textStyle } from "@/styles/textStyles";
 import { useNavigation } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { TouchableOpacity, Image, ScrollView, Text, View } from "react-native";
+import { GetHomeMovies } from "@/api/home/home";
 
 export default function PremiereCarousel() {
   const navigator = useNavigation();
@@ -12,10 +13,11 @@ export default function PremiereCarousel() {
 
   useEffect(() => {
     async function loadMovies() {
-      const data = await getNowPlayingMovies();
+      const data = await GetHomeMovies();
       if (data) {
-        setMovies(data.results)
-        nowPlayingMoviesId.length = 0;
+        const movies: any[] = data;
+        setMovies(movies?.now_playing);
+        nowPlayingMoviesId.push(...(movies.map((movie) => movie.id)));
       }
     }
     loadMovies();

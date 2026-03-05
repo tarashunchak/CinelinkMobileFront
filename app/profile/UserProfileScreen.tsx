@@ -1,20 +1,12 @@
-import ReturnArrowButton from "@/components/ui/returnArrowButton";
 import { textStyle } from "@/styles/textStyles";
-import React, { useCallback, useEffect, useState } from "react";
-import { TouchableOpacity, Image, ImageBackground, Pressable, ScrollView, Text, View } from "react-native";
+import React, { useCallback } from "react";
+import { TouchableOpacity, ImageBackground, Text, View } from "react-native";
 import BottomBar from "../bars/bottomBar";
 import { userPage } from "./styles";
-import { UserProfile_T } from "./types";
 import { useFocusEffect, useNavigation } from "expo-router";
-import { useAuthStore } from "@/local_storage/user/asyncStorage/store";
-import { FollowUser, UnfollowUser } from "@/api/followers/followers";
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { getCurrentUserID } from "@/utils/utils";
-import FollowingsList from "./components/followingsList";
-import FollowersList from "./components/followersList";
 import { useUserProfile } from "./hooks/useUserProfile";
-import { ActionButton } from "./components/actionButton";
-import { LogOutButton } from "./components/logOutButton";
 import { ProfileHeader } from "./components/profileHeader";
 import { ProfileMain } from "./components/profileMain";
 
@@ -22,7 +14,6 @@ export default function UserProfileScreen({ route }: any) {
   const navigator = useNavigation();
   const userID = route?.params?.userID ? route.params.userID : getCurrentUserID();
   const { user, loadUser } = useUserProfile(userID);
-  const isCurrentUser = userID === getCurrentUserID();
 
   useFocusEffect(
     useCallback(() => {

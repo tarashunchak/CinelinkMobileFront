@@ -8,29 +8,30 @@ import { genresInfo } from "@/styles/genreStyle";
 import { textStyle } from "@/styles/textStyles";
 import { useNavigation } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { Dimensions, Image, ImageBackground, Linking, Platform, Pressable, ScrollView, Text, TouchableOpacity, View } from "react-native";
-import { heightPercentageToDP } from "react-native-responsive-screen";
+import { Dimensions, Image, ImageBackground, Linking, Platform, Pressable, ScrollView, Text, TouchableOpacity, View } from "react-native"; import { heightPercentageToDP } from "react-native-responsive-screen";
 import YoutubePlayer from "react-native-youtube-iframe";
 import ActorCard from "./components/CreditsCard";
 import DetailRow from "./components/DetailRow";
 import { Movie } from "./types";
 import { AddWatchlistItem } from "@/api/watchlist/watchlist";
 import { CURRENT_USER } from "@/api/currentUser";
+import MainInfo from "./components/MainInfo";
+import DetailsBlock from "./components/DetailsBlock";
 
 
 const { width: screenW, height: screenH } = Dimensions.get("window");
 
 export default function MovieDetailScreen({ route }: any) {
   const navigation = useNavigation();
-  const [movie, setMovie] = useState<Movie | null>(null);
-  console.log("Movie ID in moviedetailsscreen: ", route.params?.movieId || 13);
+  const [movie, setMovie] = useState<Movie>();
+  console.log("Movie ID in moviedetailsscreen: ", route?.params?.movieId || 13);
 
-  const inCinemas: boolean = route.params?.inCinemas;
-  const maximum = route.params?.maximum;
+  const inCinemas: boolean = route?.params?.inCinemas;
+  const maximum = route?.params?.maximum;
 
   useEffect(() => {
     async function loadMovieDetails() {
-      const data: Movie = await getDetailedMovieByID(route.params?.movieId || 13);
+      const data: Movie = await getDetailedMovieByID(route?.params?.movieId || 13);
       if (!data) return;
       data.directors = data.credits.crew?.filter(member => member.job === "Director").map(member => member.name);
       setMovie(data);
@@ -47,91 +48,8 @@ export default function MovieDetailScreen({ route }: any) {
       <ImageBackground source={require("@/assets/images/background.png")} style={{ flex: 1 }}>
 
         <ScrollView showsVerticalScrollIndicator={false} style={{ padding: "1%" }}>
-          <LeafyReturnArrowButton style={{ marginTop: "5%", zIndex: 2 }} onPress={() => navigation.goBack()} />
 
-          <ImageBackground
-            source={{ uri: "https://image.tmdb.org/t/p/w500" + movie?.images?.backdrops[movie?.images?.backdrops?.length - 1]?.file_path }}
-            style={styles.ImageBackground}>
-            <View style={{ backgroundColor: "rgba(0, 0, 0, 0.75)", marginRight: "-2%", marginTop: "1%", height: heightPercentageToDP("40%") }}>
-
-              <View style={{ flexDirection: "column", marginLeft: "3%", marginTop: "20%", justifyContent: "space-between" }}>
-
-                <Text style={styles.mainView.movieBasicInfo.title}
-                  numberOfLines={1}
-                  ellipsizeMode="tail"
-                >
-                  {movie?.title}
-                </Text>
-
-                <View style={styles.mainView.movieBasicInfo.view}>
-
-                  <View style={styles.mainView.movieBasicInfo.posterView}>
-                    <Image
-                      source={{ uri: "https://image.tmdb.org/t/p/w300" + movie?.poster_path }}
-                      style={{ height: "100%", width: "100%" }} />
-                    {
-                      inCinemas ? (
-                        <View style={{ position: "absolute", top: "3%", width: "100%", backgroundColor: "rgba(50, 158, 79, 0.9)" }}>
-                          <Text style={[textStyle.white12, { textTransform: "uppercase", textAlign: "center", alignSelf: "center" }]}>{`In cinemas till ${(maximum.slice(3, 5) + ' ' + MONTH[maximum.slice(0, 2)])}`}</Text>
-                        </View>
-                      ) : (<></>)
-                    }
-                  </View>
-
-                  <View style={styles.mainView.movieBasicInfo.infoView.view}>
-                    <View style={styles.mainView.movieBasicInfo.infoView.textInfoView}>
-                      <View style={styles.mainView.movieBasicInfo.infoView.yearView}>
-                        <Text style={textStyle.yellow16}>{"Year"}</Text>
-                        <Text style={textStyle.white16}>{`: ${movie?.release_date.slice(0, 4)}`}</Text>
-                      </View>
-
-                      <View style={styles.mainView.movieBasicInfo.infoView.directorView}>
-                        <Text style={textStyle.yellow16}>{"Director"}</Text>
-                        <Text style={textStyle.white16}>{`: ${movie?.directors[0]}`}</Text>
-                      </View>
-
-                      <View style={styles.mainView.movieBasicInfo.infoView.starsView}>
-                        <Text style={textStyle.yellow16}>{"Stars: "}</Text>
-                        {
-                          movie?.credits?.cast?.slice(0, Math.min(4, movie?.credits?.cast?.length)).map((star, index) =>
-                            <Text key={index} style={
-                              [textStyle.white16,
-                              styles.mainView.movieBasicInfo.infoView.stars]
-                            }>
-                              {`${star.name}`}
-                            </Text>
-                          )
-                        }
-                      </View>
-
-                      <View style={{ width: 100, height: 20, flexDirection: "row" }}>
-                        <Text style={textStyle.yellow16}>Runtime: </Text>
-                        <Text style={textStyle.white16}>{movie?.runtime} </Text>
-                        <Text style={textStyle.yellow16}>min</Text>
-                      </View>
-
-                      <TouchableOpacity style={styles.mainView.movieBasicInfo.infoView.imdbText.view}
-                        onPress={async () => {
-                          const url = `https://www.imdb.com/title/${movie?.imdb_id}`;
-                          const sup = await Linking.canOpenURL(url);
-                          if (sup) Linking.openURL(url);
-                        }}
-                      >
-
-                        <Text style={styles.mainView.movieBasicInfo.infoView.imdbText.text}>
-                          {
-                            `IMDb: ${movie?.vote_average.toFixed(1)}`
-                          }
-                        </Text>
-                      </TouchableOpacity>
-
-                    </View>
-                  </View>
-                </View>
-              </View>
-            </View>
-          </ImageBackground>
-
+          <MainInfo movie={movie} inCinemas={inCinemas} />
 
           <View style={styles.actionRow.view}>
             <TouchableOpacity style={styles.actionRow.markAsWatchedBtn}
@@ -209,18 +127,7 @@ export default function MovieDetailScreen({ route }: any) {
             <Text style={[{ width: "100%", textAlign: "justify" }, textStyle.white16]}>   {movie?.overview}</Text>
           </View>
 
-          <View style={{ marginTop: "5%", backgroundColor: "rgba(255, 255, 255, 0.05)", padding: 6, paddingTop: 0, borderWidth: 0.5, borderColor: "rgba(255, 255, 255, 0.2)", borderRadius: 12 }}>
-            <Text style={[textStyle.yellow20]}>Details</Text>
-            <View style={{ flexDirection: "column" }}>
-              <DetailRow label="Release date" item={movie?.release_date} maxW="75%" />
-              <DetailRow label="Spoken languages" items={movie?.spoken_languages} prop="english_name" maxW="75%" />
-              <DetailRow label="Countries" items={movie?.production_countries} prop="name" maxW="75%" />
-              <DetailRow label="Companies" items={movie?.production_companies} prop="name" maxW="75%" />
-              <DetailRow label="Revenue" item={movie?.revenue + "$"} maxW="75%" />
-              <DetailRow label="Tagline" item={movie?.tagline || "Nothing"} maxW="75%" />
-              <DetailRow label="IMDb ID" item={movie?.imdb_id || "Not available"} maxW="75%" />
-            </View>
-          </View>
+          <DetailsBlock movie={movie} />
 
           <View style={{ width: "100%", marginTop: "5%" }}>
 
@@ -330,15 +237,7 @@ const styles = {
       },
       infoView: {
         view: {
-          flexDirection: "column",
-          marginLeft: "3%",
-          width: "62%",
-          height: "100%",
-          backgroundColor: "rgba(255, 255, 255, 0.05)",
-          borderWidth: 1,
-          borderColor: "rgba(255, 255, 255, 0.10)",
-          borderRadius: 5,
-          padding: "1.5%",
+
         },
         textInfoView: {
           flexDirection: "column",
@@ -365,18 +264,10 @@ const styles = {
         },
         imdbText: {
           view: {
-            backgroundColor: "#deb522",
-            height: 24,
-            borderRadius: 5,
-            width: 76,
-            flexDirection: "column",
-            justifyContent: "center"
+
           },
           text: {
-            textAlign: "center",
-            fontSize: 14,
-            color: "black",
-            fontWeight: "bold",
+
           }
         },
       },

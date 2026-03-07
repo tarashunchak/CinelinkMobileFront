@@ -1,10 +1,9 @@
 import LeafyReturnArrowButton from "@/components/ui/returnArrowButton";
 import { textStyle } from "@/styles/textStyles";
 import React from "react";
-import { FlatList, ImageBackground, ScrollView, SectionList, Text, View } from "react-native";
-import { heightPercentageToDP } from "react-native-responsive-screen";
+import { ImageBackground, SectionList, Text, View } from "react-native";
 import BottomBar from "../bars/bottomBar";
-import ActorCard from "./components/CreditsCard";
+import CreditCard from "./components/CreditCard";
 
 export default function MovieCreditsScreen({ route, navigation }: any) {
   const { credits, poster } = route.params;
@@ -18,20 +17,17 @@ export default function MovieCreditsScreen({ route, navigation }: any) {
   }
 
   const CreditsRow = (row: any) => {
-    return <View
-      style={{
-        flexDirection: "row",
-        justifyContent: "space-between",
-        marginBottom: 10,
-      }}
-    >
-      {row?.map((actor: any, index) => (
-        <View key={index}>
-          <ActorCard cast={actor} />
-        </View>
-      ))
-      }
-    </View>
+    return (
+      <View style={styles.rowView}>
+        {
+          row?.map((credit: any, index: number) => (
+            <View key={index}>
+              <CreditCard cast={credit} />
+            </View>
+          ))
+        }
+      </View>
+    )
   }
 
   const SECTIONS = [
@@ -54,11 +50,7 @@ export default function MovieCreditsScreen({ route, navigation }: any) {
         sections={SECTIONS}
         keyExtractor={(_, index) => String(index)}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{
-          padding: "2%",
-          paddingBottom: "20%",
-          backgroundColor: "rgba(0,0,0,0.85)",
-        }}
+        contentContainerStyle={styles.sectionList}
 
         ListHeaderComponent={() => (
           <LeafyReturnArrowButton
@@ -69,28 +61,12 @@ export default function MovieCreditsScreen({ route, navigation }: any) {
 
         renderSectionHeader={({ section }) => (
           <>
-            <Text
-              style={[
-                textStyle.yellow26,
-                {
-                  marginBottom: "5%",
-                  alignSelf: "center",
-                },
-              ]}
-            >
+            <Text style={styles.headerTitle}>
               {section.title}
             </Text>
 
             {section.title === "Crew" && (
-              <View
-                style={{
-                  backgroundColor: "white",
-                  height: 0.5,
-                  width: "80%",
-                  marginBottom: "5%",
-                  alignSelf: "center",
-                }}
-              />
+              <View style={styles.line} />
             )}
           </>
         )}
@@ -108,3 +84,30 @@ export default function MovieCreditsScreen({ route, navigation }: any) {
 
   )
 }
+
+const styles = {
+  rowView: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 10,
+  },
+  sectionList: {
+    padding: "2%",
+    paddingBottom: "20%",
+    backgroundColor: "rgba(0,0,0,0.85)",
+  },
+  line: {
+    backgroundColor: "white",
+    height: 0.5,
+    width: "80%",
+    marginBottom: "5%",
+    alignSelf: "center",
+  },
+  headerTitle: [
+    textStyle.yellow26,
+    {
+      marginBottom: "5%",
+      alignSelf: "center",
+    },
+  ]
+};

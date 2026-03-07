@@ -1,15 +1,34 @@
 import React from "react";
-import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
-import { heightPercentageToDP } from "react-native-responsive-screen";
-import { Dimensions, Image, ImageBackground, Linking, Platform, Pressable, ScrollView, Text, TouchableOpacity, View } from "react-native";
-import LeafyReturnArrowButton from "@/components/ui/returnArrowButton";
+import { Text, View } from "react-native";
 import { textStyle } from "@/styles/textStyles";
-import { useNavigation } from "expo-router";
-import InfoRow from "./InfoRow";
-import { Movie } from "../types";
 
-export default function OverviewBlock() {
+export default function OverviewBlock({ text }: { text: string }) {
   return (
-    null
+    <View style={styles.view}>
+      <Text style={textStyle.yellow20}>Overview</Text>
+      <Text style={styles.text}>
+        {text}
+      </Text>
+    </View>
   )
 }
+
+const styles = {
+  view: {
+    backgroundColor: "rgba(255, 255, 255, 0.05)",
+    padding: 6,
+    paddingTop: 0,
+    borderWidth: 0.5,
+    borderColor: "rgba(255, 255, 255, 0.2)",
+    borderRadius: 12,
+    marginTop: "3%",
+    flexDirection: "column"
+  },
+  text: [
+    textStyle.white16,
+    {
+      width: "100%",
+      textAlign: "justify",
+    },
+  ]
+};

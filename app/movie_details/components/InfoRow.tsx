@@ -6,8 +6,8 @@ export default function InfoRow({ left, right }: { left: string, right: string |
   if (typeof (right) === "string") {
     return (
       <View style={styles.view}>
-        <Text style={textStyle.yellow16}>{left}</Text>
-        <Text style={textStyle.white16}>{`: ${right}`}</Text>
+        <Text style={textStyle.yellow16}>{left}: </Text>
+        <Text style={textStyle.white16}>{`${right}`}</Text>
       </View>
     )
   }

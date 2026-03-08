@@ -1,17 +1,46 @@
 import LeafyReturnArrowButton from "@/components/ui/returnArrowButton";
 import { textStyle } from "@/styles/textStyles";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { ImageBackground, SectionList, Text, View } from "react-native";
 import BottomBar from "../bars/bottomBar";
 import CreditCard from "./components/CreditCard";
+import { useNavigation } from "expo-router";
+import { GetMovieCredits } from "./services/services";
 
-export default function MovieCreditsScreen({ route, navigation }: any) {
-  const { credits, poster } = route.params;
+type Credit = {
+  id: number;
+  name: string;
+  original_name: string;
+  profile_path: string;
+  credit_id: string;
+  known_for_department: string;
+  character: string;
+}
 
-  const chunkBy3 = (array: any) => {
+interface Credits {
+  cast: Credit[];
+  crew: Credit[];
+}
+
+export default function MovieCreditsScreen({ route }: any) {
+  const [credits, setCredits] = useState<any>();
+  const { movieID, poster_path } = route.params;
+  const navigation = useNavigation();
+
+
+  useEffect(() => {
+    async function load() {
+      const data = await GetMovieCredits(movieID);
+      if (data) setCredits(data)
+      console.warn(`Credits info: ${credits} \n Movie ID: ${movieID}`);
+    };
+    load();
+  }, [movieID])
+
+  const chunkBy3 = (array: any[]) => {
     const result = [];
-    for (let i = 0; i < array.length; i += 3) {
-      result.push(array.slice(i, i + 3));
+    for (let i = 0; i < array?.length; i += 3) {
+      result.push(array?.slice(i, i + 3));
     }
     return result;
   }
@@ -21,9 +50,7 @@ export default function MovieCreditsScreen({ route, navigation }: any) {
       <View style={styles.rowView}>
         {
           row?.map((credit: any, index: number) => (
-            <View key={index}>
-              <CreditCard cast={credit} />
-            </View>
+            <CreditCard key={index} credit={credit} />
           ))
         }
       </View>
@@ -43,7 +70,7 @@ export default function MovieCreditsScreen({ route, navigation }: any) {
 
   return (
     <ImageBackground
-      source={{ uri: "https://image.tmdb.org/t/p/w500" + poster }}
+      source={{ uri: "https://image.tmdb.org/t/p/w500" + poster_path }}
       style={{ flex: 1 }}
     >
       <SectionList
@@ -61,13 +88,13 @@ export default function MovieCreditsScreen({ route, navigation }: any) {
 
         renderSectionHeader={({ section }) => (
           <>
-            <Text style={styles.headerTitle}>
-              {section.title}
-            </Text>
-
             {section.title === "Crew" && (
               <View style={styles.line} />
             )}
+
+            <Text style={styles.headerTitle}>
+              {section.title}
+            </Text>
           </>
         )}
 
@@ -100,6 +127,7 @@ const styles = {
     backgroundColor: "white",
     height: 0.5,
     width: "80%",
+    marginTop: "5%",
     marginBottom: "5%",
     alignSelf: "center",
   },

@@ -4,9 +4,7 @@ import TabNavigator from "@/navigation/tabNavigator";
 import AuthNavigator from "@/navigation/AuthNavigator";
 import { useAuthStore } from "@/local_storage/user/asyncStorage/store"
 import { RTClient } from "./rt_client/rt_client";
-import MeetUpScreen from "./meetup/MeetUpScreen";
-import { getCurrentUser, getCurrentUserID } from "@/utils/utils";
-import MovieDetailScreen from "./movie_details/MovieDetailScreen";
+import { getCurrentUserID } from "@/utils/utils";
 
 export default function App() {
   useAuthStore.getState().init();
@@ -18,10 +16,10 @@ export default function App() {
   return (
     <>
       <StatusBar hidden={true} />
-      {isHydrated ? (isAuthenticated ? <MovieDetailScreen /> : <AuthNavigator />) : null}
+      {isHydrated ? (isAuthenticated ? <TabNavigator /> : <AuthNavigator />) : null}
     </>
   );
 };
 
-//{isHydrated ? (isAuthenticated ? <TabNavigator /> : <AuthNavigator />) : null}
+//{isHydrated ? (isAuthenticated ? <MovieDetailScreen /> : <AuthNavigator />) : null}
 //<MeetUpScreen />

@@ -5,12 +5,9 @@ import { textStyle } from "@/styles/textStyles";
 
 export default function TrailerBlock({ trailerKey }: { trailerKey: string }) {
   return (
-    <>
-      <Text style={styles.title}>Trailer</Text>
-      <View style={styles.view}>
-        <YoutubePlayer height={250} width={"100%"} play={false} videoId={trailerKey} />
-      </View>
-    </>
+    <View style={styles.view}>
+      <YoutubePlayer height={250} width={"100%"} play={false} videoId={trailerKey} />
+    </View>
   )
 }
 

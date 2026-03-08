@@ -30,5 +30,6 @@ const styles = {
     flexDirection: "row",
     maxWidth: "90%",
     marginTop: "1%",
-  }
+  },
+
 };

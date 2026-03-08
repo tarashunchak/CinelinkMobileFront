@@ -1,14 +1,10 @@
-import { getNowPlayingMovies } from "@/api/tmdbApi";
-import { MONTH } from "@/utils/month";
-import { nowPlayingMoviesId } from "@/utils/nowPlaying";
 import { textStyle } from "@/styles/textStyles";
-import { useNavigation } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { TouchableOpacity, Image, ScrollView, Text, View } from "react-native";
+import { ScrollView, Text, View } from "react-native";
 import { GetHomeMovies } from "@/api/home/home";
+import MovieCard from "./MovieCard";
 
 export default function PremiereCarousel() {
-  const navigator = useNavigation();
   const [movies, setMovies] = useState();
 
   useEffect(() => {
@@ -17,7 +13,6 @@ export default function PremiereCarousel() {
       if (data) {
         const movies: any[] = data;
         setMovies(movies?.now_playing);
-        nowPlayingMoviesId.push(...(movies.map((movie) => movie.id)));
       }
     }
     loadMovies();
@@ -36,36 +31,21 @@ export default function PremiereCarousel() {
         showsHorizontalScrollIndicator={false}
       >
         {
-          movies?.results?.map((movie: any, index: number) => {
-            nowPlayingMoviesId.push(movie?.id);
-            return (
-              <TouchableOpacity key={index} style={styles.view}
-                onPress={() => navigator?.push("MovieDetailScreen",
-                  {
-                    movieId: movie?.id,
-                    inCinemas: true,
-                    maximum
-                  }
-                )}>
-                <View>
-                  <Image style={styles.poster}
-                    source={{ uri: "https://image.tmdb.org/t/p/w200" + movie?.poster_path }} />
-                  <View style={styles.info.view}>
-                    <Text style={styles.info.text}>
-                      {`till ${(maximum.slice(3, 5) + ' ' + MONTH[maximum.slice(0, 2)])}`}
-                    </Text>
-                  </View>
-                </View>
-              </TouchableOpacity>
-            )
-          })
+          movies?.results?.map((movie: any, index: number) =>
+            <MovieCard key={index}
+              data={{
+                movie_id: movie?.id,
+                poster_path: movie?.poster_path,
+                inCinemas: true,
+                maximum
+              }} />)
         }
       </ScrollView >
     </View>
   )
 }
 
-const styles: object = {
+const styles = {
   text: [
     textStyle.white22,
     { marginTop: "15%" }

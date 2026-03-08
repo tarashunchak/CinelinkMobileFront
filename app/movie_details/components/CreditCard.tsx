@@ -15,8 +15,14 @@ export default function CreditCard({ credit }: { credit: Cast }) {
           : "https://i.pinimg.com/736x/b9/bb/27/b9bb27a7fc1941680ce9f75481df60bb.jpg"
       }}
         style={styles.img} />
-      <Text style={textStyle.white12}>{credit?.name}</Text>
-      <Text style={textStyle.grey12} numberOfLines={1}
+      <Text
+        numberOfLines={1}
+        ellipsizeMode="tail"
+        style={textStyle.white12}
+      >
+        {credit?.name}
+      </Text>
+      <Text style={textStyle.gray12} numberOfLines={1}
         ellipsizeMode="tail">{credit?.character}</Text>
       <Text style={textStyle.yellow12} >{credit?.known_for_department}</Text>
     </TouchableOpacity>

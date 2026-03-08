@@ -1,13 +1,11 @@
 import BottomBar from "@/app/bars/bottomBar";
 import GenresList from "@/components/ui/leafy-genres-list";
-import { inputStyle } from "@/styles/inputStyle";
 import { textStyle } from "@/styles/textStyles";
-import React, { useCallback, useEffect } from "react";
-import { Image, ImageBackground, ScrollView, Text, TextInput } from "react-native";
-import { heightPercentageToDP as hp } from "react-native-responsive-screen";
+import React from "react";
+import { ImageBackground, ScrollView, Text } from "react-native";
 import PremiereCarousel from "./components/PremiereCarousel";
 import HorizontalMoviesList from "./components/HorizontalFilmList";
-import { useFocusEffect, useNavigation } from "expo-router";
+import { useNavigation } from "expo-router";
 import MovieOfTheDay from "./components/MovieOfTheDay";
 
 export default function HomePageScreen() {

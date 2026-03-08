@@ -39,7 +39,7 @@ export default function MainInfo({ movie, inCinemas = false }: { movie: Movie, i
               <View style={styles.poster}>
                 <Image
                   source={{ uri: "https://image.tmdb.org/t/p/w300" + movie?.poster_path }}
-                  style={{ height: "100%", width: "100%" }} />
+                  style={{ height: "100%", width: "100%", backgroundColor: "rgba(255, 255, 255, 0.05)" }} />
                 {
                   inCinemas ? (
                     <View style={{ position: "absolute", top: "3%", width: "100%", backgroundColor: "rgba(50, 158, 79, 0.9)" }}>
@@ -76,7 +76,9 @@ const styles = {
   poster: {
     width: "42%",
     height: "100%",
-    backgroundColor: "white",
+    backgroundColor: "rgba(255, 255, 255, 0.05)",
     position: "relative",
+    borderColor: "rgba(255, 255, 255, 0.2)",
+    borderWidth: 0.5,
   },
 };

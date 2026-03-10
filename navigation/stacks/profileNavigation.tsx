@@ -2,7 +2,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import ActorProfileScreen from "@/app/actor_details/ActorProfileScreen";
+import ActorProfileScreen from "@/app/credit_details/CreditDetailScreen";
 import CollectionScreen from "@/app/collection/CollectionScreen";
 import MovieCreditsScreen from "@/app/movie_details/MovieCreditsScreen";
 import MovieDetailScreen from "@/app/movie_details/MovieDetailScreen";

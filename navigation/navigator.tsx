@@ -2,7 +2,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import ActorProfileScreen from "../app/actor_details/ActorProfileScreen";
+import ActorProfileScreen from "../app/credit_details/CreditDetailScreen";
 import CreatePasswordScreen from "../app/auth/CreatePasswordScreen";
 import EmailVerifyingScreen from "../app/auth/EmailVerifyingScreen";
 import ForgotPasswordScreen1 from "../app/auth/ForgotPasswordScreen1";

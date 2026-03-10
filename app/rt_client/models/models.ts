@@ -1,5 +1,5 @@
-export type ChatID = number | undefined;
-export type UserID = number | undefined;
+export type ChatID = number;
+export type UserID = number;
 
 interface Chat {
   chat_id: number;

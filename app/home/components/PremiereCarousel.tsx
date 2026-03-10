@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 import { GetHomeMovies } from "@/api/home/home";
 import MovieCard from "./MovieCard";
+import EmptyMovieCard from "./EmptyMovieCard";
 
 export default function PremiereCarousel() {
   const [movies, setMovies] = useState();
@@ -30,16 +31,19 @@ export default function PremiereCarousel() {
         horizontal={true}
         showsHorizontalScrollIndicator={false}
       >
-        {
+        {[
           movies?.results?.map((movie: any, index: number) =>
-            <MovieCard key={index}
+            <MovieCard
+              key={index}
               data={{
                 movie_id: movie?.id,
                 poster_path: movie?.poster_path,
                 inCinemas: true,
                 maximum
               }} />)
-        }
+          ,
+          <EmptyMovieCard key={movies?.results?.length} />
+        ]}
       </ScrollView >
     </View>
   )

@@ -18,8 +18,7 @@ import { GetMovieYouTubeTrailerKey, LoadMovieDetails } from "./services/services
 export default function MovieDetailScreen({ route }: any) {
   const navigation = useNavigation();
   const [movie, setMovie] = useState<Movie>();
-  const movieID = route?.params?.movieID;
-  const inCinemas = route?.params?.inCinemas;
+  const { movieID, inCinemas } = route?.params;
 
   useEffect(() => {
     async function load() {
@@ -64,7 +63,7 @@ export default function MovieDetailScreen({ route }: any) {
         <MovieCardList
           navigation={navigation}
           movieID={movie?.id}
-          movieGenre={movie?.genres[0]?.id}
+          movieGenre={movie?.genres?.[0]?.id}
         />
       </ScrollView >
       <BottomBar />

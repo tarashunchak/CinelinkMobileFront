@@ -8,7 +8,6 @@ export function useUserProfile(userID: number) {
 
   const loadUser = useCallback(async () => {
     setLoading(true);
-
     try {
       const data = await getUserProfileData(userID);
       if (!data) return;
@@ -21,5 +20,6 @@ export function useUserProfile(userID: number) {
   return {
     user,
     loadUser,
+    loading,
   };
 };

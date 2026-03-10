@@ -1,24 +1,26 @@
 import { textStyle } from "@/styles/textStyles";
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import { TouchableOpacity, ImageBackground, Text, View } from "react-native";
 import BottomBar from "../bars/bottomBar";
 import { userPage } from "./styles";
 import { useFocusEffect, useNavigation } from "expo-router";
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
-import { getCurrentUserID } from "@/utils/utils";
+import { getCurrentUserID, isCurrentUser } from "@/utils/utils";
 import { useUserProfile } from "./hooks/useUserProfile";
 import { ProfileHeader } from "./components/profileHeader";
 import { ProfileMain } from "./components/profileMain";
 
 export default function UserProfileScreen({ route }: any) {
   const navigator = useNavigation();
-  const userID = route?.params?.userID ? route.params.userID : getCurrentUserID();
-  const { user, loadUser } = useUserProfile(userID);
+  const userID = route?.params?.userID;
+  const { user, loadUser, loading } = useUserProfile(userID);
+  const [isCurrUser, setIsCurrUser] = useState<boolean>(false);
 
   useFocusEffect(
     useCallback(() => {
       loadUser();
-    }, [loadUser])
+      setIsCurrUser(isCurrentUser(userID))
+    }, [userID])
   )
 
   return (
@@ -33,8 +35,9 @@ export default function UserProfileScreen({ route }: any) {
         />
         <View style={{ flexDirection: "column", gap: 5 }}>
           <ProfileMain
+            isLoading={(loading ?? false) && true}
             user={user}
-            isCurrentUser={true}
+            isCurrentUser={isCurrUser}
             isFollowed={false}
             onEdit={() => { }}
             onToggleFollow={() => { }}

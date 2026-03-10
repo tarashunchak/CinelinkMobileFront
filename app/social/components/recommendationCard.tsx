@@ -24,7 +24,7 @@ export default function RecommendedCard({ item }: { item: RecommendedCard_T }) {
   const navigation = useNavigation();
   return (
     <TouchableOpacity style={styles.card.view}
-      onPress={() => navigation?.navigate("MovieDetailScreen", { movieId: item?.movie_id })} >
+      onPress={() => navigation?.navigate("MovieDetailScreen", { movieID: item?.movie_id })} >
       <Image style={styles.card.content.poster} source={{ uri: `https://image.tmdb.org/t/p/w300${item?.poster_path}` }} />
       <View style={styles.card.content.columnInfo.view}>
         <Text style={styles.card.content.columnInfo.title}

@@ -11,14 +11,16 @@ import { DirectChat, OnlineMessage } from "@/app/rt_client/models/models";
 export default function Header({ info }: { info: DirectChat }) {
   const navigator = useNavigation();
   const [status, setStatus] = useState<boolean | undefined>(info?.peer?.is_online || false);
-  const [chat, setChat] = useState<any>(info?.info);
-  const [peer, setPeer] = useState<any>(info?.peer);
+  const [chat, setChat] = useState<any>();
+  const [peer, setPeer] = useState<any>();
 
   useEffect(() => {
     RTClient.setOnOnlineCallBack(getCurrentUserID(), (data: OnlineMessage) => {
       console.warn("user status: ", data.is_online);
       setStatus(data.is_online);
     });
+    setChat(info?.info);
+    setPeer(info?.peer);
   }, []);
 
   return (

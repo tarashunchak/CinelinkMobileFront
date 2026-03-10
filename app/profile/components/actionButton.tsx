@@ -3,6 +3,7 @@ import { textStyle } from "@/styles/textStyles";
 import React from "react";
 
 type Props = {
+  isLoading: boolean;
   isCurrentUser: boolean;
   isFollowed: boolean;
   onEdit: () => void;
@@ -10,6 +11,7 @@ type Props = {
 };
 
 export function ActionButton({
+  isLoading,
   isCurrentUser,
   isFollowed,
   onEdit,
@@ -18,7 +20,7 @@ export function ActionButton({
 
   let text;
 
-  if (!isCurrentUser && !isFollowed)
+  if (isLoading)
     text = "* * *";
   else if (isCurrentUser)
     text = "Edit";

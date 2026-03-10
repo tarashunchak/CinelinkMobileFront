@@ -1,10 +1,10 @@
-import { getPopularMovies } from "@/api/tmdbApi";
 import { useNavigation } from "expo-router";
 import { textStyle } from "@/styles/textStyles";
 import React, { useEffect, useState } from "react";
-import { Image, TouchableOpacity, ScrollView } from "react-native";
+import { ScrollView } from "react-native";
 import { GetHomeMovies } from "@/api/home/home";
 import MovieCard from "./MovieCard";
+import EmptyMovieCard from "./EmptyMovieCard";
 
 export default function HorizontalMoviesList() {
   const navigator = useNavigation();
@@ -27,16 +27,18 @@ export default function HorizontalMoviesList() {
       horizontal={true}
       showsHorizontalScrollIndicator={false}
     >
-      {
-        movies?.map((movie: any, index: number) => <MovieCard
-          data={{
-            movie_id: movie?.id,
-            poster_path: movie?.poster_path,
-            inCinemas: false,
-            maximum: null
-          }}
-        />)
-      }
+      {[
+        movies?.map((movie: any, index: number) =>
+          <MovieCard
+            key={index}
+            data={{
+              movie_id: movie?.id,
+              poster_path: movie?.poster_path,
+              inCinemas: false,
+            }}
+          />),
+        <EmptyMovieCard />
+      ]}
     </ScrollView >
   )
 }

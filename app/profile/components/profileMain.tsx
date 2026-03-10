@@ -5,6 +5,7 @@ import { UserProfile_T } from "../types";
 import { textStyle } from "@/styles/textStyles";
 
 type Props = {
+  isLoading: boolean;
   user: UserProfile_T | undefined;
   isCurrentUser: boolean;
   isFollowed: boolean;
@@ -13,6 +14,7 @@ type Props = {
 };
 
 export function ProfileMain({
+  isLoading,
   user,
   isCurrentUser,
   isFollowed,
@@ -21,11 +23,11 @@ export function ProfileMain({
 }: Props) {
 
   const fullName: string =
-    user ? `${user?.first_name} ${user?.last_name}`
-      : "**** ****";
+    isLoading ? "**** ****"
+      : `${user?.first_name} ${user?.last_name}`;
 
   const username: string =
-    user?.username || "********";
+    isLoading ? "********" : user?.username || "********";
 
   return (
     <>
@@ -38,6 +40,7 @@ export function ProfileMain({
         <ActionButton
           isCurrentUser={isCurrentUser}
           isFollowed={isFollowed}
+          isLoading={isLoading}
           onEdit={onEdit}
           onToggleFollow={onToggleFollow}
         />
@@ -67,7 +70,7 @@ export function ProfileMain({
       <View style={styles.joinedAt}>
         <Image source={require("@/assets/images/Calendar.png")} />
         <Text style={textStyle.gray16}>
-          Joined {user?.created_at || "****.**.**"}
+          Joined {isLoading ? "****.**.**" : user?.created_at || "****.**.**"}
         </Text>
       </View>
     </>

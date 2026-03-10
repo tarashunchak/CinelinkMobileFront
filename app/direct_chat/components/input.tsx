@@ -3,7 +3,7 @@ import { textStyle } from "@/styles/textStyles";
 import React, { useState } from "react";
 import { View, Text, Image, TouchableOpacity, TextInput } from "react-native";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
-import { RTChat } from "../../rt_client/rt_client";
+import { RTClient } from "../../rt_client/rt_client";
 import { getCurrentUserID } from "@/utils/utils";
 
 export default function Input({ chatID }: { chatID: number }) {
@@ -13,12 +13,12 @@ export default function Input({ chatID }: { chatID: number }) {
   //const sendMessage = route?.params?.sendMessage;
 
   async function handleFocus() {
-    await RTChat.setTyping(chatID, getCurrentUserID(), true);
+    await RTClient.setTyping(1, getCurrentUserID() ?? 1, true);
     setIsFocused(true);
   };
 
   async function handleBlur() {
-    await RTChat.setTyping(chatID, getCurrentUserID(), false);
+    await RTClient.setTyping(1, getCurrentUserID(), false);
     setIsFocused(false);
   };
 
@@ -41,7 +41,7 @@ export default function Input({ chatID }: { chatID: number }) {
           <TouchableOpacity
             style={styles.sendBtn.view}
             onPress={() => {
-              RTChat.sendMessage(chatID,
+              RTClient.sendMessage(chatID,
                 {
                   message_id: 0,
                   chat_id: chatID,

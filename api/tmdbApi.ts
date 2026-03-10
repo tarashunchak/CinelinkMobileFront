@@ -41,7 +41,6 @@ export async function getSimilarMovies(movieID: number) {
 export async function getFilmographyByPerson(personID: number) {
   const response = await fetch(`${API_URL}/credits/${personID}`);
   const data = await response.json();
-  console.log("Actor: ", data);
   return data?.results;
 }
 

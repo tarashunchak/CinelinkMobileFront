@@ -22,29 +22,23 @@ export default function SocialScreen() {
   const [friends, setFriends] = useState<UserCard_T[]>();
   const [recommendations, setRecommendatoins] = useState<RecommendedCard_T[]>();
   const [chats, setChats] = useState<any[]>();
-  const currentUserID = getCurrentUserID();
+  const currentUserID = getCurrentUserID() ?? 1;
 
   useFocusEffect(useCallback(() => {
     async function loadContent() {
-      await RTClient.setPageEntering("social", getCurrentUserID());
+      await RTClient.setPageEntering("social", getCurrentUserID() ?? 1);
 
-      const [friendsData, recommendationsData, chatsData] = await Promise.all([
-        GetUserFollowers(currentUserID),
-        GetUserRecommendations(currentUserID),
-        GetUserChats(currentUserID)
-      ])
+      setFriends(await GetUserFollowers(currentUserID));
+      setRecommendatoins(await GetUserRecommendations(currentUserID))
+      setChats(await GetUserChats(currentUserID))
 
       /*const chatsData = await GetUserChats(currentUserID);
       const friendsData: UserCard_T[] = await GetUserFollowers(currentUserID);
       const recommendationsData = await GetUserRecommendations(currentUserID);*/
-
-      if (chatsData) setChats(chatsData);
-      if (friendsData) setFriends(friendsData);
-      if (recommendationsData) setRecommendatoins(recommendationsData);
     };
 
     loadContent();
-  }, [currentUserID])
+  }, [])
   )
 
   return (

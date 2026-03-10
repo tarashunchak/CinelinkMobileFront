@@ -151,7 +151,7 @@ class RTChatClient {
     }));
   };
 
-  public async setTyping(chatID: ChatID, userID: UserID | undefined, isTyping: boolean) {
+  public async setTyping(chatID: ChatID, userID: UserID, isTyping: boolean) {
     console.warn(`User: ${userID} is ${!isTyping ? "not" : ''} typing in chat ${chatID}`);
     console.warn(`Chat conns: ${this.conns.get(userID)}`);
     this.conns.get(chatID)?.send(JSON.stringify({

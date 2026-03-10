@@ -6,11 +6,12 @@ import { LogOutButton } from "./logOutButton";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 
 type Props = {
-  user: UserProfile_T | undefined;
+  user: UserProfile_T;
   onBack: () => void;
+  isCurrentUser: boolean;
 };
 
-export function ProfileHeader({ user, onBack }: Props) {
+export function ProfileHeader({ user, onBack, isCurrentUser }: Props) {
   return (
     <>
       <ImageBackground
@@ -21,7 +22,7 @@ export function ProfileHeader({ user, onBack }: Props) {
       />
       <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
         <ReturnArrowButton onPress={onBack} />
-        <LogOutButton isVisible={true} />
+        <LogOutButton isVisible={isCurrentUser} />
       </View>
     </>
   );

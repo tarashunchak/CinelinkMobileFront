@@ -5,7 +5,15 @@ import { TouchableOpacity, View, Text, Image } from "react-native";
 import { useNavigation } from "expo-router";
 import { UserCard_T } from "@/app/types/user";
 
-export default function UserCard({ user }: { user: UserCard_T }) {
+interface Props {
+  user_id: number;
+  username: string;
+  first_name: string | undefined;
+  last_name: string | undefined;
+  avatar_url: string | undefined;
+}
+
+export default function UserCard({ user }: { user: Props }) {
   const navigator = useNavigation();
   return (
     <TouchableOpacity style={styles.card.view}

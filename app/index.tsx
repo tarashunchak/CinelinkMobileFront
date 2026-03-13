@@ -6,6 +6,7 @@ import { useAuthStore } from "@/local_storage/user/asyncStorage/store"
 import { RTClient } from "./rt_client/rt_client";
 import { getCurrentUserID } from "@/utils/utils";
 import CreditDetailScreen from "./credit_details/CreditDetailScreen";
+import SearchResultBlock from "./search/components/SearchResultBlock";
 
 export default function App() {
   useAuthStore.getState().init();
@@ -22,7 +23,7 @@ export default function App() {
   );
 };
 
+//{isHydrated ? (isAuthenticated ? <SearchResultBlock /> : <AuthNavigator />) : null}
 //{isHydrated ? (isAuthenticated ? <MovieDetailScreen /> : <AuthNavigator />) : null}
-//{isHydrated ? (isAuthenticated ? <TabNavigator /> : <AuthNavigator />) : null}
 //{isHydrated ? (isAuthenticated ? <CreditDetailScreen creditID={40} /> : <AuthNavigator />) : null}
 //<MeetUpScreen />

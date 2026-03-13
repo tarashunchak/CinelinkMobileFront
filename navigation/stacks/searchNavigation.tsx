@@ -12,6 +12,7 @@ import WatchlistsLibraryScreen from "@/app/library/WatchlistsLibraryScreen";
 import WatchlistDetailsScreen from "@/app/watchlist/WatchlistDetailsScreen";
 import HomePageScreen from "@/app/home/HomeScreen";
 import SearchScreen from "@/app/search/SearchScreen";
+import SearchResultBlock from "@/app/search/components/SearchResultBlock";
 
 const Stack = createNativeStackNavigator();
 
@@ -21,7 +22,9 @@ export default function SearchNavigatorStack() {
     <SafeAreaProvider style={{ flex: 1 }}>
       <StatusBar hidden={true} />
       <Stack.Navigator>
-        <Stack.Screen name="Search" component={SearchScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="Search" component={SearchResultBlock} options={{ headerShown: false }} />
+        <Stack.Screen name="UserProfileScreen" component={UserProfileScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="SearchTMPLT" component={SearchScreen} options={{ headerShown: false }} />
       </Stack.Navigator>
     </SafeAreaProvider>
   )

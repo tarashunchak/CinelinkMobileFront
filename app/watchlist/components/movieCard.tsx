@@ -13,7 +13,7 @@ export default function MovieCard({ movie }: { movie: Movie }) {
   const navigator = useNavigation();
   return (
     <TouchableOpacity style={[movieCardStyle?.backgroundStyle]} onPress={() => {
-      navigator?.push("MovieDetailScreen", { movieId: movie?.movie_id });
+      navigator?.push("MovieDetailScreen", { movieID: movie?.movie_id });
     }}>
       <Image
         source={{ uri: "https://image.tmdb.org/t/p/w300" + movie.poster_path }}

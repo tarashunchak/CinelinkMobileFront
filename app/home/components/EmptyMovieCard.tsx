@@ -7,7 +7,7 @@ export default function EmptyMovieCard({ route }: any) {
   const navigator = useNavigation();
   return (
     <TouchableOpacity
-      key={7}
+      key={20}
       onPress={() => null}
       style={styles.view}>
       <Image

@@ -42,7 +42,7 @@ export default function PremiereCarousel() {
                 maximum
               }} />)
           ,
-          <EmptyMovieCard key={movies?.results?.length} />
+          <EmptyMovieCard />
         ]}
       </ScrollView >
     </View>

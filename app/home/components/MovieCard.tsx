@@ -13,7 +13,7 @@ export interface MovieCard_I {
 
 export default function MovieCard({ data }: { data: MovieCard_I }) {
   const navigator = useNavigation();
-  console.warn(`MovieCard movie_id = ${data?.movie_id}`);
+  //console.warn(`MovieCard movie_id = ${data?.movie_id}`);
   return (
     <TouchableOpacity style={styles.view}
       onPress={() => navigator?.push("MovieDetailScreen",

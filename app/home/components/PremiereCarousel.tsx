@@ -4,8 +4,10 @@ import { ScrollView, Text, View } from "react-native";
 import { GetHomeMovies } from "@/api/home/home";
 import MovieCard from "./MovieCard";
 import EmptyMovieCard from "./EmptyMovieCard";
+import { useNavigation } from "expo-router";
 
 export default function PremiereCarousel() {
+  const navigator = useNavigation()
   const [movies, setMovies] = useState();
 
   useEffect(() => {
@@ -42,7 +44,11 @@ export default function PremiereCarousel() {
                 maximum
               }} />)
           ,
-          <EmptyMovieCard />
+          <EmptyMovieCard
+            onPress={() => {
+              navigator?.navigate("Search", { query: "now_playing" });
+            }}
+          />
         ]}
       </ScrollView >
     </View>

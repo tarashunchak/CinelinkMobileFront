@@ -5,14 +5,26 @@ import { View, Text, Image, TouchableOpacity } from "react-native";
 
 export default function MovieCard({ movie }: { movie: any }) {
   const navigator = useNavigation();
+
+  let img_uri;
+
+  if (movie?.poster_path)
+    img_uri = movie?.poster_path;
+  else if (movie?.profile_path)
+    img_uri = movie?.profile_path;
+
   return (
     <TouchableOpacity style={styles.view}
       onPress={() => { navigator.navigate("MovieDetailScreen", { movieID: movie?.id }) }}
     >
       <View style={{ flexDirection: "row", gap: 10 }}>
-        <Image style={styles.poster} source={{ uri: `https://image.tmdb.org/t/p/w300/${movie?.poster_path}` }} />
+        <Image style={styles.poster} source={{ uri: `https://image.tmdb.org/t/p/w300/${img_uri}` }} />
         <View style={styles.info.view}>
-          <Text style={styles.info.title}>{movie?.title}</Text>
+          <Text
+            style={styles.info.title}
+            numberOfLines={1}
+            ellipsizeMode="tail"
+          >{movie?.title || movie?.name}</Text>
           <View style={styles.info.imdb.view}>
             <Text style={styles.info.imdb.text}>{`IMDb: ${movie?.vote_average?.toFixed(2)}`}</Text>
           </View>
@@ -34,7 +46,7 @@ export default function MovieCard({ movie }: { movie: any }) {
 const styles = {
   view: {
     width: "100%",
-    height: 74,
+    height: 76,
     backgroundColor: "rgba(255, 255, 255, 0.03)",
     borderColor: "rgba(255, 255, 255, 0.2)",
     borderWidth: 0.5,
@@ -45,15 +57,21 @@ const styles = {
     marginBottom: 5,
   },
   poster: {
-    height: 72,
-    width: (72 * 0.66),
+    height: "100%",
+    aspectRatio: 0.7,
   },
   info: {
     view: {
       flexDirection: "column",
       justifyContent: "space-evenly",
     },
-    title: textStyle.yellow18,
+    title: [
+      textStyle.yellow18,
+      {
+        maxWidth: "85%",
+        minWidth: "85%",
+      }
+    ],
     imdb: {
       view: {
         backgroundColor: "#DEB522",

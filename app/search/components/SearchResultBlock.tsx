@@ -6,21 +6,49 @@ import { GetQueryResult } from "../services/queries";
 import { textStyle } from "@/styles/textStyles";
 import MovieCard from "./movieCard";
 import UserCard from "@/components/userCard";
+import { getNowPlayingMovies, getPopularMovies } from "@/api/tmdbApi";
+import CategoriesBlock, { getActiveCategory } from "./CategoriesBlock";
+import LeafyReturnArrowButton from "@/components/ui/returnArrowButton";
+import ContentBlock from "./ContentBlock";
 
 type Search = {
 
 }
 
+type Data = {
+  movies: any[];
+  users: any[];
+}
+
 export default function SearchResultBlock({ route }: any) {
   const navigator = useNavigation();
-  const [_data, setData] = useState<any[]>([]);
+  const [_data, setData] = useState<any>();
   const [_value, setValue] = useState<string>("");
 
-  const query: string = route?.params?.query;
+  const activeCategory: string = getActiveCategory();
+  const query = route?.params?.params;
+  //const query: string = route?.params?.query;
+  console.warn(`QUERY: ${query}`);
 
   async function load() {
-    const data = await GetQueryResult(_value);
-    if (data) setData(data)
+    let data = {
+      movies: [],
+      users: [],
+    }
+    switch (query) {
+      case "popular": {
+        data.movies = await getPopularMovies();
+        break;
+      }
+      case "now_playing": {
+        data.movies = await getPopularMovies();
+        break;
+      }
+      default: {
+        data = await GetQueryResult(_value);
+      }
+    }
+    if (data?.movies || data?.users) setData(data)
   }
 
   useEffect(() => {
@@ -34,9 +62,7 @@ export default function SearchResultBlock({ route }: any) {
     >
       <ScrollView style={{ flex: 1, padding: "1%", paddingTop: "10%", paddingBottom: "10%" }}>
         <View style={styles.input.view}>
-          <Image style={styles.input.icon}
-            source={require("@/app/search/assets/search.png")}
-          />
+          <LeafyReturnArrowButton />
           <TextInput
             style={[textStyle.white20, { marginLeft: 5, height: "100%", width: "80%" }]}
             value={_value}
@@ -46,16 +72,8 @@ export default function SearchResultBlock({ route }: any) {
             }}
           />
         </View>
-        {
-          _data?.map((item: any, index: number) => {
-
-            return (
-              item?.type == "movie" && <MovieCard movie={item} key={index} />,
-              item?.type == "user" && <UserCard user={item} key={index} />
-            )
-          }
-          ) || null
-        }
+        <ContentBlock query={_value} />
+        <View style={{ height: "8%" }}></View>
       </ScrollView>
     </ImageBackground>
   )
@@ -64,14 +82,12 @@ export default function SearchResultBlock({ route }: any) {
 const styles = {
   input: {
     view: {
-      height: 54,
+      height: 50,
       width: "96%",
       margin: "2%",
       marginTop: "1%",
       backgroundColor: "rgba(255, 255, 255, 0.05)",
-      borderWidth: 1,
-      borderColor: "rgba(255, 255, 255, 0.2)",
-      borderRadius: 8,
+      borderRadius: 999,
       flexDirection: "row",
     },
     icon: {

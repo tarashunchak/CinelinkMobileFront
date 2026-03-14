@@ -3,12 +3,11 @@ import { Image, Text, TouchableOpacity } from "react-native";
 import { useNavigation } from "expo-router";
 import { textStyle } from "@/styles/textStyles";
 
-export default function EmptyMovieCard({ route }: any) {
-  const navigator = useNavigation();
+export default function EmptyMovieCard({ onPress }: { onPress: () => void }) {
   return (
     <TouchableOpacity
       key={20}
-      onPress={() => null}
+      onPress={onPress}
       style={styles.view}>
       <Image
         source={require("@/assets/images/threeDots.png")}

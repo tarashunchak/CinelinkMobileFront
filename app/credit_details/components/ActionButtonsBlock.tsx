@@ -43,8 +43,8 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     height: 36,
     width: 88,
-    flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
   },
   favouriteBtn: {
     borderColor: "rgba(0, 92, 77, 0.4)",
@@ -52,8 +52,8 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     height: 36,
     width: 148,
-    flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
     borderRadius: 10,
   },
   shareBtn: {
@@ -62,8 +62,8 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     height: 36,
     width: 64,
-    flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
     borderRadius: 10,
   },
 });

@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
     width: "100%",
     padding: 1,
     paddingLeft: hp(1),
-    paddingRight: hp(1),
+    paddingRight: hp(2),
     borderRadius: 999,
     borderWidth: 0.5,
     borderColor: "rgba(255, 255, 255, 0.2)",
@@ -69,6 +69,8 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     borderWidth: 0.5,
     borderColor: "rgba(255, 255, 255, 0.2)",
+    alignItems: "center",
+    justifyContent: "center",
   },
   activeView: {
     minWidth: 44,

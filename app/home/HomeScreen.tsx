@@ -1,17 +1,27 @@
 import BottomBar from "@/app/bars/bottomBar";
 import GenresList from "@/components/ui/leafy-genres-list";
 import { textStyle } from "@/styles/textStyles";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { ImageBackground, ScrollView, Text } from "react-native";
 import PremiereCarousel from "./components/PremiereCarousel";
-import HorizontalMoviesList from "./components/HorizontalFilmList";
+import HorizontalMoviesList from "./components/HorizontalMoviesList";
 import { useNavigation } from "expo-router";
 import MovieOfTheDay from "./components/MovieOfTheDay";
+import { GetHomeMovies } from "@/api/home/home";
 
 export default function HomePageScreen() {
-  const [selectedGenre, setSelectedGenre] = React.useState<number>(0);
-
+  const [selectedGenre, setSelectedGenre] = useState<number>(0);
+  const [movies, setMovies] = useState();
   const navigation = useNavigation();
+
+  useEffect(() => {
+    async function load() {
+      const data = await GetHomeMovies();
+      if (data) setMovies(data);
+    };
+    load();
+  }, [])
+
   return (
     <ImageBackground source={require("@/assets/images/background.png")} style={{ flex: 1 }}>
       <ScrollView
@@ -24,15 +34,15 @@ export default function HomePageScreen() {
 
         <MovieOfTheDay />
 
-        <PremiereCarousel />
+        <PremiereCarousel nowPlaying={movies?.now_playing} />
 
         <Text style={styles.text}>
           Trending
         </Text>
-        <HorizontalMoviesList />
+        <HorizontalMoviesList popular={movies?.popular} />
 
         <Text style={styles.text}>
-          {"Genres"}
+          Genres
         </Text>
         <GenresList setSelectedGenre={setSelectedGenre} />
 

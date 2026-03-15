@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
   view: {
     gap: 10,
     height: hp("15%"),
-    width: "98%",
+    width: "100%",
     backgroundColor: "rgba(255, 255, 255, 0.03)",
     borderRadius: 6,
     borderWidth: 1,
@@ -47,13 +47,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignSelf: "center",
+    marginBottom: hp(0.5),
   },
   text: {
 
   },
   image: {
     height: "100%",
-    width: "45%",
+    width: "40%",
     resizeMode: "cover",
     borderRadius: 4,
   },

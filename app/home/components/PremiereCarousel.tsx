@@ -1,27 +1,22 @@
 import { textStyle } from "@/styles/textStyles";
 import React, { useEffect, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
-import { GetHomeMovies } from "@/api/home/home";
 import MovieCard from "./MovieCard";
 import EmptyMovieCard from "./EmptyMovieCard";
 import { useNavigation } from "expo-router";
+import MovieListSkeleton from "./MovieListSkeleton";
 
-export default function PremiereCarousel() {
-  const navigator = useNavigation()
-  const [movies, setMovies] = useState();
+export default function PremiereCarousel({ nowPlaying }: { nowPlaying: any[] }) {
+  const navigator = useNavigation();
+  const [movies, setMovies] = useState<any[]>([]);
 
   useEffect(() => {
-    async function loadMovies() {
-      const data = await GetHomeMovies();
-      if (data) {
-        const movies: any[] = data;
-        setMovies(movies?.now_playing);
-      }
+    async function load() {
+      if (nowPlaying)
+        setMovies(nowPlaying);
     }
-    loadMovies();
-  }, []);
-
-  const maximum = movies?.dates?.maximum?.slice(5, 10);
+    load();
+  }, [nowPlaying]);
 
   return (
     <View>
@@ -33,23 +28,24 @@ export default function PremiereCarousel() {
         horizontal={true}
         showsHorizontalScrollIndicator={false}
       >
-        {[
-          movies?.results?.map((movie: any, index: number) =>
+        {movies ? [
+          movies?.map((movie: any, index: number) =>
             <MovieCard
               key={index}
               data={{
                 movie_id: movie?.id,
                 poster_path: movie?.poster_path,
                 inCinemas: true,
-                maximum
+                maximum: ""
               }} />)
           ,
           <EmptyMovieCard
             onPress={() => {
               navigator?.navigate("Search", { query: "now_playing" });
             }}
+            key={20}
           />
-        ]}
+        ] : <MovieListSkeleton />}
       </ScrollView >
     </View>
   )

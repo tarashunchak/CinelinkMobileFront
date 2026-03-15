@@ -12,6 +12,7 @@ import WatchlistsLibraryScreen from "@/app/library/WatchlistsLibraryScreen";
 import WatchlistDetailsScreen from "@/app/watchlist/WatchlistDetailsScreen";
 import HomePageScreen from "@/app/home/HomeScreen";
 import ChatScreen from "@/app/direct_chat/DirectChatScreen";
+import CreditDetailScreen from "@/app/credit_details/CreditDetailScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -24,7 +25,7 @@ export default function HomeNavigatorStack() {
         <Stack.Screen name="HomePage" component={HomePageScreen} options={{ headerShown: false }} />
         <Stack.Screen name="MovieDetailScreen" component={MovieDetailScreen} options={{ headerShown: false }} />
         <Stack.Screen name="MovieCreditsScreen" component={MovieCreditsScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="ActorProfileScreen" component={ActorProfileScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="CreditDetailScreen" component={CreditDetailScreen} options={{ headerShown: false }} />
         <Stack.Screen name="WatchlistsLibraryScreen" component={WatchlistsLibraryScreen} options={{ headerShown: false }} />
         <Stack.Screen name="WatchlistDetailsScreen" component={WatchlistDetailsScreen} options={{ headerShown: false }} />
       </Stack.Navigator>

@@ -82,7 +82,7 @@ const styles = {
   background: {
     height: "100%",
     width: "100%",
-    backgroundColor: "rgba(0, 0, 0, 0.75)"
+    backgroundColor: "rgba(0, 0, 0, 0.8)"
   },
   view: {
     flexDirection: "row",

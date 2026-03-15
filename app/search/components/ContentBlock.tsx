@@ -6,6 +6,7 @@ import UserCard from "@/components/userCard";
 import CategoriesBlock from "./CategoriesBlock";
 import WatchlistCard from "./WatchlistCard";
 import { heightPercentageToDP } from "react-native-responsive-screen";
+import CreditCard from "./CreditCard";
 
 interface Props {
   query: string;
@@ -41,6 +42,10 @@ export default function ContentBlock({ query, specification = undefined }: Props
       {
         (category === "All" || category === "Watchlists")
         && _data?.watchlists?.map((item: any, index: number) => <WatchlistCard watchlist={item} key={index} />)
+      }
+      {
+        (category === "All" || category === "Credits")
+        && _data?.credits?.map((item: any, index: number) => <CreditCard credit={item} key={index} />)
       }
       <View style={{ marginBottom: heightPercentageToDP(8) }}></View>
     </>

@@ -6,25 +6,18 @@ import { View, Text, Image, TouchableOpacity } from "react-native";
 export default function MovieCard({ movie }: { movie: any }) {
   const navigator = useNavigation();
 
-  let img_uri;
-
-  if (movie?.poster_path)
-    img_uri = movie?.poster_path;
-  else if (movie?.profile_path)
-    img_uri = movie?.profile_path;
-
   return (
     <TouchableOpacity style={styles.view}
       onPress={() => { navigator.navigate("MovieDetailScreen", { movieID: movie?.id }) }}
     >
       <View style={{ flexDirection: "row", gap: 10 }}>
-        <Image style={styles.poster} source={{ uri: `https://image.tmdb.org/t/p/w300/${img_uri}` }} />
+        <Image style={styles.poster} source={{ uri: `https://image.tmdb.org/t/p/w300/${movie?.poster_path}` }} />
         <View style={styles.info.view}>
           <Text
             style={styles.info.title}
             numberOfLines={1}
             ellipsizeMode="tail"
-          >{movie?.title || movie?.name}</Text>
+          >{movie?.title}</Text>
           <View style={styles.info.imdb.view}>
             <Text style={styles.info.imdb.text}>{`IMDb: ${movie?.vote_average?.toFixed(2)}`}</Text>
           </View>

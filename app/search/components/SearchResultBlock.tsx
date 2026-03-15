@@ -62,7 +62,7 @@ export default function SearchResultBlock({ route }: any) {
     >
       <ScrollView style={{ flex: 1, padding: "1%", paddingTop: "10%", paddingBottom: "10%" }}>
         <View style={styles.input.view}>
-          <LeafyReturnArrowButton />
+          <LeafyReturnArrowButton onPress={() => navigator.goBack()} />
           <TextInput
             style={[textStyle.white20, { marginLeft: 5, height: "100%", width: "80%" }]}
             value={_value}

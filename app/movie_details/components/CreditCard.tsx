@@ -9,11 +9,12 @@ export default function CreditCard({ credit }: { credit: Cast }) {
   return (
     <TouchableOpacity
       style={styles.view}
-      onPress={() => navigator?.push("ActorProfileScreen", { personID: credit.id })}>
-      <Image source={{
-        uri: credit?.profile_path ? "https://image.tmdb.org/t/p/w200" + credit?.profile_path
-          : "https://i.pinimg.com/736x/b9/bb/27/b9bb27a7fc1941680ce9f75481df60bb.jpg"
-      }}
+      onPress={() => navigator?.push("CreditDetailScreen", { creditID: credit.id })}>
+      <Image
+        source={{
+          uri: credit?.profile_path ? `https://image.tmdb.org/t/p/w200${credit?.profile_path}`
+            : "https://i.pinimg.com/736x/b9/bb/27/b9bb27a7fc1941680ce9f75481df60bb.jpg"
+        }}
         style={styles.img} />
       <Text
         numberOfLines={1}

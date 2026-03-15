@@ -5,21 +5,19 @@ import { ScrollView } from "react-native";
 import { GetHomeMovies } from "@/api/home/home";
 import MovieCard from "./MovieCard";
 import EmptyMovieCard from "./EmptyMovieCard";
+import MovieListSkeleton from "./MovieListSkeleton";
 
-export default function HorizontalMoviesList() {
+export default function HorizontalMoviesList({ popular }: { popular: any[] }) {
   const navigator = useNavigation();
-  const [movies, setMovies] = useState<any>();
+  const [movies, setMovies] = useState<any[]>([]);
 
   useEffect(() => {
-    async function loadmovies() {
-      const data = await GetHomeMovies();
-      setMovies(data?.popular);
-      return;
+    async function load() {
+      setMovies(popular)
     }
-    console.log("same genre pressed — no reload");
 
-    loadmovies();
-  }, []);
+    load();
+  }, [popular]);
 
   return (
     <ScrollView
@@ -27,7 +25,7 @@ export default function HorizontalMoviesList() {
       horizontal={true}
       showsHorizontalScrollIndicator={false}
     >
-      {[
+      {movies ? [
         movies?.map((movie: any, index: number) =>
           <MovieCard
             key={index}
@@ -37,8 +35,8 @@ export default function HorizontalMoviesList() {
               inCinemas: false,
             }}
           />),
-        <EmptyMovieCard />
-      ]}
+        <EmptyMovieCard key={20} />
+      ] : <MovieListSkeleton />}
     </ScrollView >
   )
 }

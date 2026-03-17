@@ -7,12 +7,13 @@ import { useFocusEffect, useNavigation } from "expo-router";
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { getCurrentUserID, isCurrentUser } from "@/utils/utils";
 import { useUserProfile } from "./hooks/useUserProfile";
-import { ProfileHeader } from "./components/profileHeader";
-import { ProfileMain } from "./components/profileMain";
+import { ProfileHeader } from "./components/ProfileHeader";
+import { ProfileMain } from "./components/ProfileMain";
+import { FollowUser, UnfollowUser } from "@/api/followers/followers";
 
 export default function UserProfileScreen({ route }: any) {
   const navigator = useNavigation();
-  const userID = route?.params?.userID;
+  const userID = route?.params?.userID ?? getCurrentUserID();
   const { user, loadUser, loading } = useUserProfile(userID);
   const [isCurrUser, setIsCurrUser] = useState<boolean>(false);
 
@@ -20,7 +21,7 @@ export default function UserProfileScreen({ route }: any) {
     useCallback(() => {
       loadUser();
       setIsCurrUser(isCurrentUser(userID))
-    }, [userID])
+    }, [])
   )
 
   return (
@@ -38,9 +39,14 @@ export default function UserProfileScreen({ route }: any) {
             isLoading={(loading ?? false) && true}
             user={user}
             isCurrentUser={isCurrUser}
-            isFollowed={false}
+            isFollowed={user?.is_following}
             onEdit={() => { }}
-            onToggleFollow={() => { }}
+            onToggleFollow={async () => {
+              if (user?.is_following)
+                await UnfollowUser(userID) && loadUser();
+              else
+                await FollowUser(userID) && loadUser();
+            }}
           />
 
           <View style={userPage.stats.view}>

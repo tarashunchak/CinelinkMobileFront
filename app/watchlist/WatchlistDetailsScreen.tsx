@@ -66,9 +66,9 @@ export default function WatchlistDetailsScreen({ route }: any) {
           (
             <>
               {
-                watchlistMovies ? watchlistMovies?.map((item: Movie, index: number) => <MovieCard key={index} movie={item} />)
-                  :
-                  <Text style={[textStyle.gray32, { alignSelf: "center", opacity: 0.4, marginTop: hp("20%") }]}>Watchlist is empty</Text>
+                watchlistMovies?.map((item: Movie, index: number) => <MovieCard key={index} movie={item} />)
+                ??
+                <Text style={[textStyle.gray32, { alignSelf: "center", opacity: 0.4, marginTop: hp("20%") }]}>Watchlist is empty</Text>
               }
               <View style={{ height: hp(8) }}></View>
             </>

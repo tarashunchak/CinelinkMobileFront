@@ -1,6 +1,6 @@
 import { TouchableOpacity, Text, StyleSheet } from "react-native";
 import { textStyle } from "@/styles/textStyles";
-import React from "react";
+import React, { useEffect } from "react";
 
 type Props = {
   isLoading: boolean;
@@ -28,7 +28,7 @@ export function ActionButton({
     text = isFollowed ? "Unfollow" : "Follow";
 
   return (
-    !isCurrentUser ?
+    isCurrentUser ?
 
       <TouchableOpacity
         style={styles.transparent}
@@ -45,7 +45,7 @@ export function ActionButton({
 
       <TouchableOpacity
         style={isFollowed ? styles.transparent : styles.white}
-        onPress={onToggleFollow}
+        onPress={async () => await onToggleFollow()}
       >
         <Text
           style={isFollowed ? textStyle.white18 : textStyle.black18}

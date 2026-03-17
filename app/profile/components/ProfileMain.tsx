@@ -1,6 +1,6 @@
 import React from "react";
 import { Image, Text, View } from "react-native";
-import { ActionButton } from "./actionButton";
+import { ActionButton } from "./ActionButton";
 import { UserProfile_T } from "../types";
 import { textStyle } from "@/styles/textStyles";
 
@@ -100,7 +100,7 @@ const styles = {
     gap: 5,
   },
   bio: {
-    padding: 2,
+    padding: 5,
     backgroundColor: "rgba(255, 255, 255, 0.05)",
     justifyContent: "center",
     borderRadius: 6,

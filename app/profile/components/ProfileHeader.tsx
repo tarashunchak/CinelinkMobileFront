@@ -2,7 +2,7 @@ import React from "react";
 import ReturnArrowButton from "@/components/ui/returnArrowButton";
 import { ImageBackground, View } from "react-native";
 import { UserProfile_T } from "../types";
-import { LogOutButton } from "./logOutButton";
+import { LogOutButton } from "./LogOutButton";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 
 type Props = {

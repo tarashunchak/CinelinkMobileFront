@@ -55,7 +55,7 @@ export function ProfileMain({
       <Text
         style={textStyle.gray12}
       >
-        {username}
+        {`@${username}`}
       </Text>
 
       {

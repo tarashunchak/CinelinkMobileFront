@@ -2,7 +2,7 @@ import { API_URL } from "@/api/API_CONFIG";
 import { ChatID, UserID, RTMessage, DirectChat, GroupChat } from "./models/models";
 import { getCurrentUserID } from "@/utils/utils";
 import { GetChat } from "@/api/chats/chats";
-
+import { MessagesQueue } from "./messagesQueue/messagesQueue";
 
 const WS_ADDRESS = (userID: UserID) =>
   (`ws://192.168.0.187:8080/ws/${userID}`);
@@ -17,6 +17,7 @@ class RTChatClient {
   private OnSend: Map<ChatID, Function> = new Map();
   private OnOnline: Map<ChatID, Function> = new Map();
   private OnTyping: Map<ChatID, Function> = new Map();
+  private messagesQueue: MessagesQueue = new MessagesQueue();
 
   private configure(userID: UserID) {
     this.conns.get(userID)!.onmessage = (event) => {

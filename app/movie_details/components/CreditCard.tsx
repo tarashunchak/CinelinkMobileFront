@@ -1,10 +1,9 @@
 import React from "react";
 import { useNavigation } from "expo-router";
 import { Image, Text, TouchableOpacity } from "react-native";
-import { Cast } from "../types";
 import { textStyle } from "@/styles/textStyles";
 
-export default function CreditCard({ credit }: { credit: Cast }) {
+export default function CreditCard({ credit }: { credit: any }) {
   const navigator = useNavigation();
   return (
     <TouchableOpacity
@@ -24,7 +23,7 @@ export default function CreditCard({ credit }: { credit: Cast }) {
         {credit?.name}
       </Text>
       <Text style={textStyle.gray12} numberOfLines={1}
-        ellipsizeMode="tail">{credit?.character}</Text>
+        ellipsizeMode="tail">{credit?.character ?? "N/A"}</Text>
       <Text style={textStyle.yellow12} >{credit?.known_for_department}</Text>
     </TouchableOpacity>
   );

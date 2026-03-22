@@ -1,45 +1,53 @@
 import { textStyle } from "@/styles/textStyles";
 import React from "react";
-import { Linking, Platform, TouchableOpacity, View, Text, Image } from "react-native";
-import { movieCardStyle } from "@/styles/movieCardStyle";
-import { heightPercentageToDP as hp } from "react-native-responsive-screen";
+import { Linking, TouchableOpacity, View, Text, Image } from "react-native";
 import { Movie } from "../../movie_details/types";
 import { useNavigation } from "expo-router";
-import GenresList from "@/components/ui/leafy-genres-list";
 import GenresLayout from "./genresLayout";
 
 
 export default function MovieCard({ movie }: { movie: Movie }) {
   const navigator = useNavigation();
   return (
-    <TouchableOpacity style={[movieCardStyle?.backgroundStyle]} onPress={() => {
-      navigator?.push("MovieDetailScreen", { movieID: movie?.movie_id });
-    }}>
+    <TouchableOpacity
+      style={[styles?.backgroundStyle]}
+      onPress={() => {
+        navigator?.push("MovieDetailScreen",
+          { movieID: movie?.movie_id });
+      }}>
       <Image
-        source={{ uri: "https://image.tmdb.org/t/p/w300" + movie.poster_path }}
-        style={movieCardStyle.moviePosterStyle}
+        source={{ uri: `https://image.tmdb.org/t/p/w300${movie.poster_path}` }}
+        style={styles.moviePosterStyle}
         pointerEvents="none"
       />
       <View style={{ flexDirection: "column", height: "100%", marginLeft: "4%", justifyContent: "space-evenly" }}>
         <View style={{ flexDirection: "row", justifyContent: "flex-start" }}>
-          <Text style={movieCardStyle.movieTitleStyle}
+          <Text style={styles.movieTitleStyle}
             pointerEvents="none"
             numberOfLines={1}
-            ellipsizeMode="tail">{movie?.title}</Text>
-          <Text style={[movieCardStyle.movieYearStyle, textStyle.gray16]} pointerEvents="none">{` (${movie?.release_date?.slice(0, 4)})`}</Text>
+            ellipsizeMode="tail"
+          >
+            {movie?.title}
+          </Text>
+          <Text
+            style={[
+              styles.movieYearStyle,
+              textStyle.gray16
+            ]}
+            pointerEvents="none">
+            {` (${movie?.release_date?.slice(0, 4)})`}
+          </Text>
         </View>
 
-        <TouchableOpacity style={movieCardStyle.imdbText.view}
+        <TouchableOpacity style={styles.imdbText.view}
           onPress={async () => {
             const url = `https://www.imdb.com/title/${movie?.imdb_id}`;
             const sup = await Linking.canOpenURL(url);
             if (sup) Linking.openURL(url);
           }}
         >
-          <Text style={movieCardStyle.imdbText.text}>
-            {
-              `IMDb: ${movie?.imdb_rating?.toFixed(1)}`
-            }
+          <Text style={styles.imdbText.text}>
+            {`IMDb: ${movie?.imdb_rating?.toFixed(1)}`}
           </Text>
         </TouchableOpacity>
 
@@ -50,91 +58,76 @@ export default function MovieCard({ movie }: { movie: Movie }) {
 };
 
 const styles = {
-  card: {
+  backgroundStyle: {
+    backgroundColor: "rgba(255, 255, 255, 0.03)",
+    borderWidth: 0.5,
+    borderColor: "rgba(255, 255, 255, 0.20)",
+    height: 118,
+    width: "100%",
+    marginTop: "1.5%",
+    borderRadius: 15,
+    padding: "1%",
+    paddingRight: "5%",
+    paddingLeft: "5%",
+    flexDirection: "row",
+  },
+  movieTitleStyle: {
+    fontSize: 16,
+    marginTop: "-1%",
+    color: "white",
+    fontFamily: "sans-serif-condensed",
+    minWidth: "1%",
+    maxWidth: "75%",
+    textAlign: "left",
+  },
+  movieYearStyle: {
+    fontSize: 16,
+    marginTop: "-1%",
+    color: "white",
+    fontFamily: "sans-serif-condensed",
+    textAlign: "left",
+  },
+  movieDirectorStyle: {
+    fontSize: 12,
+    color: "#ACACAC",
+    fontFamily: "sans-serif-condensed",
+    marginTop: 2,
+  },
+  imdbText: {
     view: {
-      flexDirection: "row",
-      gap: 10,
-      width: "98%",
-      height: hp("13%"),
-      backgroundColor: "rgba(255, 255, 255, 0.03)",
-      borderColor: "rgba(255, 255, 255, 0.2)",
-      borderWidth: 0.5,
+      backgroundColor: "#deb522",
+      height: 20,
       borderRadius: 4,
-      paddingLeft: "3%",
-      marginBottom: 5,
-      alignSelf: "center",
+      width: 64,
+      flexDirection: "column",
+      justifyContent: "center"
     },
-    content: {
-      poster: {
-        height: "98%",
-        aspectRatio: 2.2 / 3,
-        backgroundColor: "white",
-        alignSelf: "center",
-      },
-      columnInfo: {
-        view: {
-          flexDirection: "column",
-          justifyContent: "space-evenly",
-        },
-        title: [textStyle.white18, {
-          maxWidth: "85%",
-          minWidth: "85%",
-        }],
-        imdb: {
-          view: {
-            backgroundColor: "#DEB522",
-            width: 54,
-            height: 18,
-            borderRadius: 4,
-          },
-          text: [textStyle.black12, {
-            alignSelf: "center",
-            textAlign: "center",
-          }]
-        },
-        recommendedBy: {
-          view: {
-            height: "40%",
-            width: 130,
-            flexDirection: "column",
-            justifyContent: "space-evenly",
-            backgroundColor: "rgba(255, 255, 255, 0.1)",
-            borderRadius: 2,
-            paddingLeft: "1%",
-          },
-          header: [textStyle.gray12, {
-
-          }],
-          avatars: {
-            view: {
-              flexDirection: "row",
-              justifyContent: "space-evenly",
-              gap: 5,
-              paddingLeft: "2%",
-            },
-            item: {
-              minHeight: 28,
-              aspectRatio: 1 / 1,
-              borderRadius: 999,
-              backgroundColor: "white",
-            }
-          }
-        }
-      }
+    text: {
+      textAlign: "center",
+      fontSize: 12,
+      color: "black",
+      fontWeight: "bold",
     }
-  }
+  },
+  moviePosterStyle: {
+    width: 73,
+    height: "100%",
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.1)",
+  },
 };
 
-/* <TouchableOpacity style={styles.card.view}
+/* <TouchableOpacity style={styles.view}
         onPress={() => navigator.push("MovieDetailScreen", { movieId: movie?.movie_id })}>
-        <Image style={styles.card.content.poster} source={{ uri: `https://image.tmdb.org/t/p/w300${movie?.poster_path}` }} />
-        <View style={styles.card.content.columnInfo.view}>
-          <Text style={styles.card.content.columnInfo.title}
+        <Image style={styles.content.poster} source={{ uri: `https://image.tmdb.org/t/p/w300${movie?.poster_path}` }} />
+        <View style={styles.content.columnInfo.view}>
+          <Text style={styles.content.columnInfo.title}
             pointerEvents="none"
             numberOfLines={1}
             ellipsizeMode="tail">{movie?.title}</Text>
-          <View style={styles.card.content.columnInfo.imdb.view}>
-            <Text style={styles.card.content.columnInfo.imdb.text}>
+          <View style={styles.content.columnInfo.imdb.view}>
+            <Text style={styles.content.columnInfo.imdb.text}>
               {`IMDb: ${movie?.imdb_rating?.toFixed(1)}`}
             </Text>
           </View>

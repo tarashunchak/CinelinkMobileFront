@@ -1,5 +1,5 @@
 import { API_URL } from "@/api/API_CONFIG";
-import { ChatID, UserID, RTMessage, DirectChat, GroupChat } from "./models/models";
+import { ChatID, UserID, RTMessage } from "./models/models";
 import { getCurrentUserID } from "@/utils/utils";
 import { GetChat } from "@/api/chats/chats";
 import { MessagesQueue } from "./messagesQueue/messagesQueue";
@@ -22,16 +22,24 @@ class RTChatClient {
   private configure(userID: UserID) {
     this.conns.get(userID)!.onmessage = (event) => {
       const data: RTMessage = JSON.parse(event.data);
+      const type = data?.type;
       console.log("MESSAGE HANDLER: ", data);
-      if (data.type === "message") {
-        console.log("Message received");
-        this.chatMessages.get(userID)?.push(data);
-        this.OnMessage.get(userID)?.();
-      } else if (data.type === "typing") {
-        this.OnTyping.get(userID)?.();
-      } else if (data.type === "online") {
-        console.log("User Is Online: ", data);
-        this.OnOnline.get(userID)?.(data.content);
+      switch (type) {
+        case "message": {
+          console.log("Message received");
+          this.chatMessages.get(userID)?.push(data);
+          this.OnMessage.get(userID)?.();
+          break;
+        }
+        case "typing": {
+          this.OnTyping.get(data?.content?.chat_id)?.(data?.content);
+          break;
+        }
+        case "online": {
+          console.log("User Is Online: ", data);
+          this.OnOnline.get(data?.content?.chat_id)?.(data.content);
+          break;
+        }
       }
     };
   };
@@ -49,6 +57,9 @@ class RTChatClient {
       return
     } else {
       this.conns.set(userID, new WebSocket(WS_ADDRESS(userID)));
+      this.conns.get(userID)?.addEventListener("open", () => {
+        this.setOnline(userID, true);
+      })
     }
     this.configure(userID);
   };
@@ -63,7 +74,7 @@ class RTChatClient {
   };
 
   public async setOnTypingCallBack(chatID: ChatID, hook: Function) {
-    this.chatCallback.set(chatID, hook);
+    this.OnTyping.set(chatID, hook);
   };
 
 
@@ -155,7 +166,7 @@ class RTChatClient {
   public async setTyping(chatID: ChatID, userID: UserID, isTyping: boolean) {
     console.warn(`User: ${userID} is ${!isTyping ? "not" : ''} typing in chat ${chatID}`);
     console.warn(`Chat conns: ${this.conns.get(userID)}`);
-    this.conns.get(chatID)?.send(JSON.stringify({
+    this.conns.get(userID)?.send(JSON.stringify({
       type: "typing",
       content: {
         chat_id: chatID,
@@ -165,7 +176,7 @@ class RTChatClient {
     }));
   };
 
-  public async setChatEntering(chatID: ChatID, userID: UserID | undefined) {
+  public async setChatEntering(chatID: ChatID, userID: UserID) {
     console.warn(`User: ${userID} is enter chat ${chatID}`);
     console.warn(`Chat conns: ${this.conns.get(userID)}`);
     this.conns.get(userID)?.send(JSON.stringify({
@@ -177,10 +188,10 @@ class RTChatClient {
     }));
   };
 
-  public async setChatLeaving(chatID: ChatID, userID: UserID | undefined) {
+  public async setChatLeaving(chatID: ChatID, userID: UserID) {
     console.warn(`User: ${userID} is leaving chat ${chatID}`);
     console.warn(`Chat conns: ${this.conns.get(userID)}`);
-    this.conns.get(chatID)?.send(JSON.stringify({
+    this.conns.get(userID)?.send(JSON.stringify({
       type: "chat_leaving",
       content: {
         chat_id: chatID,

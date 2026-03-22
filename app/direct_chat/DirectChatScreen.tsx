@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { ImageBackground, ScrollView, View, KeyboardAvoidingView } from "react-native";
+import { ImageBackground, ScrollView, View, KeyboardAvoidingView, Text } from "react-native";
 import Header from "./components/HeaderBlock";
 import Input from "./components/input";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
@@ -8,16 +8,13 @@ import { getCurrentUserID } from "@/utils/utils";
 import { RTClient } from "@/app/rt_client/rt_client";
 import { RTMessage } from "@/app/rt_client/models/models";
 import TextMessage from "./components/TextMessage";
+import { textStyle } from "@/styles/textStyles";
 
 export default function DirectChatScreen({ route }: any) {
   const chatID = route?.params?.chatID;
 
   const [chat, setChat] = useState();
   const [messages, setMessages] = useState<RTMessage[]>();
-  const [online, setOnline] = useState();
-  const [isTyping, setIsTyping] = useState();
-
-  if (isTyping) console.warn("user_is typing");
 
   RTClient.setOnOnlineCallBack(1, () => {
     console.warn("User is online!!!!!!!!");
@@ -28,7 +25,10 @@ export default function DirectChatScreen({ route }: any) {
       async function loadContent() {
         setChat(await RTClient.getChat(chatID));
         setMessages(await RTClient.getChatMessages(chatID));
-        RTClient.setOnTypingCallBack(getCurrentUserID(), setIsTyping);
+        setTimeout(() => {
+          RTClient.setChatEntering(chatID, 1);
+        }, 2000
+        )
         return () => {
           console.log("Screen unfocused");
         }

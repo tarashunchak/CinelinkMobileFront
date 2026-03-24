@@ -48,7 +48,7 @@ export default function RecommendedCard({ item }: { item: RecommendedCard_T }) {
             }
             {
               item?.recommended_by?.length > 3 &&
-              <Text style={[textStyle.gray14]}>{`+${item?.recommended_by?.length - 3}`}</Text>
+              <Text style={[textStyle?.gray14]}>{`+${item?.recommended_by?.length}`}</Text>
             }
           </View>
         </View>

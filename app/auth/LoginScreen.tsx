@@ -46,6 +46,7 @@ export default function LoginScreen({ navigation }: any) {
           <View style={{ flexDirection: "column", marginTop: "5%" }}>
             <Text style={[textStyle.white18, { marginLeft: "1%" }]}>Password</Text>
             <TextInput onChangeText={(text) => { setPassword(text) }}
+              secureTextEntry
               style={[
                 inputStyle.defaultInput,
                 {

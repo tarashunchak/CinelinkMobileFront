@@ -33,6 +33,7 @@ export default function UserProfileScreen({ route }: any) {
         <ProfileHeader
           user={user}
           onBack={navigator.goBack}
+          isCurrentUser={isCurrUser}
         />
         <View style={{ flexDirection: "column", gap: 5 }}>
           <ProfileMain

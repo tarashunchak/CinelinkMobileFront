@@ -13,12 +13,12 @@ export default function Input({ chatID }: { chatID: number }) {
   //const sendMessage = route?.params?.sendMessage;
 
   async function handleFocus() {
-    await RTClient.setTyping(1, getCurrentUserID() ?? 1, true);
+    await RTClient.setTyping(chatID, getCurrentUserID(), true);
     setIsFocused(true);
   };
 
   async function handleBlur() {
-    await RTClient.setTyping(1, getCurrentUserID(), false);
+    await RTClient.setTyping(chatID, getCurrentUserID(), false);
     setIsFocused(false);
   };
 
@@ -43,7 +43,6 @@ export default function Input({ chatID }: { chatID: number }) {
             onPress={() => {
               RTClient.sendMessage(chatID,
                 {
-                  message_id: 0,
                   chat_id: chatID,
                   sender_id: getCurrentUserID(),
                   content: {

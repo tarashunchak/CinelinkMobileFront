@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react";
 import { ImageBackground, ScrollView, View, KeyboardAvoidingView, Text } from "react-native";
 import Header from "./components/HeaderBlock";
-import Input from "./components/input";
+import Input from "./components/Input";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { useFocusEffect } from "expo-router";
 import { getCurrentUserID } from "@/utils/utils";
@@ -38,7 +38,10 @@ export default function DirectChatScreen({ route }: any) {
 
   return (
     <KeyboardAvoidingView style={{ flexGrow: 1 }} enabled={true} behavior="padding">
-      <ImageBackground source={require("@/assets/images/background.png")} style={{ flex: 1, justifyContent: "space-between" }}>
+      <ImageBackground
+        style={{ flex: 1, justifyContent: "space-between" }}
+        source={require("@/assets/images/background.png")}
+      >
         <Header info={chat} />
         <ScrollView style={{}}
           keyboardShouldPersistTaps="always"

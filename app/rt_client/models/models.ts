@@ -16,7 +16,7 @@ interface ChatMember {
   full_name: string;
   avatar_url: string;
   role: string;
-  is_online: boolean | null;
+  is_online: boolean;
 };
 
 export type OnlineMessage = {

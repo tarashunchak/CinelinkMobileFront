@@ -10,23 +10,26 @@ import { DirectChat, OnlineMessage } from "@/app/rt_client/models/models";
 
 export default function Header({ info }: { info: DirectChat }) {
   const navigator = useNavigation();
-  const [status, setStatus] = useState<boolean | undefined>(info?.peer?.is_online || false);
   const [typing, setTyping] = useState<boolean>(false);
   const [chat, setChat] = useState<any>();
-  const [peer, setPeer] = useState<any>();
+  const [peer, setPeer] = useState<any>(info?.peer);
+  const [status, setStatus] = useState<boolean>(peer?.is_online);
+
+  console.warn("Chat info: ", info)
 
   useEffect(() => {
-    RTClient.setOnOnlineCallBack(chat?.id, (data: OnlineMessage) => {
+    setChat(info?.info);
+    setPeer(info?.peer);
+    setStatus(peer?.is_online);
+    RTClient.setOnOnlineCallBack(chat?.chat_id, (data: OnlineMessage) => {
       console.warn("user status: ", data.is_online);
       setStatus(data.is_online);
     });
-    RTClient.setOnTypingCallBack(chat?.id, (data: any) => {
+    RTClient.setOnTypingCallBack(chat?.chat_id, (data: any) => {
       console.warn("user typing status: ", data.is_typing);
       setTyping(data.is_typing);
     });
-    setChat(info?.info);
-    setPeer(info?.peer);
-  }, [typing]);
+  }, [typing, status]);
 
   return (
     <View style={styles.view}>
@@ -60,11 +63,11 @@ export default function Header({ info }: { info: DirectChat }) {
           <View style={styles.chatInfo.text.view}>
             <Text style={styles.chatInfo.text.name}>{info?.info.name}</Text>
             {!status ? (
-              <Text style={styles.chatInfo.text.lastSeen}>{`last seen ${chat?.last_seen}`}</Text>
+              <Text style={styles.chatInfo.text.lastSeen}>{`last seen ${Date(peer?.last_seen).substring(8)}`}</Text>
             ) :
               (
                 <View style={styles.isOnline.view}>
-                  <Text style={styles.isOnline.text}>{`online`}</Text>
+                  <Text style={styles.isOnline.text}>{typing ? `is typing ...` : `online`}</Text>
                 </View>
               )
             }

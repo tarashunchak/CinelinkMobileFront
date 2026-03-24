@@ -23,7 +23,6 @@ class RTChatClient {
     this.conns.get(userID)!.onmessage = (event) => {
       const data: RTMessage = JSON.parse(event.data);
       const type = data?.type;
-      console.log("MESSAGE HANDLER: ", data);
       switch (type) {
         case "message": {
           console.log("Message received");
@@ -32,12 +31,13 @@ class RTChatClient {
           break;
         }
         case "typing": {
+          console.log(`typing received: content = ${this.OnTyping.get(data?.content?.chat_id)}`);
           this.OnTyping.get(data?.content?.chat_id)?.(data?.content);
           break;
         }
         case "online": {
           console.log("User Is Online: ", data);
-          this.OnOnline.get(data?.content?.chat_id)?.(data.content);
+          this.OnOnline.get(userID)?.(data.content);
           break;
         }
       }

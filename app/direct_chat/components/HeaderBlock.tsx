@@ -1,11 +1,11 @@
 import { RTClient } from "@/app/rt_client/rt_client";
 import LeafyReturnArrowButton from "@/components/ui/returnArrowButton";
 import { textStyle } from "@/styles/textStyles";
-import { getCurrentUserID, isCurrentUser } from "@/utils/utils";
-import { useFocusEffect, useNavigation } from "expo-router";
-import React, { useCallback, useEffect, useState } from "react";
+import { getCurrentUserID } from "@/utils/utils";
+import { useNavigation } from "expo-router";
+import React, { useEffect, useState } from "react";
 import { View, Text, Image, TouchableOpacity } from "react-native";
-import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
+import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { DirectChat, OnlineMessage } from "@/app/rt_client/models/models";
 
 export default function Header({ info }: { info: DirectChat }) {
@@ -15,17 +15,17 @@ export default function Header({ info }: { info: DirectChat }) {
   const [peer, setPeer] = useState<any>(info?.peer);
   const [status, setStatus] = useState<boolean>(peer?.is_online);
 
-  console.warn("Chat info: ", info)
+  const chatID: number = info?.info?.chat_id;
 
   useEffect(() => {
     setChat(info?.info);
     setPeer(info?.peer);
     setStatus(peer?.is_online);
-    RTClient.setOnOnlineCallBack(chat?.chat_id, (data: OnlineMessage) => {
+    RTClient.setOnOnlineCallBack(chatID, (data: any) => {
       console.warn("user status: ", data.is_online);
       setStatus(data.is_online);
     });
-    RTClient.setOnTypingCallBack(chat?.chat_id, (data: any) => {
+    RTClient.setOnTypingCallBack(chatID, (data: any) => {
       console.warn("user typing status: ", data.is_typing);
       setTyping(data.is_typing);
     });

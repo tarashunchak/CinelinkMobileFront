@@ -31,13 +31,14 @@ class RTChatClient {
           break;
         }
         case "typing": {
-          console.log(`typing received: content = ${this.OnTyping.get(data?.content?.chat_id)}`);
-          this.OnTyping.get(data?.content?.chat_id)?.(data?.content);
+          const chat_id: ChatID = data?.content?.chat_id;
+          console.warn(`Connection ${chat_id}: ${this.OnTyping.get(chat_id)}`)
+          this.OnTyping.get(chat_id)?.(data?.content);
           break;
         }
         case "online": {
           console.log("User Is Online: ", data);
-          this.OnOnline.get(userID)?.(data.content);
+          this.OnOnline.get(data?.content?.chat_id)?.(data.content);
           break;
         }
       }
@@ -68,18 +69,18 @@ class RTChatClient {
     this.conns.get(chatID)?.close();
   };
 
-  public async setOnMessageCallBack(userID: UserID, hook: Function) {
-    this.OnMessage.set(userID, hook);
+  public async setOnMessageCallBack(userID: UserID, callback: Function) {
+    this.OnMessage.set(userID, callback);
 
   };
 
-  public async setOnTypingCallBack(chatID: ChatID, hook: Function) {
-    this.OnTyping.set(chatID, hook);
+  public async setOnTypingCallBack(chatID: ChatID, callback: Function) {
+    this.OnTyping.set(chatID, callback);
   };
 
 
-  public async setOnOnlineCallBack(chatID: ChatID, hook: Function) {
-    this.OnOnline.set(chatID, hook);
+  public async setOnOnlineCallBack(chatID: ChatID, callback: Function) {
+    this.OnOnline.set(chatID, callback);
   };
 
   public async mergeMessages(chatID: ChatID, old: RTMessage[]): Promise<RTMessage[]> {

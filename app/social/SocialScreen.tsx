@@ -14,7 +14,7 @@ import { GetUserChats } from "@/api/chats/chats";
 import { RTClient } from "../rt_client/rt_client";
 import { getCurrentUserID } from "@/utils/utils";
 import { UserCard_T } from "../types/user";
-import UserCard from "@/components/userCard";
+import FriendCard from "./components/FriendCard";
 
 export default function SocialScreen() {
   const tabs = ["Friends", "Recommendations", "Activity", "Chats"];
@@ -67,7 +67,7 @@ export default function SocialScreen() {
           {[
             activeTab === "Friends" &&
             friends?.map((friend: UserCard_T, index: number) =>
-              (<UserCard key={index} user={friend} />))
+              (<FriendCard key={index} friend={friend} />))
 
             ,
             activeTab === "Recommendations" &&

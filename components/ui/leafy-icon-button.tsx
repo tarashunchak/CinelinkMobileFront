@@ -48,8 +48,8 @@ export default function LeafyIconButton(
     }, style] : finalButtonStyle;
   //const finalStyle = buttonStyle;
 
+    //google: require('@/assets/images/Google.png'),
   const images = {
-    google: require('@/assets/images/Google.png'),
     apple: require('@/assets/images/Apple_Inc.png'),
     home: require('@/assets/images/HomeBtn.png'),
     compass: require('@/assets/images/Compass.png'),

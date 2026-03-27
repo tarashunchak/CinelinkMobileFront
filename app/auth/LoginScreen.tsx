@@ -7,6 +7,7 @@ import * as WebBrowser from "expo-web-browser";
 import React, { useState } from "react";
 import { Image, ImageBackground, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
+import Input from "./components/Input";
 
 
 WebBrowser.maybeCompleteAuthSession();
@@ -30,32 +31,17 @@ export default function LoginScreen({ navigation }: any) {
         <ImageBackground source={require("@/assets/images/background.png")}
           style={[styles.darkRect]}>
 
-          <View style={{ flexDirection: "column", marginTop: "10%" }}>
-            <Text style={[textStyle.white18, { marginLeft: "1%" }]}>Username</Text>
-            <TextInput onChangeText={(text) => { setLogin(text) }}
-              style={[
-                inputStyle.defaultInput,
-                {
-                  marginTop: 5
-                }
-              ]}
-              placeholderTextColor={"rgba(255, 255, 255, 0.6)"}
-              placeholder="Enter username" />
-          </View>
+          <Input 
+            placeholder="Username"
+            text="Enter username" 
+            onChangeText={(text) =>  setLogin(text) }
+          />
 
-          <View style={{ flexDirection: "column", marginTop: "5%" }}>
-            <Text style={[textStyle.white18, { marginLeft: "1%" }]}>Password</Text>
-            <TextInput onChangeText={(text) => { setPassword(text) }}
-              secureTextEntry
-              style={[
-                inputStyle.defaultInput,
-                {
-                  marginTop: 5
-                }
-              ]}
-              placeholderTextColor={"rgba(255, 255, 255, 0.6)"}
-              placeholder="Enter password" />
-          </View>
+          <Input 
+            placeholder="Password"
+            text="Enter password" 
+            onChangeText={(text) =>  setPassword(text) }
+          />
 
           <TouchableOpacity style={[buttonStyle.continueButton, { borderRadius: 8, marginTop: "5%" }]}
             onPress={() => { LoginRequest(login, password) }}>

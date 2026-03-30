@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { ImageBackground, ScrollView, View, KeyboardAvoidingView } from "react-native";
+import { ImageBackground, ScrollView, View, KeyboardAvoidingView, Platform } from "react-native";
 import Header from "./components/HeaderBlock";
 import Input from "./components/Input";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
@@ -8,6 +8,7 @@ import { RTClient } from "@/app/rt_client/rt_client";
 import { RTMessage } from "@/app/rt_client/models/models";
 import TextMessage from "./components/TextMessage";
 import { getCurrentUserID } from "@/utils/utils";
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 export default function DirectChatScreen({ route }: any) {
   const chatID = route?.params?.chatID;
@@ -32,14 +33,19 @@ export default function DirectChatScreen({ route }: any) {
     }, []));
 
   return (
-    <KeyboardAvoidingView style={{ flexGrow: 1 }} enabled={true} behavior="padding">
+    <KeyboardAvoidingView 
+    style={{ flexGrow: 1 }} 
+    enabled={true} 
+    behavior="padding"
+    keyboardVerticalOffset={Platform.OS === "ios" ? 60 : 0}
+    >
       <ImageBackground
         style={{ flex: 1, justifyContent: "space-between" }}
         source={require("@/assets/images/background.png")}
       >
         <Header info={chat} />
-        <ScrollView style={{}}
-          keyboardShouldPersistTaps="always"
+        <KeyboardAwareScrollView style={{}}
+          keyboardShouldPersistTaps={"handled"}
           contentContainerStyle={{ flexGrow: 1 }}>
           {[
             messages?.map((item: any, index: number) => (
@@ -48,7 +54,7 @@ export default function DirectChatScreen({ route }: any) {
             <View key={0} style={{ height: hp(8) }}></View>
           ]}
 
-        </ScrollView>
+        </KeyboardAwareScrollView>
         <Input chatID={chatID} />
 
       </ImageBackground>

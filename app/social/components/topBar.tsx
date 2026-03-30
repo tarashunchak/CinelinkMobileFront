@@ -43,12 +43,12 @@ const styles = {
       flexDirection: "row",
       justifyContent: "space-between",
       alignItems: "center",
-      padding: "1%",
+      padding: "0.5%",
     },
     buttons: {
       view: {
-        paddingLeft: "2.5%",
-        paddingRight: "2.5%",
+        paddingLeft: "2%",
+        paddingRight: "2%",
         height: "98%",
         alignItems: "center",
         justifyContent: "center",

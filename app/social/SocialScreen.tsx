@@ -54,7 +54,7 @@ export default function SocialScreen() {
   return (
     <View style={{ flex: 1 }}>
       <ImageBackground source={require("@/assets/images/background.png")}
-        style={{ flex: 1, paddingTop: "10%" }}>
+      style={{ flex: 1, backgroundColor:"black", paddingTop: "10%" }}>
         <View style={styles.topBar.view}>
           {
             tabs.map(tab => (
@@ -120,8 +120,8 @@ const styles = {
     },
     buttons: {
       view: {
-        paddingLeft: "2.5%",
-        paddingRight: "2.5%",
+        paddingLeft: "2%",
+        paddingRight: "2%",
         height: "98%",
         alignItems: "center",
         justifyContent: "center",

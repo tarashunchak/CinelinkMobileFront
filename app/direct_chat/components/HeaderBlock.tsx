@@ -4,7 +4,7 @@ import { textStyle } from "@/styles/textStyles";
 import { getCurrentUserID } from "@/utils/utils";
 import { useNavigation } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { View, Text, Image, TouchableOpacity } from "react-native";
+import { View, Text, Image, TouchableOpacity, Platform } from "react-native";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { DirectChat, OnlineMessage } from "@/app/rt_client/models/models";
 
@@ -107,7 +107,7 @@ const styles = {
     }],
   },
   view: {
-    height: hp(12),
+    height: Platform.OS === "ios" ? hp(10) : hp(12),
     backgroundColor: "rgba(20, 20, 20, 1)",
     flexDirection: "row",
     alignItems: "flex-end",

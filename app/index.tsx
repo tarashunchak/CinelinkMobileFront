@@ -1,4 +1,3 @@
-import { StatusBar } from "expo-status-bar";
 import React from "react";
 import TabNavigator from "@/navigation/tabNavigator";
 import AuthNavigator from "@/navigation/AuthNavigator";
@@ -12,16 +11,9 @@ export default function App() {
   const isHydrated = useAuthStore(state => state.isHydrated);
 
   RTClient.connect(getCurrentUserID());
-
   return (
-    <>
-      <StatusBar hidden={true} />
-      {isHydrated ? (isAuthenticated ? <TabNavigator /> : <AuthNavigator />) : null}
-    </>
+      <>
+        {isHydrated ? (isAuthenticated ? <TabNavigator /> : <AuthNavigator />) : null}
+      </>
   );
 };
-
-//{isHydrated ? (isAuthenticated ? <SearchResultBlock /> : <AuthNavigator />) : null}
-//{isHydrated ? (isAuthenticated ? <MovieDetailScreen /> : <AuthNavigator />) : null}
-//{isHydrated ? (isAuthenticated ? <CreditDetailScreen creditID={40} /> : <AuthNavigator />) : null}
-//<MeetUpScreen />

@@ -1,7 +1,5 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { StatusBar } from "expo-status-bar";
 import React from "react";
-import { SafeAreaProvider } from "react-native-safe-area-context";
 import ActorProfileScreen from "@/app/credit_details/CreditDetailScreen";
 import CollectionScreen from "@/app/collection/CollectionScreen";
 import MovieCreditsScreen from "@/app/movie_details/MovieCreditsScreen";
@@ -19,13 +17,10 @@ const Stack = createNativeStackNavigator();
 export default function SearchNavigatorStack() {
 
   return (
-    <SafeAreaProvider style={{ flex: 1 }}>
-      <StatusBar hidden={true} />
       <Stack.Navigator>
         <Stack.Screen name="Search" component={SearchResultBlock} options={{ headerShown: false }} />
         <Stack.Screen name="UserProfileScreen" component={UserProfileScreen} options={{ headerShown: false }} />
         <Stack.Screen name="SearchTMPLT" component={SearchScreen} options={{ headerShown: false }} />
       </Stack.Navigator>
-    </SafeAreaProvider>
   )
 }

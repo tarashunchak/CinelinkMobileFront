@@ -32,12 +32,14 @@ export default function LoginScreen() {
           <Input
             placeholder="Username"
             text="Enter username"
+            type="text"
             onChangeText={(text) => setLogin(text)}
           />
 
           <Input
             placeholder="Password"
             text="Enter password"
+            type="password"
             onChangeText={(text) => setPassword(text)}
           />
 

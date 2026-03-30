@@ -1,7 +1,7 @@
 import { SendChatMessages } from "@/api/chats/messages";
 import { textStyle } from "@/styles/textStyles";
 import React, { useState } from "react";
-import { View, Text, Image, TouchableOpacity, TextInput } from "react-native";
+import { View, Text, Image, TouchableOpacity, TextInput, Platform } from "react-native";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { RTClient } from "../../rt_client/rt_client";
 import { getCurrentUserID } from "@/utils/utils";
@@ -67,7 +67,7 @@ const styles = {
     position: "absolute",
     bottom: "2%",
     zIndex: 2,
-    minHeight: hp(5.1),
+    minHeight: Platform.OS === "ios" ? hp(5.45) : hp(5.1),
     //backgroundColor: "rgba(255, 255, 255, 0.03)",
     backgroundColor: "rgba(20, 20, 20, 1)",
     borderColor: "rgba(255, 255, 255, 0.5)",
@@ -79,9 +79,11 @@ const styles = {
     alignSelf: "center",
     marginTop: "5%",
     flexDirection: "row",
+    jusitfyContent:"center",
   },
   input: [textStyle.white18, {
     width: "88%",
+    alignSelf:"center",
   }],
   sendBtn: {
     view: {

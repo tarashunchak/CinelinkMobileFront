@@ -14,11 +14,11 @@
       "web"
     ],
     "ios": {
-      "supportsTablet": true,
-      "UIViewControllerBasedStatusBarAppearance": false,
+      "UIViewControllerBasedStatusBarAppearance": true,
       "UIStatusBarHidden": true,
       "UIRequiresFullScreen": true,
-      "bundleIdentifier": "com.leafy.app"
+      "bundleIdentifier": "com.leafy.app",
+      "edgeToEdgeEnabled":true
     },
     "android": {
       "package": "com.leafy.app",

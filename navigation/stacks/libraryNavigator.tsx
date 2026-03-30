@@ -1,7 +1,6 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StatusBar } from "expo-status-bar";
 import React from "react";
-import { SafeAreaProvider } from "react-native-safe-area-context";
 import ActorProfileScreen from "@/app/credit_details/CreditDetailScreen";
 import CollectionScreen from "@/app/collection/CollectionScreen";
 import MovieCreditsScreen from "@/app/movie_details/MovieCreditsScreen";
@@ -10,7 +9,6 @@ import UserProfileScreen from "@/app/profile/UserProfileScreen";
 
 import WatchlistsLibraryScreen from "@/app/library/WatchlistsLibraryScreen";
 import WatchlistDetailsScreen from "@/app/watchlist/WatchlistDetailsScreen";
-import CreateWatchlist from "@/app/library/components/addWatchlist";
 import AddWatchlist from "@/app/library/components/addWatchlist";
 
 const Stack = createNativeStackNavigator();
@@ -18,8 +16,6 @@ const Stack = createNativeStackNavigator();
 export default function LibraryNavigatorStack() {
 
   return (
-    <SafeAreaProvider style={{ flex: 1 }}>
-      <StatusBar hidden={true} />
       <Stack.Navigator>
         <Stack.Screen name="WatchlistsLibraryScreen" component={WatchlistsLibraryScreen} options={{ headerShown: false }} />
         <Stack.Screen name="CollectionScreen" component={CollectionScreen} options={{ headerShown: false }} />
@@ -30,6 +26,5 @@ export default function LibraryNavigatorStack() {
         <Stack.Screen name="WatchlistDetailsScreen" component={WatchlistDetailsScreen} options={{ headerShown: false }} />
         <Stack.Screen name="AddWatchlist" component={AddWatchlist} options={{ headerShown: false }} />
       </Stack.Navigator>
-    </SafeAreaProvider>
   )
 }

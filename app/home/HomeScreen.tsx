@@ -7,6 +7,8 @@ import PremiereCarousel from "./components/PremiereCarousel";
 import HorizontalMoviesList from "./components/HorizontalMoviesList";
 import MovieOfTheDay from "./components/MovieOfTheDay";
 import { GetHomeMovies } from "@/api/home/home";
+import { StatusBar } from "expo-status-bar";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 interface Movies {
   popular:any[],
@@ -17,6 +19,7 @@ export default function HomePageScreen() {
   const [selectedGenre, setSelectedGenre] = useState<number>(0);
   const [movies, setMovies] = useState<Movies>();
 
+
   useEffect(() => {
     async function load() {
       const data = await GetHomeMovies();
@@ -25,8 +28,17 @@ export default function HomePageScreen() {
     load();
   }, [])
 
+
   return (
-    <ImageBackground source={require("@/assets/images/background.png")} style={{ flex: 1 }}>
+    <SafeAreaProvider>
+      <SafeAreaView style={{flex:1}} edges={[]}>
+    <StatusBar hidden/>
+    <ImageBackground source={require("@/assets/images/background.png")} 
+    style={{ 
+      flex: 1,
+      
+    }}
+    >
       <ScrollView
         style={{
           backgroundColor: "transparent",
@@ -51,7 +63,10 @@ export default function HomePageScreen() {
 
       </ScrollView>
       <BottomBar />
+
     </ImageBackground >
+    </SafeAreaView>
+    </SafeAreaProvider>
   );
 }
 

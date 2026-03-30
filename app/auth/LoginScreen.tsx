@@ -1,18 +1,16 @@
 import { LoginRequest } from "@/api/auth/loginPageApi";
 import { backgroundStyle } from "@/styles/backgroundStyle";
 import { buttonStyle } from "@/styles/buttonStyle";
-import { inputStyle } from "@/styles/inputStyle";
 import { textStyle } from "@/styles/textStyles";
 import * as WebBrowser from "expo-web-browser";
 import React, { useState } from "react";
-import { Image, ImageBackground, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Image, ImageBackground, Text, TouchableOpacity, View } from "react-native";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import Input from "./components/Input";
 
-
 WebBrowser.maybeCompleteAuthSession();
 
-export default function LoginScreen({ navigation }: any) {
+export default function LoginScreen() {
   const [login, setLogin] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
@@ -31,16 +29,16 @@ export default function LoginScreen({ navigation }: any) {
         <ImageBackground source={require("@/assets/images/background.png")}
           style={[styles.darkRect]}>
 
-          <Input 
+          <Input
             placeholder="Username"
-            text="Enter username" 
-            onChangeText={(text) =>  setLogin(text) }
+            text="Enter username"
+            onChangeText={(text) => setLogin(text)}
           />
 
-          <Input 
+          <Input
             placeholder="Password"
-            text="Enter password" 
-            onChangeText={(text) =>  setPassword(text) }
+            text="Enter password"
+            onChangeText={(text) => setPassword(text)}
           />
 
           <TouchableOpacity style={[buttonStyle.continueButton, { borderRadius: 8, marginTop: "5%" }]}

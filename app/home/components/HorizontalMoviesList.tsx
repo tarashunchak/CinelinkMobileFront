@@ -1,14 +1,11 @@
-import { useNavigation } from "expo-router";
 import { textStyle } from "@/styles/textStyles";
 import React, { useEffect, useState } from "react";
 import { ScrollView } from "react-native";
-import { GetHomeMovies } from "@/api/home/home";
 import MovieCard from "./MovieCard";
 import EmptyMovieCard from "./EmptyMovieCard";
 import MovieListSkeleton from "./MovieListSkeleton";
 
 export default function HorizontalMoviesList({ popular }: { popular: any[] }) {
-  const navigator = useNavigation();
   const [movies, setMovies] = useState<any[]>([]);
 
   useEffect(() => {
@@ -21,7 +18,7 @@ export default function HorizontalMoviesList({ popular }: { popular: any[] }) {
 
   return (
     <ScrollView
-      style={[styles.scrollView]}
+      style={styles?.scrollView}
       horizontal={true}
       showsHorizontalScrollIndicator={false}
     >
@@ -33,9 +30,15 @@ export default function HorizontalMoviesList({ popular }: { popular: any[] }) {
               movie_id: movie?.id,
               poster_path: movie?.poster_path,
               inCinemas: false,
+              maximum: null,
             }}
           />),
-        <EmptyMovieCard key={20} />
+        <EmptyMovieCard 
+          onPress={()=>{
+
+          }}
+          key={20} 
+        />
       ] : <MovieListSkeleton />}
     </ScrollView >
   )

@@ -1,15 +1,11 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { TouchableOpacity, Text, ImageBackground, ScrollView, View } from "react-native";
+import React, { useState, useEffect} from "react";
+import { TouchableOpacity, Text, ImageBackground, View, FlatList } from "react-native";
 import BottomBar from "../bars/bottomBar";
-import SocialPageTopBar from "./components/topBar";
 import RecommendationCard, { RecommendedCard_T } from "./components/RecommendationCard";
 import ChatCard from "./components/chatCard";
 import { textStyle } from "@/styles/textStyles";
 import { GetUserFollowers } from "@/api/followers/followers";
-import { CURRENT_USER } from "@/api/currentUser";
 import { GetUserRecommendations } from "@/api/recommendations/recommendations";
-import { useAuthStore } from "@/local_storage/user/asyncStorage/store";
-import { useFocusEffect } from "expo-router";
 import { GetUserChats } from "@/api/chats/chats";
 import { RTClient } from "../rt_client/rt_client";
 import { getCurrentUserID } from "@/utils/utils";
@@ -22,24 +18,38 @@ export default function SocialScreen() {
   const [friends, setFriends] = useState<UserCard_T[]>();
   const [recommendations, setRecommendatoins] = useState<RecommendedCard_T[]>();
   const [chats, setChats] = useState<any[]>();
+  const [activity, setActivity] = useState<any[]>();
   const currentUserID = getCurrentUserID() ?? 1;
 
-  useFocusEffect(useCallback(() => {
+  useEffect(()=>{
     async function loadContent() {
       await RTClient.setPageEntering("social", getCurrentUserID() ?? 1);
 
       setFriends(await GetUserFollowers(currentUserID));
       setRecommendatoins(await GetUserRecommendations(currentUserID))
       setChats(await GetUserChats(currentUserID))
-
-      /*const chatsData = await GetUserChats(currentUserID);
-      const friendsData: UserCard_T[] = await GetUserFollowers(currentUserID);
-      const recommendationsData = await GetUserRecommendations(currentUserID);*/
     };
 
     loadContent();
   }, [])
-  )
+
+
+  let data = null;
+  switch(activeTab){
+    case "Friends":{
+      data = friends;
+      break;
+    }case "Recommendations":{
+      data = recommendations;
+      break;
+    }case "Activity":{
+      data= activity;
+      break;
+    }case "Chats":{
+      data = chats;
+      break;
+    }
+  }
 
   return (
     <View style={{ flex: 1 }}>
@@ -63,23 +73,30 @@ export default function SocialScreen() {
             ))
           }
         </View>
-        <ScrollView style={{ padding: "1%" }}>
-          {[
+        <FlatList
+          data={data}
+          keyExtractor={(item, index) => String(index)}
+          renderItem={({item})=>(
+            <>
+            {
             activeTab === "Friends" &&
-            friends?.map((friend: UserCard_T, index: number) =>
-              (<FriendCard key={index} friend={friend} />))
-
-            ,
+              <FriendCard friend={item} />
+            }
+            {
             activeTab === "Recommendations" &&
-            recommendations?.map((item: RecommendedCard_T, index: number) =>
-              <RecommendationCard key={index} item={item} />)
-            ,
+              <RecommendationCard  item={item} />
+            }
+            {
             activeTab === "Chats" &&
-            chats?.map((item: any, index: number) =>
-              <ChatCard key={index} item={item} />)
-          ]
-          }
-        </ScrollView>
+              <ChatCard item={item} />
+            }
+            {
+            activeTab === "Activity" &&
+            null
+            }
+            </>
+          )
+          }/>
       </ImageBackground >
       <BottomBar />
     </View>

@@ -3,17 +3,14 @@ import React, { useEffect, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 import MovieCard from "./MovieCard";
 import EmptyMovieCard from "./EmptyMovieCard";
-import { useNavigation } from "expo-router";
 import MovieListSkeleton from "./MovieListSkeleton";
 
 export default function PremiereCarousel({ nowPlaying }: { nowPlaying: any[] }) {
-  const navigator = useNavigation();
   const [movies, setMovies] = useState<any[]>([]);
 
   useEffect(() => {
     async function load() {
-      if (nowPlaying)
-        setMovies(nowPlaying);
+      setMovies(nowPlaying ?? []);
     }
     load();
   }, [nowPlaying]);
@@ -39,10 +36,8 @@ export default function PremiereCarousel({ nowPlaying }: { nowPlaying: any[] }) 
                 maximum: ""
               }} />)
           ,
-          <EmptyMovieCard
-            onPress={() => {
-              navigator?.navigate("Search", { query: "now_playing" });
-            }}
+          <EmptyMovieCard 
+            onPress={()=>{}} 
             key={20}
           />
         ] : <MovieListSkeleton />}

@@ -5,14 +5,17 @@ import React, { useEffect, useState } from "react";
 import { ImageBackground, ScrollView, Text } from "react-native";
 import PremiereCarousel from "./components/PremiereCarousel";
 import HorizontalMoviesList from "./components/HorizontalMoviesList";
-import { useNavigation } from "expo-router";
 import MovieOfTheDay from "./components/MovieOfTheDay";
 import { GetHomeMovies } from "@/api/home/home";
 
+interface Movies {
+  popular:any[],
+  now_playing:any[],
+}
+
 export default function HomePageScreen() {
   const [selectedGenre, setSelectedGenre] = useState<number>(0);
-  const [movies, setMovies] = useState();
-  const navigation = useNavigation();
+  const [movies, setMovies] = useState<Movies>();
 
   useEffect(() => {
     async function load() {

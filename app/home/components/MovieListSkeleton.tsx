@@ -1,11 +1,10 @@
 import React from "react";
-import { View, Image, Text, TouchableOpacity } from "react-native";
-import { textStyle } from "@/styles/textStyles";
+import { View } from "react-native";
 
 export default function MovieListSkeleton() {
   return (
     <View style={{ flexDirection: "row" }}>
-      {Array.from({ length: 10 })?.map((value: any, index: number) =>
+      {Array.from({ length: 10 }).map((value: any, index: number) =>
         <View
           key={index}
           style={styles.view}
@@ -29,11 +28,4 @@ const styles = {
     alignItems: "center",
     padding: 0.5,
   },
-  image: {
-    height: 20,
-    width: 20,
-    borderTopLeftRadius: 6,
-    borderTopRightRadius: 6,
-    alignSelf: "center"
-  }
 };

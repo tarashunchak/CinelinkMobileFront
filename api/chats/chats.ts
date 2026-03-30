@@ -2,14 +2,14 @@ import { useAuthStore } from "@/local_storage/user/asyncStorage/store";
 import { API_URL } from "./../API_CONFIG";
 import { getCurrentUser, jwtHeaders } from "@/utils/utils";
 
-type APIResponse = {
+interface APIResponse {
   status: number;
   results: any;
 }
 
 export async function GetUserChats(userID: number) {
   const response = await fetch(`${API_URL}/users/${userID}/chats`);
-  /*if (!response.ok) {
+  if (!response.ok) {
     switch (response.status) {
       case 404:
         throw new Error("Not Found");
@@ -20,9 +20,9 @@ export async function GetUserChats(userID: number) {
       default:
         throw new Error(`HTTP error: ${response.status}`);
     }
-  }*/
+  }
   const data = await response.json();
-  return data.results;
+  return data?.results;
 };
 
 export async function GetChat(chatID: number) {
@@ -34,14 +34,12 @@ export async function GetChat(chatID: number) {
     }
   )
   const data = await response.json();
-  //console.log("chat: ", data?.results);
-  //console.warn("JWT before authorization: ");
   return data?.results;
 };
 
 export async function GetChatMessages(chatID: number) {
-  console.log("chatID messages: ", chatID);
   const response = await fetch(`${API_URL}/chats/${chatID}/messages`);
+  if(!response.ok){}
   const data = await response.json();
   return data?.results;
 };

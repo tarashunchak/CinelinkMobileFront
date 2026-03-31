@@ -6,7 +6,7 @@ import { useNavigation } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { View, Text, Image, TouchableOpacity, Platform } from "react-native";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
-import { DirectChat, OnlineMessage } from "@/app/rt_client/models/models";
+import { DirectChat } from "@/app/rt_client/models/models";
 
 export default function Header({ info }: { info: DirectChat }) {
   const navigator = useNavigation();
@@ -19,7 +19,6 @@ export default function Header({ info }: { info: DirectChat }) {
 
   useEffect(() => {
     setChat(info?.info);
-    setPeer(info?.peer);
     setStatus(peer?.is_online);
     RTClient.setOnOnlineCallBack(chatID, (data: any) => {
       console.warn("user status: ", data.is_online);
@@ -55,7 +54,7 @@ export default function Header({ info }: { info: DirectChat }) {
                 height: 53,
                 borderRadius: 999
               }}
-              source={{ uri: peer?.avatar_url }}
+              source={{ uri: info?.peer?.avatar_url }}
             />
             {status && <View style={styles.isOnline.dot}></View>}
           </TouchableOpacity>

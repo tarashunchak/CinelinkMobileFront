@@ -43,8 +43,8 @@ export default function MovieOfTheDay() {
         </Text>
         <TouchableOpacity style={{}}
           onPress={() =>
-            navigator.jumpTo("MovieDetailScreen",
-              { movieId: movie?.movie_id }
+            navigator?.navigate("MovieDetailScreen",
+              { movieID: movie?.movie_id }
             )
           }>
           <View style={styles.view}>
@@ -78,6 +78,7 @@ const styles = {
   backdrop: {
     height: hp("45%"),
     margin: "-2%",
+    marginBottom: hp(5)
   },
   background: {
     height: "100%",
@@ -87,7 +88,7 @@ const styles = {
   view: {
     flexDirection: "row",
     alignSelf: "center",
-    gap: 5
+    gap: 5,
   },
   text: {
     textAlign: "center",

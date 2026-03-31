@@ -8,13 +8,13 @@ import PhotosModal from "./components/PhotosModal";
 import MainInfo from "./components/MainInfo";
 import ActionButtonsBlock from "./components/ActionButtonsBlock";
 
-export default function CreditDetailScreen({ creditID }: { creditID: number }) {
+export default function CreditDetailScreen({ route }: any) {
+  const { creditID } = route?.params;
   const navigation = useNavigation();
   const [credit, setCredit] = useState<any>(null);
   const [movies, setMovies] = useState<any>(null);
   const [images, setImages] = useState<any>(null);
   const [backdrop, setBackdrop] = useState<any>(null);
-
 
   useEffect(() => {
     async function loadCreditDetails() {

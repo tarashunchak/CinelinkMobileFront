@@ -72,18 +72,18 @@ const styles = {
     backgroundColor: "rgba(20, 20, 20, 1)",
     borderColor: "rgba(255, 255, 255, 0.5)",
     borderWidth: 0.5,
-    borderRadius: hp(2.8),
+    borderRadius: hp(2.5),
     paddingRight: 2,
     paddingBottom: 2,
     paddingLeft: "5%",
     alignSelf: "center",
     marginTop: "5%",
     flexDirection: "row",
-    jusitfyContent:"center",
+    jusitfyContent: "center",
   },
   input: [textStyle.white18, {
     width: "88%",
-    alignSelf:"center",
+    alignSelf: "center",
   }],
   sendBtn: {
     view: {

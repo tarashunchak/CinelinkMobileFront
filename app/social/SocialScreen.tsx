@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { TouchableOpacity, Text, ImageBackground, View, FlatList } from "react-native";
 import BottomBar from "../bars/bottomBar";
 import RecommendationCard, { RecommendedCard_T } from "./components/RecommendationCard";
@@ -21,7 +21,7 @@ export default function SocialScreen() {
   const [activity, setActivity] = useState<any[]>();
   const currentUserID = getCurrentUserID() ?? 1;
 
-  useEffect(()=>{
+  useEffect(() => {
     async function loadContent() {
       await RTClient.setPageEntering("social", getCurrentUserID() ?? 1);
 
@@ -35,17 +35,17 @@ export default function SocialScreen() {
 
 
   let data = null;
-  switch(activeTab){
-    case "Friends":{
+  switch (activeTab) {
+    case "Friends": {
       data = friends;
       break;
-    }case "Recommendations":{
+    } case "Recommendations": {
       data = recommendations;
       break;
-    }case "Activity":{
-      data= activity;
+    } case "Activity": {
+      data = activity;
       break;
-    }case "Chats":{
+    } case "Chats": {
       data = chats;
       break;
     }
@@ -54,7 +54,7 @@ export default function SocialScreen() {
   return (
     <View style={{ flex: 1 }}>
       <ImageBackground source={require("@/assets/images/background.png")}
-      style={{ flex: 1, backgroundColor:"black", paddingTop: "10%" }}>
+        style={{ flex: 1, backgroundColor: "black", paddingTop: "10%" }}>
         <View style={styles.topBar.view}>
           {
             tabs.map(tab => (
@@ -76,27 +76,27 @@ export default function SocialScreen() {
         <FlatList
           data={data}
           keyExtractor={(item, index) => String(index)}
-          renderItem={({item})=>(
+          renderItem={({ item }) => (
             <>
-            {
-            activeTab === "Friends" &&
-              <FriendCard friend={item} />
-            }
-            {
-            activeTab === "Recommendations" &&
-              <RecommendationCard  item={item} />
-            }
-            {
-            activeTab === "Chats" &&
-              <ChatCard item={item} />
-            }
-            {
-            activeTab === "Activity" &&
-            null
-            }
+              {
+                activeTab === "Friends" &&
+                <FriendCard friend={item} />
+              }
+              {
+                activeTab === "Recommendations" &&
+                <RecommendationCard item={item} />
+              }
+              {
+                activeTab === "Chats" &&
+                <ChatCard item={item} />
+              }
+              {
+                activeTab === "Activity" &&
+                null
+              }
             </>
           )
-          }/>
+          } />
       </ImageBackground >
       <BottomBar />
     </View>

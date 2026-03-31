@@ -1,5 +1,5 @@
 import React from "react";
-import TabNavigator from "@/navigation/tabNavigator";
+import TabNavigator from "@/navigation/TabNavigator";
 import AuthNavigator from "@/navigation/AuthNavigator";
 import { useAuthStore } from "@/local_storage/user/asyncStorage/store"
 import { RTClient } from "./rt_client/rt_client";
@@ -12,8 +12,8 @@ export default function App() {
 
   RTClient.connect(getCurrentUserID());
   return (
-      <>
-        {isHydrated ? (isAuthenticated ? <TabNavigator /> : <AuthNavigator />) : null}
-      </>
+    <>
+      {isHydrated ? (isAuthenticated ? <TabNavigator /> : <AuthNavigator />) : null}
+    </>
   );
 };

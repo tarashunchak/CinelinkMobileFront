@@ -1,51 +1,46 @@
-import { textStyle } from "@/styles/textStyles";
 import React, { useEffect, useState } from "react";
-import { ScrollView } from "react-native";
+import { FlatList, StyleSheet } from "react-native";
 import MovieCard from "./MovieCard";
-import EmptyMovieCard from "./EmptyMovieCard";
-import MovieListSkeleton from "./MovieListSkeleton";
+import { Movie_I } from "../models/movie";
 
-export default function HorizontalMoviesList({ popular }: { popular: any[] }) {
-  const [movies, setMovies] = useState<any[]>([]);
+export default function HorizontalMoviesList(
+  { moviesList, inCinemas }:
+    {
+      moviesList: Movie_I[],
+      inCinemas: boolean
+    }
+) {
+  const [movies, setMovies] = useState<Movie_I[]>([]);
 
   useEffect(() => {
     async function load() {
-      setMovies(popular)
+      setMovies(moviesList)
     }
-
     load();
-  }, [popular]);
+  }, [moviesList]);
 
   return (
-    <ScrollView
-      style={styles?.scrollView}
-      horizontal={true}
-      showsHorizontalScrollIndicator={false}
-    >
-      {movies ? [
-        movies?.map((movie: any, index: number) =>
-          <MovieCard
-            key={index}
-            data={{
-              movie_id: movie?.id,
-              poster_path: movie?.poster_path,
-              inCinemas: false,
-              maximum: null,
-            }}
-          />),
-        <EmptyMovieCard 
-          onPress={()=>{
-
+    <FlatList
+      style={styles.flatList}
+      horizontal
+      data={movies}
+      keyExtractor={(_, index) => String(index)}
+      renderItem={({ item }) => (
+        <MovieCard
+          data={{
+            movie_id: item?.id,
+            poster_path: item?.poster_path,
+            inCinemas,
+            maximum: null,
           }}
-          key={20} 
-        />
-      ] : <MovieListSkeleton />}
-    </ScrollView >
+        />)
+      }
+    />
   )
 }
 
-const styles = {
-  scrollView: {
+const styles = StyleSheet.create({
+  flatList: {
     height: 160,
     backgroundColor: "rgba(255, 255, 255, 0.05)",
     padding: 4,
@@ -56,37 +51,4 @@ const styles = {
     marginLeft: "-1%",
     marginRight: "-1%",
   },
-  view: {
-    marginRight: 5,
-    width: 100,
-    height: "99%",
-    backgroundColor: "rgba(255, 255, 255, 0.03)",
-    borderRadius: 6,
-    borderWidth: 1,
-    borderColor: "rgba(255, 255, 255, 0.05)",
-    padding: 4,
-  },
-  poster: {
-    width: "100%",
-    height: "100%",
-    borderRadius: 4
-  },
-  info: {
-    view: {
-      position: "absolute",
-      top: "3%",
-      width: "100%",
-      backgroundColor: "rgba(50, 158, 79, 0.9)",
-      borderWidth: 0.5,
-      borderColor: "rgba(255, 255, 255, 0.4)"
-    },
-    text: [
-      textStyle.white10,
-      {
-        textTransform: "uppercase",
-        textAlign: "center",
-        alignSelf: "center"
-      }
-    ]
-  }
-}
+});

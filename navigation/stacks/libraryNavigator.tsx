@@ -14,17 +14,16 @@ import AddWatchlist from "@/app/library/components/addWatchlist";
 const Stack = createNativeStackNavigator();
 
 export default function LibraryNavigatorStack() {
-
   return (
-      <Stack.Navigator>
-        <Stack.Screen name="WatchlistsLibraryScreen" component={WatchlistsLibraryScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="CollectionScreen" component={CollectionScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="UserProfileScreen" component={UserProfileScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="MovieDetailScreen" component={MovieDetailScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="MovieCreditsScreen" component={MovieCreditsScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="ActorProfileScreen" component={ActorProfileScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="WatchlistDetailsScreen" component={WatchlistDetailsScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="AddWatchlist" component={AddWatchlist} options={{ headerShown: false }} />
-      </Stack.Navigator>
+    <Stack.Navigator>
+      <Stack.Screen name="WatchlistsLibraryScreen" component={WatchlistsLibraryScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="CollectionScreen" component={CollectionScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="UserProfileScreen" component={UserProfileScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="MovieDetailScreen" component={MovieDetailScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="MovieCreditsScreen" component={MovieCreditsScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="ActorProfileScreen" component={ActorProfileScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="WatchlistDetailsScreen" component={WatchlistDetailsScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="AddWatchlist" component={AddWatchlist} options={{ headerShown: false }} />
+    </Stack.Navigator>
   )
 }

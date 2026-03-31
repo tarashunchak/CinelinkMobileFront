@@ -3,22 +3,20 @@ import GenresList from "@/components/ui/leafy-genres-list";
 import { textStyle } from "@/styles/textStyles";
 import React, { useEffect, useState } from "react";
 import { ImageBackground, ScrollView, Text } from "react-native";
-import PremiereCarousel from "./components/PremiereCarousel";
 import HorizontalMoviesList from "./components/HorizontalMoviesList";
 import MovieOfTheDay from "./components/MovieOfTheDay";
 import { GetHomeMovies } from "@/api/home/home";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
-interface Movies {
-  popular:any[],
-  now_playing:any[],
+interface Movies_I {
+  popular: any[],
+  now_playing: any[],
 }
 
 export default function HomePageScreen() {
   const [selectedGenre, setSelectedGenre] = useState<number>(0);
-  const [movies, setMovies] = useState<Movies>();
-
+  const [movies, setMovies] = useState<Movies_I>();
 
   useEffect(() => {
     async function load() {
@@ -28,52 +26,58 @@ export default function HomePageScreen() {
     load();
   }, [])
 
-
   return (
     <SafeAreaProvider>
-      <SafeAreaView style={{flex:1}} edges={[]}>
-    <StatusBar hidden/>
-    <ImageBackground source={require("@/assets/images/background.png")} 
-    style={{ 
-      flex: 1,
-      
-    }}
-    >
-      <ScrollView
-        style={{
-          backgroundColor: "transparent",
-          padding: "1%"
-        }}
-        showsVerticalScrollIndicator={false}
-      >
+      <SafeAreaView style={{ flex: 1 }} edges={[]}>
+        <StatusBar hidden />
+        <ImageBackground source={require("@/assets/images/background.png")}
+          style={{
+            flex: 1,
+            backgroundColor: "black",
+          }}
+        >
+          <ScrollView
+            style={{
+              backgroundColor: "transparent",
+              padding: "1%"
+            }}
+            showsVerticalScrollIndicator={false}
+          >
+            <MovieOfTheDay />
 
-        <MovieOfTheDay />
+            <Text style={styles.text}>
+              Now in Cinemas
+            </Text>
+            <HorizontalMoviesList
+              moviesList={movies?.now_playing}
+              inCinemas={true}
+            />
 
-        <PremiereCarousel nowPlaying={movies?.now_playing} />
+            <Text style={styles.text}>
+              Trending
+            </Text>
+            <HorizontalMoviesList
+              moviesList={movies?.popular}
+              inCinemas={false}
+            />
 
-        <Text style={styles.text}>
-          Trending
-        </Text>
-        <HorizontalMoviesList popular={movies?.popular} />
+            <Text style={styles.text}>
+              Genres
+            </Text>
+            <GenresList setSelectedGenre={setSelectedGenre} />
 
-        <Text style={styles.text}>
-          Genres
-        </Text>
-        <GenresList setSelectedGenre={setSelectedGenre} />
+          </ScrollView>
+          <BottomBar />
 
-      </ScrollView>
-      <BottomBar />
-
-    </ImageBackground >
-    </SafeAreaView>
+        </ImageBackground >
+      </SafeAreaView>
     </SafeAreaProvider>
   );
 }
 
-const styles: object = {
+const styles = {
   text: [
     textStyle.white22,
     { marginTop: "5%" }
   ]
 }
-//<FilmCardList selectedGenre={selectedGenre} />

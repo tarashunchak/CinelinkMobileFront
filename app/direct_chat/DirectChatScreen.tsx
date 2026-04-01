@@ -21,7 +21,7 @@ export default function DirectChatScreen({ route }: any) {
     useCallback(() => {
       async function loadContent() {
         setChat(await RTClient.getChat(chatID));
-        setMessages((await RTClient.getChatMessages(chatID))?.reverse);
+        setMessages(await RTClient.getChatMessages(chatID));
         setTimeout(() => {
           RTClient.setChatEntering(chatID, getCurrentUserID());
         },
@@ -59,7 +59,6 @@ export default function DirectChatScreen({ route }: any) {
             )}
             keyboardShouldPersistTaps="always"
             removeClippedSubviews
-            inverted
           />
         </KeyboardAvoidingView>
         <FloatingButton isVisible={isFloatButtonVisible} />

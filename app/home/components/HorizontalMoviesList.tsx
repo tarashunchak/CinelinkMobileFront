@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FlatList, StyleSheet } from "react-native";
 import MovieCard from "./MovieCard";
 import { Movie_I } from "../models/movie";
+import EmptyMovieCard from "./EmptyMovieCard";
 
 export default function HorizontalMoviesList(
   { moviesList, inCinemas }:
@@ -10,7 +11,7 @@ export default function HorizontalMoviesList(
       inCinemas: boolean
     }
 ) {
-  const [movies, setMovies] = useState<Movie_I[]>([]);
+  const [movies, setMovies] = useState<Movie_I[]>(Array.from({ length: 10 }));
 
   useEffect(() => {
     async function load() {
@@ -26,14 +27,16 @@ export default function HorizontalMoviesList(
       data={movies}
       keyExtractor={(_, index) => String(index)}
       renderItem={({ item }) => (
-        <MovieCard
-          data={{
-            movie_id: item?.id,
-            poster_path: item?.poster_path,
-            inCinemas,
-            maximum: null,
-          }}
-        />)
+        item ?
+          <MovieCard
+            data={{
+              movie_id: item?.id,
+              poster_path: item?.poster_path,
+              inCinemas,
+              maximum: null,
+            }}
+          /> : <EmptyMovieCard />
+      )
       }
     />
   )

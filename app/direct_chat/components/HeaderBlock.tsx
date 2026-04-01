@@ -45,7 +45,7 @@ export default function Header({ info }: { info: DirectChat }) {
           <TouchableOpacity
             style={styles.chatInfo.img}
             onPress={() => {
-              navigator.push("UserProfileScreen", { userID: peer?.user_id });
+              navigator.push("UserProfileScreen", { userID: info?.peer?.user_id });
             }}
           >
             <Image
@@ -60,7 +60,7 @@ export default function Header({ info }: { info: DirectChat }) {
           </TouchableOpacity>
 
           <View style={styles.chatInfo.text.view}>
-            <Text style={styles.chatInfo.text.name}>{info?.info.name}</Text>
+            <Text style={styles.chatInfo.text.name}>{info?.peer?.username}</Text>
             {!status ? (
               <Text style={styles.chatInfo.text.lastSeen}>{`last seen ${Date(peer?.last_seen).substring(8)}`}</Text>
             ) :

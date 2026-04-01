@@ -8,6 +8,7 @@ import InfoBlock from "./InfoBlock";
 import { Movie } from "../types";
 
 export default function MainInfo({ movie, inCinemas = false }: { movie: Movie, inCinemas: boolean }) {
+  const maximum = null;
   const navigation = useNavigation();
   const backdropPath = movie?.images?.backdrops[movie?.images?.backdrops?.length - 1]?.file_path;
   return (
@@ -43,7 +44,7 @@ export default function MainInfo({ movie, inCinemas = false }: { movie: Movie, i
                 {
                   inCinemas ? (
                     <View style={{ position: "absolute", top: "3%", width: "100%", backgroundColor: "rgba(50, 158, 79, 0.9)" }}>
-                      <Text style={[textStyle.white12, { textTransform: "uppercase", textAlign: "center", alignSelf: "center" }]}>{`In cinemas till ${(maximum.slice(3, 5) + ' ' + MONTH[maximum.slice(0, 2)])}`}</Text>
+                      <Text style={[textStyle.white12, { textTransform: "uppercase", textAlign: "center", alignSelf: "center" }]}>{`In cinemas till ${maximum && (maximum?.slice(3, 5) + ' ' + MONTH[maximum.slice(0, 2)])}`}</Text>
                     </View>
                   ) : (<></>)
                 }

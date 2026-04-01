@@ -1,6 +1,6 @@
-import { CURRENT_USER } from "@/api/currentUser";
 import { useAuthStore } from "@/local_storage/user/asyncStorage/store";
 import { textStyle } from "@/styles/textStyles";
+import { getCurrentUserID } from "@/utils/utils";
 import { useNavigation } from "expo-router";
 import React from "react";
 import { View, Text, Image, TouchableOpacity, Platform } from "react-native";
@@ -11,8 +11,21 @@ export default function LibraryHeader() {
   return (
     <View style={styles.view}>
       <View style={styles.left.view}>
-        <Image style={styles.left.avatar} source={{ uri: useAuthStore.getState().user?.avatar_url }} />
-        <Text style={styles.left.text}>Your watchlists</Text>
+        <TouchableOpacity
+          onPress={() => navigator?.navigate(
+            "UserProfileScreen",
+            {
+              userID: getCurrentUserID()
+            })}
+        >
+          <Image
+            style={styles.left.avatar}
+            source={{ uri: useAuthStore.getState().user?.avatar_url }}
+          />
+        </TouchableOpacity>
+        <Text style={styles.left.text}>
+          Your watchlists
+        </Text>
       </View>
       <View style={styles.right.view}>
         <TouchableOpacity>

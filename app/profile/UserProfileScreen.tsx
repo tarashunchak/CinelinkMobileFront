@@ -27,7 +27,7 @@ export default function UserProfileScreen({ route }: any) {
   return (
     <ImageBackground
       source={require("@/assets/images/background.png")}
-      style={{ flex: 1, backgroundColor:"black" }}
+      style={{ flex: 1, backgroundColor: "black" }}
     >
       <View style={[{ padding: "2%" }]}>
         <ProfileHeader

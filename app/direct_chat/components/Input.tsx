@@ -1,16 +1,13 @@
-import { SendChatMessages } from "@/api/chats/messages";
 import { textStyle } from "@/styles/textStyles";
 import React, { useState } from "react";
-import { View, Text, Image, TouchableOpacity, TextInput, Platform } from "react-native";
-import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
+import { View, Image, TouchableOpacity, TextInput, Platform } from "react-native";
+import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { RTClient } from "../../rt_client/rt_client";
 import { getCurrentUserID } from "@/utils/utils";
 
 export default function Input({ chatID }: { chatID: number }) {
   const [isFocused, setIsFocused] = useState(false);
   const [text, setText] = useState<string>();
-
-  //const sendMessage = route?.params?.sendMessage;
 
   async function handleFocus() {
     await RTClient.setTyping(chatID, getCurrentUserID(), true);

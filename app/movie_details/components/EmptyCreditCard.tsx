@@ -7,11 +7,12 @@ export default function EmptyCreditCard({ movieID, poster_path }: { movieID: num
   const navigator = useNavigation();
   return (
     <TouchableOpacity
-      key={7}
       onPress={() =>
         navigator?.push(
           "MovieCreditsScreen",
-          { movieID, poster_path }
+          {
+            movieID, poster_path
+          }
         )
       }
       style={styles.view}>

@@ -10,7 +10,7 @@ export default function App() {
   const isAuthenticated = useAuthStore(state => state.isAuthenticated);
   const isHydrated = useAuthStore(state => state.isHydrated);
 
-  RTClient.connect(getCurrentUserID());
+  RTClient.connect(useAuthStore?.getState()?.user?.user_id);
   return (
     <>
       {isHydrated ? (isAuthenticated ? <TabNavigator /> : <AuthNavigator />) : null}

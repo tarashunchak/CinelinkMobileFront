@@ -12,13 +12,16 @@ export default function CreditCardsList(
     }
 ) {
   return (
-    <ScrollView horizontal={true} style={styles.view}>
+    <ScrollView
+      horizontal
+      style={styles.view}
+    >
       {[
         credits?.map((person, index) =>
           <CreditCard key={index} credit={person} />
         ),
         <EmptyCreditCard
-          key={credits?.length}
+          key={credits?.length + 1}
           movieID={movieID}
           poster_path={poster_path}
         />

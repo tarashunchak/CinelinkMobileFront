@@ -1,17 +1,16 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { Image, ImageBackground, Pressable, ScrollView, Text, TextInput, Touchable, TouchableOpacity, View } from "react-native";
+import React, { useState, useCallback } from "react";
+import { ImageBackground, ScrollView, View } from "react-native";
 import BottomBar from "../bars/bottomBar";
-import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen"
-
+import { heightPercentageToDP as hp } from "react-native-responsive-screen"
 import { viewStyle } from "@/styles/viewStyle";
 import { textStyle } from "@/styles/textStyles";
-import { CURRENT_USER } from "@/api/currentUser";
 import { GetUserWatchlists } from "@/api/watchlist/watchlist";
 import WatchlistCard from "./components/watchlistCard";
-import LibraryHeader from "./components/header";
-import { useFocusEffect } from "expo-router";
+import LibraryHeader from "./components/Header";
+import { useFocusEffect, useNavigation } from "expo-router";
 
-export default function WatchlistsScreen({ navigation }: any) {
+export default function WatchlistsScreen() {
+  const navigator = useNavigation();
   const [watchlists, setWatchlists] = useState<any>(null);
 
   useFocusEffect(

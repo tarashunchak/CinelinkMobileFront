@@ -10,13 +10,11 @@ import { getCurrentUserID } from "@/utils/utils";
 import FloatingButton from "./components/FloatingButton";
 
 export default function DirectChatScreen({ route }: any) {
-  const chatID = route?.params?.chatID;
-
+  const { chatID } = route?.params;
   const [chat, setChat] = useState();
   const [messages, setMessages] = useState<RTMessage[]>();
   const [isFloatButtonVisible, setFloatButtonVisible] = useState<boolean>(false);
 
-  const flatListRef = useRef<FlatList>(null);
   useFocusEffect(
     useCallback(() => {
       async function loadContent() {
@@ -26,11 +24,9 @@ export default function DirectChatScreen({ route }: any) {
           RTClient.setChatEntering(chatID, getCurrentUserID());
         },
         )
-
         return () => {
           console.log("Screen unfocused");
         }
-        flatListRef.current?.scrollToOffset({ offset: 0 })
       }
       loadContent();
     }, []));
@@ -50,20 +46,16 @@ export default function DirectChatScreen({ route }: any) {
           source={require("@/assets/images/background.png")}
         >
           <Header info={chat} />
-          <KeyboardAvoidingView
-          >
-            <FlatList
-              ref={flatListRef}
-              onScroll={() => setFloatButtonVisible(true)}
-              data={messages}
-              keyExtractor={(_, index) => String(index)}
-              renderItem={({ item }) => (
-                <TextMessage message={item} />
-              )}
-              keyboardShouldPersistTaps="always"
-              removeClippedSubviews
-            />
-          </KeyboardAvoidingView>
+          <FlatList
+            onScroll={() => setFloatButtonVisible(true)}
+            data={messages}
+            keyExtractor={(_, index) => String(index)}
+            renderItem={({ item }) => (
+              <TextMessage message={item} />
+            )}
+            keyboardShouldPersistTaps="always"
+            removeClippedSubviews
+          />
           <FloatingButton isVisible={isFloatButtonVisible} />
           <Input chatID={chatID} />
         </ImageBackground>

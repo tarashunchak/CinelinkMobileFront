@@ -27,51 +27,46 @@ export default function HomePageScreen() {
   }, [])
 
   return (
-    <SafeAreaProvider>
-      <SafeAreaView style={{ flex: 1 }} edges={[]}>
-        <StatusBar hidden />
-        <ImageBackground source={require("@/assets/images/background.png")}
-          style={{
-            flex: 1,
-            backgroundColor: "black",
-          }}
-        >
-          <ScrollView
-            style={{
-              backgroundColor: "transparent",
-              padding: "1%"
-            }}
-            showsVerticalScrollIndicator={false}
-          >
-            <MovieOfTheDay />
+    <ImageBackground source={require("@/assets/images/background.png")}
+      style={{
+        flex: 1,
+        backgroundColor: "black",
+      }}
+    >
+      <ScrollView
+        style={{
+          backgroundColor: "transparent",
+          padding: "1%"
+        }}
+        showsVerticalScrollIndicator={false}
+      >
+        <MovieOfTheDay />
 
-            <Text style={styles.text}>
-              Now in Cinemas
-            </Text>
-            <HorizontalMoviesList
-              moviesList={movies?.now_playing}
-              inCinemas={true}
-            />
+        <Text style={styles.text}>
+          Now in Cinemas
+        </Text>
+        <HorizontalMoviesList
+          moviesList={movies?.now_playing}
+          inCinemas={true}
+        />
 
-            <Text style={styles.text}>
-              Trending
-            </Text>
-            <HorizontalMoviesList
-              moviesList={movies?.popular}
-              inCinemas={false}
-            />
+        <Text style={styles.text}>
+          Trending
+        </Text>
+        <HorizontalMoviesList
+          moviesList={movies?.popular}
+          inCinemas={false}
+        />
 
-            <Text style={styles.text}>
-              Genres
-            </Text>
-            <GenresList setSelectedGenre={setSelectedGenre} />
+        <Text style={styles.text}>
+          Genres
+        </Text>
+        <GenresList setSelectedGenre={setSelectedGenre} />
 
-          </ScrollView>
-          <BottomBar />
+      </ScrollView>
+      <BottomBar />
 
-        </ImageBackground >
-      </SafeAreaView>
-    </SafeAreaProvider>
+    </ImageBackground >
   );
 }
 

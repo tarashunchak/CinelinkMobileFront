@@ -180,13 +180,16 @@ class RTChatClient {
   public async setChatEntering(chatID: ChatID, userID: UserID) {
     console.warn(`User: ${userID} is enter chat ${chatID}`);
     console.warn(`Chat conns: ${this.conns.get(userID)}`);
-    this.conns.get(userID)?.send(JSON.stringify({
-      type: "chat_entering",
-      content: {
-        chat_id: chatID,
-        user_id: userID,
-      }
-    }));
+    const ws = this.conns.get(userID);
+    if (ws?.OPEN) {
+      ws?.send(JSON.stringify({
+        type: "chat_entering",
+        content: {
+          chat_id: chatID,
+          user_id: userID,
+        }
+      }));
+    }
   };
 
   public async setChatLeaving(chatID: ChatID, userID: UserID) {
@@ -203,13 +206,16 @@ class RTChatClient {
 
   public async setPageEntering(page: string, userID: UserID) {
     console.warn(`User: ${userID} is entering page ${page}`);
-    this.conns.get(userID)?.send(JSON.stringify({
-      type: "page_entering",
-      content: {
-        page: page,
-        user_id: userID,
-      }
-    }));
+    const ws = this.conns.get(userID);
+    if (ws && ws?.readyState === ws?.OPEN) {
+      ws?.send(JSON.stringify({
+        type: "page_entering",
+        content: {
+          page: page,
+          user_id: userID,
+        }
+      }));
+    }
   };
 
   public async setPageLeaving(page: string, userID: UserID) {

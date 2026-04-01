@@ -1,5 +1,5 @@
 import React, { useCallback, useRef, useState } from "react";
-import { ImageBackground, KeyboardAvoidingView, Platform, FlatList } from "react-native";
+import { ImageBackground, KeyboardAvoidingView, Platform, FlatList, TouchableWithoutFeedback, Keyboard } from "react-native";
 import Header from "./components/HeaderBlock";
 import Input from "./components/Input";
 import { useFocusEffect } from "expo-router";
@@ -36,35 +36,39 @@ export default function DirectChatScreen({ route }: any) {
     }, []));
 
   return (
-    <KeyboardAvoidingView
-      style={{ flexGrow: 1 }}
-      enabled={true}
-      behavior="padding"
-      keyboardVerticalOffset={Platform.OS === "ios" ? 60 : 0}
+    <TouchableWithoutFeedback
+      onPress={Keyboard.dismiss}
     >
-      <ImageBackground
-        style={{ flex: 1, justifyContent: "space-between" }}
-        source={require("@/assets/images/background.png")}
+      <KeyboardAvoidingView
+        style={{ flexGrow: 1 }}
+        enabled={true}
+        behavior="padding"
+        keyboardVerticalOffset={Platform.OS === "ios" ? 60 : 0}
       >
-        <Header info={chat} />
-        <KeyboardAvoidingView
+        <ImageBackground
+          style={{ flex: 1, justifyContent: "space-between" }}
+          source={require("@/assets/images/background.png")}
         >
-          <FlatList
-            ref={flatListRef}
-            onScroll={() => setFloatButtonVisible(true)}
-            data={messages}
-            keyExtractor={(_, index) => String(index)}
-            renderItem={({ item }) => (
-              <TextMessage message={item} />
-            )}
-            keyboardShouldPersistTaps="always"
-            removeClippedSubviews
-          />
-        </KeyboardAvoidingView>
-        <FloatingButton isVisible={isFloatButtonVisible} />
-        <Input chatID={chatID} />
-      </ImageBackground>
-    </KeyboardAvoidingView>
+          <Header info={chat} />
+          <KeyboardAvoidingView
+          >
+            <FlatList
+              ref={flatListRef}
+              onScroll={() => setFloatButtonVisible(true)}
+              data={messages}
+              keyExtractor={(_, index) => String(index)}
+              renderItem={({ item }) => (
+                <TextMessage message={item} />
+              )}
+              keyboardShouldPersistTaps="always"
+              removeClippedSubviews
+            />
+          </KeyboardAvoidingView>
+          <FloatingButton isVisible={isFloatButtonVisible} />
+          <Input chatID={chatID} />
+        </ImageBackground>
+      </KeyboardAvoidingView>
+    </TouchableWithoutFeedback>
   );
 };
 

@@ -32,6 +32,7 @@ export default function Input({ chatID }: { chatID: number }) {
         placeholderTextColor={"rgba(255, 255, 255, 0.3)"}
         onFocus={handleFocus}
         onBlur={handleBlur}
+        onPointerCancel={handleBlur}
         multiline={true}
         numberOfLines={10}
       />

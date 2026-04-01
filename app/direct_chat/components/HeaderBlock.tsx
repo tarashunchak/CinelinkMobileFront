@@ -4,27 +4,22 @@ import { textStyle } from "@/styles/textStyles";
 import { getCurrentUserID } from "@/utils/utils";
 import { useNavigation } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { View, Text, Image, TouchableOpacity, Platform } from "react-native";
+import { View, Text, Image, TouchableOpacity, Platform, StyleSheet } from "react-native";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { DirectChat } from "@/app/rt_client/models/models";
 
-export default function Header({ info }: { info: DirectChat }) {
+export default function Header({ info }: { info?: DirectChat }) {
   const navigator = useNavigation();
-  const [typing, setTyping] = useState<boolean>(false);
-  const [chat, setChat] = useState<any>();
-  const [peer, setPeer] = useState<any>(info?.peer);
+  const { peer, chat } = info || {};
+  const [typing, setTyping] = useState<boolean>(peer?.is_typing);
   const [status, setStatus] = useState<boolean>(peer?.is_online);
 
-  const chatID: number = info?.info?.chat_id;
-
   useEffect(() => {
-    setChat(info?.info);
-    setStatus(peer?.is_online);
-    RTClient.setOnOnlineCallBack(chatID, (data: any) => {
+    RTClient.setOnOnlineCallBack(chat?.chat_id, (data: any) => {
       console.warn("user status: ", data.is_online);
       setStatus(data.is_online);
     });
-    RTClient.setOnTypingCallBack(chatID, (data: any) => {
+    RTClient.setOnTypingCallBack(chat?.chat_id, (data: any) => {
       console.warn("user typing status: ", data.is_typing);
       setTyping(data.is_typing);
     });
@@ -45,24 +40,24 @@ export default function Header({ info }: { info: DirectChat }) {
           <TouchableOpacity
             style={styles.chatInfo.img}
             onPress={() => {
-              navigator.push("UserProfileScreen", { userID: info?.peer?.user_id });
+              navigator.push("UserProfileScreen", {
+                userID: peer?.user_id,
+              });
             }}
           >
             <Image
-              style={{
-                width: 53,
-                height: 53,
-                borderRadius: 999
-              }}
-              source={{ uri: info?.peer?.avatar_url }}
+              style={stylesR.avatarImg}
+              source={{ uri: peer?.avatar_url }}
             />
             {status && <View style={styles.isOnline.dot}></View>}
           </TouchableOpacity>
 
           <View style={styles.chatInfo.text.view}>
-            <Text style={styles.chatInfo.text.name}>{info?.peer?.username}</Text>
+            <Text style={styles.chatInfo.text.name}>{peer?.username}</Text>
             {!status ? (
-              <Text style={styles.chatInfo.text.lastSeen}>{`last seen ${Date(peer?.last_seen).substring(8)}`}</Text>
+              <Text style={styles.chatInfo.text.lastSeen}>
+                {`last seen ${Date(peer?.last_seen).substring(8)}`}
+              </Text>
             ) :
               (
                 <View style={styles.isOnline.view}>
@@ -82,6 +77,14 @@ export default function Header({ info }: { info: DirectChat }) {
     </View>
   );
 };
+
+const stylesR = StyleSheet.create({
+  avatarImg: {
+    width: 53,
+    height: 53,
+    borderRadius: 999
+  }
+});
 
 const styles = {
   isOnline: {

@@ -17,6 +17,7 @@ interface ChatMember {
   avatar_url: string;
   role: string;
   is_online: boolean;
+  is_typing: boolean;
 };
 
 export type OnlineMessage = {
@@ -45,11 +46,11 @@ export type RTMessage = {
 };
 
 export interface DirectChat {
-  info: Chat;
+  chat: Chat;
   peer: ChatMember;
 };
 
 export interface GroupChat {
-  info: Chat;
+  chat: Chat;
   members: ChatMember[];
 };

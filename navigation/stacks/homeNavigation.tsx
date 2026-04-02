@@ -10,7 +10,10 @@ const Stack = createNativeStackNavigator();
 
 export default function HomeNavigatorStack() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+    screenOptions={{headerShown:false,
+      contentStyle:{flex:1, backgroundColor:"transparent"}}}
+    >
       <Stack.Screen name="HomePage" component={HomePageScreen} options={{ headerShown: false }} />
       <Stack.Screen name="MovieDetailScreen" component={MovieDetailScreen} options={{ headerShown: false }} />
       <Stack.Screen name="MovieCreditsScreen" component={MovieCreditsScreen} options={{ headerShown: false }} />

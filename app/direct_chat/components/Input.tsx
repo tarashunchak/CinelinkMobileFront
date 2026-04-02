@@ -75,7 +75,6 @@ const styles = {
     paddingBottom: 2,
     paddingLeft: "5%",
     alignSelf: "center",
-    marginTop: "5%",
     flexDirection: "row",
     jusitfyContent: "center",
   },

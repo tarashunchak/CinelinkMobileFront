@@ -23,7 +23,7 @@ export default function Header({ info }: { info?: DirectChat }) {
       console.warn("user typing status: ", data.is_typing);
       setTyping(data.is_typing);
     });
-  }, [typing, status]);
+  }, [chat?.chat_id]);
 
   return (
     <View style={styles.view}>

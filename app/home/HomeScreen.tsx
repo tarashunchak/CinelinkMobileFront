@@ -6,8 +6,6 @@ import { ImageBackground, ScrollView, Text } from "react-native";
 import HorizontalMoviesList from "./components/HorizontalMoviesList";
 import MovieOfTheDay from "./components/MovieOfTheDay";
 import { GetHomeMovies } from "@/api/home/home";
-import { StatusBar } from "expo-status-bar";
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 interface Movies_I {
   popular: any[],

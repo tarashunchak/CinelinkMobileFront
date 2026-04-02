@@ -64,7 +64,7 @@ export default function Header({ info }: { info?: DirectChat }) {
               (
                 <View style={styles.isOnline.view}>
                   <Text style={styles.isOnline.text}>
-                    {!typing ? `is typing ...` : `online`}
+                    {typing ? `is typing ...` : `online`}
                   </Text>
                 </View>
               )

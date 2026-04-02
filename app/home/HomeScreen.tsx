@@ -2,19 +2,23 @@ import BottomBar from "@/app/bars/bottomBar";
 import GenresList from "@/components/ui/leafy-genres-list";
 import { textStyle } from "@/styles/textStyles";
 import React, { useEffect, useState } from "react";
-import { ImageBackground, ScrollView, Text } from "react-native";
+import { ImageBackground, ScrollView, StyleSheet, Text } from "react-native";
 import HorizontalMoviesList from "./components/HorizontalMoviesList";
 import MovieOfTheDay from "./components/MovieOfTheDay";
 import { GetHomeMovies } from "@/api/home/home";
+import { Movie_I } from "./models/movie";
 
 interface Movies_I {
-  popular: any[],
-  now_playing: any[],
+  popular: Movie_I[],
+  now_playing: Movie_I[],
 }
 
 export default function HomePageScreen() {
   const [selectedGenre, setSelectedGenre] = useState<number>(0);
-  const [movies, setMovies] = useState<Movies_I>();
+  const [movies, setMovies] = useState<Movies_I>({
+    popular:[],
+    now_playing:[],
+  });
 
   useEffect(() => {
     async function load() {
@@ -25,40 +29,29 @@ export default function HomePageScreen() {
   }, [])
 
   return (
-    <ImageBackground source={require("@/assets/images/background.png")}
-      style={{
-        flex: 1,
-        backgroundColor: "black",
-      }}
+    <ImageBackground 
+      source={require("@/assets/images/background.png")}
+      style={stylesR.background}
     >
       <ScrollView
-        style={{
-          backgroundColor: "transparent",
-          padding: "1%"
-        }}
+        style={stylesR.scrollView}
         showsVerticalScrollIndicator={false}
       >
         <MovieOfTheDay />
 
-        <Text style={styles.text}>
-          Now in Cinemas
-        </Text>
+        <Text style={[textStyle.white20, stylesR.titleText]}>Now in Cinemas</Text>
         <HorizontalMoviesList
-          moviesList={movies?.now_playing}
+          moviesList={movies.now_playing}
           inCinemas={true}
         />
 
-        <Text style={styles.text}>
-          Trending
-        </Text>
+        <Text style={[textStyle.white20, stylesR.titleText]}>Trending</Text>
         <HorizontalMoviesList
-          moviesList={movies?.popular}
+          moviesList={movies.popular}
           inCinemas={false}
         />
 
-        <Text style={styles.text}>
-          Genres
-        </Text>
+        <Text style={[textStyle.white20, stylesR.titleText]}>Genres</Text>
         <GenresList setSelectedGenre={setSelectedGenre} />
 
       </ScrollView>
@@ -68,9 +61,16 @@ export default function HomePageScreen() {
   );
 }
 
-const styles = {
-  text: [
-    textStyle.white22,
-    { marginTop: "5%" }
-  ]
-}
+const stylesR = StyleSheet.create({
+  background: {
+    flex: 1,
+    backgroundColor: "black",
+  },
+  scrollView:{
+    backgroundColor: "transparent",
+    padding: "1%"
+  },
+  titleText:{
+     marginTop: "5%",
+  }
+});

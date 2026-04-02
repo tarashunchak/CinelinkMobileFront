@@ -60,9 +60,9 @@ class RTChatClient {
       this.conns.set(userID, new WebSocket(WS_ADDRESS(userID)));
       this.conns.get(userID)?.addEventListener("open", () => {
         this.setOnline(userID, true);
+        this.configure(userID);
       })
     }
-    this.configure(userID);
   };
 
   public async disconnect(chatID: ChatID) {

@@ -53,7 +53,9 @@ export default function Header({ info }: { info?: DirectChat }) {
           </TouchableOpacity>
 
           <View style={styles.chatInfo.text.view}>
-            <Text style={styles.chatInfo.text.name}>{peer?.username}</Text>
+            <Text style={styles.chatInfo.text.name}>
+              {peer?.username}
+            </Text>
             {!status ? (
               <Text style={styles.chatInfo.text.lastSeen}>
                 {`last seen ${Date(peer?.last_seen).substring(8)}`}
@@ -61,7 +63,9 @@ export default function Header({ info }: { info?: DirectChat }) {
             ) :
               (
                 <View style={styles.isOnline.view}>
-                  <Text style={styles.isOnline.text}>{typing ? `is typing ...` : `online`}</Text>
+                  <Text style={styles.isOnline.text}>
+                    {!typing ? `is typing ...` : `online`}
+                  </Text>
                 </View>
               )
             }
@@ -70,7 +74,7 @@ export default function Header({ info }: { info?: DirectChat }) {
 
       </View>
 
-      <TouchableOpacity style={{ height: 54, width: 54, alignItems: "center", justifyContent: "center" }}>
+      <TouchableOpacity style={stylesR.dots}>
         <Image source={require("@/app/direct_chat/assets/dots-vertical.png")} style={{ height: "70%", width: "70%" }} />
       </TouchableOpacity>
 
@@ -83,6 +87,12 @@ const stylesR = StyleSheet.create({
     width: 53,
     height: 53,
     borderRadius: 999
+  },
+  dots:{ 
+    height: 54,
+    width: 54,
+    alignItems: "center", 
+    justifyContent: "center" 
   }
 });
 

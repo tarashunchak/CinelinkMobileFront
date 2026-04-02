@@ -16,8 +16,8 @@ interface Movies_I {
 export default function HomePageScreen() {
   const [selectedGenre, setSelectedGenre] = useState<number>(0);
   const [movies, setMovies] = useState<Movies_I>({
-    popular:[],
-    now_playing:[],
+    popular: [],
+    now_playing: [],
   });
 
   useEffect(() => {
@@ -29,7 +29,7 @@ export default function HomePageScreen() {
   }, [])
 
   return (
-    <ImageBackground 
+    <ImageBackground
       source={require("@/assets/images/background.png")}
       style={stylesR.background}
     >
@@ -66,11 +66,11 @@ const stylesR = StyleSheet.create({
     flex: 1,
     backgroundColor: "black",
   },
-  scrollView:{
+  scrollView: {
     backgroundColor: "transparent",
     padding: "1%"
   },
-  titleText:{
-     marginTop: "5%",
+  titleText: {
+    marginTop: "5%",
   }
 });

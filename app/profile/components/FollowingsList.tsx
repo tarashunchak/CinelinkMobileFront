@@ -5,9 +5,8 @@ import { FlatList } from "react-native";
 import UserCard from "@/components/userCard";
 import { UserCard_T } from "@/app/types/user";
 
-export default function FollowingsList(data: any) {
+export default function FollowingsList({ userID }: { userID: number }) {
   const [followings, setFollowings] = useState<UserCard_T[]>();
-  const userID = data.userID;
 
   useFocusEffect(
     useCallback(() => {

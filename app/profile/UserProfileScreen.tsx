@@ -10,12 +10,15 @@ import { useUserProfile } from "./hooks/useUserProfile";
 import { ProfileHeader } from "./components/ProfileHeader";
 import { ProfileMain } from "./components/ProfileMain";
 import { FollowUser, UnfollowUser } from "@/api/followers/followers";
+import FollowingsList from "./components/FollowingsList";
+import FollowersList from "./components/FollowersList";
 
 export default function UserProfileScreen({ route }: any) {
   const navigator = useNavigation();
   const userID = route?.params?.userID ?? getCurrentUserID();
   const { user, loadUser, loading } = useUserProfile(userID);
   const [isCurrUser, setIsCurrUser] = useState<boolean>(false);
+  const [list, setList] = useState<string>("Posts");
 
   useFocusEffect(
     useCallback(() => {
@@ -62,6 +65,7 @@ export default function UserProfileScreen({ route }: any) {
 
             <TouchableOpacity style={userPage.stats.item}
               onPress={() => {
+                setList("Followers");
               }}>
               <Text style={userPage.stats.itemText}>{user?.followers || "*"}</Text>
               <Text style={userPage.stats.itemText}>Followers</Text>
@@ -75,8 +79,15 @@ export default function UserProfileScreen({ route }: any) {
 
         </View>
 
-        <View style={styles.line}>
-        </View>
+        <View style={styles.line}></View>
+        {
+          list === "Followings"
+          && <FollowingsList userID={userID} />
+        }
+        {
+          list === "Followers"
+          && <FollowersList userID={userID} />
+        }
 
       </View >
       <BottomBar />

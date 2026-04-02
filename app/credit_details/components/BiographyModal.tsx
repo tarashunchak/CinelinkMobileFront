@@ -1,4 +1,5 @@
 import { textStyle } from "@/styles/textStyles";
+import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
 import { ImageBackground, Modal, Pressable, ScrollView, Text, View } from "react-native";
 import { heightPercentageToDP } from "react-native-responsive-screen";
@@ -15,14 +16,19 @@ export default function BiographyModal({ bio }: { bio: string }) {
         </ScrollView>
       </View>
 
-      <Modal visible={open} transparent={true} animationType="slide">
+      <Modal
+        statusBarTranslucent={true}
+        visible={open}
+        transparent={true}
+        animationType="slide"
+      >
         <ImageBackground
           style={{
             width: "100%",
             height: "100%",
             justifyContent: "center",
             alignItems: "center",
-            backgroundColor: "rgba(0, 0, 0, 0.6)",
+            backgroundColor: "rgba(0, 0, 0, 0.8)",
           }}>
           <View style={{
             width: "90%",

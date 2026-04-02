@@ -7,15 +7,14 @@ import React, { useCallback, useState } from "react";
 import { FlatList } from "react-native";
 import { UserCard_T } from "@/app/types/user";
 
-export default function FollowersList(data: any) {
+export default function FollowersList({ userID }: { userID: number }) {
   const [followers, setFollowers] = useState<UserCard_T[]>();
-  const userID = data.userID;
 
   useFocusEffect(
     useCallback(() => {
       async function loadContent() {
         const data: UserCard_T[] = await GetUserFollowers(userID);
-        if (!data) return;
+        //if (!data) return;
         setFollowers(data);
       }
       loadContent();

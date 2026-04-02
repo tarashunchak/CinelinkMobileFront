@@ -13,7 +13,6 @@ export interface MovieCard_I {
 
 export default function MovieCard({ data }: { data: MovieCard_I }) {
   const navigator = useNavigation();
-  //console.warn(`MovieCard movie_id = ${data?.movie_id}`);
   return (
     <TouchableOpacity style={styles.view}
       onPress={() => navigator?.push("MovieDetailScreen",
@@ -28,7 +27,7 @@ export default function MovieCard({ data }: { data: MovieCard_I }) {
         {data?.inCinemas &&
           <View style={styles.inCinemas.view}>
             <Text style={styles.inCinemas.text}>
-              {`till ${(data?.maximum?.slice(3, 5) + ' ' + MONTH[data?.maximum?.slice(0, 2)])}`}
+              {`till ${(data?.maximum?.slice(3, 4) + ' ' + MONTH[data?.maximum?.slice(5, 7)])}`}
             </Text>
           </View>
         }

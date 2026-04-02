@@ -1,8 +1,9 @@
-import React from "react";
-import { Image, Text, View } from "react-native";
+import React, { useState } from "react";
+import { Image, Text, TouchableOpacity, View } from "react-native";
 import { ActionButton } from "./ActionButton";
 import { UserProfile_T } from "../types";
 import { textStyle } from "@/styles/textStyles";
+import ProfilePhotoModal from "./ProfilePhotoModal";
 
 type Props = {
   isLoading: boolean;
@@ -29,13 +30,20 @@ export function ProfileMain({
   const username: string =
     isLoading ? "********" : user?.username || "********";
 
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+
   return (
     <>
       <View style={styles.view}>
-        <Image
-          source={{ uri: user?.avatar_url }}
+        <TouchableOpacity
           style={styles.avatar}
-        />
+          onPress={() => setIsOpen(true)}
+        >
+          <Image
+            source={{ uri: user?.avatar_url }}
+            style={{ width: "100%", height: "100%", borderRadius: 999 }}
+          />
+        </TouchableOpacity>
 
         <ActionButton
           isCurrentUser={isCurrentUser}
@@ -73,6 +81,7 @@ export function ProfileMain({
           Joined {isLoading ? "****.**.**" : user?.created_at || "****.**.**"}
         </Text>
       </View>
+      <ProfilePhotoModal isOpen={isOpen} avatarUrl={user?.avatar_url} />
     </>
   );
 };

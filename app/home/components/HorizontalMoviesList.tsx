@@ -33,7 +33,7 @@ export default function HorizontalMoviesList(
               movie_id: item?.id,
               poster_path: item?.poster_path,
               inCinemas,
-              maximum: "",
+              maximum: item?.maximum,
             }}
           /> : <EmptyMovieCard />
       )

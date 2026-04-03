@@ -81,7 +81,7 @@ export function ProfileMain({
           Joined {isLoading ? "****.**.**" : user?.created_at || "****.**.**"}
         </Text>
       </View>
-      <ProfilePhotoModal isOpen={isOpen} avatarUrl={user?.avatar_url} />
+      <ProfilePhotoModal onClose={()=>setIsOpen(false)} isOpen={isOpen} avatarUrl={user?.avatar_url} />
     </>
   );
 };

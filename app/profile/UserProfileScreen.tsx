@@ -24,8 +24,10 @@ export default function UserProfileScreen({ route }: any) {
     useCallback(() => {
       loadUser();
       setIsCurrUser(isCurrentUser(userID))
+      console.warn(`User info: ${user?.followings}`);
     }, [])
-  )
+  );
+
 
   return (
     <ImageBackground

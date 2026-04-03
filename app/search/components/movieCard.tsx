@@ -19,7 +19,7 @@ export default function MovieCard({ movie }: { movie: any }) {
             ellipsizeMode="tail"
           >{movie?.title}</Text>
           <View style={styles.info.imdb.view}>
-            <Text style={styles.info.imdb.text}>{`IMDb: ${movie?.vote_average?.toFixed(2)}`}</Text>
+            <Text style={styles.info.imdb.text}>{`IMDb: ${movie?.imdb_rating?.toFixed(2)}`}</Text>
           </View>
           <Text style={textStyle.gray14}>3 friends watched</Text>
         </View>

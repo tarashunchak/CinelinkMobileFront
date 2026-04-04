@@ -4,7 +4,7 @@ import { useNavigation } from "expo-router";
 import SearchInput from "./input";
 import { GetQueryResult } from "../services/queries";
 import { textStyle } from "@/styles/textStyles";
-import MovieCard from "./movieCard";
+import MovieCard from "./MovieCard";
 import UserCard from "@/components/userCard";
 import { getNowPlayingMovies, getPopularMovies } from "@/api/tmdbApi";
 import CategoriesBlock, { getActiveCategory } from "./CategoriesBlock";

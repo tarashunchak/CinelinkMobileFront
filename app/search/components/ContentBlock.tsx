@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View } from "react-native";
 import { GetQueryResult } from "../services/queries";
-import MovieCard from "./movieCard";
+import MovieCard from "./MovieCard";
 import UserCard from "@/components/userCard";
 import CategoriesBlock from "./CategoriesBlock";
 import WatchlistCard from "./WatchlistCard";
@@ -25,7 +25,7 @@ export default function ContentBlock({ query, specification = undefined }: Props
     if (!specification)
       load();
     if (query?.length < 2) setData([]);
-  }, [category, query])
+  }, [query])
 
   return (
     <>

@@ -10,6 +10,7 @@ import ActionButtonsBlock from "./components/ActionButtonsBlock";
 
 export default function CreditDetailScreen({ route }: any) {
   const { creditID } = route?.params;
+  console.warn("Credit id at CreditDetailScreen after Credit Card: ", creditID)
   const navigation = useNavigation();
   const [credit, setCredit] = useState<any>(null);
   const [movies, setMovies] = useState<any>(null);

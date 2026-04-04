@@ -26,7 +26,7 @@ interface Movie {
 }
 
 interface MovieCardListParams {
-  selectedGenre: number;
+  selectedGenre: number | any;
   movieID: number | any;
   movieGenre: number | any;
 }
@@ -73,7 +73,7 @@ export default function MovieCardList({ selectedGenre, movieID, movieGenre }: Mo
             (<TouchableOpacity key={index} style={[movieCardStyle?.backgroundStyle]} onPress={() => {
               const id = movie.id;
               console.log("MovieID pre: ", id);
-              navigation?.push("MovieDetailScreen", { movieId: id });
+              navigation?.push("MovieDetailScreen", { movieID: id });
             }}>
               <Image
                 source={{ uri: "https://image.tmdb.org/t/p/w300" + movie.poster_path }}

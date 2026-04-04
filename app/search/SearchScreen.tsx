@@ -5,7 +5,7 @@ import { searchScreen } from "./styles";
 import SearchInput from "./components/input";
 import BottomBar from "../bars/bottomBar";
 import { textStyle } from "@/styles/textStyles";
-import MovieCard from "./components/movieCard";
+import MovieCard from "./components/MovieCard";
 //import { addToHistory, getHistory } from "@/local_storage/local_storage";
 
 export default function SearchScreen({ navigation }: any) {

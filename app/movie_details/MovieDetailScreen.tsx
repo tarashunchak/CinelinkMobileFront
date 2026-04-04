@@ -61,7 +61,6 @@ export default function MovieDetailScreen({ route }: any) {
 
         <Text style={styles.title}>Similar movies</Text>
         <MovieCardList
-          navigation={navigation}
           movieID={movie?.id}
           movieGenre={movie?.genres?.[0]?.id}
         />

@@ -18,7 +18,7 @@ export default function UserProfileScreen({ route }: any) {
   const userID = route?.params?.userID ?? getCurrentUserID();
   const { user, loadUser, loading } = useUserProfile(userID);
   const [isCurrUser, setIsCurrUser] = useState<boolean>(false);
-  const [list, setList] = useState<string>("Posts");
+  const [list, setList] = useState<string>("Followers");
 
   useFocusEffect(
     useCallback(() => {

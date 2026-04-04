@@ -5,13 +5,21 @@ import { View, Text, Image, TouchableOpacity } from "react-native";
 
 export default function MovieCard({ movie }: { movie: any }) {
   const navigator = useNavigation();
-
+  console.warn("Movie card data: ", movie);
   return (
     <TouchableOpacity style={styles.view}
-      onPress={() => { navigator.navigate("MovieDetailScreen", { movieID: movie?.id }) }}
+      onPress={() => {
+        navigator.navigate(
+          "MovieDetailScreen",
+          { movieID: movie?.movie_id, inCinemas: false }
+        )
+      }}
     >
       <View style={{ flexDirection: "row", gap: 10 }}>
-        <Image style={styles.poster} source={{ uri: `https://image.tmdb.org/t/p/w300/${movie?.poster_path}` }} />
+        <Image
+          style={styles.poster}
+          source={{ uri: `https://image.tmdb.org/t/p/w300/${movie?.poster_path}` }}
+        />
         <View style={styles.info.view}>
           <Text
             style={styles.info.title}
@@ -26,10 +34,16 @@ export default function MovieCard({ movie }: { movie: any }) {
       </View>
       <View style={{ flexDirection: "column", justifyContent: "space-between" }}>
         <View>
-          <Image style={styles.actions} source={require("@/app/search/assets/addToLib.png")} />
+          <Image
+            style={styles.actions}
+            source={require("@/app/search/assets/addToLib.png")}
+          />
         </View>
         <View>
-          <Image style={styles.actions} source={require("@/app/search/assets/remove.png")} />
+          <Image
+            style={styles.actions}
+            source={require("@/app/search/assets/remove.png")}
+          />
         </View>
       </View>
     </TouchableOpacity >

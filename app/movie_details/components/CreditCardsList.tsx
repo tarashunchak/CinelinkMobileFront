@@ -16,13 +16,14 @@ export default function CreditCardsList(
       horizontal
       style={styles.view}
       data={credits}
-      keyExtractor={(item: any, _: number) => String(item?.imdb_id)}
-      renderItem={({ item }) => (<CreditCard credit={item} />)}
-      ListFooterComponent={<EmptyCreditCard
-        key={credits?.length + 1}
-        movieID={movieID}
-        poster_path={poster_path}
-      />}
+      keyExtractor={(item: any, index: number) => String(index)}
+      renderItem={({ item }) => <CreditCard credit={item} />}
+      ListFooterComponent={
+        <EmptyCreditCard
+          movieID={movieID}
+          poster_path={poster_path}
+        />
+      }
     />
   )
 }

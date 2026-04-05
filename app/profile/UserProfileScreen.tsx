@@ -54,10 +54,12 @@ export default function UserProfileScreen({ route }: any) {
             isFollowed={user?.is_following}
             onEdit={() => { }}
             onToggleFollow={async () => {
-              if (user?.is_following)
+              if (user?.is_following) {
                 await UnfollowUser(userID) && loadUser();
-              else
+              }
+              else {
                 await FollowUser(userID) && loadUser();
+              }
             }}
           />
 

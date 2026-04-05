@@ -15,7 +15,7 @@ import { GetSocial } from "./services/services";
 
 export default function SocialScreen() {
   const tabs = ["Friends", "Recommendations", "Activity", "Chats"];
-  const [activeTab, setActiveTab] = useState("Recommendations");
+  const [activeTab, setActiveTab] = useState(tabs[0]);
   const [friends, setFriends] = useState<UserCard_T[]>();
   const [recommendations, setRecommendatoins] = useState<RecommendedCard_T[]>();
   const [chats, setChats] = useState<any[]>();

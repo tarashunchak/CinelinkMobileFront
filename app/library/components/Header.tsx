@@ -3,7 +3,7 @@ import { textStyle } from "@/styles/textStyles";
 import { getCurrentUserID } from "@/utils/utils";
 import { useNavigation } from "expo-router";
 import React from "react";
-import { View, Text, Image, TouchableOpacity, Platform } from "react-native";
+import { View, Text, Image, TouchableOpacity, Platform, StyleSheet } from "react-native";
 import { heightPercentageToDP as hp, widthPercentageToDP } from "react-native-responsive-screen";
 
 export default function LibraryHeader() {
@@ -39,7 +39,7 @@ export default function LibraryHeader() {
   );
 };
 
-const styles = {
+const stylesR = StyleSheet.create({
   view: {
     backgroundColor: "rgba(255, 255, 255, 0.05)",
     height: hp("12%"),
@@ -48,7 +48,27 @@ const styles = {
     justifyContent: "space-between",
     alignItems: "center",
     padding: "2%",
-    marginBottom: 15,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 10,
+    },
+    shadowOpacity: 0.51,
+    shadowRadius: 13.16,
+
+    elevation: 24,
+  }
+});
+
+const styles = {
+  view: {
+    backgroundColor: "rgba(255, 255, 255, 0.10)",
+    height: hp("12%"),
+    width: widthPercentageToDP("100%"),
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: "2%",
   },
   left: {
     view: {

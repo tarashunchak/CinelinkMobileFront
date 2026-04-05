@@ -4,7 +4,7 @@ import UserCard from "@/components/userCard";
 import { heightPercentageToDP as hp, } from "react-native-responsive-screen";
 import { useFocusEffect, useNavigation } from "expo-router";
 import React, { useCallback, useState } from "react";
-import { FlatList } from "react-native";
+import { FlatList, View } from "react-native";
 import { UserCard_T } from "@/app/types/user";
 
 export default function FollowersList({ userID }: { userID: number }) {
@@ -29,6 +29,7 @@ export default function FollowersList({ userID }: { userID: number }) {
       keyExtractor={(item: any, index: number) => String(item?.user_id)}
       showsVerticalScrollIndicator={false}
       renderItem={({ item }) => <UserCard user={item} />}
+      ListFooterComponent={<View style={{ height: hp(8) }}></View>}
     />
   )
 }

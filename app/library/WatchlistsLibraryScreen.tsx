@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from "react";
-import { ImageBackground, ScrollView, View } from "react-native";
+import { FlatList, ImageBackground, ScrollView, View } from "react-native";
 import BottomBar from "../bars/bottomBar";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen"
 import { viewStyle } from "@/styles/viewStyle";
@@ -28,16 +28,21 @@ export default function WatchlistsScreen() {
   return (
     <View style={{ flex: 1 }}>
       <ImageBackground source={require("@/assets/images/background.png")} style={viewStyle.imageBackground}>
-        <ScrollView>
-          <LibraryHeader />
-          <View style={{ gap: 5 }}>
-            {
-              watchlists?.sort((a: any, b: any) => { return a.movies_quantity > b.movies_quantity }).map((item: any, index: number) => (
-                <WatchlistCard key={index} watchlist={item} />
-              ))
-            }
-          </View>
-        </ScrollView>
+        <LibraryHeader />
+        <FlatList
+          data={watchlists}
+          keyExtractor={(_: any, index: number) => String(index)}
+          ItemSeparatorComponent={(<View style={{ height: 5 }}></View>)}
+          renderItem={({ item }) =>
+            <WatchlistCard watchlist={item} />
+          }
+          ListHeaderComponent={
+            <View style={{ height: 10 }}></View>
+          }
+          ListFooterComponent={
+            <View style={{ height: hp(8) }}></View>
+          }
+        />
       </ImageBackground>
       <BottomBar />
     </View>

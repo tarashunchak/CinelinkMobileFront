@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Image, Text, TouchableOpacity, View } from "react-native";
+import React, { useCallback, useMemo, useState } from "react";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { ActionButton } from "./ActionButton";
 import { UserProfile_T } from "../types";
 import { textStyle } from "@/styles/textStyles";
@@ -30,6 +30,10 @@ export function ProfileMain({
   const username: string =
     isLoading ? "********" : user?.username || "********";
 
+  const fetchJoinedAt = useMemo(() => {
+    const date = new Date(user?.joined_at ?? null);
+    return new Intl.DateTimeFormat('en-US').format(date ?? new Date())
+  }, [isLoading]);
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   return (
@@ -78,16 +82,16 @@ export function ProfileMain({
       <View style={styles.joinedAt}>
         <Image source={require("@/assets/images/Calendar.png")} />
         <Text style={textStyle.gray16}>
-          Joined {isLoading ? "****.**.**" : user?.created_at || "****.**.**"}
+          {`Joined ${fetchJoinedAt}`}
         </Text>
       </View>
-      <ProfilePhotoModal onClose={()=>setIsOpen(false)} isOpen={isOpen} avatarUrl={user?.avatar_url} />
+      <ProfilePhotoModal onClose={() => setIsOpen(false)} isOpen={isOpen} avatarUrl={user?.avatar_url} />
     </>
   );
 };
 
 
-const styles = {
+const styles = StyleSheet.create({
   view: {
     width: "100%",
     marginTop: "45%",
@@ -116,4 +120,4 @@ const styles = {
     borderWidth: 0.5,
     borderColor: "rgba(255, 255, 255, 0.2)"
   },
-};
+});

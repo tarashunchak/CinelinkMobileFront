@@ -43,7 +43,7 @@ export default function CreditDetailScreen({ route }: any) {
           showsVerticalScrollIndicator={false}
           style={{ padding: "1%", flex: 1 }}
         >
-          <MainInfo credit={credit} />
+          <MainInfo credit={credit} backdrop={backdrop} />
 
           <ActionButtonsBlock />
 

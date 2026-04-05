@@ -14,7 +14,7 @@ export default function FollowersList({ userID }: { userID: number }) {
     useCallback(() => {
       async function loadContent() {
         const data: UserCard_T[] = await GetUserFollowers(userID);
-        //if (!data) return;
+        if (!data) return;
         setFollowers(data);
       }
       loadContent();
@@ -26,7 +26,7 @@ export default function FollowersList({ userID }: { userID: number }) {
       style={{ paddingTop: 5, paddingBottom: hp(8) }}
       data={followers}
       scrollEnabled={true}
-      keyExtractor={(_: any, index: number) => String(index)}
+      keyExtractor={(item: any, index: number) => String(item?.user_id)}
       showsVerticalScrollIndicator={false}
       renderItem={({ item }) => <UserCard user={item} />}
     />

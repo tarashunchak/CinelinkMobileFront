@@ -1,7 +1,7 @@
 import { textStyle } from "@/styles/textStyles";
 import { useNavigation } from "expo-router";
 import React from "react";
-import { View, Text, Image, TouchableOpacity } from "react-native";
+import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 
 export default function MovieCard({ movie }: { movie: any }) {
   const navigator = useNavigation();
@@ -11,7 +11,7 @@ export default function MovieCard({ movie }: { movie: any }) {
       onPress={() => {
         navigator.navigate(
           "MovieDetailScreen",
-          { movieID: movie?.movie_id, inCinemas: false }
+          { movieID: movie?.movie_id }
         )
       }}
     >
@@ -20,19 +20,25 @@ export default function MovieCard({ movie }: { movie: any }) {
           style={styles.poster}
           source={{ uri: `https://image.tmdb.org/t/p/w300/${movie?.poster_path}` }}
         />
-        <View style={styles.info.view}>
+        <View style={styles.infoView}>
           <Text
-            style={styles.info.title}
+            style={[textStyle.yellow18, styles.title]}
             numberOfLines={1}
             ellipsizeMode="tail"
           >{movie?.title}</Text>
-          <View style={styles.info.imdb.view}>
-            <Text style={styles.info.imdb.text}>{`IMDb: ${movie?.imdb_rating?.toFixed(2)}`}</Text>
+          <View style={styles.imdbView}>
+            <Text style={[textStyle?.black12, styles.imdbText]}>
+              {`IMDb: ${movie?.imdb_rating?.toFixed(2)}`}
+            </Text>
           </View>
-          <Text style={textStyle.gray14}>3 friends watched</Text>
+          <Text style={textStyle.gray14}>
+            3 friends watched
+          </Text>
         </View>
       </View>
-      <View style={{ flexDirection: "column", justifyContent: "space-between" }}>
+      <View
+        style={{ flexDirection: "column", justifyContent: "space-between" }}
+      >
         <View>
           <Image
             style={styles.actions}
@@ -50,7 +56,7 @@ export default function MovieCard({ movie }: { movie: any }) {
   )
 }
 
-const styles = {
+const styles = StyleSheet.create({
   view: {
     width: "100%",
     height: 76,
@@ -67,35 +73,28 @@ const styles = {
     height: "100%",
     aspectRatio: 0.7,
   },
-  info: {
-    view: {
-      flexDirection: "column",
-      justifyContent: "space-evenly",
-    },
-    title: [
-      textStyle.yellow18,
-      {
-        maxWidth: "85%",
-        minWidth: "85%",
-      }
-    ],
-    imdb: {
-      view: {
-        backgroundColor: "#DEB522",
-        width: 54,
-        height: 18,
-        borderRadius: 4,
-        alignItems: "center",
-        justifyContent: "center",
-      },
-      text: [textStyle.black12, {
-        alignSelf: "center",
-        textAlign: "center",
-      }]
-    },
+  infoView: {
+    flexDirection: "column",
+    justifyContent: "space-evenly",
+  },
+  title: {
+    maxWidth: "85%",
+    minWidth: "85%",
+  },
+  imdbView: {
+    backgroundColor: "#DEB522",
+    width: 54,
+    height: 18,
+    borderRadius: 4,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  imdbText: {
+    alignSelf: "center",
+    textAlign: "center",
   },
   actions: {
     width: 32,
     height: 32,
-  },
-};
+  }
+});

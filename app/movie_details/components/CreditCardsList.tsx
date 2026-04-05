@@ -1,5 +1,5 @@
 import React from "react";
-import { ScrollView, StyleSheet } from "react-native";
+import { FlatList, StyleSheet } from "react-native";
 import CreditCard from "./CreditCard";
 import EmptyCreditCard from "./EmptyCreditCard";
 
@@ -12,21 +12,18 @@ export default function CreditCardsList(
     }
 ) {
   return (
-    <ScrollView
+    <FlatList
       horizontal
       style={styles.view}
-    >
-      {[
-        credits?.map((person, index) =>
-          <CreditCard key={index} credit={person} />
-        ),
-        <EmptyCreditCard
-          key={credits?.length + 1}
-          movieID={movieID}
-          poster_path={poster_path}
-        />
-      ]}
-    </ScrollView>
+      data={credits}
+      keyExtractor={(item: any, _: number) => String(item?.imdb_id)}
+      renderItem={({ item }) => (<CreditCard credit={item} />)}
+      ListFooterComponent={<EmptyCreditCard
+        key={credits?.length + 1}
+        movieID={movieID}
+        poster_path={poster_path}
+      />}
+    />
   )
 }
 

@@ -11,23 +11,27 @@ import { RTClient } from "../rt_client/rt_client";
 import { getCurrentUserID } from "@/utils/utils";
 import { UserCard_T } from "../types/user";
 import FriendCard from "./components/FriendCard";
+import { GetSocial } from "./services/services";
 
 export default function SocialScreen() {
   const tabs = ["Friends", "Recommendations", "Activity", "Chats"];
-  const [activeTab, setActiveTab] = useState("Friends");
+  const [activeTab, setActiveTab] = useState("Recommendations");
   const [friends, setFriends] = useState<UserCard_T[]>();
   const [recommendations, setRecommendatoins] = useState<RecommendedCard_T[]>();
   const [chats, setChats] = useState<any[]>();
   const [activity, setActivity] = useState<any[]>();
-  const currentUserID = getCurrentUserID() ?? 1;
 
   useEffect(() => {
     async function loadContent() {
       await RTClient.setPageEntering("social", getCurrentUserID() ?? 1);
 
-      setFriends(await GetUserFollowers(currentUserID));
+      const data = await GetSocial();
+      setFriends(data?.friends);
+      setRecommendatoins(data?.recommendations);
+      setChats(data?.chats);
+      /*setFriends(await GetUserFollowers(currentUserID));
       setRecommendatoins(await GetUserRecommendations(currentUserID))
-      setChats(await GetUserChats(currentUserID))
+      setChats(await GetUserChats(currentUserID))*/
     };
 
     loadContent();

@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "app",
-    "slug": "app",
+    "slug": "cinelink",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -17,11 +17,11 @@
       "UIViewControllerBasedStatusBarAppearance": true,
       "UIStatusBarHidden": true,
       "UIRequiresFullScreen": true,
-      "bundleIdentifier": "com.leafy.app",
-      "edgeToEdgeEnabled":true
+      "bundleIdentifier": "com.cinelink.app",
+      "edgeToEdgeEnabled": true
     },
     "android": {
-      "package": "com.leafy.app",
+      "package": "com.cinelink.app",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
@@ -54,6 +54,13 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "8319bbc8-e0d3-462c-ab14-a3e3e3879451"
+      }
+    },
+    "owner": "tarashunchakorg"
   }
 }

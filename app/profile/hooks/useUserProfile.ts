@@ -4,7 +4,7 @@ import { useCallback, useState } from "react";
 
 export function useUserProfile(userID: number) {
   const [user, setUser] = useState<UserProfile_T>();
-  const [loading, setLoading] = useState<boolean>();
+  const [userLoading, setLoading] = useState<boolean>();
 
   const loadUser = useCallback(async () => {
     setLoading(true);
@@ -20,6 +20,6 @@ export function useUserProfile(userID: number) {
   return {
     user,
     loadUser,
-    loading,
+    userLoading,
   };
 };

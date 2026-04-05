@@ -12,17 +12,23 @@ import { ProfileMain } from "./components/ProfileMain";
 import { FollowUser, UnfollowUser } from "@/api/followers/followers";
 import FollowingsList from "./components/FollowingsList";
 import FollowersList from "./components/FollowersList";
+import { useFollowings } from "./hooks/useFollowings";
+import { useFollowers } from "./hooks/useFollowers";
 
 export default function UserProfileScreen({ route }: any) {
   const navigator = useNavigation();
   const userID = route?.params?.userID ?? getCurrentUserID();
-  const { user, loadUser, loading } = useUserProfile(userID);
+  const { user, loadUser, userLoading } = useUserProfile(userID);
+  const { followings, loadFollowings, followingsLoading } = useFollowings(userID);
+  const { followers, loadFollowers, followersLoading } = useFollowers(userID);
   const [isCurrUser, setIsCurrUser] = useState<boolean>(false);
   const [list, setList] = useState<string>("Followers");
 
   useFocusEffect(
     useCallback(() => {
       loadUser();
+      loadFollowings();
+      loadFollowers();
       setIsCurrUser(isCurrentUser(userID))
       console.warn(`User info: ${user?.followings}`);
     }, [])
@@ -42,7 +48,7 @@ export default function UserProfileScreen({ route }: any) {
         />
         <View style={{ flexDirection: "column", gap: 5 }}>
           <ProfileMain
-            isLoading={(loading ?? false) && true}
+            isLoading={(userLoading ?? false) && true}
             user={user}
             isCurrentUser={isCurrUser}
             isFollowed={user?.is_following}
@@ -61,7 +67,7 @@ export default function UserProfileScreen({ route }: any) {
               onPress={() => {
                 setList("Followings");
               }}>
-              <Text style={userPage.stats.itemText}>{user?.followings || "*"}</Text>
+              <Text style={userPage.stats.itemText}>{followings?.length || "*"}</Text>
               <Text style={userPage.stats.itemText}>Followings</Text>
             </TouchableOpacity>
 
@@ -69,7 +75,7 @@ export default function UserProfileScreen({ route }: any) {
               onPress={() => {
                 setList("Followers");
               }}>
-              <Text style={userPage.stats.itemText}>{user?.followers || "*"}</Text>
+              <Text style={userPage.stats.itemText}>{followers?.length || "*"}</Text>
               <Text style={userPage.stats.itemText}>Followers</Text>
             </TouchableOpacity>
 

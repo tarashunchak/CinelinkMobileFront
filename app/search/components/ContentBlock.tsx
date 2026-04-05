@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { View } from "react-native";
-import { GetQueryResult } from "../services/queries";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { Text, FlatList, StyleSheet, View } from "react-native";
+import { GetQueryResult, SearchMovie, SearchPerson, SearchUser, SearchWatchlist } from "../services/queries";
 import MovieCard from "./MovieCard";
 import UserCard from "@/components/userCard";
 import CategoriesBlock from "./CategoriesBlock";
 import WatchlistCard from "./WatchlistCard";
 import { heightPercentageToDP } from "react-native-responsive-screen";
 import CreditCard from "./CreditCard";
+import { textStyle } from "@/styles/textStyles";
 
 interface Props {
   query: string;
@@ -15,39 +16,74 @@ interface Props {
 
 export default function ContentBlock({ query, specification = undefined }: Props) {
   const [category, setCategory] = useState<string>("All")
-  const [_data, setData] = useState<any>();
+  const [_data, setData] = useState([]);
+
+  const fetchData = useCallback(async () => {
+    try {
+      const data = await GetQueryResult(query);
+      if (!data) return;
+
+      setData(data?.results);
+    } catch (exception: any) {
+    }
+  }, [query])
 
   useEffect(() => {
     async function load() {
-      const data = await GetQueryResult(query);
-      if (data) setData(data);
+      await fetchData()
     }
     if (!specification)
       load();
     if (query?.length < 2) setData([]);
-  }, [query])
+  }, [query, category])
+
+
+  const filteredData = useCallback(() => {
+    if (!Array.isArray(_data)) return [];
+    if (category === "All") return _data;
+    return _data?.filter((item: any) => item?.type === category.toLowerCase()) ?? [];
+  }, [category, _data])
 
   return (
     <>
       <CategoriesBlock setCurrent={setCategory} />
-      <View style={{ marginTop: heightPercentageToDP(1) }}></View>
-      {
-        (category === "All" || category === "Movies")
-        && _data?.movies?.map((item: any, index: number) => <MovieCard movie={item} key={index} />)
-      }
-      {
-        (category === "All" || category === "Users")
-        && _data?.users?.map((item: any, index: number) => <UserCard user={item} key={index} />)
-      }
-      {
-        (category === "All" || category === "Watchlists")
-        && _data?.watchlists?.map((item: any, index: number) => <WatchlistCard watchlist={item} key={index} />)
-      }
-      {
-        (category === "All" || category === "Credits")
-        && _data?.credits?.map((item: any, index: number) => <CreditCard credit={item} key={index} />)
-      }
-      <View style={{ marginBottom: heightPercentageToDP(8) }}></View>
+      <View style={styles.topSpacer}></View>
+      <FlatList
+        style={{ flex: 1 }}
+        data={filteredData()}
+        keyExtractor={(_, index) => String(index)}
+        renderItem={({ item }) => {
+          console.warn("Item: ", item)
+
+          switch (item?.type) {
+            case "movies":
+              return <MovieCard movie={item} />;
+            case "credits":
+              return <CreditCard credit={item} />;
+            case "users":
+              return <UserCard user={item} />;
+            case "watchlists":
+              return <WatchlistCard watchlist={item} />;
+            default:
+              return null
+          }
+        }}
+        ListEmptyComponent={
+          (<Text style={[textStyle?.gray40,
+          {
+            alignSelf: "center",
+            marginTop: "50%"
+          }
+          ]}>No Results</Text>
+          )
+        }
+      />
+      < View style={styles.bottomSpacer}></View >
     </>
   )
 }
+
+const styles = StyleSheet.create({
+  topSpacer: { marginTop: heightPercentageToDP(1) },
+  bottomSpacer: { marginBottom: heightPercentageToDP(8) }
+});

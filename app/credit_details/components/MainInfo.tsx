@@ -1,6 +1,6 @@
 import React from "react";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
-import { Image, ImageBackground, Text, View } from "react-native";
+import { Image, ImageBackground, StyleSheet, Text, View } from "react-native";
 import LeafyReturnArrowButton from "@/components/ui/returnArrowButton";
 import { textStyle } from "@/styles/textStyles";
 import { useNavigation } from "expo-router";
@@ -15,13 +15,19 @@ export interface CreditMainInfo_I {
   imdb_id: number;
 };
 
-export default function MainInfo({ credit }: { credit: CreditMainInfo_I }) {
+export default function MainInfo(
+  { credit, backdrop }
+    : {
+      credit: CreditMainInfo_I,
+      backdrop: string[],
+    }
+) {
   const navigation = useNavigation();
   return (
     <View>
       <LeafyReturnArrowButton style={{ marginTop: "5%", zIndex: 2 }} onPress={() => navigation.goBack()} />
       <ImageBackground
-        source={{ uri: `https://image.tmdb.org/t/p/w500${null}` }}
+        source={{ uri: `https://image.tmdb.org/t/p/w500${backdrop?.[backdrop?.length - 1] ?? ""}` }}
         style={styles.backdrop}>
         <View style={styles.darkRect}>
           <View style={{ flexDirection: "column", marginLeft: "3%", marginTop: "20%", justifyContent: "space-between" }}>
@@ -46,7 +52,7 @@ export default function MainInfo({ credit }: { credit: CreditMainInfo_I }) {
   )
 }
 
-const styles = {
+const styles = StyleSheet.create({
   backdrop: {
     height: hp("40%"),
     width: "104%",
@@ -75,4 +81,4 @@ const styles = {
     height: 220,
     justifyContent: "space-between"
   }
-};
+});

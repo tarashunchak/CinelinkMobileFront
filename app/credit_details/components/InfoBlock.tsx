@@ -16,9 +16,10 @@ interface CreditInfo_I {
 };
 
 const GENDER = {
-  0: "female",
-  1: "male",
-}
+  0: "Not specified",
+  1: "Female",
+  2: "Male",
+};
 
 export default function InfoBlock({ creditInfo }: { creditInfo: CreditInfo_I }) {
   if (!creditInfo) return null
@@ -35,7 +36,7 @@ export default function InfoBlock({ creditInfo }: { creditInfo: CreditInfo_I }) 
 
       <TouchableOpacity style={styles.imdbBtn.view}
         onPress={async () => {
-          const url = `https://www.imdb.com/title/${creditInfo?.imdb_id}`;
+          const url = `https://www.imdb.com/name/${creditInfo?.imdb_id}`;
           const sup = await Linking.canOpenURL(url);
           if (sup) Linking.openURL(url);
         }}

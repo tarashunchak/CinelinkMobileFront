@@ -166,7 +166,7 @@ class RTChatClient {
 
   public async setTyping(chatID: ChatID, userID: UserID, isTyping: boolean) {
     console.warn(`User: ${userID} is ${!isTyping ? "not" : ''} typing in chat ${chatID}`);
-    console.warn(`Chat conns: ${this.conns.get(userID)}`);
+    console.warn("Chat conns: ", this.conns.get(userID));
     this.conns.get(userID)?.send(JSON.stringify({
       type: "typing",
       content: {
@@ -194,7 +194,7 @@ class RTChatClient {
 
   public async setChatLeaving(chatID: ChatID, userID: UserID) {
     console.warn(`User: ${userID} is leaving chat ${chatID}`);
-    console.warn(`Chat conns: ${this.conns.get(userID)}`);
+    console.warn("Chat conns: ", this.conns.get(userID));
     this.conns.get(userID)?.send(JSON.stringify({
       type: "chat_leaving",
       content: {

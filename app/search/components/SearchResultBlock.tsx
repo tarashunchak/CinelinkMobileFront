@@ -73,7 +73,6 @@ export default function SearchResultBlock({ route }: any) {
           />
         </View>
         <ContentBlock query={_value} />
-        <View style={{ height: "8%" }}></View>
       </ScrollView>
     </ImageBackground>
   )

@@ -48,13 +48,14 @@ export default function DirectChatScreen({ route }: any) {
           <Header info={chat} />
           <FlatList
             onScroll={() => setFloatButtonVisible(true)}
-            data={messages}
+            data={messages?.reverse()}
             keyExtractor={(_, index) => String(index)}
             renderItem={({ item }) => (
               <TextMessage message={item} />
             )}
             keyboardShouldPersistTaps="always"
             removeClippedSubviews
+            inverted
           />
           <FloatingButton isVisible={isFloatButtonVisible} />
           <Input chatID={chatID} />

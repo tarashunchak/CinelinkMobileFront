@@ -9,24 +9,23 @@ import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { DirectChat } from "@/app/rt_client/models/models";
 import { calcLastSeen } from "../utils/utils";
 
-export default function Header({ info }: { info?: DirectChat }) {
+export default function Header({ info }: { info: DirectChat }) {
   const navigator = useNavigation();
-  const { peer, chat } = info || {};
+  const peer = info?.peer;
   const [typing, setTyping] = useState<boolean>(peer?.is_typing);
   const [status, setStatus] = useState<boolean>(peer?.is_online);
 
+  console.warn("chat_id = ", info)
   useEffect(() => {
-    RTClient.setOnOnlineCallBack(chat?.chat_id, (data: any) => {
+    RTClient.setOnOnlineCallBack(info?.info?.chat_id, (data: any) => {
       console.warn("user status: ", data.is_online);
       setStatus(data.is_online);
     });
-    RTClient.setOnTypingCallBack(chat?.chat_id, (data: any) => {
+    RTClient.setOnTypingCallBack(info?.info?.chat_id, (data: any) => {
       console.warn("user typing status: ", data.is_typing);
       setTyping(data.is_typing);
     });
-  }, [chat?.chat_id]);
-
-  console.log("Peer: ", peer)
+  }, [info]);
 
   return (
     <View style={styles.view}>

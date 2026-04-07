@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Image, View, Text, TouchableOpacity, ImageBackground, TextInput, ScrollView } from "react-native";
+import { Image, View, Text, TouchableOpacity, ImageBackground, TextInput, ScrollView, StyleSheet } from "react-native";
 import { useNavigation } from "expo-router";
 import SearchInput from "./input";
 import { GetQueryResult } from "../services/queries";
@@ -27,7 +27,6 @@ export default function SearchResultBlock({ route }: any) {
 
   const activeCategory: string = getActiveCategory();
   const query = route?.params?.params;
-  //const query: string = route?.params?.query;
   console.warn(`QUERY: ${query}`);
 
   async function load() {
@@ -58,43 +57,57 @@ export default function SearchResultBlock({ route }: any) {
   return (
     <ImageBackground
       source={require("@/assets/images/background.png")}
-      style={{ flex: 1 }}
+      style={{
+        flex: 1,
+        padding: "1%",
+        paddingTop: "10%",
+        paddingBottom: "10%"
+      }}
     >
-      <ScrollView style={{ flex: 1, padding: "1%", paddingTop: "10%", paddingBottom: "10%" }}>
-        <View style={styles.input.view}>
-          <LeafyReturnArrowButton onPress={() => navigator.goBack()} />
-          <TextInput
-            style={[textStyle.white20, { marginLeft: 5, height: "100%", width: "80%" }]}
-            value={_value}
-            onChangeText={text => {
-              setValue(text);
-              load();
-            }}
+      <View style={styles.inputView}>
+        <LeafyReturnArrowButton onPress={navigator.goBack} />
+        <TextInput
+          style={[textStyle.white20,
+          {
+            marginLeft: 5,
+            height: "100%",
+            width: "73%"
+          }
+          ]}
+          value={_value}
+          onChangeText={text => {
+            setValue(text);
+            load();
+          }}
+        />
+        <TouchableOpacity style={{ height: "90%", width: "90%", justifyContent: "center" }}>
+          <Image
+            source={require("@/app/search/assets/filter.png")}
+            style={{ height: 34, width: 34 }}
           />
-        </View>
-        <ContentBlock query={_value} />
-      </ScrollView>
+        </TouchableOpacity>
+      </View>
+      <ContentBlock query={_value} />
     </ImageBackground>
   )
 }
 
-const styles = {
-  input: {
-    view: {
-      height: 50,
-      width: "96%",
-      margin: "2%",
-      marginTop: "1%",
-      backgroundColor: "rgba(255, 255, 255, 0.05)",
-      borderRadius: 999,
-      flexDirection: "row",
-    },
-    icon: {
-      backgroundColor: "transparent",
-      height: 34,
-      width: 34,
-      alignSelf: "center",
-      marginLeft: 10
-    },
-  }
-};
+const styles = StyleSheet.create({
+  inputView: {
+    height: 50,
+    width: "96%",
+    margin: "2%",
+    marginTop: "1%",
+    backgroundColor: "rgba(255, 255, 255, 0.05)",
+    borderRadius: 999,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  inputIcon: {
+    backgroundColor: "transparent",
+    height: 34,
+    width: 34,
+    alignSelf: "center",
+    marginLeft: 10
+  },
+});

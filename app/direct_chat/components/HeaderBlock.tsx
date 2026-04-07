@@ -7,6 +7,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, Image, TouchableOpacity, Platform, StyleSheet } from "react-native";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { DirectChat } from "@/app/rt_client/models/models";
+import { calcLastSeen } from "../utils/utils";
 
 export default function Header({ info }: { info?: DirectChat }) {
   const navigator = useNavigation();
@@ -24,6 +25,8 @@ export default function Header({ info }: { info?: DirectChat }) {
       setTyping(data.is_typing);
     });
   }, [chat?.chat_id]);
+
+  console.log("Peer: ", peer)
 
   return (
     <View style={styles.view}>
@@ -58,7 +61,7 @@ export default function Header({ info }: { info?: DirectChat }) {
             </Text>
             {!status ? (
               <Text style={styles.chatInfo.text.lastSeen}>
-                {`last seen ${Date(peer?.last_seen).substring(8)}`}
+                {`last seen ${calcLastSeen(peer?.last_seen)}`}
               </Text>
             ) :
               (
@@ -88,11 +91,11 @@ const stylesR = StyleSheet.create({
     height: 53,
     borderRadius: 999
   },
-  dots:{ 
+  dots: {
     height: 54,
     width: 54,
-    alignItems: "center", 
-    justifyContent: "center" 
+    alignItems: "center",
+    justifyContent: "center"
   }
 });
 

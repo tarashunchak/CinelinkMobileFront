@@ -49,7 +49,7 @@ export default function ContentBlock({ query, specification = undefined }: Props
       <CategoriesBlock setCurrent={setCategory} />
       <View style={styles.topSpacer}></View>
       <FlatList
-        style={{ flex: 1 }}
+        style={{ height: heightPercentageToDP(80) }}
         data={filteredData()}
         keyExtractor={(_, index) => String(index)}
         renderItem={({ item }) => {

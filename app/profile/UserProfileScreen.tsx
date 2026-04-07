@@ -1,6 +1,5 @@
-import { textStyle } from "@/styles/textStyles";
 import React, { useCallback, useState } from "react";
-import { TouchableOpacity, ImageBackground, Text, View } from "react-native";
+import { TouchableOpacity, ImageBackground, Text, View, StyleSheet } from "react-native";
 import BottomBar from "../bars/bottomBar";
 import { userPage } from "./styles";
 import { useFocusEffect, useNavigation } from "expo-router";
@@ -105,7 +104,7 @@ export default function UserProfileScreen({ route }: any) {
   );
 };
 
-const styles = {
+const styles = StyleSheet.create({
   line: {
     width: wp(96),
     height: 0.5,
@@ -136,18 +135,16 @@ const styles = {
     borderRadius: 22,
     alignSelf: "flex-end",
   },
-  bio: {
-    view: {
-      padding: 2,
-      backgroundColor: "rgba(255, 255, 255, 0.05)",
-      justifyContent: "center",
-      borderRadius: 6,
-      borderWidth: 0.5,
-      borderColor: "rgba(255, 255, 255, 0.2)"
-    },
-    text: [textStyle.white16, {
-      margin: 10,
-      textAlign: "left"
-    }],
+  bioView: {
+    padding: 2,
+    backgroundColor: "rgba(255, 255, 255, 0.05)",
+    justifyContent: "center",
+    borderRadius: 6,
+    borderWidth: 0.5,
+    borderColor: "rgba(255, 255, 255, 0.2)"
   },
-};
+  bioText: {
+    margin: 10,
+    textAlign: "left"
+  }
+});

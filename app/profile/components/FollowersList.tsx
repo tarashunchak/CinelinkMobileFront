@@ -23,7 +23,7 @@ export default function FollowersList({ userID }: { userID: number }) {
 
   return (
     <FlatList
-      style={{ paddingTop: 5, paddingBottom: hp(8) }}
+      style={{ paddingTop: 5, paddingBottom: hp(8), maxHeight: hp(40) }}
       data={followers}
       scrollEnabled={true}
       keyExtractor={(item: any, index: number) => String(item?.user_id)}

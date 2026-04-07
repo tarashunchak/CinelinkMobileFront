@@ -1,5 +1,5 @@
-import React, { useCallback, useRef, useState } from "react";
-import { ImageBackground, KeyboardAvoidingView, Platform, FlatList, TouchableWithoutFeedback, Keyboard } from "react-native";
+import React, { useCallback, useState } from "react";
+import { ImageBackground, KeyboardAvoidingView, Platform, FlatList, TouchableWithoutFeedback, Keyboard, StyleSheet } from "react-native";
 import Header from "./components/HeaderBlock";
 import Input from "./components/Input";
 import { useFocusEffect } from "expo-router";
@@ -10,7 +10,7 @@ import { getCurrentUserID } from "@/utils/utils";
 import FloatingButton from "./components/FloatingButton";
 
 export default function DirectChatScreen({ route }: any) {
-  const { chatID } = route?.params;
+  const { chatID } = route?.params ?? { chatID: 3 };
   const [chat, setChat] = useState();
   const [messages, setMessages] = useState<RTMessage[]>();
   const [isFloatButtonVisible, setFloatButtonVisible] = useState<boolean>(false);
@@ -64,8 +64,8 @@ export default function DirectChatScreen({ route }: any) {
   );
 };
 
-const styles = {
+const styles = StyleSheet.create({
   view: {
 
   }
-};
+});

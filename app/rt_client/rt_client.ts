@@ -3,11 +3,93 @@ import { ChatID, UserID, RTMessage } from "./models/models";
 import { getCurrentUserID } from "@/utils/utils";
 import { GetChat } from "@/api/chats/chats";
 import { MessagesQueue } from "./messagesQueue/messagesQueue";
+import { WSConnector } from "./ws_connector/ws_connector";
+import { Chat, ChatManager, ChatMessage } from "./chat_manager/chat_manager";
 
-const WS_ADDRESS = (userID: UserID) =>
+const WS_ADDRESS = (userID: UserID): string =>
   `${process.env.EXPO_PUBLIC_WS_URL}/${userID}`;
-const HTTP_ADDRESS = (chatID: ChatID) =>
+const HTTP_ADDRESS = (chatID: ChatID): string =>
   `${process.env.EXPO_PUBLIC_API_URL}/chats/${chatID}/messages`;
+
+class RTClient_ {
+  private wsConnections: Map<UserID, WSConnector> = new Map();
+  private chatManager: ChatManager = new ChatManager();
+
+  private onWSMessage(data: any) {
+    const type = data?.type;
+    const chatID: number = data?.content?.chat_id;
+    switch (type) {
+      case "message": {
+        console.log("Message received");
+        this.chatManager?.handleIncommingMessage(chatID, data);
+        this.chatManager?.getCallbacks(chatID)?.onMessage?.(data);
+        break;
+      }
+      case "typing": {
+        console.log("Typing received");
+        this.chatManager?.getCallbacks(chatID)?.onTyping?.(data)
+        break;
+      }
+      case "online": {
+        console.log("User Is Online: ", data);
+        this.chatManager?.getCallbacks(chatID)?.onOnline?.(data)
+        break;
+      }
+    }
+  }
+
+  public connect(userID: UserID) {
+    this.wsConnections?.set(userID, new WSConnector(
+      WS_ADDRESS(userID),
+      (data: any) => this.onWSMessage,
+      () => { }
+    ))
+  };
+
+  public disconnect(userID: UserID) {
+    this.wsConnections?.get(userID)?.disconnect();
+  };
+
+  public async getChatMessages(chatID: ChatID): Promise<ChatMessage[]> {
+    return this.chatManager.getChatMessages(chatID);
+  };
+
+  public async getChat(chatID: ChatID): Promise<Chat> {
+    return this.chatManager.getChat(chatID);
+  };
+
+  public async setOnMessageCallBack(chatID: ChatID, callBack: Function) {
+    this.chatManager.callbacks.onMessage.set(chatID, callBack);
+  };
+
+  public async setOnTypingCallBack(chatID: ChatID, callBack: Function) {
+    this.chatManager.callbacks.onTyping.set(chatID, callBack);
+  };
+
+  public async setOnOnlineCallBack(chatID: ChatID, callBack: Function) {
+    this.chatManager.callbacks.onOnline.set(chatID, callBack);
+  };
+
+  public async setChatEntering(chatID: ChatID, userID: UserID) {
+    this.wsConnections?.get(userID)?.send({
+      type: "chat_entering",
+      content: {
+        user_id: userID,
+        chat_id: chatID,
+      }
+    });
+  };
+
+  public async setChatLeaving(chatID: ChatID, userID: UserID) {
+    this.wsConnections?.get(userID)?.send({
+      type: "chat_leaving",
+      content: {
+        user_id: userID,
+        chat_id: chatID,
+      }
+    });
+  };
+};
 
 class RTChatClient {
   private conns: Map<UserID, WebSocket> = new Map();

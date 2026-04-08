@@ -1,4 +1,4 @@
-import { ChatID, UserID, RTMessage } from "./../models/models";
+import { ChatID, UserID } from "./../models/models";
 
 export type Chat = {
   info: {
@@ -26,16 +26,29 @@ export type ChatMessage = {
   message: any,
 };
 
-class ChatManager {
+export class ChatManager {
   private messages: Map<ChatID, ChatMessage[]> = new Map();
   private loadedStatus: Map<ChatID, boolean> = new Map();
 
   public callbacks = {
-    onMessage: new Map<ChatID | UserID, Function>(),
+    onMessage: new Map<ChatID, Function>(),
     onTyping: new Map<ChatID, Function>(),
     onOnline: new Map<ChatID, Function>(),
     onSend: new Map<ChatID, Function>(),
   };
+
+  public setCallBack(chatID: ChatID, callBack: Function) {
+
+  }
+
+  public getCallbacks(chatID: ChatID) {
+    return {
+      onMessage: this.callbacks?.onMessage?.get(chatID),
+      onTyping: this.callbacks?.onTyping?.get(chatID),
+      onOnline: this.callbacks?.onOnline?.get(chatID),
+      onSend: this.callbacks?.onSend?.get(chatID),
+    };
+  }
 
   public async handleIncommingMessage(chatID: ChatID, message: ChatMessage) {
     const current = this.messages?.get(chatID) ?? [];

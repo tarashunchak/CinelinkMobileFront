@@ -1,3 +1,5 @@
+import { kMaxLength } from "node:buffer";
+
 export type ChatID = number;
 export type UserID = number;
 
@@ -53,4 +55,41 @@ export interface DirectChat {
 export interface GroupChat {
   chat: Chat;
   members: ChatMember[];
+};
+
+export type ChatPresense = {
+  type: "chat_entering" | "chat_leaving";
+  content: {
+    user_id: UserID;
+    chat_id: ChatID;
+  };
+};
+
+export type PagePresense = {
+  type: "page_entering" | "page_leaving";
+  content: {
+    user_id: UserID;
+    page: string;
+  };
+};
+
+export type Online = {
+  type: "online";
+  content: {
+    user_id: UserID;
+    is_online: boolean;
+  }
+};
+
+export type Typing = {
+  type: "typing";
+  content: {
+    chat_id: ChatID;
+    user_id: UserID;
+    is_typing: boolean;
+  }
+};
+
+export type Ping = {
+  type: "ping";
 };

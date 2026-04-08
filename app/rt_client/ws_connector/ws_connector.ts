@@ -1,8 +1,10 @@
-import { ChatID, UserID, RTMessage } from "../models/models";
+import { Ping, ChatPresense, PagePresense, Online, Typing } from "../models/models";
 
 type MessageHandler = (message: any) => void;
 
-class WSConnector {
+type WSMessage = ChatPresense | PagePresense | Online | Typing | Ping;
+
+export class WSConnector {
   private ws: WebSocket | null = null;
   private reconnectAttempts = 0;
   private maxReconnectAttempts = 5;
@@ -55,7 +57,7 @@ class WSConnector {
     clearInterval(this.pingInterval);
   }
 
-  public send(data: any) {
+  public send(data: WSMessage) {
     if (this.ws?.readyState === WebSocket.OPEN) {
       this.ws?.send(JSON.stringify(data));
     } else {

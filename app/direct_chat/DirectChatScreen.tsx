@@ -31,6 +31,8 @@ export default function DirectChatScreen({ route }: any) {
       loadContent();
     }, []));
 
+  console.warn("Chat info: ", chat);
+  console.warn("Message: ", messages?.[0]);
   return (
     <TouchableWithoutFeedback
       onPress={Keyboard.dismiss}
@@ -45,7 +47,7 @@ export default function DirectChatScreen({ route }: any) {
           style={{ flex: 1, justifyContent: "space-between" }}
           source={require("@/assets/images/background.png")}
         >
-          <Header info={chat} />
+          <Header chatID={chat?.info?.chat_id} peer={chat?.peer} />
           <FlatList
             onScroll={() => setFloatButtonVisible(true)}
             data={messages?.reverse()}

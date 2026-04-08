@@ -9,23 +9,22 @@ import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { DirectChat } from "@/app/rt_client/models/models";
 import { calcLastSeen } from "../utils/utils";
 
-export default function Header({ info }: { info: DirectChat }) {
+export default function Header({ chatID, peer }: { chatID: number, peer: DirectChat }) {
   const navigator = useNavigation();
-  const peer = info?.peer;
   const [typing, setTyping] = useState<boolean>(peer?.is_typing);
   const [status, setStatus] = useState<boolean>(peer?.is_online);
 
-  console.warn("chat_id = ", info)
+  console.warn("chat_id = ", peer)
   useEffect(() => {
-    RTClient.setOnOnlineCallBack(info?.info?.chat_id, (data: any) => {
+    RTClient.setOnOnlineCallBack(chatID, (data: any) => {
       console.warn("user status: ", data.is_online);
       setStatus(data.is_online);
     });
-    RTClient.setOnTypingCallBack(info?.info?.chat_id, (data: any) => {
+    RTClient.setOnTypingCallBack(chatID, (data: any) => {
       console.warn("user typing status: ", data.is_typing);
       setTyping(data.is_typing);
     });
-  }, [info]);
+  }, [peer]);
 
   return (
     <View style={styles.view}>
@@ -38,9 +37,9 @@ export default function Header({ info }: { info: DirectChat }) {
             }
           } />
 
-        <View style={styles.chatInfo.view}>
+        <View style={styles.chatpeer.view}>
           <TouchableOpacity
-            style={styles.chatInfo.img}
+            style={styles.chatpeer.img}
             onPress={() => {
               navigator.push("UserProfileScreen", {
                 userID: peer?.user_id,
@@ -54,12 +53,12 @@ export default function Header({ info }: { info: DirectChat }) {
             {status && <View style={styles.isOnline.dot}></View>}
           </TouchableOpacity>
 
-          <View style={styles.chatInfo.text.view}>
-            <Text style={styles.chatInfo.text.name}>
+          <View style={styles.chatpeer.text.view}>
+            <Text style={styles.chatpeer.text.name}>
               {peer?.username}
             </Text>
             {!status ? (
-              <Text style={styles.chatInfo.text.lastSeen}>
+              <Text style={styles.chatpeer.text.lastSeen}>
                 {`last seen ${calcLastSeen(peer?.last_seen)}`}
               </Text>
             ) :
@@ -131,7 +130,7 @@ const styles = {
     paddingBottom: "2%",
     zIndex: 2,
   },
-  chatInfo: {
+  chatpeer: {
     view: {
       flexDirection: "row",
       height: "100%",

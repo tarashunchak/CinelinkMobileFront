@@ -5,9 +5,9 @@ import { GetChat } from "@/api/chats/chats";
 import { MessagesQueue } from "./messagesQueue/messagesQueue";
 
 const WS_ADDRESS = (userID: UserID) =>
-  (`ws://192.168.0.187:8080/ws/${userID}`);
+  `${process.env.EXPO_PUBLIC_WS_URL}/${userID}`;
 const HTTP_ADDRESS = (chatID: ChatID) =>
-  (`http://192.168.0.187:8080/chats/${chatID}/messages`);
+  `${process.env.EXPO_PUBLIC_API_URL}/chats/${chatID}/messages`;
 
 class RTChatClient {
   private conns: Map<UserID, WebSocket> = new Map();

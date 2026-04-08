@@ -13,7 +13,7 @@ export default function App() {
   RTClient.connect(useAuthStore?.getState()?.user?.user_id);
   return (
     <>
-      {isHydrated ? (isAuthenticated ? <DirectChatScreen /> : <AuthNavigator />) : null}
+      {isHydrated ? (isAuthenticated ? <TabNavigator /> : <AuthNavigator />) : null}
     </>
   );
 };

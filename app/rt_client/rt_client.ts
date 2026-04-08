@@ -70,6 +70,16 @@ class RTClient_ {
     this.chatManager.callbacks.onOnline.set(chatID, callBack);
   };
 
+  public async setOnlineStatus(userID: UserID, isOnline: boolean = true) {
+    this.wsConnections.get(userID)?.send({
+      type: "online",
+      content: {
+        user_id: userID,
+        is_online: isOnline,
+      }
+    });
+  };
+
   public async setChatEntering(chatID: ChatID, userID: UserID) {
     this.wsConnections?.get(userID)?.send({
       type: "chat_entering",
@@ -89,6 +99,8 @@ class RTClient_ {
       }
     });
   };
+
+
 };
 
 class RTChatClient {
@@ -313,4 +325,5 @@ class RTChatClient {
 
 };
 
-export const RTClient: RTChatClient = new RTChatClient();
+//export const RTClient: RTChatClient = new RTChatClient();
+export const RTClient: RTClient_ = new RTClient_();

@@ -5,9 +5,11 @@ import { GetChat } from "@/api/chats/chats";
 import { MessagesQueue } from "./messagesQueue/messagesQueue";
 import { WSConnector } from "./ws_connector/ws_connector";
 import { Chat, ChatManager, ChatMessage } from "./chat_manager/chat_manager";
+import ProvidersBlock from "../movie_details/components/ProvidersBlock";
 
 const WS_ADDRESS = (userID: UserID): string =>
   `${process.env.EXPO_PUBLIC_WS_URL}/${userID}`;
+//`ws://192.168.0.187:8080/ws/${userID}`;
 const HTTP_ADDRESS = (chatID: ChatID): string =>
   `${process.env.EXPO_PUBLIC_API_URL}/chats/${chatID}/messages`;
 
@@ -39,14 +41,20 @@ class RTClient_ {
   }
 
   public connect(userID: UserID) {
+    console.warn("User id in connect: ", userID);
+    //const url = `${process.env.EXPO_PUBLIC_WS_URL}/` + userID;
+    const url = WS_ADDRESS(userID);
+    console.warn("url: ", url);
     this.wsConnections?.set(userID, new WSConnector(
-      WS_ADDRESS(userID),
-      (data: any) => this.onWSMessage,
-      () => { }
-    ))
+      url,
+      (data: any) => { this.onWSMessage(data) },
+      () => { this.setOnlineStatus(userID, true); },
+      () => { },
+    ));
   };
 
   public disconnect(userID: UserID) {
+    this.setOnlineStatus(userID, false);
     this.wsConnections?.get(userID)?.disconnect();
   };
 
@@ -62,13 +70,8 @@ class RTClient_ {
     this.chatManager.callbacks.onMessage.set(chatID, callBack);
   };
 
-  public async setOnTypingCallBack(chatID: ChatID, callBack: Function) {
-    this.chatManager.callbacks.onTyping.set(chatID, callBack);
-  };
-
-  public async setOnOnlineCallBack(chatID: ChatID, callBack: Function) {
-    this.chatManager.callbacks.onOnline.set(chatID, callBack);
-  };
+  public setOnTypingCallBack = this.chatManager.setOnTyping;
+  public setOnOnlineCallBack = this.chatManager.setOnOnline;
 
   public async setOnlineStatus(userID: UserID, isOnline: boolean = true) {
     this.wsConnections.get(userID)?.send({
@@ -76,6 +79,18 @@ class RTClient_ {
       content: {
         user_id: userID,
         is_online: isOnline,
+      }
+    });
+  };
+
+  public async setTypingStatus(chatID: ChatID, userID: UserID, isTyping: boolean) {
+    console.warn(`User: ${userID} is ${!isTyping ? "not" : ''} typing in chat ${chatID}`);
+    this.wsConnections.get(userID)?.send({
+      type: "typing",
+      content: {
+        chat_id: chatID,
+        user_id: userID,
+        is_typing: isTyping,
       }
     });
   };
@@ -100,7 +115,25 @@ class RTClient_ {
     });
   };
 
+  public async setPageEntering(userID: UserID, page: string) {
+    this.wsConnections?.get(userID)?.send({
+      type: "page_entering",
+      content: {
+        user_id: userID,
+        page,
+      }
+    });
+  };
 
+  public async setPageLeaving(userID: UserID, page: string) {
+    this.wsConnections?.get(userID)?.send({
+      type: "page_leaving",
+      content: {
+        user_id: userID,
+        page,
+      }
+    });
+  };
 };
 
 class RTChatClient {

@@ -49,7 +49,8 @@ export default function ContentBlock({ query, specification = undefined }: Props
       <CategoriesBlock setCurrent={setCategory} />
       <View style={styles.topSpacer}></View>
       <FlatList
-        style={{ height: heightPercentageToDP(80) }}
+        showsVerticalScrollIndicator={false}
+        style={{ height: "100%" }}
         data={filteredData()}
         keyExtractor={(_, index) => String(index)}
         renderItem={({ item }) => {
@@ -78,7 +79,6 @@ export default function ContentBlock({ query, specification = undefined }: Props
           )
         }
       />
-      < View style={styles.bottomSpacer}></View >
     </>
   )
 }

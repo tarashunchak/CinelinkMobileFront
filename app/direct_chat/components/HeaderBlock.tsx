@@ -33,7 +33,7 @@ export default function Header({ chatID, peer }: { chatID: number, peer: DirectC
           onPress={
             () => {
               navigator.goBack();
-              RTClient.setChatLeaving(chat?.chat_id, getCurrentUserID());
+              RTClient.setChatLeaving(chatID, getCurrentUserID());
             }
           } />
 

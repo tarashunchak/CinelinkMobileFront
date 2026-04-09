@@ -51,7 +51,8 @@ export default function CategoriesBlock({ setCurrent = () => { } }: { setCurrent
 const styles = StyleSheet.create({
   scrollView: {
     marginTop: hp(1),
-    height: hp(5),
+    minHeight: 40,
+    maxHeight: 40,
     width: "100%",
     padding: 1,
     paddingLeft: hp(1),

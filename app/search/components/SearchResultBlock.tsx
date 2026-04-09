@@ -61,7 +61,6 @@ export default function SearchResultBlock({ route }: any) {
         flex: 1,
         padding: "1%",
         paddingTop: "10%",
-        paddingBottom: "10%"
       }}
     >
       <View style={styles.inputView}>

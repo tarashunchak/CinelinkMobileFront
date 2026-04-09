@@ -13,13 +13,18 @@ export class WSConnector {
   constructor(
     private url: string,
     private onMessage: MessageHandler,
-    private onOpen: () => void
-  ) { }
+    private onOpen: () => void,
+    private onClose: () => void,
+  ) {
+    this.connect();
+  }
 
   public connect() {
-    this.ws = new WebSocket(this.url)
+    //console.warn("WS URL: ", this.url);
+    this.ws = new WebSocket(`ws://192.168.0.187:8080/ws/2`);
 
     this.ws.onopen = () => {
+      console.warn("WS is open!!")
       this.reconnectAttempts = 0;
       this.startPing();
       this.onOpen();
@@ -35,6 +40,7 @@ export class WSConnector {
     };
 
     this.ws.onclose = () => {
+      this.onClose();
       this.stopPing();
       this.attemptReconnect();
     };
@@ -43,7 +49,10 @@ export class WSConnector {
   private attemptReconnect() {
     if (this.reconnectAttempts, this.maxReconnectAttempts) {
       ++this.reconnectAttempts;
-      setTimeout(() => this.connect(), 2000 * this.reconnectAttempts);
+      setTimeout(() => {
+        console.warn(`reconnect attempt #${this.reconnectAttempts}`)
+        this.connect();
+      }, 2000 * this.reconnectAttempts);
     }
   }
 

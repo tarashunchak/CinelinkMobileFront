@@ -1,4 +1,6 @@
+import { jwtHeaders } from "@/utils/utils";
 import { ChatID, UserID } from "./../models/models";
+import { useAuthStore } from "@/local_storage/user/asyncStorage/store";
 
 export type Chat = {
   info: {
@@ -15,7 +17,7 @@ export type Chat = {
     role: string,
     user_id: number,
     username: string,
-  }
+  };
 };
 
 export type ChatMessage = {
@@ -39,7 +41,15 @@ export class ChatManager {
 
   public setCallBack(chatID: ChatID, callBack: Function) {
 
-  }
+  };
+
+  public async setOnOnline(chatID: ChatID, callback: Function) {
+    this.callbacks?.onOnline?.set(chatID, callback);
+  };
+
+  public async setOnTyping(chatID: ChatID, callback: Function) {
+    this.callbacks?.onTyping?.set(chatID, callback);
+  };
 
   public getCallbacks(chatID: ChatID) {
     return {
@@ -48,7 +58,7 @@ export class ChatManager {
       onOnline: this.callbacks?.onOnline?.get(chatID),
       onSend: this.callbacks?.onSend?.get(chatID),
     };
-  }
+  };
 
   public async handleIncommingMessage(chatID: ChatID, message: ChatMessage) {
     const current = this.messages?.get(chatID) ?? [];
@@ -56,7 +66,13 @@ export class ChatManager {
   };
 
   public async getChat(chatID: ChatID): Promise<Chat> {
-    const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/chats/${chatID}`)
+    console.warn("Chat ID in getChat: ", chatID)
+    const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/chats/${chatID}`,
+      {
+        method: "GET",
+        headers: jwtHeaders(useAuthStore?.getState()?.user?.jwt)
+      }
+    );
     const text = await response?.text();
     const data = JSON.parse(text);
     return data?.results;
@@ -78,4 +94,4 @@ export class ChatManager {
 
     return data?.results;
   };
-}
+};

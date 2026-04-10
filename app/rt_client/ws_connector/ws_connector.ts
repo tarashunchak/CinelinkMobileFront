@@ -21,7 +21,8 @@ export class WSConnector {
 
   public connect() {
     //console.warn("WS URL: ", this.url);
-    this.ws = new WebSocket(`ws://192.168.0.187:8080/ws/2`);
+    //this.ws = new WebSocket(`ws://192.168.0.187:8080/ws/2`);
+    this.ws = new WebSocket(this.url);
 
     this.ws.onopen = () => {
       console.warn("WS is open!!")
@@ -47,6 +48,8 @@ export class WSConnector {
   }
 
   private attemptReconnect() {
+    if (this.ws?.readyState === WebSocket.OPEN)
+      return;
     if (this.reconnectAttempts, this.maxReconnectAttempts) {
       ++this.reconnectAttempts;
       setTimeout(() => {

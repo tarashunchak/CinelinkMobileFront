@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Image, View, Text, TouchableOpacity, ImageBackground, TextInput, ScrollView, StyleSheet } from "react-native";
+import { Image, View, Text, TouchableOpacity, ImageBackground, TextInput, StyleSheet } from "react-native";
 import { useNavigation } from "expo-router";
 import SearchInput from "./input";
 import { GetQueryResult } from "../services/queries";

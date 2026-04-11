@@ -2,6 +2,7 @@ import { API_URL } from "@/api/API_CONFIG";
 import { CURRENT_USER } from "../currentUser";
 import { WatchlistItem_T, WatchlistCard } from "./types";
 import { useAuthStore } from "@/local_storage/user/asyncStorage/store";
+import { jwtHeaders } from "@/utils/utils";
 
 export async function AddWatchlistItem(item: WatchlistItem_T) {
   await fetch(`${API_URL}/user/watchlist`, {
@@ -30,11 +31,12 @@ export async function GetWatchlistMovies(watchlistID: number) {
 
 export async function CreateWatchlist(name: string): Promise<boolean> {
   const userID = useAuthStore.getState().user?.user_id;
+  const jwt = useAuthStore.getState().user?.jwt;
   console.log("Current user: ", userID);
   const response = await fetch(`${API_URL}/users/${userID}/watchlists`,
     {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { ...jwtHeaders(jwt), "Content-Type": "application/json" },
       body: JSON.stringify({ name }),
     }
   );

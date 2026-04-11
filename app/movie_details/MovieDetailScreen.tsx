@@ -2,7 +2,7 @@ import BottomBar from "@/app/bars/bottomBar";
 import MovieCardList from "@/components/ui/leafy-film-list";
 import { textStyle } from "@/styles/textStyles";
 import { useNavigation } from "expo-router";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ImageBackground, ScrollView, Text } from "react-native";
 import { Movie } from "./types";
 import MainInfo from "./components/MainInfo";
@@ -14,11 +14,15 @@ import ProvidersBlock from "./components/ProvidersBlock";
 import TrailerBlock from "./components/TrailerBlock";
 import CreditCardsList from "./components/CreditCardsList";
 import { GetMovieYouTubeTrailerKey, LoadMovieDetails } from "./services/services";
+import WatchlistSheet, { WatchlistSheetRef } from "./components/AddToWatchlistModal";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export default function MovieDetailScreen({ route }: any) {
   const navigation = useNavigation();
   const [movie, setMovie] = useState<Movie>();
   const { movieID, inCinemas } = route?.params;
+
+  const sheetRef = useRef<WatchlistSheetRef>(null);
 
   useEffect(() => {
     async function load() {
@@ -32,41 +36,51 @@ export default function MovieDetailScreen({ route }: any) {
   const trailerKey = GetMovieYouTubeTrailerKey(movie?.videos);
 
   return (
-    <ImageBackground source={require("@/assets/images/background.png")} style={{ flex: 1 }}>
-      <ScrollView showsVerticalScrollIndicator={false} style={{ padding: "1%" }}>
-        <MainInfo movie={movie} inCinemas={inCinemas} />
-        <ActionButtonsBlock movieID={movie?.id} />
-        <GenresBlock genres={movie?.genres} />
-        <ProvidersBlock providers={movie?.providers} />
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <ImageBackground source={require("@/assets/images/background.png")} style={{ flex: 1 }}>
+        <ScrollView showsVerticalScrollIndicator={false} style={{ padding: "1%" }}>
+          <MainInfo movie={movie} inCinemas={inCinemas} />
+          <ActionButtonsBlock
+            movieID={movie?.id}
+            onActionButton={() => {
+              console.log("onActionButton");
+              sheetRef.current?.open()
+            }
+            }
+          />
+          <GenresBlock genres={movie?.genres} />
+          <ProvidersBlock providers={movie?.providers} />
 
-        <Text style={styles.title}>Trailer</Text>
-        <TrailerBlock trailerKey={trailerKey} />
+          <Text style={styles.title}>Trailer</Text>
+          <TrailerBlock trailerKey={trailerKey} />
 
-        <OverviewBlock text={movie?.overview} />
-        <DetailsBlock movie={movie} />
+          <OverviewBlock text={movie?.overview} />
+          <DetailsBlock movie={movie} />
 
-        <Text style={styles.title}>Cast</Text>
-        <CreditCardsList
-          movieID={movieID}
-          credits={movie?.credits?.cast}
-          poster_path={movie?.poster_path}
-        />
+          <Text style={styles.title}>Cast</Text>
+          <CreditCardsList
+            movieID={movieID}
+            credits={movie?.credits?.cast}
+            poster_path={movie?.poster_path}
+          />
 
-        <Text style={styles.title}>Crew</Text>
-        <CreditCardsList
-          movieID={movieID}
-          credits={movie?.credits?.crew}
-          poster_path={movie?.poster_path}
-        />
+          <Text style={styles.title}>Crew</Text>
+          <CreditCardsList
+            movieID={movieID}
+            credits={movie?.credits?.crew}
+            poster_path={movie?.poster_path}
+          />
 
-        <Text style={styles.title}>Similar movies</Text>
-        <MovieCardList
-          movieID={movie?.id}
-          movieGenre={movie?.genres?.[0]?.id}
-        />
-      </ScrollView >
-      <BottomBar />
-    </ImageBackground >
+          <Text style={styles.title}>Similar movies</Text>
+          <MovieCardList
+            movieID={movie?.id}
+            movieGenre={movie?.genres?.[0]?.id}
+          />
+        </ScrollView >
+        <BottomBar />
+        <WatchlistSheet ref={sheetRef} />
+      </ImageBackground >
+    </GestureHandlerRootView>
   );
 }
 

@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { TouchableOpacity, ImageBackground, Text, View, StyleSheet } from "react-native";
+import { TouchableOpacity, ImageBackground, Text, View, StyleSheet, Platform } from "react-native";
 import BottomBar from "../bars/bottomBar";
 import { userPage } from "./styles";
 import { useFocusEffect, useNavigation } from "expo-router";
@@ -39,7 +39,7 @@ export default function UserProfileScreen({ route }: any) {
       source={require("@/assets/images/background.png")}
       style={{ flex: 1, backgroundColor: "black" }}
     >
-      <View style={[{ padding: "2%" }]}>
+      <View style={[{ padding: "2%", paddingTop: Platform.OS === "ios" ? "5%" : "2%" }]}>
         <ProfileHeader
           user={user}
           onBack={navigator.goBack}
@@ -53,12 +53,10 @@ export default function UserProfileScreen({ route }: any) {
             isFollowed={user?.is_following}
             onEdit={() => { }}
             onToggleFollow={async () => {
-              if (user?.is_following) {
+              if (user?.is_following)
                 await UnfollowUser(userID) && loadUser();
-              }
-              else {
+              else
                 await FollowUser(userID) && loadUser();
-              }
             }}
           />
 

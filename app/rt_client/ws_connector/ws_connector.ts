@@ -1,3 +1,4 @@
+import { useAuthStore } from "@/local_storage/user/asyncStorage/store";
 import { Ping, ChatPresense, PagePresense, Online, Typing } from "../models/models";
 
 type MessageHandler = (message: any) => void;
@@ -22,7 +23,8 @@ export class WSConnector {
   public connect() {
     //console.warn("WS URL: ", this.url);
     //this.ws = new WebSocket(`ws://192.168.0.187:8080/ws/2`);
-    this.ws = new WebSocket(this.url);
+    this.ws = new WebSocket(`ws://185.227.108.14:8080/ws/${useAuthStore.getState().user?.user_id}`);
+    console.warn("WS URL: ", this.url);
 
     this.ws.onopen = () => {
       console.warn("WS is open!!")

@@ -21,12 +21,18 @@ export default function UserCard({ user }: { user: Props }) {
         navigator?.push("UserProfileScreen", { userID: user?.user_id })
       }}>
       <View style={styles.card.info.view}>
-        <Image
-          style={styles.card.info.avatar}
-          source={user?.avatar_url
-            ? { uri: user?.avatar_url }
-            : require("@/assets/images/giggaNigga.png")}
-        />
+        <View style={{
+          flexDirection: "row",
+          height: "100%",
+          gap: "6%",
+          alignItems: "center"
+        }}>
+          <Image
+            style={styles.card.info.avatar}
+            source={{ uri: user?.avatar_url }}
+          />
+          {user?.is_online && <View style={styles.card.isOnline.dot}></View>}
+        </View>
         <View style={styles.card.info.text.view}>
           <Text style={styles.card.info.text.name}>
             {user?.username}
@@ -43,6 +49,27 @@ export default function UserCard({ user }: { user: Props }) {
 
 const styles = {
   card: {
+    isOnline: {
+      view: {
+        flexDirection: "row",
+        gap: 5,
+        alignItems: "center"
+      },
+      dot: {
+        height: 12,
+        width: 12,
+        backgroundColor: "#329E4F",
+        borderRadius: 10,
+        position: "absolute",
+        right: 3,
+        bottom: 3,
+        borderColor: "white",
+        borderWidth: 0.5,
+      },
+      text: [textStyle.white14, {
+        color: "#329E4F",
+      }],
+    },
     view: {
       flexDirection: "row",
       width: "100%",

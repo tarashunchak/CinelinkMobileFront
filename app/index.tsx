@@ -3,7 +3,6 @@ import TabNavigator from "@/navigation/TabNavigator";
 import AuthNavigator from "@/navigation/AuthNavigator";
 import { useAuthStore } from "@/local_storage/user/asyncStorage/store"
 import { RTClient } from "./rt_client/rt_client";
-import DirectChatScreen from "./direct_chat/DirectChatScreen";
 
 export default function App() {
   useAuthStore.getState().init();
@@ -17,4 +16,3 @@ export default function App() {
     </>
   );
 };
-//<TabNavigator /> 

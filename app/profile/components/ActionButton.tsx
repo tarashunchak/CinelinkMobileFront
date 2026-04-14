@@ -34,9 +34,8 @@ export function ActionButton({
   return (
     <View style={{ flexDirection: "row", gap: 10 }}>
       {
-        isCurrentUser ?
-
-          <TouchableOpacity
+        (isCurrentUser) ?
+          (<TouchableOpacity
             style={styles.transparent}
             onPress={onEdit}
           >
@@ -44,11 +43,10 @@ export function ActionButton({
               style={textStyle.white18}
             >
               {text}
-            </Text> </TouchableOpacity >
-
+            </Text>
+          </TouchableOpacity >)
           :
-
-          <TouchableOpacity
+          (<TouchableOpacity
             style={isFollowed ? styles.transparent : styles.white}
             onPress={async () => await onToggleFollow()}
           >
@@ -57,18 +55,18 @@ export function ActionButton({
             >
               {text}
             </Text>
-          </TouchableOpacity>
+          </TouchableOpacity>)
       }
       {
-        isFollowed ?
-          <TouchableOpacity
+        (isFollowed) ?
+          (<TouchableOpacity
             style={styles.chatBtnView}
             onPress={onChat}
           >
             <Text style={textStyle.white18}>
               {"Chat"}
             </Text>
-          </TouchableOpacity>
+          </TouchableOpacity>)
           : null
       }
     </View>

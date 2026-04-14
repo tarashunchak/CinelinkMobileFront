@@ -2,8 +2,10 @@ import React from "react";
 import { Text, Image, View, TouchableOpacity } from "react-native";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen"
 import { textStyle } from "@/styles/textStyles";
+import { useNavigation } from "expo-router";
 
 export default function HeaderBlock({ watchlist }: { watchlist: any }) {
+  const navigator = useNavigation();
   return (
     <View style={{ justifyContent: "flex-end", height: hp("41%") - 26 }}>
       <View style={[{ flexDirection: "row", justifyContent: "space-between" }]}>

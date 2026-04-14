@@ -47,7 +47,7 @@ class RTClient_ {
     console.warn("url: ", url);
     this.wsConnections?.set(userID, new WSConnector(
       url,
-      (data: any) => { this.onWSMessage(data) },
+      (data: any) => { this.onWSMessage(data); },
       () => { this.setOnlineStatus(userID, true); },
       () => { },
     ));

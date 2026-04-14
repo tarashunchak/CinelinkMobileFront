@@ -10,19 +10,21 @@ import UserProfileScreen from "@/app/profile/UserProfileScreen";
 import WatchlistsLibraryScreen from "@/app/library/WatchlistsLibraryScreen";
 import WatchlistDetailsScreen from "@/app/watchlist/WatchlistDetailsScreen";
 import HomePageScreen from "@/app/home/HomeScreen";
+import DirectChatScreen from "@/app/direct_chat/DirectChatScreen";
 
 const Stack = createNativeStackNavigator();
 
 export default function ProfileNavigatorStack() {
 
   return (
-      <Stack.Navigator>
-        <Stack.Screen name="UserProfileScreen" component={UserProfileScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="MovieDetailScreen" component={MovieDetailScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="MovieCreditsScreen" component={MovieCreditsScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="ActorProfileScreen" component={ActorProfileScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="WatchlistsLibraryScreen" component={WatchlistsLibraryScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="WatchlistDetailsScreen" component={WatchlistDetailsScreen} options={{ headerShown: false }} />
-      </Stack.Navigator>
+    <Stack.Navigator>
+      <Stack.Screen name="UserProfileScreen" component={UserProfileScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="MovieDetailScreen" component={MovieDetailScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="MovieCreditsScreen" component={MovieCreditsScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="ActorProfileScreen" component={ActorProfileScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="WatchlistsLibraryScreen" component={WatchlistsLibraryScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="WatchlistDetailsScreen" component={WatchlistDetailsScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="DirectChatScreen" component={DirectChatScreen} options={{ headerShown: false }} />
+    </Stack.Navigator>
   )
 }

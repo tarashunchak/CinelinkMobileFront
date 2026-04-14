@@ -13,6 +13,8 @@ import FollowingsList from "./components/FollowingsList";
 import FollowersList from "./components/FollowersList";
 import { useFollowings } from "./hooks/useFollowings";
 import { useFollowers } from "./hooks/useFollowers";
+import { GetChatMessages } from "@/api/chats/chats";
+import { GetDirectChatID } from "../direct_chat/utils/utils";
 
 export default function UserProfileScreen({ route }: any) {
   const navigator = useNavigation();
@@ -57,6 +59,10 @@ export default function UserProfileScreen({ route }: any) {
                 await UnfollowUser(userID) && loadUser();
               else
                 await FollowUser(userID) && loadUser();
+            }}
+            onChat={async () => {
+              console.warn("On chat");
+              navigator.navigate("DirectChatScreen", { chatID: await GetDirectChatID(getCurrentUserID(), userID) });
             }}
           />
 

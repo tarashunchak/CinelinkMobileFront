@@ -12,6 +12,7 @@ type Props = {
   isFollowed: boolean;
   onEdit: () => void,
   onToggleFollow: () => void,
+  onChat: () => void;
 };
 
 export function ProfileMain({
@@ -20,7 +21,8 @@ export function ProfileMain({
   isCurrentUser,
   isFollowed,
   onEdit,
-  onToggleFollow
+  onToggleFollow,
+  onChat,
 }: Props) {
 
   const fullName: string =
@@ -55,6 +57,7 @@ export function ProfileMain({
           isLoading={isLoading}
           onEdit={onEdit}
           onToggleFollow={onToggleFollow}
+          onChat={onChat}
         />
 
       </View>

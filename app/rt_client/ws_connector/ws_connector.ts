@@ -23,7 +23,7 @@ export class WSConnector {
   public connect() {
     //console.warn("WS URL: ", this.url);
     //this.ws = new WebSocket(`ws://192.168.0.187:8080/ws/2`);
-    this.ws = new WebSocket(`ws://185.227.108.14:8080/ws/${useAuthStore.getState().user?.user_id}`);
+    this.ws = new WebSocket(this.url);
     console.warn("WS URL: ", this.url);
 
     this.ws.onopen = () => {
@@ -43,6 +43,7 @@ export class WSConnector {
     };
 
     this.ws.onclose = () => {
+      console.warn("WS connection closed");
       this.onClose();
       this.stopPing();
       this.attemptReconnect();
@@ -50,9 +51,7 @@ export class WSConnector {
   }
 
   private attemptReconnect() {
-    if (this.ws?.readyState === WebSocket.OPEN)
-      return;
-    if (this.reconnectAttempts, this.maxReconnectAttempts) {
+    if ((this.ws?.readyState != WebSocket.OPEN) && (this.reconnectAttempts < this.maxReconnectAttempts)) {
       ++this.reconnectAttempts;
       setTimeout(() => {
         console.warn(`reconnect attempt #${this.reconnectAttempts}`)

@@ -5,7 +5,7 @@ import { heightPercentageToDP as hp } from "react-native-responsive-screen"
 import { viewStyle } from "@/styles/viewStyle";
 import { textStyle } from "@/styles/textStyles";
 import { GetUserWatchlists } from "@/api/watchlist/watchlist";
-import WatchlistCard from "./components/watchlistCard";
+import WatchlistCard from "./components/WatchlistCard";
 import LibraryHeader from "./components/Header";
 import { useFocusEffect, useNavigation } from "expo-router";
 

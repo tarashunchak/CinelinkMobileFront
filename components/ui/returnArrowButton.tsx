@@ -1,4 +1,5 @@
 import { TouchableOpacity, Dimensions, Image, StyleSheet } from "react-native";
+import { PressableScale } from "react-native-pressable-scale";
 
 const { width: screenW, height: screenH } = Dimensions.get("window");
 
@@ -50,9 +51,9 @@ export default function ReturnArrowButton(
     returnLeft: require('@/assets/images/ReturnArrow.png'),
   };
   return (
-    <TouchableOpacity style={finalStyle} onPress={onPress}>
+    <PressableScale style={finalStyle} onPress={onPress}>
       <Image source={images["returnLeft"]} ></Image>
-    </TouchableOpacity>
+    </PressableScale>
   );
 };
 

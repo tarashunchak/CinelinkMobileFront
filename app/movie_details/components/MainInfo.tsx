@@ -1,19 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
-import { Image, ImageBackground, Text, View } from "react-native";
-import LeafyReturnArrowButton from "@/components/ui/returnArrowButton";
+import { Image, ImageBackground, StyleSheet, Text, View } from "react-native";
+import ReturnArrowButton from "@/components/ui/returnArrowButton";
 import { textStyle } from "@/styles/textStyles";
 import { useNavigation } from "expo-router";
 import InfoBlock from "./InfoBlock";
 import { Movie } from "../types";
+import { PressableScale } from "react-native-pressable-scale";
+import PosterModal from "./PosterModal";
 
 export default function MainInfo({ movie, inCinemas = false }: { movie: Movie, inCinemas: boolean }) {
   const maximum = null;
   const navigation = useNavigation();
   const backdropPath = movie?.images?.backdrops[movie?.images?.backdrops?.length - 1]?.file_path;
+
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+
   return (
     <View>
-      <LeafyReturnArrowButton style={{ marginTop: "5%", zIndex: 2 }} onPress={() => navigation.goBack()} />
+      <ReturnArrowButton style={{ marginTop: "5%", zIndex: 2 }} onPress={() => navigation.goBack()} />
       <ImageBackground
         source={{ uri: `https://image.tmdb.org/t/p/w500${backdropPath}` }}
         style={styles.backdrop}>
@@ -37,18 +42,23 @@ export default function MainInfo({ movie, inCinemas = false }: { movie: Movie, i
               }
             }>
 
-              <View style={styles.poster}>
+              <PressableScale
+                onPress={() => { setIsOpen(true); }}
+                style={styles.posterView}
+              >
                 <Image
                   source={{ uri: "https://image.tmdb.org/t/p/w300" + movie?.poster_path }}
-                  style={{ height: "100%", width: "100%", backgroundColor: "rgba(255, 255, 255, 0.05)" }} />
+                  style={styles.posterImage} />
                 {
-                  inCinemas ? (
-                    <View style={{ position: "absolute", top: "3%", width: "100%", backgroundColor: "rgba(50, 158, 79, 0.9)" }}>
-                      <Text style={[textStyle.white12, { textTransform: "uppercase", textAlign: "center", alignSelf: "center" }]}>{`In cinemas till ${maximum && (maximum?.slice(3, 5) + ' ' + MONTH[maximum.slice(0, 2)])}`}</Text>
+                  inCinemas && (
+                    <View style={styles.inCinemasStripe}>
+                      <Text style={[textStyle.white12, { textTransform: "uppercase", textAlign: "center", alignSelf: "center" }]}>
+                        {`In cinemas till ${maximum && (maximum?.slice(3, 5) + ' ' + MONTH[maximum.slice(0, 2)])}`}
+                      </Text>
                     </View>
-                  ) : (<></>)
+                  )
                 }
-              </View>
+              </PressableScale>
 
               <InfoBlock movieInfo={movie} />
 
@@ -56,11 +66,16 @@ export default function MainInfo({ movie, inCinemas = false }: { movie: Movie, i
           </View>
         </View>
       </ImageBackground >
+      <PosterModal
+        isOpen={isOpen}
+        posterUrl={backdropPath}
+        onClose={() => { setIsOpen(false) }}
+      />
     </View >
   )
 }
 
-const styles = {
+const styles = StyleSheet.create({
   backdrop: {
     height: hp("40%"),
     width: "104%",
@@ -74,7 +89,7 @@ const styles = {
     marginTop: "1%",
     height: hp("40%"),
   },
-  poster: {
+  posterView: {
     width: "42%",
     height: "100%",
     backgroundColor: "rgba(255, 255, 255, 0.05)",
@@ -82,4 +97,15 @@ const styles = {
     borderColor: "rgba(255, 255, 255, 0.2)",
     borderWidth: 0.5,
   },
-};
+  posterImage: {
+    width: "100%",
+    height: "100%",
+    backgroundColor: "rgba(255, 255, 255, 0.05)"
+  },
+  inCinemasStripe: {
+    top: "3%",
+    width: "100%",
+    position: "absolute",
+    backgroundColor: "rgba(50, 158, 79, 0.9)"
+  },
+});

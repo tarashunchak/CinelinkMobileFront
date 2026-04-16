@@ -1,8 +1,9 @@
 import { useNavigation } from "expo-router";
 import React from "react";
-import { TouchableOpacity, Image, Text, View } from "react-native";
+import { TouchableOpacity, Image, Text, View, StyleSheet } from "react-native";
 import { textStyle } from "@/styles/textStyles";
 import { MONTH } from "@/utils/month";
+import { PressableScale } from "react-native-pressable-scale";
 
 export interface MovieCard_I {
   movie_id: number;
@@ -14,7 +15,7 @@ export interface MovieCard_I {
 export default function MovieCard({ data }: { data: MovieCard_I }) {
   const navigator = useNavigation();
   return (
-    <TouchableOpacity style={styles.view}
+    <PressableScale style={styles.view}
       onPress={() => navigator?.push("MovieDetailScreen",
         {
           movieID: data?.movie_id,
@@ -24,19 +25,20 @@ export default function MovieCard({ data }: { data: MovieCard_I }) {
       <View>
         <Image style={styles.poster}
           source={{ uri: "https://image.tmdb.org/t/p/w200" + data?.poster_path }} />
-        {data?.inCinemas &&
-          <View style={styles.inCinemas.view}>
-            <Text style={styles.inCinemas.text}>
+        {
+          data?.inCinemas &&
+          <View style={styles.inCinemasView}>
+            <Text style={[textStyle.white10, styles.inCinemasText]}>
               {`till ${(data?.maximum?.slice(3, 4) + ' ' + MONTH[data?.maximum?.slice(5, 7)])}`}
             </Text>
           </View>
         }
       </View>
-    </TouchableOpacity>
+    </PressableScale >
   )
 }
 
-const styles = {
+const styles = StyleSheet.create({
   view: {
     marginRight: 5,
     width: 100,
@@ -52,22 +54,17 @@ const styles = {
     height: "100%",
     borderRadius: 4
   },
-  inCinemas: {
-    view: {
-      position: "absolute",
-      top: "3%",
-      width: "100%",
-      backgroundColor: "rgba(50, 158, 79, 0.9)",
-      borderWidth: 0.5,
-      borderColor: "rgba(255, 255, 255, 0.4)"
-    },
-    text: [
-      textStyle.white10,
-      {
-        textTransform: "uppercase",
-        textAlign: "center",
-        alignSelf: "center"
-      }
-    ]
+  inCinemasView: {
+    position: "absolute",
+    top: "3%",
+    width: "100%",
+    backgroundColor: "rgba(50, 158, 79, 0.9)",
+    borderWidth: 0.5,
+    borderColor: "rgba(255, 255, 255, 0.4)"
+  },
+  inCinemasText: {
+    textTransform: "uppercase",
+    textAlign: "center",
+    alignSelf: "center"
   }
-}
+});

@@ -28,7 +28,7 @@ export default function FollowingsList({ userID }: { userID: number }) {
       keyExtractor={(item: any, _: number) => String(item?.user_id)}
       showsVerticalScrollIndicator={false}
       renderItem={({ item }) => <UserCard user={item} />}
-      ListFooterComponent={<View style={{ height: hp(8) }}></View>}
+      ListFooterComponent={<View style={{ height: hp(6) }}></View>}
     />
   )
 };

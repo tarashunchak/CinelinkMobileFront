@@ -1,24 +1,12 @@
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
-import { AddWatchlistItem } from "@/api/watchlist/watchlist";
-import { getCurrentUserID } from "@/utils/utils";
 import { textStyle } from "@/styles/textStyles";
-import { WatchlistItem_T } from "@/api/watchlist/types";
-import { buttonStyle } from "@/styles/buttonStyle";
 
 export default function ActionButtonsBlock({ movieID }: { movieID: number | undefined }) {
   return (
     <View style={styles.view}>
       <TouchableOpacity style={[styles.buttonView, styles.markAsWatchedBtn]}
-        onPress={() => {
-          const item: WatchlistItem_T = {
-            id: 0,
-            movie_id: movieID,
-            user_id: getCurrentUserID() || 0,
-            watchlist_id: 0,
-          };
-          AddWatchlistItem(item);
-        }}>
+        onPress={() => { }}>
         <Text style={styles.buttonText}>Add to Watchlist</Text>
       </TouchableOpacity>
 

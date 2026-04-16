@@ -2,8 +2,8 @@ import BottomBar from "@/app/bars/bottomBar";
 import MovieCardList from "@/components/ui/leafy-film-list";
 import { textStyle } from "@/styles/textStyles";
 import { useNavigation } from "expo-router";
-import React, { useEffect, useState } from "react";
-import { ImageBackground, ScrollView, Text } from "react-native";
+import React, { useMemo, useEffect, useRef, useState } from "react";
+import { View, ImageBackground, ScrollView, Text } from "react-native";
 import { Movie } from "./types";
 import MainInfo from "./components/MainInfo";
 import DetailsBlock from "./components/DetailsBlock";
@@ -14,11 +14,16 @@ import ProvidersBlock from "./components/ProvidersBlock";
 import TrailerBlock from "./components/TrailerBlock";
 import CreditCardsList from "./components/CreditCardsList";
 import { GetMovieYouTubeTrailerKey, LoadMovieDetails } from "./services/services";
+import WatchlistSheet, { WatchlistSheetRef } from "./components/AddToWatchlistModal";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import BottomSheet, { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 
 export default function MovieDetailScreen({ route }: any) {
   const navigation = useNavigation();
   const [movie, setMovie] = useState<Movie>();
   const { movieID, inCinemas } = route?.params;
+
+  const sheetRef = useRef<WatchlistSheetRef>(null);
 
   useEffect(() => {
     async function load() {
@@ -30,7 +35,6 @@ export default function MovieDetailScreen({ route }: any) {
     , [movieID]);
 
   const trailerKey = GetMovieYouTubeTrailerKey(movie?.videos);
-
   return (
     <ImageBackground source={require("@/assets/images/background.png")} style={{ flex: 1 }}>
       <ScrollView showsVerticalScrollIndicator={false} style={{ padding: "1%" }}>

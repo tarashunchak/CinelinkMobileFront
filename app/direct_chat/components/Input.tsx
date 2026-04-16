@@ -1,6 +1,6 @@
 import { textStyle } from "@/styles/textStyles";
 import React, { useState } from "react";
-import { View, Image, TouchableOpacity, TextInput, Platform } from "react-native";
+import { View, Image, TouchableOpacity, TextInput } from "react-native";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { RTClient } from "../../rt_client/rt_client";
 import { getCurrentUserID } from "@/utils/utils";
@@ -10,12 +10,12 @@ export default function Input({ chatID }: { chatID: number }) {
   const [text, setText] = useState<string>();
 
   async function handleFocus() {
-    await RTClient.setTyping(chatID, getCurrentUserID(), true);
+    await RTClient.setTypingStatus(chatID, getCurrentUserID(), true);
     setIsFocused(true);
   };
 
   async function handleBlur() {
-    await RTClient.setTyping(chatID, getCurrentUserID(), false);
+    await RTClient.setTypingStatus(chatID, getCurrentUserID(), false);
     setIsFocused(false);
   };
 

@@ -12,6 +12,7 @@ type Props = {
   isFollowed: boolean;
   onEdit: () => void,
   onToggleFollow: () => void,
+  onChat: () => void;
 };
 
 export function ProfileMain({
@@ -20,7 +21,8 @@ export function ProfileMain({
   isCurrentUser,
   isFollowed,
   onEdit,
-  onToggleFollow
+  onToggleFollow,
+  onChat,
 }: Props) {
 
   const fullName: string =
@@ -47,6 +49,7 @@ export function ProfileMain({
             source={{ uri: user?.avatar_url }}
             style={{ width: "100%", height: "100%", borderRadius: 999 }}
           />
+          {user?.is_online && <View style={styles.isOnlineDot}></View>}
         </TouchableOpacity>
 
         <ActionButton
@@ -55,6 +58,7 @@ export function ProfileMain({
           isLoading={isLoading}
           onEdit={onEdit}
           onToggleFollow={onToggleFollow}
+          onChat={onChat}
         />
 
       </View>
@@ -120,4 +124,15 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     borderColor: "rgba(255, 255, 255, 0.2)"
   },
+  isOnlineDot: {
+    height: 12,
+    width: 12,
+    backgroundColor: "#329E4F",
+    borderRadius: 10,
+    position: "absolute",
+    right: 3,
+    bottom: 3,
+    borderColor: "white",
+    borderWidth: 0.5,
+  }
 });

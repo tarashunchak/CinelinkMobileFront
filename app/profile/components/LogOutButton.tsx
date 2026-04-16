@@ -1,6 +1,7 @@
 import { TouchableOpacity, Image, Alert, StyleSheet } from "react-native";
-import React from "react";
+import React, { use } from "react";
 import { useAuthStore } from "@/local_storage/user/asyncStorage/store";
+import { RTClient } from "@/app/rt_client/rt_client";
 
 type Props = {
   isVisible: boolean;
@@ -17,7 +18,10 @@ function showLogOutDialog() {
     },
     {
       text: "Confirm",
-      onPress: () => useAuthStore.getState().logOut()
+      onPress: () => {
+        RTClient.setOnlineStatus(useAuthStore.getState()?.user?.user_id, false);
+        useAuthStore.getState().logOut();
+      }
     }
   ]);
 };

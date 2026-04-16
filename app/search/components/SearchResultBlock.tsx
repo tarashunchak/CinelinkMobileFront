@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Image, View, Text, TouchableOpacity, ImageBackground, TextInput, ScrollView, StyleSheet } from "react-native";
+import { Image, View, Text, TouchableOpacity, ImageBackground, TextInput, StyleSheet } from "react-native";
 import { useNavigation } from "expo-router";
 import SearchInput from "./input";
 import { GetQueryResult } from "../services/queries";
@@ -61,7 +61,6 @@ export default function SearchResultBlock({ route }: any) {
         flex: 1,
         padding: "1%",
         paddingTop: "10%",
-        paddingBottom: "10%"
       }}
     >
       <View style={styles.inputView}>

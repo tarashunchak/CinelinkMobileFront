@@ -1,3 +1,4 @@
+import { API_URL } from "@/api/API_CONFIG";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 
@@ -11,3 +12,15 @@ export function calcLastSeen(timestamp: string): string {
   const lastSeen = dayjs(timestamp);
   return lastSeen.fromNow();
 }
+
+export async function GetDirectChatID(user1ID: number, user2ID: number): Promise<number> {
+  if (1) return 3;
+  const response = await fetch(`${API_URL}/chats/get-or-create`, {
+    body: JSON.stringify({
+      users_ids: [user1ID, user2ID]
+    })
+  });
+  const text = await response.text();
+  const data = JSON.parse(text);
+  return data?.results;
+};

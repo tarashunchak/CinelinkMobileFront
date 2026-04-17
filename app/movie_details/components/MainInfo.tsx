@@ -9,7 +9,13 @@ import { Movie } from "../types";
 import { PressableScale } from "react-native-pressable-scale";
 import PosterModal from "./PosterModal";
 
-export default function MainInfo({ movie, inCinemas = false }: { movie: Movie, inCinemas: boolean }) {
+export default function MainInfo(
+  { movie, inCinemas = false }
+    : {
+      movie: Movie,
+      inCinemas: boolean,
+    }
+) {
   const maximum = null;
   const navigation = useNavigation();
   const backdropPath = movie?.images?.backdrops[movie?.images?.backdrops?.length - 1]?.file_path;
@@ -52,23 +58,21 @@ export default function MainInfo({ movie, inCinemas = false }: { movie: Movie, i
                 {
                   inCinemas && (
                     <View style={styles.inCinemasStripe}>
-                      <Text style={[textStyle.white12, { textTransform: "uppercase", textAlign: "center", alignSelf: "center" }]}>
+                      <Text style={[textStyle.white12, styles.inCinemasStripeText]}>
                         {`In cinemas till ${maximum && (maximum?.slice(3, 5) + ' ' + MONTH[maximum.slice(0, 2)])}`}
                       </Text>
                     </View>
                   )
                 }
               </PressableScale>
-
               <InfoBlock movieInfo={movie} />
-
             </View>
           </View>
         </View>
       </ImageBackground >
       <PosterModal
         isOpen={isOpen}
-        posterUrl={backdropPath}
+        posterUrl={movie?.poster_path}
         onClose={() => { setIsOpen(false) }}
       />
     </View >
@@ -107,5 +111,10 @@ const styles = StyleSheet.create({
     width: "100%",
     position: "absolute",
     backgroundColor: "rgba(50, 158, 79, 0.9)"
+  },
+  inCinemasStripeText: {
+    textTransform: "uppercase",
+    textAlign: "center",
+    alignSelf: "center"
   },
 });

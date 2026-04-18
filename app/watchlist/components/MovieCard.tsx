@@ -4,12 +4,14 @@ import { Linking, TouchableOpacity, View, Text, Image } from "react-native";
 import { Movie } from "../../movie_details/types";
 import { useNavigation } from "expo-router";
 import GenresLayout from "./genresLayout";
+import { PressableScale } from "react-native-pressable-scale";
 
 
 export default function MovieCard({ movie }: { movie: Movie }) {
   const navigator = useNavigation();
   return (
-    <TouchableOpacity
+    <PressableScale
+      activeScale={0.98}
       style={[styles?.backgroundStyle]}
       onPress={() => {
         navigator?.push("MovieDetailScreen",
@@ -53,7 +55,7 @@ export default function MovieCard({ movie }: { movie: Movie }) {
 
         <GenresLayout genres={movie?.genres} />
       </View>
-    </TouchableOpacity>
+    </PressableScale>
   );
 };
 
@@ -117,21 +119,3 @@ const styles = {
     borderColor: "rgba(255, 255, 255, 0.1)",
   },
 };
-
-/* <TouchableOpacity style={styles.view}
-        onPress={() => navigator.push("MovieDetailScreen", { movieId: movie?.movie_id })}>
-        <Image style={styles.content.poster} source={{ uri: `https://image.tmdb.org/t/p/w300${movie?.poster_path}` }} />
-        <View style={styles.content.columnInfo.view}>
-          <Text style={styles.content.columnInfo.title}
-            pointerEvents="none"
-            numberOfLines={1}
-            ellipsizeMode="tail">{movie?.title}</Text>
-          <View style={styles.content.columnInfo.imdb.view}>
-            <Text style={styles.content.columnInfo.imdb.text}>
-              {`IMDb: ${movie?.imdb_rating?.toFixed(1)}`}
-            </Text>
-          </View>
-
-          <GenresLayout genres={movie?.genres} />
-        </View>
-      </TouchableOpacity >*/

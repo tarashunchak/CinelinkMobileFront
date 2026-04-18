@@ -36,7 +36,5 @@ export default function FollowingsList({ userID }: { userID: number }) {
 const styles = StyleSheet.create({
   view: {
     paddingTop: 5,
-    paddingBottom: "8%",
-    maxHeight: hp(20),
   }
 });

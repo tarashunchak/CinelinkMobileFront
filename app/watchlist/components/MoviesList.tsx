@@ -3,14 +3,17 @@ import MovieCard from "./MovieCard";
 import { View, StyleSheet, Text } from "react-native";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen"
 import { textStyle } from "@/styles/textStyles";
+import { FlatList } from "react-native-gesture-handler";
 
 export default function MoviesList({ movies }: { movies: any[] }) {
   return (
-    <>
-      {
-        movies?.map((item: any, index: number) =>
-          <MovieCard key={index} movie={item} />)
-        ??
+    <FlatList
+      data={movies}
+      keyExtractor={(_, index) => String(index)}
+      renderItem={({ item }) => (
+        <MovieCard movie={item} />
+      )}
+      ListEmptyComponent={
         <Text
           style={[
             textStyle.gray32,
@@ -19,8 +22,10 @@ export default function MoviesList({ movies }: { movies: any[] }) {
           Watchlist is empty
         </Text>
       }
-      <View style={styles.bottomSpacer}></View>
-    </>
+      ListFooterComponent={
+        <View style={styles.bottomSpacer}></View>
+      }
+    />
   )
 }
 

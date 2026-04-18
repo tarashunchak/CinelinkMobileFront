@@ -15,6 +15,7 @@ import { useFollowings } from "./hooks/useFollowings";
 import { useFollowers } from "./hooks/useFollowers";
 import { GetChatMessages } from "@/api/chats/chats";
 import { GetDirectChatID } from "../direct_chat/utils/utils";
+import { GestureHandlerRootView, ScrollView } from "react-native-gesture-handler";
 
 export default function UserProfileScreen({ route }: any) {
   const navigator = useNavigation();
@@ -37,74 +38,77 @@ export default function UserProfileScreen({ route }: any) {
 
 
   return (
-    <ImageBackground
-      source={require("@/assets/images/background.png")}
-      style={{ flex: 1, backgroundColor: "black" }}
-    >
-      <View style={[{ padding: "2%", paddingTop: Platform.OS === "ios" ? "5%" : "2%" }]}>
-        <ProfileHeader
-          user={user}
-          onBack={navigator.goBack}
-          isCurrentUser={isCurrUser}
-        />
-        <View style={{ flexDirection: "column", gap: 5 }}>
-          <ProfileMain
-            isLoading={(userLoading ?? false) && true}
+    <GestureHandlerRootView>
+      <ImageBackground
+        source={require("@/assets/images/background.png")}
+        style={{ flex: 1, backgroundColor: "black" }}
+      >
+        <ScrollView style={[{ padding: "2%", paddingTop: Platform.OS === "ios" ? "5%" : "2%" }]}>
+          <ProfileHeader
             user={user}
+            onBack={navigator.goBack}
             isCurrentUser={isCurrUser}
-            isFollowed={user?.is_following}
-            onEdit={() => { }}
-            onToggleFollow={async () => {
-              if (user?.is_following)
-                await UnfollowUser(userID) && loadUser();
-              else
-                await FollowUser(userID) && loadUser();
-            }}
-            onChat={async () => {
-              console.warn("On chat");
-              navigator.navigate("DirectChatScreen", { chatID: await GetDirectChatID(getCurrentUserID(), userID) });
-            }}
           />
+          <View style={{ flexDirection: "column", gap: 5 }}>
+            <ProfileMain
+              isLoading={(userLoading ?? false) && true}
+              user={user}
+              isCurrentUser={isCurrUser}
+              isFollowed={user?.is_following}
+              onEdit={() => { }}
+              onToggleFollow={async () => {
+                if (user?.is_following)
+                  await UnfollowUser(userID) && loadUser();
+                else
+                  await FollowUser(userID) && loadUser();
+              }}
+              onChat={async () => {
+                console.warn("On chat");
+                navigator.navigate("DirectChatScreen", { chatID: await GetDirectChatID(getCurrentUserID(), userID) });
+              }}
+            />
 
-          <View style={userPage.stats.view}>
+            <View style={userPage.stats.view}>
 
-            <TouchableOpacity style={userPage.stats.item}
-              onPress={() => {
-                setList("Followings");
-              }}>
-              <Text style={userPage.stats.itemText}>{followings?.length || "*"}</Text>
-              <Text style={userPage.stats.itemText}>Followings</Text>
-            </TouchableOpacity>
+              <TouchableOpacity style={userPage.stats.item}
+                onPress={() => {
+                  setList("Followings");
+                }}>
+                <Text style={userPage.stats.itemText}>{followings?.length || "*"}</Text>
+                <Text style={userPage.stats.itemText}>Followings</Text>
+              </TouchableOpacity>
 
-            <TouchableOpacity style={userPage.stats.item}
-              onPress={() => {
-                setList("Followers");
-              }}>
-              <Text style={userPage.stats.itemText}>{followers?.length || "*"}</Text>
-              <Text style={userPage.stats.itemText}>Followers</Text>
-            </TouchableOpacity>
+              <TouchableOpacity style={userPage.stats.item}
+                onPress={() => {
+                  setList("Followers");
+                }}>
+                <Text style={userPage.stats.itemText}>{followers?.length || "*"}</Text>
+                <Text style={userPage.stats.itemText}>Followers</Text>
+              </TouchableOpacity>
 
-            <TouchableOpacity style={userPage.stats.item}>
-              <Text style={userPage.stats.itemText}>{user?.posts || "*"}</Text>
-              <Text style={userPage.stats.itemText}>Posts</Text>
-            </TouchableOpacity>
+              <TouchableOpacity style={userPage.stats.item}>
+                <Text style={userPage.stats.itemText}>{user?.posts || "*"}</Text>
+                <Text style={userPage.stats.itemText}>Posts</Text>
+              </TouchableOpacity>
+            </View>
+
           </View>
 
-        </View>
+          <View style={styles.line}></View>
+          {
+            list === "Followings"
+            && <FollowingsList userID={userID} />
+          }
+          {
+            list === "Followers"
+            && <FollowersList userID={userID} />
+          }
 
-        <View style={styles.line}></View>
-        {
-          list === "Followings"
-          && <FollowingsList userID={userID} />
-        }
-        {
-          list === "Followers"
-          && <FollowersList userID={userID} />
-        }
+        </ScrollView >
 
-      </View >
-      <BottomBar />
-    </ImageBackground >
+        <BottomBar />
+      </ImageBackground >
+    </GestureHandlerRootView>
   );
 };
 

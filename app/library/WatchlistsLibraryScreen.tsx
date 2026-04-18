@@ -40,7 +40,7 @@ export default function WatchlistsScreen() {
             <View style={{ height: 10 }}></View>
           }
           ListFooterComponent={
-            <View style={{ height: hp(8) }}></View>
+            <View style={{ height: hp(14) }}></View>
           }
         />
       </ImageBackground>

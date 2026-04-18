@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from "react";
-import { TouchableOpacity, ImageBackground, Text, View, StyleSheet, Platform } from "react-native";
+import { ImageBackground, Text, View, StyleSheet, Platform } from "react-native";
+import { PressableScale } from "react-native-pressable-scale";
 import BottomBar from "../bars/bottomBar";
 import { userPage } from "./styles";
 import { useFocusEffect, useNavigation } from "expo-router";
@@ -13,9 +14,9 @@ import FollowingsList from "./components/FollowingsList";
 import FollowersList from "./components/FollowersList";
 import { useFollowings } from "./hooks/useFollowings";
 import { useFollowers } from "./hooks/useFollowers";
-import { GetChatMessages } from "@/api/chats/chats";
 import { GetDirectChatID } from "../direct_chat/utils/utils";
 import { GestureHandlerRootView, ScrollView } from "react-native-gesture-handler";
+import { textStyle } from "@/styles/textStyles";
 
 export default function UserProfileScreen({ route }: any) {
   const navigator = useNavigation();
@@ -36,6 +37,11 @@ export default function UserProfileScreen({ route }: any) {
     }, [])
   );
 
+  const statsStyle = (statName: string) => {
+    return statName === list
+      ? styles.activeStatsView
+      : styles.inactiveStatsView;
+  }
 
   return (
     <GestureHandlerRootView>
@@ -70,26 +76,26 @@ export default function UserProfileScreen({ route }: any) {
 
             <View style={userPage.stats.view}>
 
-              <TouchableOpacity style={userPage.stats.item}
+              <PressableScale style={statsStyle("Followings")}
                 onPress={() => {
                   setList("Followings");
                 }}>
-                <Text style={userPage.stats.itemText}>{followings?.length || "*"}</Text>
-                <Text style={userPage.stats.itemText}>Followings</Text>
-              </TouchableOpacity>
+                <Text style={textStyle.white14}>{followings?.length || "*"}</Text>
+                <Text style={textStyle.white14}>Followings</Text>
+              </PressableScale>
 
-              <TouchableOpacity style={userPage.stats.item}
+              <PressableScale style={statsStyle("Followers")}
                 onPress={() => {
                   setList("Followers");
                 }}>
-                <Text style={userPage.stats.itemText}>{followers?.length || "*"}</Text>
-                <Text style={userPage.stats.itemText}>Followers</Text>
-              </TouchableOpacity>
+                <Text style={textStyle.white14}>{followers?.length || "*"}</Text>
+                <Text style={textStyle.white14}>Followers</Text>
+              </PressableScale>
 
-              <TouchableOpacity style={userPage.stats.item}>
-                <Text style={userPage.stats.itemText}>{user?.posts || "*"}</Text>
-                <Text style={userPage.stats.itemText}>Posts</Text>
-              </TouchableOpacity>
+              <PressableScale style={userPage.stats.item}>
+                <Text style={textStyle.white14}>{user?.posts || "*"}</Text>
+                <Text style={textStyle.white14}>Posts</Text>
+              </PressableScale>
             </View>
 
           </View>
@@ -105,7 +111,6 @@ export default function UserProfileScreen({ route }: any) {
           }
 
         </ScrollView >
-
         <BottomBar />
       </ImageBackground >
     </GestureHandlerRootView>
@@ -154,5 +159,20 @@ const styles = StyleSheet.create({
   bioText: {
     margin: 10,
     textAlign: "left"
-  }
+  },
+  activeStatsView: {
+    flexDirection: "row",
+    paddingHorizontal: 5,
+    paddingBottom: 1,
+    gap: 5,
+    borderRadius: 999,
+    backgroundColor: "rgba(255, 255, 255, 0.2)",
+  },
+  inactiveStatsView: {
+    flexDirection: "row",
+    paddingHorizontal: 5,
+    paddingBottom: 1,
+    gap: 5,
+    backgroundColor: "transparent",
+  },
 });

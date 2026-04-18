@@ -5,7 +5,6 @@ import { PressableScale } from "react-native-pressable-scale";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { useNavigation } from "expo-router";
 import { RTClient } from "@/app/rt_client/rt_client";
-import { CURRENT_USER } from "@/api/currentUser";
 import { getCurrentUserID } from "@/utils/utils";
 
 export default async function ChatCard({ item }: { item: any }) {

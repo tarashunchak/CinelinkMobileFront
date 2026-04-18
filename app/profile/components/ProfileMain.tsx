@@ -4,6 +4,7 @@ import { ActionButton } from "./ActionButton";
 import { UserProfile_T } from "../types";
 import { textStyle } from "@/styles/textStyles";
 import ProfilePhotoModal from "./ProfilePhotoModal";
+import { PressableScale } from "react-native-pressable-scale";
 
 type Props = {
   isLoading: boolean;
@@ -41,7 +42,7 @@ export function ProfileMain({
   return (
     <>
       <View style={styles.view}>
-        <TouchableOpacity
+        <PressableScale
           style={styles.avatar}
           onPress={() => setIsOpen(true)}
         >
@@ -50,7 +51,7 @@ export function ProfileMain({
             style={{ width: "100%", height: "100%", borderRadius: 999 }}
           />
           {user?.is_online && <View style={styles.isOnlineDot}></View>}
-        </TouchableOpacity>
+        </PressableScale>
 
         <ActionButton
           isCurrentUser={isCurrentUser}

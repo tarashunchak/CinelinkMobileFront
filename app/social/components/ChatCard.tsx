@@ -1,6 +1,7 @@
 import React from "react";
 import { textStyle } from "@/styles/textStyles";
-import { TouchableOpacity, View, Text, Image } from "react-native";
+import { View, Text, Image } from "react-native";
+import { PressableScale } from "react-native-pressable-scale";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { useNavigation } from "expo-router";
 import { RTClient } from "@/app/rt_client/rt_client";
@@ -11,7 +12,8 @@ export default async function ChatCard({ item }: { item: any }) {
   const navigator = useNavigation();
 
   return (
-    <TouchableOpacity
+    <PressableScale
+      activeScale={0.98}
       style={styles.card.view}
       onPress={() => {
         navigator?.navigate("DirectChatScreen", { chatID: item?.chat_id });
@@ -31,7 +33,7 @@ export default async function ChatCard({ item }: { item: any }) {
           <Text style={styles.card.info.text.last_message}>{"Go v minecraft"}</Text>
         </View>
       </View>
-    </TouchableOpacity>
+    </PressableScale>
   );
 }
 

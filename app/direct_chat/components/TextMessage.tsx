@@ -1,8 +1,10 @@
 import React from "react";
+import * as Haptics from "expo-haptics";
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
 import { isCurrentUser } from "@/utils/utils";
 import { timestamp } from "../utils/utils";
 import { textStyle } from "@/styles/textStyles";
+import { PressableScale } from "react-native-pressable-scale";
 
 interface TextMessage_I {
   message_id: number;
@@ -16,18 +18,23 @@ interface TextMessage_I {
 
 export default function TextMessage({ message }: { message: TextMessage_I }) {
   return (
-    <TouchableOpacity
-      style={[stylesR.messageView, 
-        isCurrentUser(message?.sender_id)
-          ? stylesR.isCurrentUser
-          : stylesR.notCurrentUser]}>
+    <PressableScale
+      style={[stylesR.messageView,
+      isCurrentUser(message?.sender_id)
+        ? stylesR.isCurrentUser
+        : stylesR.notCurrentUser]}
+      onLongPress={() => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+      }}
+      delayLongPress={350}
+    >
       <Text style={[textStyle.white16]}>
         {message?.content?.message}
       </Text>
       <Text style={[textStyle.gray12]}>
         {timestamp(new Date(message?.timestamp))}
       </Text>
-    </TouchableOpacity >
+    </PressableScale >
   );
 };
 
@@ -44,11 +51,11 @@ const stylesR = StyleSheet.create({
     flexDirection: "column",
     gap: 5,
   },
-  isCurrentUser:{
+  isCurrentUser: {
     backgroundColor: "rgba(255, 255, 255, 0.1)",
     alignSelf: "flex-end",
   },
-  notCurrentUser:{
+  notCurrentUser: {
     backgroundColor: "rgba(0, 0, 0, 0.4)",
     alignSelf: "flex-start",
   }

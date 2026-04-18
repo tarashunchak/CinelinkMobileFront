@@ -1,9 +1,10 @@
-import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import { textStyle } from "@/styles/textStyles";
 import React, { useEffect } from "react";
 import { useNavigation } from "expo-router";
+import { PressableScale } from "react-native-pressable-scale";
 
-type Props = {
+interface Props {
   isLoading: boolean;
   isCurrentUser: boolean;
   isFollowed: boolean;
@@ -20,7 +21,6 @@ export function ActionButton({
   onToggleFollow,
   onChat,
 }: Props) {
-
   let text;
   const navigator = useNavigation();
 
@@ -35,7 +35,7 @@ export function ActionButton({
     <View style={{ flexDirection: "row", gap: 10 }}>
       {
         (isCurrentUser) ?
-          (<TouchableOpacity
+          (<PressableScale
             style={styles.transparent}
             onPress={onEdit}
           >
@@ -44,9 +44,9 @@ export function ActionButton({
             >
               {text}
             </Text>
-          </TouchableOpacity >)
+          </PressableScale >)
           :
-          (<TouchableOpacity
+          (<PressableScale
             style={isFollowed ? styles.transparent : styles.white}
             onPress={async () => await onToggleFollow()}
           >
@@ -55,18 +55,18 @@ export function ActionButton({
             >
               {text}
             </Text>
-          </TouchableOpacity>)
+          </PressableScale>)
       }
       {
         (isFollowed) ?
-          (<TouchableOpacity
+          (<PressableScale
             style={styles.chatBtnView}
             onPress={onChat}
           >
             <Text style={textStyle.white18}>
               {"Chat"}
             </Text>
-          </TouchableOpacity>)
+          </PressableScale>)
           : null
       }
     </View>

@@ -1,3 +1,4 @@
+import React from "react";
 import { textStyle } from "@/styles/textStyles";
 import { Text, View, Image, ImageBackground, Modal, StyleSheet, TouchableOpacity } from "react-native";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
@@ -5,11 +6,12 @@ import * as ImagePicker from "expo-image-picker";
 import { useState } from "react";
 
 export default function ProfilePhotoModal(
-  { isOpen, avatarUrl, onClose }:
+  { isOpen, avatarUrl, onClose, isCurrentUser }:
     {
       isOpen: boolean,
       avatarUrl: string,
-      onClose: () => void
+      onClose: () => void,
+      isCurrentUser: boolean,
     }
 ) {
 
@@ -45,22 +47,25 @@ export default function ProfilePhotoModal(
               style={styles.avatarImage}
             />
           </View>
-          <TouchableOpacity
-            style={styles.editBtnView}
-            onPress={async () => {
-              const results = await ImagePicker.launchImageLibraryAsync({
-                mediaTypes: ImagePicker.MediaTypeOptions.Images,
-                quality: 1,
-              });
-              setAvatarUri(results?.assets[0].uri)
-            }}
-          >
-            <Image
-              style={styles.editBtnImage}
-              source={require("@/app/profile/assets/EditIcon.png")}
-            />
-            <Text style={textStyle.white20}>Edit</Text>
-          </TouchableOpacity>
+          {
+            isCurrentUser &&
+            <TouchableOpacity
+              style={styles.editBtnView}
+              onPress={async () => {
+                const results = await ImagePicker.launchImageLibraryAsync({
+                  mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                  quality: 1,
+                });
+                setAvatarUri(results?.assets[0].uri)
+              }}
+            >
+              <Image
+                style={styles.editBtnImage}
+                source={require("@/app/profile/assets/EditIcon.png")}
+              />
+              <Text style={textStyle.white20}>Edit</Text>
+            </TouchableOpacity>
+          }
         </View>
       </ImageBackground>
     </Modal>

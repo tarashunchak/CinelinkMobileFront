@@ -3,6 +3,7 @@ import React from "react";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { TouchableOpacity, View, Text, Image } from "react-native";
 import { useNavigation } from "expo-router";
+import { PressableScale } from "react-native-pressable-scale";
 
 interface Props {
   user_id: number;
@@ -16,7 +17,9 @@ interface Props {
 export default function FriendCard({ friend }: { friend: Props }) {
   const navigator = useNavigation();
   return (
-    <TouchableOpacity style={styles.card.view}
+    <PressableScale
+      activeScale={0.98}
+      style={styles.card.view}
       onPress={() => {
         navigator?.push("UserProfileScreen", { userID: friend?.user_id })
       }}>
@@ -38,7 +41,7 @@ export default function FriendCard({ friend }: { friend: Props }) {
         style={styles.card.chatIcon}
         source={require("@/app/social/assets/chatIcon.png")}
       />
-    </TouchableOpacity>
+    </PressableScale>
   );
 };
 

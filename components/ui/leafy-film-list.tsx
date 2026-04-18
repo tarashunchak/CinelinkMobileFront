@@ -8,6 +8,7 @@ import { Image, Linking, Platform, Text, TouchableOpacity, View } from "react-na
 import { heightPercentageToDP } from "react-native-responsive-screen";
 import { Float } from "react-native/Libraries/Types/CodegenTypes";
 import { textStyle } from "../../styles/textStyles";
+import { PressableScale } from "react-native-pressable-scale";
 
 interface Genre {
   id: number;
@@ -70,7 +71,7 @@ export default function MovieCardList({ selectedGenre, movieID, movieGenre }: Mo
           nowPlayingMoviesId.includes(movie?.id) ?
             null
             :
-            (<TouchableOpacity key={index} style={[movieCardStyle?.backgroundStyle]} onPress={() => {
+            (<PressableScale key={index} style={[movieCardStyle?.backgroundStyle]} onPress={() => {
               const id = movie.id;
               console.log("MovieID pre: ", id);
               navigation?.push("MovieDetailScreen", { movieID: id });
@@ -113,7 +114,7 @@ export default function MovieCardList({ selectedGenre, movieID, movieGenre }: Mo
                   </Text>
                 </TouchableOpacity>
               </View>
-            </TouchableOpacity>
+            </PressableScale >
             )
         )
         )}

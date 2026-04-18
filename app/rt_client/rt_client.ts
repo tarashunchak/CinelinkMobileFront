@@ -2,8 +2,7 @@ import { API_URL } from "@/api/API_CONFIG";
 import { ChatID, UserID, RTMessage } from "./models/models";
 import { getCurrentUserID } from "@/utils/utils";
 import { GetChat } from "@/api/chats/chats";
-import { MessagesQueue } from "./messagesQueue/messagesQueue";
-import { WSConnector } from "./ws_connector/ws_connector";
+import { MessagesQueue } from "./messagesQueue/messagesQueue"; import { WSConnector } from "./ws_connector/ws_connector";
 import { Chat, ChatManager, ChatMessage } from "./chat_manager/chat_manager";
 import ProvidersBlock from "../movie_details/components/ProvidersBlock";
 
@@ -133,6 +132,19 @@ class RTClient_ {
         page,
       }
     });
+  };
+
+  public async sendMessage(chatID: ChatID, message: RTMessage) {
+    const resp = await fetch(HTTP_ADDRESS(chatID),
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(message)
+      }
+    );
+    const data = await resp?.json();
+
+    return data?.results;
   };
 };
 

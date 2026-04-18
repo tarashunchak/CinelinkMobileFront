@@ -89,7 +89,12 @@ export function ProfileMain({
           {`Joined ${fetchJoinedAt}`}
         </Text>
       </View>
-      <ProfilePhotoModal onClose={() => setIsOpen(false)} isOpen={isOpen} avatarUrl={user?.avatar_url} />
+      <ProfilePhotoModal
+        isCurrentUser={isCurrentUser}
+        isOpen={isOpen}
+        avatarUrl={user?.avatar_url}
+        onClose={() => setIsOpen(false)}
+      />
     </>
   );
 };

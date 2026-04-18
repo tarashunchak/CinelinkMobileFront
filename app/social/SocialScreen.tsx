@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { TouchableOpacity, Text, ImageBackground, View, FlatList } from "react-native";
 import BottomBar from "../bars/bottomBar";
 import RecommendationCard, { RecommendedCard_T } from "./components/RecommendationCard";
-import ChatCard from "./components/chatCard";
+import ChatCard from "./components/ChatCard";
 import { textStyle } from "@/styles/textStyles";
 import { GetUserFollowers } from "@/api/followers/followers";
 import { GetUserRecommendations } from "@/api/recommendations/recommendations";

@@ -11,7 +11,6 @@ export default function RootLayout() {
         }}>
             <StatusBar translucent backgroundColor="transparent" style="light" />
             <Slot />
-
         </View>
     );
 };

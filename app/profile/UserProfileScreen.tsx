@@ -15,7 +15,7 @@ import FollowersList from "./components/FollowersList";
 import { useFollowings } from "./hooks/useFollowings";
 import { useFollowers } from "./hooks/useFollowers";
 import { GetDirectChatID } from "../direct_chat/utils/utils";
-import { GestureHandlerRootView, ScrollView } from "react-native-gesture-handler";
+import { FlatList, GestureHandlerRootView, ScrollView } from "react-native-gesture-handler";
 import { textStyle } from "@/styles/textStyles";
 
 export default function UserProfileScreen({ route }: any) {
@@ -49,68 +49,72 @@ export default function UserProfileScreen({ route }: any) {
         source={require("@/assets/images/background.png")}
         style={{ flex: 1, backgroundColor: "black" }}
       >
-        <ScrollView style={[{ padding: "2%", paddingTop: Platform.OS === "ios" ? "5%" : "2%" }]}>
-          <ProfileHeader
-            user={user}
-            onBack={navigator.goBack}
-            isCurrentUser={isCurrUser}
-          />
-          <View style={{ flexDirection: "column", gap: 5 }}>
-            <ProfileMain
-              isLoading={(userLoading ?? false) && true}
-              user={user}
-              isCurrentUser={isCurrUser}
-              isFollowed={user?.is_following}
-              onEdit={() => { }}
-              onToggleFollow={async () => {
-                if (user?.is_following)
-                  await UnfollowUser(userID) && loadUser();
-                else
-                  await FollowUser(userID) && loadUser();
-              }}
-              onChat={async () => {
-                console.warn("On chat");
-                navigator.navigate("DirectChatScreen", { chatID: await GetDirectChatID(getCurrentUserID(), userID) });
-              }}
-            />
+        <FlatList
+          ListHeaderComponent={
+            <View style={[{ padding: "2%", paddingTop: Platform.OS === "ios" ? "5%" : "2%" }]}>
+              <ProfileHeader
+                user={user}
+                onBack={navigator.goBack}
+                isCurrentUser={isCurrUser}
+              />
+              <View style={{ flexDirection: "column", gap: 5 }}>
+                <ProfileMain
+                  isLoading={(userLoading ?? false) && true}
+                  user={user}
+                  isCurrentUser={isCurrUser}
+                  isFollowed={user?.is_following}
+                  onEdit={() => { }}
+                  onToggleFollow={async () => {
+                    if (user?.is_following)
+                      await UnfollowUser(userID) && loadUser();
+                    else
+                      await FollowUser(userID) && loadUser();
+                  }}
+                  onChat={async () => {
+                    console.warn("On chat");
+                    navigator.navigate("DirectChatScreen", { chatID: await GetDirectChatID(getCurrentUserID(), userID) });
+                  }}
+                />
 
-            <View style={userPage.stats.view}>
+                <View style={userPage.stats.view}>
 
-              <PressableScale style={statsStyle("Followings")}
-                onPress={() => {
-                  setList("Followings");
-                }}>
-                <Text style={textStyle.white14}>{followings?.length || "*"}</Text>
-                <Text style={textStyle.white14}>Followings</Text>
-              </PressableScale>
+                  <PressableScale style={statsStyle("Followings")}
+                    onPress={() => {
+                      setList("Followings");
+                    }}>
+                    <Text style={textStyle.white14}>{followings?.length || "*"}</Text>
+                    <Text style={textStyle.white14}>Followings</Text>
+                  </PressableScale>
 
-              <PressableScale style={statsStyle("Followers")}
-                onPress={() => {
-                  setList("Followers");
-                }}>
-                <Text style={textStyle.white14}>{followers?.length || "*"}</Text>
-                <Text style={textStyle.white14}>Followers</Text>
-              </PressableScale>
+                  <PressableScale style={statsStyle("Followers")}
+                    onPress={() => {
+                      setList("Followers");
+                    }}>
+                    <Text style={textStyle.white14}>{followers?.length || "*"}</Text>
+                    <Text style={textStyle.white14}>Followers</Text>
+                  </PressableScale>
 
-              <PressableScale style={userPage.stats.item}>
-                <Text style={textStyle.white14}>{user?.posts || "*"}</Text>
-                <Text style={textStyle.white14}>Posts</Text>
-              </PressableScale>
-            </View>
+                  <PressableScale style={userPage.stats.item}>
+                    <Text style={textStyle.white14}>{user?.posts || "*"}</Text>
+                    <Text style={textStyle.white14}>Posts</Text>
+                  </PressableScale>
+                </View>
 
-          </View>
+              </View>
 
-          <View style={styles.line}></View>
-          {
-            list === "Followings"
-            && <FollowingsList userID={userID} />
+              <View style={styles.line}></View>
+              {
+                list === "Followings"
+                && <FollowingsList userID={userID} />
+              }
+              {
+                list === "Followers"
+                && <FollowersList userID={userID} />
+              }
+
+            </View >
           }
-          {
-            list === "Followers"
-            && <FollowersList userID={userID} />
-          }
-
-        </ScrollView >
+        />
         <BottomBar />
       </ImageBackground >
     </GestureHandlerRootView>

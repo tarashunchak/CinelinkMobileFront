@@ -1,9 +1,9 @@
 import React from "react";
 import ReturnArrowButton from "@/components/ui/returnArrowButton";
-import { ImageBackground, View } from "react-native";
+import { ImageBackground, StyleSheet, View } from "react-native";
 import { UserProfile_T } from "../types";
 import { LogOutButton } from "./LogOutButton";
-import { heightPercentageToDP as hp } from "react-native-responsive-screen";
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 
 type Props = {
   user: UserProfile_T;
@@ -18,7 +18,7 @@ export function ProfileHeader({ user, onBack, isCurrentUser }: Props) {
         source={user?.bg_img_url
           ? { uri: user?.bg_img_url }
           : require("@/assets/images/profileBackground.png")}
-        style={styles.bg_img}
+        style={styles.bgImage}
       />
       <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
         <ReturnArrowButton onPress={onBack} />
@@ -28,13 +28,12 @@ export function ProfileHeader({ user, onBack, isCurrentUser }: Props) {
   );
 };
 
-const styles = {
-  bg_img: {
-    margin: "-2%",
+const styles = StyleSheet.create({
+  bgImage: {
     height: hp("36%"),
-    width: "104%",
+    width: wp(100),
     position: "absolute",
     top: 0,
     left: 0,
   }
-};
+});

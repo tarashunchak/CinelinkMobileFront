@@ -2,11 +2,12 @@ import BottomBar from "@/app/bars/bottomBar";
 import GenresList from "@/components/ui/leafy-genres-list";
 import { textStyle } from "@/styles/textStyles";
 import React, { useEffect, useState } from "react";
-import { ImageBackground, ScrollView, StyleSheet, Text } from "react-native";
+import { ScrollView, StyleSheet, Text } from "react-native";
 import HorizontalMoviesList from "./components/HorizontalMoviesList";
 import MovieOfTheDay from "./components/MovieOfTheDay";
 import { GetHomeMovies } from "@/api/home/home";
 import { Movie_I } from "./models/movie";
+import ScreenBackground from "@/components/ui/screen-background";
 
 interface Movies_I {
   popular: Movie_I[],
@@ -29,10 +30,7 @@ export default function HomePageScreen() {
   }, [])
 
   return (
-    <ImageBackground
-      source={require("@/assets/images/background.png")}
-      style={stylesR.background}
-    >
+    <ScreenBackground>
       <ScrollView
         style={stylesR.scrollView}
         showsVerticalScrollIndicator={false}
@@ -56,8 +54,7 @@ export default function HomePageScreen() {
 
       </ScrollView>
       <BottomBar />
-
-    </ImageBackground >
+    </ScreenBackground>
   );
 }
 

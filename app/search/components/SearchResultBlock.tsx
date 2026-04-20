@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Image, View, Text, TouchableOpacity, ImageBackground, TextInput, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import { useNavigation } from "expo-router";
-import SearchInput from "./input";
 import { GetQueryResult } from "../services/queries";
-import { textStyle } from "@/styles/textStyles";
-import MovieCard from "./MovieCard";
-import UserCard from "@/components/userCard";
-import { getNowPlayingMovies, getPopularMovies } from "@/api/tmdbApi";
-import CategoriesBlock, { getActiveCategory } from "./CategoriesBlock";
-import LeafyReturnArrowButton from "@/components/ui/returnArrowButton";
+import { getPopularMovies } from "@/api/tmdbApi";
+import { getActiveCategory } from "./CategoriesBlock";
 import ContentBlock from "./ContentBlock";
+import ScreenBackground from "@/components/ui/screen-background";
+import SearchInput from "./Input";
+import Spacer from "@/components/ui/spacer";
+import { heightPercentageToDP } from "react-native-responsive-screen";
 
 type Search = {
 
@@ -55,39 +54,11 @@ export default function SearchResultBlock({ route }: any) {
   }, [])
 
   return (
-    <ImageBackground
-      source={require("@/assets/images/background.png")}
-      style={{
-        flex: 1,
-        padding: "1%",
-        paddingTop: "10%",
-      }}
-    >
-      <View style={styles.inputView}>
-        <LeafyReturnArrowButton onPress={navigator.goBack} />
-        <TextInput
-          style={[textStyle.white20,
-          {
-            marginLeft: 5,
-            height: "100%",
-            width: "73%"
-          }
-          ]}
-          value={_value}
-          onChangeText={text => {
-            setValue(text);
-            load();
-          }}
-        />
-        <TouchableOpacity style={{ height: "90%", width: "90%", justifyContent: "center" }}>
-          <Image
-            source={require("@/app/search/assets/filter.png")}
-            style={{ height: 34, width: 34 }}
-          />
-        </TouchableOpacity>
-      </View>
+    <ScreenBackground>
+      <Spacer orientation="v" spacing={heightPercentageToDP(5)} />
+      <SearchInput placeholder="Enter query..." value={_value} setValue={setValue} onChangeText={load} />
       <ContentBlock query={_value} />
-    </ImageBackground>
+    </ScreenBackground>
   )
 }
 

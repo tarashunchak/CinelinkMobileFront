@@ -1,15 +1,11 @@
-import React, { useCallback, useState } from "react";
-import { ImageBackground, ScrollView, FlatList, View, Text, Image, TouchableOpacity, KeyboardAvoidingView } from "react-native";
+import React from "react";
+import { ScrollView, View, Text, KeyboardAvoidingView } from "react-native";
 import Header from "./components/header";
 import Input from "./components/input";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
-import { useFocusEffect } from "expo-router";
-import { GetChat, GetChatMessages } from "@/api/chats/chats";
 import { textStyle } from "@/styles/textStyles";
-import { SendChatMessages } from "@/api/chats/messages";
-import { useAuthStore } from "@/local_storage/user/asyncStorage/store";
 import { isCurrentUser } from "@/utils/utils";
-import { RTChat } from "../rt_client/rt_client";
+import ScreenBackground from "@/components/ui/screen-background";
 
 
 
@@ -17,7 +13,7 @@ export default function GroupChatScreen({ chat }: { chat: any }) {
 
   return (
     <KeyboardAvoidingView style={{ flexGrow: 1 }} enabled={true} behavior="padding">
-      <ImageBackground source={require("@/assets/images/background.png")} style={{ flex: 1, justifyContent: "space-between" }}>
+      <ScreenBackground>
         <Header info={chat} />
         <ScrollView style={{}}
           keyboardShouldPersistTaps="always"
@@ -72,7 +68,7 @@ export default function GroupChatScreen({ chat }: { chat: any }) {
           if (res) await loadMessages();
         }*/} />
 
-      </ImageBackground>
+      </ScreenBackground>
     </KeyboardAvoidingView>
   );
 };

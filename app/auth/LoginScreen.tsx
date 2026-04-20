@@ -4,15 +4,21 @@ import { buttonStyle } from "@/styles/buttonStyle";
 import { textStyle } from "@/styles/textStyles";
 import * as WebBrowser from "expo-web-browser";
 import React, { useState } from "react";
-import { Image, ImageBackground, Text, TouchableOpacity, View } from "react-native";
+import { Image, ImageBackground, Text, View } from "react-native";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
+import { PressableScale } from "react-native-pressable-scale";
 import Input from "./components/Input";
+import { useAuth } from "@clerk/expo";
 
 WebBrowser.maybeCompleteAuthSession();
 
 export default function LoginScreen() {
   const [login, setLogin] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+
+  const onSignIn = () => {
+
+  };
 
   return (
     <View style={styles.container}>
@@ -43,12 +49,12 @@ export default function LoginScreen() {
             onChangeText={(text) => setPassword(text)}
           />
 
-          <TouchableOpacity style={[buttonStyle.continueButton, { borderRadius: 8, marginTop: "5%" }]}
+          <PressableScale style={[buttonStyle.continueButton, { borderRadius: 8, marginTop: "5%" }]}
             onPress={() => { LoginRequest(login, password) }}>
             <Text style={[textStyle.white20]}>
               Continue
             </Text>
-          </TouchableOpacity>
+          </PressableScale>
 
           <View style={[
             {
@@ -60,7 +66,7 @@ export default function LoginScreen() {
             }
           ]}></View>
 
-          <TouchableOpacity style={[styles.googleButton.touchable]}
+          <PressableScale style={[styles.googleButton.touchable]}
             onPress={() => onSignIn("google")}>
             <View style={[styles.googleButton.view]}>
               <Image source={require("@/assets/images/google_icon.png")}
@@ -76,9 +82,9 @@ export default function LoginScreen() {
                 }
               ]}>Sign In with Google</Text>
             </View>
-          </TouchableOpacity>
+          </PressableScale>
 
-          <TouchableOpacity style={[styles.appleButton.touchable]}
+          <PressableScale style={[styles.appleButton.touchable]}
             onPress={() => onSignIn("apple")}>
             <View style={[styles.appleButton.view]}>
               <Image source={require("@/assets/images/apple.png")}
@@ -92,9 +98,12 @@ export default function LoginScreen() {
                 {
                   alignSelf: "center"
                 }
-              ]}>Sign In with Apple</Text>
+              ]}
+              >
+                {"Sign In with Apple"}
+              </Text>
             </View>
-          </TouchableOpacity>
+          </PressableScale>
 
         </ImageBackground>
 

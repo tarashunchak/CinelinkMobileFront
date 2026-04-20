@@ -1,12 +1,13 @@
 import React from "react";
 import { useNavigation } from "expo-router";
-import { Image, Text, TouchableOpacity } from "react-native";
+import { Image, Text } from "react-native";
 import { textStyle } from "@/styles/textStyles";
+import { PressableScale } from "react-native-pressable-scale";
 
 export default function CreditCard({ credit }: { credit: any }) {
   const navigator = useNavigation();
   return (
-    <TouchableOpacity
+    <PressableScale
       style={styles.view}
       onPress={() => navigator?.push("CreditDetailScreen", { creditID: credit.id })}>
       <Image
@@ -25,7 +26,7 @@ export default function CreditCard({ credit }: { credit: any }) {
       <Text style={textStyle.gray12} numberOfLines={1}
         ellipsizeMode="tail">{credit?.character ?? "N/A"}</Text>
       <Text style={textStyle.yellow12} >{credit?.known_for_department}</Text>
-    </TouchableOpacity>
+    </PressableScale>
   );
 }
 

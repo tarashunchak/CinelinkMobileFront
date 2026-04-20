@@ -43,7 +43,8 @@ export async function sendTokenToBackend(token: string) {
 export async function configure() {
   Notifications.setNotificationHandler({
     handleNotification: async () => ({
-      shouldPlaySound: false,
+      shouldPlaySound: true,
+      shouldShowAlert: true,
       shouldSetBadge: false,
       shouldShowBanner: true,
       shouldShowList: true,

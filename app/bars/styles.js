@@ -1,6 +1,6 @@
-import { Platform } from "react-native";
+import { Platform, StyleSheet } from "react-native";
 
-export const bottomBar = {
+export const bottomBar = StyleSheet.create({
   view: [
     {
       zIndex: 5,
@@ -9,7 +9,7 @@ export const bottomBar = {
       alignItems: "center",
       backgroundColor: "rgba(23, 23, 23, 1)",
       //backgroundColor: "rgba(13, 12, 28, 0.90)",
-      height: Platform.OS === "ios" ? "7.5%" : "7%",
+      height: Platform.OS === "ios" ? "7%" : "6.5%",
       margin: "2%",
       width: "94%",
       position: "absolute",
@@ -20,4 +20,4 @@ export const bottomBar = {
       borderRadius: 999,
     }
   ]
-}
+});

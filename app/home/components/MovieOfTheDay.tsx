@@ -2,8 +2,9 @@ import { getMovieOfTheDay } from "@/api/tmdbApi";
 import { textStyle } from "@/styles/textStyles";
 import { useFocusEffect, useNavigation } from "expo-router";
 import React, { useCallback, useState } from "react";
-import { TouchableOpacity, Text, View, Image, ImageBackground } from "react-native";
+import { Text, View, Image, ImageBackground } from "react-native";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
+import { PressableScale } from "react-native-pressable-scale";
 
 export default function MovieOfTheDay() {
   const navigator = useNavigation();
@@ -41,7 +42,7 @@ export default function MovieOfTheDay() {
           }>
           {"Movie of the day"}
         </Text>
-        <TouchableOpacity style={{}}
+        <PressableScale style={{}}
           onPress={() =>
             navigator?.navigate("MovieDetailScreen",
               { movieID: movie?.movie_id }
@@ -62,7 +63,7 @@ export default function MovieOfTheDay() {
           <Image
             source={{ uri: `https://image.tmdb.org/t/p/w300${movie?.poster_path}` }}
             style={styles.poster} />
-        </TouchableOpacity>
+        </PressableScale>
       </View>
     </ImageBackground>
   )

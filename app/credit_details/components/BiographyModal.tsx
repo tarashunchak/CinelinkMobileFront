@@ -1,7 +1,6 @@
 import { textStyle } from "@/styles/textStyles";
-import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
-import { ImageBackground, Modal, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { ImageBackground, Modal, StyleSheet, Text, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { PressableScale } from "react-native-pressable-scale";
 import { heightPercentageToDP } from "react-native-responsive-screen";

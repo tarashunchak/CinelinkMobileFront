@@ -19,10 +19,10 @@ interface TextMessage_I {
 export default function TextMessage({ message }: { message: TextMessage_I }) {
   return (
     <PressableScale
-      style={[stylesR.messageView,
+      style={[styles.messageView,
       isCurrentUser(message?.sender_id)
-        ? stylesR.isCurrentUser
-        : stylesR.notCurrentUser]}
+        ? styles.isCurrentUser
+        : styles.notCurrentUser]}
       onLongPress={() => {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
       }}
@@ -31,14 +31,18 @@ export default function TextMessage({ message }: { message: TextMessage_I }) {
       <Text style={[textStyle.white16]}>
         {message?.content?.message}
       </Text>
-      <Text style={[textStyle.gray12]}>
+      <Text style={[textStyle.gray12,
+      isCurrentUser(message?.sender_id)
+        ? styles.isCurrentUserTS
+        : styles.notCurrentUserTS,
+      ]}>
         {timestamp(new Date(message?.timestamp))}
       </Text>
     </PressableScale >
   );
 };
 
-const stylesR = StyleSheet.create({
+const styles = StyleSheet.create({
   messageView: {
     borderColor: "rgba(255, 255, 255, 0.2)",
     borderWidth: 0.5,
@@ -58,5 +62,11 @@ const stylesR = StyleSheet.create({
   notCurrentUser: {
     backgroundColor: "rgba(0, 0, 0, 0.4)",
     alignSelf: "flex-start",
-  }
+  },
+  isCurrentUserTS: {
+    alignSelf: "flex-start",
+  },
+  notCurrentUserTS: {
+    alignSelf: "flex-end",
+  },
 });

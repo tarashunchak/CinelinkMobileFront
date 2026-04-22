@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { ImageBackground, KeyboardAvoidingView, Platform, FlatList, TouchableWithoutFeedback, Keyboard, StyleSheet } from "react-native";
+import { KeyboardAvoidingView, Platform, FlatList, TouchableWithoutFeedback, Keyboard, StyleSheet } from "react-native";
 import Header from "./components/HeaderBlock";
 import Input from "./components/Input";
 import { useFocusEffect } from "expo-router";
@@ -8,6 +8,7 @@ import { RTMessage } from "@/app/rt_client/models/models";
 import TextMessage from "./components/TextMessage";
 import { getCurrentUserID } from "@/utils/utils";
 import FloatingButton from "./components/FloatingButton";
+import ScreenBackground from "@/components/ui/screen-background";
 
 export default function DirectChatScreen({ route }: any) {
   const { chatID } = route?.params ?? { chatID: 3 };
@@ -43,10 +44,7 @@ export default function DirectChatScreen({ route }: any) {
         behavior="padding"
         keyboardVerticalOffset={Platform.OS === "ios" ? 60 : 0}
       >
-        <ImageBackground
-          style={{ flex: 1, justifyContent: "space-between" }}
-          source={require("@/assets/images/background.png")}
-        >
+        <ScreenBackground>
           <Header chatID={chat?.info?.chat_id} peer={chat?.peer} />
           <FlatList
             onScroll={() => setFloatButtonVisible(true)}
@@ -61,7 +59,7 @@ export default function DirectChatScreen({ route }: any) {
           />
           <FloatingButton isVisible={isFloatButtonVisible} />
           <Input chatID={chatID} />
-        </ImageBackground>
+        </ScreenBackground>
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
   );

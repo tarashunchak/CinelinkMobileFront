@@ -57,7 +57,7 @@ export interface GroupChat {
   members: ChatMember[];
 };
 
-export type ChatPresense = {
+export type ChatPresence = {
   type: "chat_entering" | "chat_leaving";
   content: {
     user_id: UserID;
@@ -65,7 +65,7 @@ export type ChatPresense = {
   };
 };
 
-export type PagePresense = {
+export type PagePresence = {
   type: "page_entering" | "page_leaving";
   content: {
     user_id: UserID;

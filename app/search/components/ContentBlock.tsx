@@ -1,13 +1,14 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { Text, FlatList, StyleSheet, View } from "react-native";
-import { GetQueryResult, SearchMovie, SearchPerson, SearchUser, SearchWatchlist } from "../services/queries";
+import React, { useCallback, useEffect, useState } from "react";
+import { Text, FlatList, StyleSheet } from "react-native";
+import { GetQueryResult } from "../services/queries";
 import MovieCard from "./MovieCard";
 import UserCard from "@/components/userCard";
 import CategoriesBlock from "./CategoriesBlock";
 import WatchlistCard from "./WatchlistCard";
-import { heightPercentageToDP } from "react-native-responsive-screen";
+import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import CreditCard from "./CreditCard";
 import { textStyle } from "@/styles/textStyles";
+import Spacer from "@/components/ui/spacer";
 
 interface Props {
   query: string;
@@ -47,7 +48,7 @@ export default function ContentBlock({ query, specification = undefined }: Props
   return (
     <>
       <CategoriesBlock setCurrent={setCategory} />
-      <View style={styles.topSpacer}></View>
+      <Spacer orientation="v" spacing={hp(1)} />
       <FlatList
         showsVerticalScrollIndicator={false}
         style={{ height: "100%" }}
@@ -84,6 +85,6 @@ export default function ContentBlock({ query, specification = undefined }: Props
 }
 
 const styles = StyleSheet.create({
-  topSpacer: { marginTop: heightPercentageToDP(1) },
-  bottomSpacer: { marginBottom: heightPercentageToDP(8) }
+  topSpacer: { marginTop: hp(1) },
+  bottomSpacer: { marginBottom: hp(8) }
 });

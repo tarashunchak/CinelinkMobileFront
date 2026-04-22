@@ -8,7 +8,7 @@ import { PressableScale } from "react-native-pressable-scale";
 
 interface TextMessage_I {
   message_id: number;
-  sender_id: number;
+  user_id: number;
   chat_id: number;
   content: {
     message: string;
@@ -20,7 +20,7 @@ export default function TextMessage({ message }: { message: TextMessage_I }) {
   return (
     <PressableScale
       style={[styles.messageView,
-      isCurrentUser(message?.sender_id)
+      isCurrentUser(message?.user_id)
         ? styles.isCurrentUser
         : styles.notCurrentUser]}
       onLongPress={() => {
@@ -32,7 +32,7 @@ export default function TextMessage({ message }: { message: TextMessage_I }) {
         {message?.content?.message}
       </Text>
       <Text style={[textStyle.gray12,
-      isCurrentUser(message?.sender_id)
+      isCurrentUser(message?.user_id)
         ? styles.isCurrentUserTS
         : styles.notCurrentUserTS,
       ]}>

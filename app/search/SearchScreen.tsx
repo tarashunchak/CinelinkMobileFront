@@ -2,7 +2,7 @@ import { inputStyle } from "@/styles/inputStyle";
 import React from "react";
 import { ImageBackground, Text, ScrollView, TextInput, View } from "react-native";
 import { searchScreen } from "./styles";
-import SearchInput from "./components/Input";
+import SearchInput from "./components/SearchInput";
 import BottomBar from "../bars/bottomBar";
 import { textStyle } from "@/styles/textStyles";
 import MovieCard from "./components/MovieCard";

@@ -6,7 +6,7 @@ import { getPopularMovies } from "@/api/tmdbApi";
 import { getActiveCategory } from "./CategoriesBlock";
 import ContentBlock from "./ContentBlock";
 import ScreenBackground from "@/components/ui/screen-background";
-import SearchInput from "./Input";
+import SearchInput from "./SearchInput";
 import Spacer from "@/components/ui/spacer";
 import { heightPercentageToDP } from "react-native-responsive-screen";
 
@@ -20,11 +20,9 @@ type Data = {
 }
 
 export default function SearchResultBlock({ route }: any) {
-  const navigator = useNavigation();
   const [_data, setData] = useState<any>();
   const [_value, setValue] = useState<string>("");
 
-  const activeCategory: string = getActiveCategory();
   const query = route?.params?.params;
   console.warn(`QUERY: ${query}`);
 
@@ -60,24 +58,4 @@ export default function SearchResultBlock({ route }: any) {
       <ContentBlock query={_value} />
     </ScreenBackground>
   )
-}
-
-const styles = StyleSheet.create({
-  inputView: {
-    height: 50,
-    width: "96%",
-    margin: "2%",
-    marginTop: "1%",
-    backgroundColor: "rgba(255, 255, 255, 0.05)",
-    borderRadius: 999,
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  inputIcon: {
-    backgroundColor: "transparent",
-    height: 34,
-    width: 34,
-    alignSelf: "center",
-    marginLeft: 10
-  },
-});
+};

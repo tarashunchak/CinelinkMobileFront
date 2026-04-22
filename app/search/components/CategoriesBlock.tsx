@@ -1,7 +1,8 @@
 import { textStyle } from "@/styles/textStyles";
 import React, { useState } from "react";
-import { TouchableOpacity, Text, ScrollView, StyleSheet } from "react-native";
+import { Text, ScrollView, StyleSheet } from "react-native";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
+import { PressableScale } from "react-native-pressable-scale";
 
 const categories = [
   "All",
@@ -27,7 +28,7 @@ export default function CategoriesBlock({ setCurrent = () => { } }: { setCurrent
       {
         categories?.map((item: string, index: number) =>
         (
-          <TouchableOpacity
+          <PressableScale
             key={index}
             style={category == item ? styles.activeView : styles.view}
             onPress={() => {
@@ -40,7 +41,7 @@ export default function CategoriesBlock({ setCurrent = () => { } }: { setCurrent
             >
               {item}
             </Text>
-          </TouchableOpacity>
+          </PressableScale>
         )
         )
       }

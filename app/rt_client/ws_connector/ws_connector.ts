@@ -1,9 +1,8 @@
-import { useAuthStore } from "@/local_storage/user/asyncStorage/store";
-import { Ping, ChatPresense, PagePresense, Online, Typing } from "../models/models";
+import { Ping, ChatPresence, PagePresence, Online, Typing } from "../models/models";
 
 type MessageHandler = (message: any) => void;
 
-type WSMessage = ChatPresense | PagePresense | Online | Typing | Ping;
+type WSMessage = ChatPresence | PagePresence | Online | Typing | Ping;
 
 export class WSConnector {
   private ws: WebSocket | null = null;

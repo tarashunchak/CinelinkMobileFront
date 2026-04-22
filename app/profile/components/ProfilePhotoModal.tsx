@@ -1,20 +1,19 @@
 import React from "react";
 import { textStyle } from "@/styles/textStyles";
-import { Text, View, Image, ImageBackground, Modal, StyleSheet, TouchableOpacity } from "react-native";
+import { Text, View, Image, ImageBackground, Modal, StyleSheet } from "react-native";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import * as ImagePicker from "expo-image-picker";
 import { useState } from "react";
+import { PressableScale } from "react-native-pressable-scale";
 
-export default function ProfilePhotoModal(
-  { isOpen, avatarUrl, onClose, isCurrentUser }:
-    {
-      isOpen: boolean,
-      avatarUrl: string,
-      onClose: () => void,
-      isCurrentUser: boolean,
-    }
-) {
+interface Props {
+  isOpen: boolean;
+  avatarUrl: string;
+  onClose: () => void;
+  isCurrentUser: boolean;
+};
 
+export default function ProfilePhotoModal({ isOpen, avatarUrl, onClose, isCurrentUser }: Props) {
   const [avatarUri, setAvatarUri] = useState<string>(avatarUrl)
 
   return (
@@ -27,7 +26,7 @@ export default function ProfilePhotoModal(
       <ImageBackground
         style={styles.background}>
         <View style={{}}>
-          <TouchableOpacity
+          <PressableScale
             style={{
               alignSelf: "flex-end",
               height: 40,
@@ -40,7 +39,7 @@ export default function ProfilePhotoModal(
             }}
           >
             <Image style={{ height: "100%", width: "100%" }} source={require("@/app/profile/assets/Icon.png")} />
-          </TouchableOpacity>
+          </PressableScale>
           <View style={styles.avatarView}>
             <Image
               source={{ uri: avatarUri }}
@@ -49,7 +48,7 @@ export default function ProfilePhotoModal(
           </View>
           {
             isCurrentUser &&
-            <TouchableOpacity
+            <PressableScale
               style={styles.editBtnView}
               onPress={async () => {
                 const results = await ImagePicker.launchImageLibraryAsync({
@@ -64,7 +63,7 @@ export default function ProfilePhotoModal(
                 source={require("@/app/profile/assets/EditIcon.png")}
               />
               <Text style={textStyle.white20}>Edit</Text>
-            </TouchableOpacity>
+            </PressableScale>
           }
         </View>
       </ImageBackground>

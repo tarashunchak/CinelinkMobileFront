@@ -1,9 +1,9 @@
 import { textStyle } from "@/styles/textStyles";
 import React from "react";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
-import { TouchableOpacity, View, Text, Image } from "react-native";
+import { View, Text, Image } from "react-native";
 import { useNavigation } from "expo-router";
-import { UserCard_T } from "@/app/types/user";
+import { PressableScale } from "react-native-pressable-scale";
 
 interface Props {
   user_id: number;
@@ -16,7 +16,7 @@ interface Props {
 export default function UserCard({ user }: { user: Props }) {
   const navigator = useNavigation();
   return (
-    <TouchableOpacity style={styles.card.view}
+    <PressableScale style={styles.card.view}
       onPress={() => {
         navigator?.push("UserProfileScreen", { userID: user?.user_id })
       }}>
@@ -43,7 +43,7 @@ export default function UserCard({ user }: { user: Props }) {
         style={styles.card.chatIcon}
         source={require("@/app/social/assets/chatIcon.png")}
       />
-    </TouchableOpacity>
+    </PressableScale>
   );
 };
 

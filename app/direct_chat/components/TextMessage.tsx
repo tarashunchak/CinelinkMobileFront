@@ -5,6 +5,9 @@ import { isCurrentUser } from "@/utils/utils";
 import { timestamp } from "../utils/utils";
 import { textStyle } from "@/styles/textStyles";
 import { PressableScale } from "react-native-pressable-scale";
+import { ActionSheet } from "./ActionSheet";
+import { useActionSheet } from "@expo/react-native-action-sheet";
+import { RemoveMessage } from "@/api/messages";
 
 interface TextMessage_I {
   message_id: number;
@@ -16,7 +19,9 @@ interface TextMessage_I {
   timestamp: string;
 };
 
-export default function TextMessage({ message }: { message: TextMessage_I }) {
+export default function TextMessage({ message, chatID }: { message: TextMessage_I, chatID: number }) {
+  const { showActionSheetWithOptions } = useActionSheet();
+
   return (
     <PressableScale
       style={[styles.messageView,
@@ -25,6 +30,28 @@ export default function TextMessage({ message }: { message: TextMessage_I }) {
         : styles.notCurrentUser]}
       onLongPress={() => {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+        const options = ['Видалити для всіх', 'Видалити у мене', 'Скасувати'];
+        const destructiveButtonIndex = 0; // Перша кнопка буде червоною
+        const cancelButtonIndex = 2;
+
+        showActionSheetWithOptions({
+          options,
+          cancelButtonIndex,
+          destructiveButtonIndex,
+          title: 'Видалити повідомлення?',
+          userInterfaceStyle: "dark",
+        }, (selectedIndex?: number) => {
+          switch (selectedIndex) {
+            case 0:
+              // Виклик твого методу:
+              // RTClient.deleteMessage(message.chat_id, message.message_id, true)
+              RemoveMessage(chatID, message?.message_id);
+              break;
+            case 1:
+              // Видалити локально
+              break;
+          }
+        });
       }}
       delayLongPress={350}
     >

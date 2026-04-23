@@ -14,4 +14,10 @@ export class MessagesQueue {
   public clear() {
     this.queue = new Array();
   };
+
+  public flush(): any[] {
+    const items: any[] = this.queue;
+    this.queue.length = 0;
+    return items;
+  };
 };

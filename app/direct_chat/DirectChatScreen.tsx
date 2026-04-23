@@ -51,7 +51,7 @@ export default function DirectChatScreen({ route }: any) {
             data={messages?.reverse()}
             keyExtractor={(_, index) => String(index)}
             renderItem={({ item }) => (
-              <TextMessage message={item} />
+              <TextMessage chatID={chatID} message={item} />
             )}
             keyboardShouldPersistTaps="always"
             removeClippedSubviews

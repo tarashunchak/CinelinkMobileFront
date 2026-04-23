@@ -1,11 +1,8 @@
-import { API_URL } from "@/api/API_CONFIG";
 import { ChatID, UserID, RTMessage } from "./models/models";
-import { getCurrentUserID } from "@/utils/utils";
-import { GetChat } from "@/api/chats/chats";
-import { MessagesQueue } from "./messagesQueue/messagesQueue";
 import { WSConnector, WSMessage } from "./ws_connector/ws_connector";
 import { Chat, ChatManager, ChatMessage } from "./chat_manager/chat_manager";
-import ProvidersBlock from "../movie_details/components/ProvidersBlock";
+import * as Makers from "./message_makers/message_makers";
+import { Handlers } from "./message_handlers/message_handlers";
 
 const WS_ADDRESS = (userID: UserID): string =>
   `${process.env.EXPO_PUBLIC_WS_URL}/${userID}`;
@@ -22,6 +19,10 @@ class RTClient_ {
     const chatID: number = data?.chat_id;
     console.warn("OnWSMessage data: ", data);
     const callbacks = this.chatManager?.getCallbacks(chatID);
+    const handler = Handlers.get(type);
+    if (handler) {
+      handler(data);
+    }
     switch (type) {
       case "message": {
         console.log("Message received");
@@ -82,63 +83,40 @@ class RTClient_ {
   }
 
   public async setOnlineStatus(userID: UserID, isOnline: boolean = true) {
-    this.wsConnections.get(userID)?.send({
-      type: "online",
-      user_id: userID,
-      is_online: isOnline,
-    });
+    this.wsConnections.get(userID)?.send(
+      Makers.makeOnlineMessage({ user_id: userID, is_online: isOnline })
+    );
   };
 
   public async setTypingStatus(chatID: ChatID, userID: UserID, isTyping: boolean) {
     console.warn(`User: ${userID} is ${!isTyping ? "not" : ''} typing in chat ${chatID}`);
-    this.wsConnections.get(userID)?.send({
-      type: "typing",
-      chat_id: chatID,
-      user_id: userID,
-      content: {
-        is_typing: isTyping,
-      }
-    });
+    this.wsConnections.get(userID)?.send(
+      Makers.makeTypingMessage({ user_id: userID, chat_id: chatID, is_typing: isTyping })
+    );
   };
 
   public async setChatEntering(chatID: ChatID, userID: UserID) {
-    this.wsConnections?.get(userID)?.send({
-      type: "chat_entering",
-      user_id: userID,
-      chat_id: chatID,
-      content: {
-      }
-    });
+    this.wsConnections?.get(userID)?.send(
+      Makers.makeChatEnteringMessage({ chat_id: chatID, user_id: userID })
+    );
   };
 
   public async setChatLeaving(chatID: ChatID, userID: UserID) {
-    this.wsConnections?.get(userID)?.send({
-      type: "chat_leaving",
-      user_id: userID,
-      chat_id: chatID,
-      content: {
-      }
-    });
+    this.wsConnections?.get(userID)?.send(
+      Makers.makeChatLeavingMessage({ chat_id: chatID, user_id: userID })
+    );
   };
 
   public async setPageEntering(userID: UserID, page: string) {
-    this.wsConnections?.get(userID)?.send({
-      type: "page_entering",
-      content: {
-        user_id: userID,
-        page,
-      }
-    });
+    this.wsConnections?.get(userID)?.send(
+      Makers.makePageEnteringMessage({ user_id: userID, page })
+    );
   };
 
   public async setPageLeaving(userID: UserID, page: string) {
-    this.wsConnections?.get(userID)?.send({
-      type: "page_leaving",
-      content: {
-        user_id: userID,
-        page,
-      }
-    });
+    this.wsConnections?.get(userID)?.send(
+      Makers.makePageLeavingMessage({ user_id: userID, page })
+    );
   };
 
   public async sendMessage(chatID: ChatID, message: RTMessage) {

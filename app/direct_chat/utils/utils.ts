@@ -24,3 +24,7 @@ export async function GetDirectChatID(user1ID: number, user2ID: number): Promise
   const data = JSON.parse(text);
   return data?.results;
 };
+
+export async function SetCallbacks(userID: number, chatID: number) {
+
+}

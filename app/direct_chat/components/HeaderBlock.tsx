@@ -20,6 +20,7 @@ export default function Header({ chatID, peer }: { chatID: number, peer: ChatMem
         console.warn("user status: ", data.content.is_online);
         setStatus(data.content.is_online);
       });
+
       RTClient.setOnTypingCallBack(chatID, (data: any) => {
         console.warn("user typing status: ", data.content.is_typing);
         setTyping(data.content.is_typing);

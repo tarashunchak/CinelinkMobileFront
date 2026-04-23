@@ -11,7 +11,7 @@ interface Chat {
   chat_type: string;
 };
 
-interface ChatMember {
+export interface ChatMember {
   member_index: number;
   user_id: number;
   username: string;
@@ -57,7 +57,7 @@ export interface GroupChat {
   members: ChatMember[];
 };
 
-export type ChatPresence = {
+export interface ChatPresence {
   type: "chat_entering" | "chat_leaving";
   content: {
     user_id: UserID;

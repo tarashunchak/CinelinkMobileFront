@@ -2,7 +2,8 @@ import { API_URL } from "@/api/API_CONFIG";
 import { ChatID, UserID, RTMessage } from "./models/models";
 import { getCurrentUserID } from "@/utils/utils";
 import { GetChat } from "@/api/chats/chats";
-import { MessagesQueue } from "./messagesQueue/messagesQueue"; import { WSConnector } from "./ws_connector/ws_connector";
+import { MessagesQueue } from "./messagesQueue/messagesQueue";
+import { WSConnector, WSMessage } from "./ws_connector/ws_connector";
 import { Chat, ChatManager, ChatMessage } from "./chat_manager/chat_manager";
 import ProvidersBlock from "../movie_details/components/ProvidersBlock";
 
@@ -18,22 +19,25 @@ class RTClient_ {
 
   private onWSMessage(data: any) {
     const type = data?.type;
-    const chatID: number = data?.content?.chat_id;
+    const chatID: number = data?.chat_id;
+    console.warn("OnWSMessage data: ", data);
+    const callbacks = this.chatManager?.getCallbacks(chatID);
     switch (type) {
       case "message": {
         console.log("Message received");
         this.chatManager?.handleIncommingMessage(chatID, data);
-        this.chatManager?.getCallbacks(chatID)?.onMessage?.(data);
+        callbacks?.onMessage?.get(chatID)?.(data);
         break;
       }
       case "typing": {
         console.log("Typing received");
-        this.chatManager?.getCallbacks(chatID)?.onTyping?.(data)
+        console.warn("Callbacks: ", callbacks?.onTyping?.get(chatID));
+        callbacks?.onTyping?.get(chatID)?.(data);
         break;
       }
       case "online": {
-        console.log("User Is Online: ", data);
-        this.chatManager?.getCallbacks(chatID)?.onOnline?.(data)
+        console.log(`User Is ${data?.content?.is_online ? "Online" : "Offline"}: `, data);
+        callbacks?.onOnline?.get(chatID)?.(data);
         break;
       }
     }
@@ -65,20 +69,23 @@ class RTClient_ {
     return this.chatManager.getChat(chatID);
   };
 
-  public async setOnMessageCallBack(chatID: ChatID, callBack: Function) {
-    this.chatManager.callbacks.onMessage.set(chatID, callBack);
+  public async setOnMessageCallBack(chatID: ChatID, callback: (_: WSMessage) => void) {
+    this.chatManager.callbacks.onMessage.set(chatID, callback);
   };
 
-  public setOnTypingCallBack = this.chatManager.setOnTyping;
-  public setOnOnlineCallBack = this.chatManager.setOnOnline;
+  public setOnTypingCallBack(chatID: ChatID, callback: (_: WSMessage) => void) {
+    this.chatManager.setOnTyping(chatID, callback);
+  }
+
+  public setOnOnlineCallBack(chatID: ChatID, callback: (_: WSMessage) => void) {
+    this.chatManager.setOnOnline(chatID, callback);
+  }
 
   public async setOnlineStatus(userID: UserID, isOnline: boolean = true) {
     this.wsConnections.get(userID)?.send({
       type: "online",
-      content: {
-        user_id: userID,
-        is_online: isOnline,
-      }
+      user_id: userID,
+      is_online: isOnline,
     });
   };
 
@@ -86,9 +93,9 @@ class RTClient_ {
     console.warn(`User: ${userID} is ${!isTyping ? "not" : ''} typing in chat ${chatID}`);
     this.wsConnections.get(userID)?.send({
       type: "typing",
+      chat_id: chatID,
+      user_id: userID,
       content: {
-        chat_id: chatID,
-        user_id: userID,
         is_typing: isTyping,
       }
     });
@@ -97,9 +104,9 @@ class RTClient_ {
   public async setChatEntering(chatID: ChatID, userID: UserID) {
     this.wsConnections?.get(userID)?.send({
       type: "chat_entering",
+      user_id: userID,
+      chat_id: chatID,
       content: {
-        user_id: userID,
-        chat_id: chatID,
       }
     });
   };
@@ -107,9 +114,9 @@ class RTClient_ {
   public async setChatLeaving(chatID: ChatID, userID: UserID) {
     this.wsConnections?.get(userID)?.send({
       type: "chat_leaving",
+      user_id: userID,
+      chat_id: chatID,
       content: {
-        user_id: userID,
-        chat_id: chatID,
       }
     });
   };

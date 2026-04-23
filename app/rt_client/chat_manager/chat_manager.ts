@@ -1,6 +1,7 @@
 import { jwtHeaders } from "@/utils/utils";
 import { ChatID, UserID } from "./../models/models";
 import { useAuthStore } from "@/local_storage/user/asyncStorage/store";
+import { WSMessage } from "../ws_connector/ws_connector";
 
 export type Chat = {
   info: {
@@ -28,36 +29,40 @@ export type ChatMessage = {
   message: any,
 };
 
+type Callbacks = {
+  onMessage: Map<ChatID, (_: WSMessage) => void>,
+  onTyping: Map<ChatID, (_: WSMessage) => void>,
+  onOnline: Map<ChatID, (_: WSMessage) => void>,
+  onSend: Map<ChatID, (_: WSMessage) => void>,
+};
+
 export class ChatManager {
   private messages: Map<ChatID, ChatMessage[]> = new Map();
   private loadedStatus: Map<ChatID, boolean> = new Map();
 
-  public callbacks = {
-    onMessage: new Map<ChatID, Function>(),
-    onTyping: new Map<ChatID, Function>(),
-    onOnline: new Map<ChatID, Function>(),
-    onSend: new Map<ChatID, Function>(),
+  public callbacks: Callbacks = {
+    onMessage: new Map<ChatID, (_: WSMessage) => void>(),
+    onTyping: new Map<ChatID, (_: WSMessage) => void>(),
+    onOnline: new Map<ChatID, (_: WSMessage) => void>(),
+    onSend: new Map<ChatID, (_: WSMessage) => void>(),
   };
 
-  public setCallBack(chatID: ChatID, callBack: Function) {
+  public setCallBack(chatID: ChatID, callBack: (_: WSMessage) => void) {
 
   };
 
-  public async setOnOnline(chatID: ChatID, callback: Function) {
+  public async setOnOnline(chatID: ChatID, callback: (_: WSMessage) => void) {
+    console.warn("Set on online: ", chatID, " ", callback);
     this.callbacks?.onOnline?.set(chatID, callback);
   };
 
-  public async setOnTyping(chatID: ChatID, callback: Function) {
-    this.callbacks?.onTyping?.set(chatID, callback);
+  public async setOnTyping(chatID: ChatID, callback: (_: WSMessage) => void) {
+    console.warn("Set on typing: ", chatID, " ", callback);
+    this.callbacks?.onTyping.set(chatID, callback);
   };
 
-  public getCallbacks(chatID: ChatID) {
-    return {
-      onMessage: this.callbacks?.onMessage?.get(chatID),
-      onTyping: this.callbacks?.onTyping?.get(chatID),
-      onOnline: this.callbacks?.onOnline?.get(chatID),
-      onSend: this.callbacks?.onSend?.get(chatID),
-    };
+  public getCallbacks(chatID: ChatID): Callbacks {
+    return this.callbacks;
   };
 
   public async handleIncommingMessage(chatID: ChatID, message: ChatMessage) {

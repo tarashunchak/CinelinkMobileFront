@@ -8,7 +8,7 @@ interface message {
 interface ChatMessage_T {
   message_id: number;
   chat_id: number;
-  sender_id: number;
+  user_id: number;
   content: message;
   timestamp: string;
 };
@@ -22,7 +22,7 @@ export async function SendChatMessages(message: any) {
       body: JSON.stringify(
         {
           chat_id: message?.chat_id,
-          sender_id: message?.sender_id,
+          user_id: message?.user_id,
           content: message?.content,
         }
       ),

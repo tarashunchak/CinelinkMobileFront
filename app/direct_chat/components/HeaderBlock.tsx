@@ -6,25 +6,38 @@ import { useNavigation } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { View, Text, Image, TouchableOpacity, Platform, StyleSheet } from "react-native";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
-import { DirectChat } from "@/app/rt_client/models/models";
+import { ChatMember, DirectChat } from "@/app/rt_client/models/models";
 import { calcLastSeen } from "../utils/utils";
 
-export default function Header({ chatID, peer }: { chatID: number, peer: DirectChat }) {
+export default function Header({ chatID, peer }: { chatID: number, peer: ChatMember }) {
   const navigator = useNavigation();
-  const [typing, setTyping] = useState<boolean>(peer?.is_typing);
-  const [status, setStatus] = useState<boolean>(peer?.is_online);
+  const [typing, setTyping] = useState<boolean>();
+  const [status, setStatus] = useState<boolean>();
 
-  console.warn("chat_id = ", peer)
   useEffect(() => {
-    RTClient.setOnOnlineCallBack(chatID, (data: any) => {
-      console.warn("user status: ", data.is_online);
-      setStatus(data.is_online);
-    });
-    RTClient.setOnTypingCallBack(chatID, (data: any) => {
-      console.warn("user typing status: ", data.is_typing);
-      setTyping(data.is_typing);
-    });
-  }, [peer]);
+    async function func() {
+      RTClient.setOnOnlineCallBack(chatID, (data: any) => {
+        console.warn("user status: ", data.content.is_online);
+        setStatus(data.content.is_online);
+      });
+      RTClient.setOnTypingCallBack(chatID, (data: any) => {
+        console.warn("user typing status: ", data.content.is_typing);
+        setTyping(data.content.is_typing);
+      });
+
+      RTClient.setOnMessageCallBack(chatID, (data: any) => {
+        console.warn("Message ===== ", data.content.message);
+      });
+
+      setStatus(peer?.is_online);
+      setTyping(peer?.is_typing);
+
+      console.warn("chat_id = ", peer)
+      console.warn("status = ", status)
+    };
+
+    func();
+  }, [chatID, status]);
 
   return (
     <View style={styles.view}>

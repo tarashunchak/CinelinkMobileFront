@@ -2,7 +2,7 @@ import { Ping, ChatPresence, PagePresence, Online, Typing } from "../models/mode
 
 type MessageHandler = (message: any) => void;
 
-type WSMessage = ChatPresence | PagePresence | Online | Typing | Ping;
+export type WSMessage = ChatPresence | PagePresence | Online | Typing | Ping | any;
 
 export class WSConnector {
   private ws: WebSocket | null = null;
@@ -55,7 +55,7 @@ export class WSConnector {
       setTimeout(() => {
         console.warn(`reconnect attempt #${this.reconnectAttempts}`)
         this.connect();
-      }, 2000 * this.reconnectAttempts);
+      }, 5000 * this.reconnectAttempts);
     }
   }
 

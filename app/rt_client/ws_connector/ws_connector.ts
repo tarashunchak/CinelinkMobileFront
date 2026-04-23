@@ -2,7 +2,19 @@ import { Ping, ChatPresence, PagePresence, Online, Typing } from "../models/mode
 
 type MessageHandler = (message: any) => void;
 
-export type WSMessage = ChatPresence | PagePresence | Online | Typing | Ping | any;
+export interface WSMessage {
+  type: string;
+  content?: {
+    user_id: number;
+    chat_id?: number;
+    message_id?: number;
+    message_type?: string;
+    message?: any;
+    is_typing?: boolean;
+    is_online?: boolean;
+    page?: string;
+  }
+};
 
 export class WSConnector {
   private ws: WebSocket | null = null;

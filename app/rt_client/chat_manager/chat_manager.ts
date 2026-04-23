@@ -2,6 +2,7 @@ import { jwtHeaders } from "@/utils/utils";
 import { ChatID, UserID } from "./../models/models";
 import { useAuthStore } from "@/local_storage/user/asyncStorage/store";
 import { WSMessage } from "../ws_connector/ws_connector";
+import { MessagesQueue } from "../messages_queue/messages_queue";
 
 export type Chat = {
   info: {
@@ -14,8 +15,8 @@ export type Chat = {
     avatar_url: string,
     is_online: boolean,
     last_seen: string,
-    member_index: number,
-    role: string,
+    member_index?: number,
+    role?: string,
     user_id: number,
     username: string,
   };
@@ -39,6 +40,7 @@ type Callbacks = {
 export class ChatManager {
   private messages: Map<ChatID, ChatMessage[]> = new Map();
   private loadedStatus: Map<ChatID, boolean> = new Map();
+  private messagesQueue: MessagesQueue = new MessagesQueue();
 
   public callbacks: Callbacks = {
     onMessage: new Map<ChatID, (_: WSMessage) => void>(),

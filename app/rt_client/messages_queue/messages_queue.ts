@@ -1,4 +1,3 @@
-
 export class MessagesQueue {
   private queue: any[] = new Array();
 

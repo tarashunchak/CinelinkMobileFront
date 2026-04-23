@@ -21,9 +21,9 @@ class RTClient_ {
     const callbacks = this.chatManager?.getCallbacks(chatID);
     const handler = Handlers.get(type);
     if (handler) {
-      handler(data);
+      handler(data, this.chatManager);
     }
-    switch (type) {
+    /*switch (type) {
       case "message": {
         console.log("Message received");
         this.chatManager?.handleIncommingMessage(chatID, data);
@@ -41,7 +41,7 @@ class RTClient_ {
         callbacks?.onOnline?.get(chatID)?.(data);
         break;
       }
-    }
+    }*/
   }
 
   public connect(userID: UserID) {

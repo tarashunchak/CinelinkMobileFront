@@ -1,48 +1,45 @@
-interface WSMessage {
-  type: string;
-  content: {
-    user_id: number;
-    chat_id?: number;
-    message_id?: number;
-    message_type?: string;
-    message?: any;
-    is_typing?: boolean;
-    is_online?: boolean;
-    page?: string;
-  }
-}
+import { ChatManager } from "../chat_manager/chat_manager";
+import { WSMessage } from "../ws_connector/ws_connector";
 
-function handleTyping(msg: WSMessage) {
-}
+type WSHandler = (msg: WSMessage, manager: ChatManager) => void;
 
-function handleOnline(msg: WSMessage) {
-}
+function handleTyping(msg: WSMessage, manager: ChatManager) {
+  const { chat_id, user_id, is_typing } = msg.content;
+  manager.callbacks?.onTyping?.get(chat_id)?.(msg);
+};
 
-function handleSeenAll(msg: WSMessage) {
-}
+function handleOnline(msg: WSMessage, manager: ChatManager) {
+  const { chat_id, user_id, is_online } = msg.content;
+  manager.callbacks?.onOnline?.get(chat_id)?.(msg);
+};
 
-function handleMessage(msg: WSMessage) {
-}
+function handleSeenAll(msg: WSMessage, manager: ChatManager) {
+  const { chat_id, user_id } = msg.content;
+  //manager.callbacks?.onOnline?.get(chat_id)?.(msg);
+};
 
-function handleMessageEdited(msg: WSMessage) {
-}
+function handleMessage(msg: WSMessage, manager: ChatManager) {
+};
 
-function handleMessageDeleted(msg: WSMessage) {
-}
+function handleMessageEdited(msg: WSMessage, manager: ChatManager) {
+};
 
-function handleChatCreated(msg: WSMessage) {
-}
+function handleMessageDeleted(msg: WSMessage, manager: ChatManager) {
+};
 
-function handleChatDeleted(msg: WSMessage) {
-}
+function handleChatCreated(msg: WSMessage, manager: ChatManager) {
+};
 
-function handleChatEntering(msg: WSMessage) {
-}
+function handleChatDeleted(msg: WSMessage, manager: ChatManager) {
+};
 
-function handleChatLeaving(msg: WSMessage) {
-}
+function handleChatEntering(msg: WSMessage, manager: ChatManager) {
+};
 
-export const Handlers = new Map<string, Function>([
+function handleChatLeaving(msg: WSMessage, manager: ChatManager) {
+};
+
+export const Handlers = new Map<string, WSHandler>([
   ["typing", handleTyping],
   ["online", handleOnline],
   ["seen_all", handleSeenAll],

@@ -12,6 +12,7 @@ import { getCurrentUserID } from "@/utils/utils";
 import { UserCard_T } from "../types/user";
 import FriendCard from "./components/FriendCard";
 import { GetSocial } from "./services/services";
+import ScreenBackground from "@/components/ui/screen-background";
 
 export default function SocialScreen() {
   const tabs = ["Friends", "Recommendations", "Activity", "Chats"];
@@ -57,8 +58,7 @@ export default function SocialScreen() {
 
   return (
     <View style={{ flex: 1 }}>
-      <ImageBackground source={require("@/assets/images/background.png")}
-        style={{ flex: 1, backgroundColor: "black", paddingTop: "10%" }}>
+      <ScreenBackground>
         <View style={styles.topBar.view}>
           {
             tabs.map(tab => (
@@ -101,7 +101,7 @@ export default function SocialScreen() {
             </>
           )
           } />
-      </ImageBackground >
+      </ScreenBackground>
       <BottomBar />
     </View>
   )
@@ -111,6 +111,7 @@ const styles = {
   topBar: {
     view: {
       height: 52,
+      marginTop: "10%",
       marginBottom: "5%",
       width: "100%",
       alignSelf: "center",

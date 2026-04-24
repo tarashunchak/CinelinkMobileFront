@@ -5,11 +5,11 @@ export const inputStyle = {
     fontSize: 16,
     height: 48,
     paddingLeft: 20,
-    backgroundColor: "rgba(255, 255,255, 0.03)",
+    backgroundColor: "rgba(255, 255,255, 0.05)",
     borderRadius: 8,
     padding: 0.5,
     borderWidth: 1,
-    borderColor: "rgba(255, 255, 255, 0.08)",
+    borderColor: "rgba(255, 255, 255, 0.2)",
   },
   inputWhiteText: {
     color: "rgba(255, 255, 255, 0.6)",

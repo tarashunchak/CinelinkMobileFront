@@ -2,11 +2,12 @@ import { getFilmographyByPerson } from "@/api/tmdbApi";
 import BottomBar from "@/app/bars/bottomBar";
 import { useNavigation } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { ImageBackground, ScrollView, View } from "react-native";
+import { ScrollView, View } from "react-native";
 import BiographyModal from "./components/BiographyModal";
 import PhotosModal from "./components/PhotosModal";
 import MainInfo from "./components/MainInfo";
 import ActionButtonsBlock from "./components/ActionButtonsBlock";
+import ScreenBackground from "@/components/ui/screen-background";
 
 export default function CreditDetailScreen({ route }: any) {
   const { creditID } = route?.params;
@@ -36,8 +37,7 @@ export default function CreditDetailScreen({ route }: any) {
 
   return (
     <View style={{ flex: 1 }}>
-      <ImageBackground source={require("@/assets/images/background.png")} style={{ flex: 1 }}>
-
+      <ScreenBackground>
         <ScrollView
           nestedScrollEnabled={true}
           showsVerticalScrollIndicator={false}
@@ -50,7 +50,7 @@ export default function CreditDetailScreen({ route }: any) {
           <BiographyModal bio={credit?.biography || "It`s empty here for now..."} />
           <PhotosModal images={images} backdrop={backdrop} />
         </ScrollView >
-      </ImageBackground >
+      </ScreenBackground>
       <BottomBar />
     </View >
   );

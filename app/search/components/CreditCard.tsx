@@ -1,7 +1,8 @@
 import { textStyle } from "@/styles/textStyles";
 import { useNavigation } from "expo-router";
 import React from "react";
-import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, Image, StyleSheet } from "react-native";
+import { PressableScale } from "react-native-pressable-scale";
 
 interface CreditCard_I {
   credit_id: number;
@@ -23,7 +24,7 @@ export default function CreditCard({ credit }: { credit: CreditCard_I }) {
     )
 
   return (
-    < TouchableOpacity style={styles.view}
+    < PressableScale style={styles.view}
       onPress={() => {
         navigator.navigate(
           "CreditDetailScreen",
@@ -57,7 +58,7 @@ export default function CreditCard({ credit }: { credit: CreditCard_I }) {
         style={{ flexDirection: "column", justifyContent: "space-between" }}
       >
       </View>
-    </TouchableOpacity >
+    </PressableScale >
   )
 }
 
@@ -81,5 +82,7 @@ const styles = StyleSheet.create({
   profile: {
     height: 76,
     width: 54,
+    backgroundColor: "rgba(255, 255, 255, 0.3)",
+    borderWidth: 0.5,
   }
 });

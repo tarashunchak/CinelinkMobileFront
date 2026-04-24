@@ -17,6 +17,7 @@ import { useFollowers } from "./hooks/useFollowers";
 import { GetDirectChatID } from "../direct_chat/utils/utils";
 import { FlatList, GestureHandlerRootView, ScrollView } from "react-native-gesture-handler";
 import { textStyle } from "@/styles/textStyles";
+import ScreenBackground from "@/components/ui/screen-background";
 
 export default function UserProfileScreen({ route }: any) {
   const navigator = useNavigation();
@@ -45,10 +46,7 @@ export default function UserProfileScreen({ route }: any) {
 
   return (
     <GestureHandlerRootView>
-      <ImageBackground
-        source={require("@/assets/images/background.png")}
-        style={{ flex: 1, backgroundColor: "black" }}
-      >
+      <ScreenBackground>
         <FlatList
           ListHeaderComponent={
             <View style={[{ padding: "2%", paddingTop: Platform.OS === "ios" ? "5%" : "2%" }]}>
@@ -116,7 +114,7 @@ export default function UserProfileScreen({ route }: any) {
           }
         />
         <BottomBar />
-      </ImageBackground >
+      </ScreenBackground>
     </GestureHandlerRootView>
   );
 };

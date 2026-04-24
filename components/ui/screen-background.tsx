@@ -1,10 +1,13 @@
+import { useAuthStore } from "@/local_storage/user/asyncStorage/store";
 import React from "react";
 import { ImageBackground, StyleSheet } from "react-native";
 
 export default function ScreenBackground({ children }: any) {
   return (
     <ImageBackground
-      source={require("@/assets/images/background.png")}
+      source={useAuthStore?.getState()?.isAuthenticated ?
+        require("@/assets/images/background.jpg")
+        : require("@/assets/images/authBackground.png")}
       style={styles.background}
     >
       {children}

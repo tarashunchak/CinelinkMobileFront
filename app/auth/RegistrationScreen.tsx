@@ -1,54 +1,62 @@
-import LeafyReturnArrowButton from "@/components/ui/returnArrowButton";
+import ReturnArrowButton from "@/components/ui/returnArrowButton";
 import { textStyle } from "@/styles/textStyles";
+import { buttonStyle } from "@/styles/buttonStyle";
 import React, { useState } from "react";
-import { ImageBackground, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { Keyboard, KeyboardAvoidingView, StyleSheet, Text, View } from "react-native";
+import Input from "./components/Input";
+import ScreenBackground from "@/components/ui/screen-background";
+import { useNavigation } from "expo-router";
+import { TouchableWithoutFeedback } from "@gorhom/bottom-sheet";
+import { PressableScale } from "react-native-pressable-scale";
 
-export default function RegistrationScreen({ navigation }: any) {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [username, setUsername] = useState("");
+export default function RegistrationScreen() {
+  const [fullName, setFullName] = useState("");
+  //const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const navigator = useNavigation();
 
   return (
-    <ImageBackground source={require("@/assets/images/background.png")} style={{ flex: 1 }}>
+    <ScreenBackground>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <KeyboardAvoidingView style={{ padding: "2%" }}>
+          <ReturnArrowButton style={{ marginTop: "8%" }}
+            onPress={navigator.goBack}
+          />
 
-      <LeafyReturnArrowButton style={{ marginTop: "8%" }}
-        onPress={() => navigation.navigate("Login")} />
+          <Text style={[textStyle.white36, { marginTop: "16%", alignSelf: "center", textAlign: "center" }]}>Create Your Cinelink Account</Text>
+          <Text style={[textStyle.gray18, { alignSelf: "center" }]}>All your entertainment in one place</Text>
 
-      <Text style={[textStyle.white22, { fontSize: 30, marginTop: "30%", marginBottom: "2%", alignSelf: "center" }]}>Create Your Account</Text>
-      <Text style={[textStyle.grey22, { marginBottom: "10%", alignSelf: "center" }]}>All your entertainment in one place</Text>
+          <View style={{ flexDirection: "column", marginTop: "5%" }}>
+            <Input
+              placeholder="Enter full name"
+              text="Full Name"
+              type="text"
+              onChangeText={(text) => setFullName(text)}
+            />
+            <Input
+              placeholder="Enter email"
+              text="Email address"
+              type="text"
+              onChangeText={(text) => setEmail(text)}
+            />
+            <Input
+              placeholder="Enter password"
+              text="Password"
+              type="text"
+              onChangeText={(text) => setPassword(text)}
+            />
+          </View>
 
-      <View style={{ flexDirection: "column", gap: "2%" }}>
-        <View style={{ flexDirection: "column", gap: 5 }}>
-          <Text style={[textStyle.white18, { marginLeft: "1%" }]}>Full Name</Text>
-          <TextInput style={[textStyle.white18, { width: "100%", color: "white", fontSize: 18, height: 52, paddingLeft: 20, backgroundColor: "rgba(255, 255,255, 0.03)", borderRadius: 21, padding: 0.5, borderWidth: 1, borderColor: "rgba(255, 255, 255, 0.1)" }]} placeholderTextColor={"rgba(255, 255, 255, 0.6)"} placeholder="Enter email" />
-        </View>
-        <View style={{ flexDirection: "column", gap: 5 }}>
-          <Text style={[textStyle.white18, { marginLeft: "1%" }]}>Email address</Text>
-          <TextInput style={[textStyle.white18, { width: "100%", color: "white", fontSize: 18, height: 52, paddingLeft: 20, backgroundColor: "rgba(255, 255,255, 0.03)", borderRadius: 21, padding: 0.5, borderWidth: 1, borderColor: "rgba(255, 255, 255, 0.1)" }]} placeholderTextColor={"rgba(255, 255, 255, 0.6)"} placeholder="Enter email" />
-        </View>
-        <View style={{ flexDirection: "column", gap: 5 }}>
-          <Text style={[textStyle.white18, { marginLeft: "1%" }]}>Password</Text>
-          <TextInput style={[textStyle.white18, { width: "100%", color: "white", fontSize: 18, height: 52, paddingLeft: 20, backgroundColor: "rgba(255, 255,255, 0.03)", borderRadius: 21, padding: 0.5, borderWidth: 1, borderColor: "rgba(255, 255, 255, 0.1)" }]} placeholderTextColor={"rgba(255, 255, 255, 0.6)"} placeholder="Enter email" />
-        </View>
-      </View>
-
-      <Pressable style={{
-        marginTop: "5%",
-        backgroundColor: "#004338",
-        borderColor: "rgba(255, 255, 255, 0.7)",
-        borderWidth: 0.5,
-        borderRadius: 25,
-        alignItems: "center",
-        justifyContent: "center",
-        height: 52,
-      }}>
-        <Text style={textStyle.white18}>Sign Up</Text>
-      </Pressable>
-
-    </ImageBackground>
+          <PressableScale style={[buttonStyle.continueButton, { width: "100%", borderRadius: 8, marginTop: "8%" }]}
+            onPress={() => { LoginRequest(login, password) }}>
+            <Text style={[textStyle.white20]}>
+              Continue
+            </Text>
+          </PressableScale>
+        </KeyboardAvoidingView>
+      </TouchableWithoutFeedback>
+    </ScreenBackground>
   );
 }
 

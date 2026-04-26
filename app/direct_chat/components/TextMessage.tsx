@@ -1,6 +1,6 @@
 import React from "react";
 import * as Haptics from "expo-haptics";
-import { StyleSheet, Text, TouchableOpacity } from "react-native";
+import { Image, View, StyleSheet, Text } from "react-native";
 import { isCurrentUser } from "@/utils/utils";
 import { timestamp } from "../utils/utils";
 import { textStyle } from "@/styles/textStyles";
@@ -58,13 +58,22 @@ export default function TextMessage({ message, chatID }: { message: TextMessage_
       <Text style={[textStyle.white16]}>
         {message?.content?.message}
       </Text>
-      <Text style={[textStyle.gray12,
-      isCurrentUser(message?.user_id)
-        ? styles.isCurrentUserTS
-        : styles.notCurrentUserTS,
-      ]}>
-        {timestamp(new Date(message?.timestamp))}
-      </Text>
+      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+        <Image
+          source={require("../assets/checkGray.png")}
+          style={{ width: 20, height: 20 }}
+        />
+        <Text style={
+          [
+            textStyle.gray12,
+            isCurrentUser(message?.user_id)
+              ? styles.isCurrentUserTS
+              : styles.notCurrentUserTS,
+          ]}
+        >
+          {timestamp(new Date(message?.timestamp))}
+        </Text>
+      </View>
     </PressableScale >
   );
 };

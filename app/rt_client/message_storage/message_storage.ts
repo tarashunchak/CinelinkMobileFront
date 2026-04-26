@@ -10,4 +10,10 @@ export class MessageStorage {
     this.messages.set(message?.message_id, message);
     return Array.from(this.messages.values());
   };
+
+  public clearChat(chatID: number): any[] {
+    const tmp = this.messages.get(chatID);
+    this.messages.set(chatID, []);
+    return tmp ?? [];
+  };
 };

@@ -9,6 +9,9 @@ import TextMessage from "./components/TextMessage";
 import { getCurrentUserID } from "@/utils/utils";
 import FloatingButton from "./components/FloatingButton";
 import ScreenBackground from "@/components/ui/screen-background";
+import Spacer from "@/components/ui/spacer";
+import { hasPlatformFeatureAsync } from "expo-device";
+import { heightPercentageToDP } from "react-native-responsive-screen";
 
 export default function DirectChatScreen({ route }: any) {
   const { chatID } = route?.params ?? { chatID: 3 };
@@ -51,6 +54,7 @@ export default function DirectChatScreen({ route }: any) {
             renderItem={({ item }) => (
               <TextMessage chatID={chatID} message={item} />
             )}
+            ListFooterComponent={<Spacer spacing={8} />}
             keyboardShouldPersistTaps="always"
             removeClippedSubviews
             inverted

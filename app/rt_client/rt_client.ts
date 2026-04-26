@@ -17,7 +17,6 @@ class RTClient_ {
   private onWSMessage(data: any) {
     const type = data?.type;
     const chatID: number = data?.chat_id;
-    console.warn("OnWSMessage data: ", data);
     const callbacks = this.chatManager?.getCallbacks(chatID);
     const handler = Handlers.get(type);
     if (handler) {
@@ -98,6 +97,9 @@ class RTClient_ {
   public async setChatEntering(chatID: ChatID, userID: UserID) {
     this.wsConnections?.get(userID)?.send(
       Makers.makeChatEnteringMessage({ chat_id: chatID, user_id: userID })
+    );
+    this.wsConnections?.get(userID)?.send(
+      Makers.makeSeenAllMessage({ chat_id: chatID, user_id: userID })
     );
   };
 

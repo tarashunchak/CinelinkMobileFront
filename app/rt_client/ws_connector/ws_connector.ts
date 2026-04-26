@@ -1,3 +1,5 @@
+import { MessagesQueue } from "../messages_queue/messages_queue";
+
 type MessageHandler = (message: any) => void;
 
 export interface Content {
@@ -21,6 +23,7 @@ export class WSConnector {
   private reconnectAttempts = 0;
   private maxReconnectAttempts = 5;
   private pingInterval: any;
+  private messagesQueue: MessagesQueue = new MessagesQueue();
 
   constructor(
     private url: string,
@@ -39,6 +42,9 @@ export class WSConnector {
 
     this.ws.onopen = () => {
       console.warn("WS is open!!")
+      this.messagesQueue.flush().forEach((message) => {
+        this.send(message);
+      });
       this.reconnectAttempts = 0;
       this.startPing();
       this.onOpen();
@@ -47,6 +53,7 @@ export class WSConnector {
     this.ws.onmessage = (event) => {
       try {
         const data = JSON.parse(event.data);
+        console.warn("WS message: ", data);
         this.onMessage(data);
       } catch (e) {
         console.error("Failed to parse WS message: ", e);
@@ -82,6 +89,7 @@ export class WSConnector {
   }
 
   public send(data: WSMessage) {
+    this.messagesQueue.push(data);
     if (this.ws?.readyState === WebSocket.OPEN) {
       this.ws?.send(JSON.stringify(data));
     } else {

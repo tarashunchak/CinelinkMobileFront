@@ -32,8 +32,6 @@ export default function DirectChatScreen({ route }: any) {
       loadContent();
     }, []));
 
-  console.warn("Chat info: ", chat);
-  console.warn("Message: ", messages?.[0]);
   return (
     <TouchableWithoutFeedback
       onPress={Keyboard.dismiss}

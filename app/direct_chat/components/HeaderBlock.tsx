@@ -38,7 +38,7 @@ export default function Header({ chatID, peer }: { chatID: number, peer: ChatMem
     };
 
     func();
-  }, [chatID, status]);
+  }, [chatID]);
 
   return (
     <View style={styles.view}>
@@ -46,8 +46,8 @@ export default function Header({ chatID, peer }: { chatID: number, peer: ChatMem
         <LeafyReturnArrowButton
           onPress={
             () => {
-              navigator.goBack();
               RTClient.setChatLeaving(chatID, getCurrentUserID());
+              navigator.goBack();
             }
           } />
 

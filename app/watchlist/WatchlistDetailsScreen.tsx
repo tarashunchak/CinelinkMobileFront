@@ -8,6 +8,7 @@ import { heightPercentageToDP as hp } from "react-native-responsive-screen"
 import HeaderBlock from "./components/HeaderBlock";
 import MoviesList from "./components/MoviesList";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import ScreenBackground from "@/components/ui/screen-background";
 
 export default function WatchlistDetailsScreen({ route }: any) {
   const [movies, setMovies] = useState<any>();
@@ -24,10 +25,7 @@ export default function WatchlistDetailsScreen({ route }: any) {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <ImageBackground
-        style={{ flex: 1 }}
-        source={require("@/assets/images/background.png")}
-      >
+      <ScreenBackground>
         <ScrollView
           style={{}}
           showsVerticalScrollIndicator={false}
@@ -64,7 +62,7 @@ export default function WatchlistDetailsScreen({ route }: any) {
           <MoviesList movies={movies} />
         </ScrollView >
         <BottomBar />
-      </ImageBackground >
+      </ScreenBackground>
     </GestureHandlerRootView>
   )
 }

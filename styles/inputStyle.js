@@ -5,7 +5,7 @@ export const inputStyle = {
     fontSize: 16,
     height: 48,
     paddingLeft: 20,
-    backgroundColor: "rgba(255, 255,255, 0.05)",
+    backgroundColor: "rgba(255, 255,255, 0.08)",
     borderRadius: 8,
     padding: 0.5,
     borderWidth: 1,

@@ -47,7 +47,11 @@ export function ProfileMain({
           onPress={() => setIsOpen(true)}
         >
           <Image
-            source={{ uri: user?.avatar_url }}
+            source={
+              user?.avatar_url
+                ? { uri: user?.avatar_url }
+                : require("../assets/oscar.jpg")
+            }
             style={{ width: "100%", height: "100%", borderRadius: 999 }}
           />
           {user?.is_online && <View style={styles.isOnlineDot}></View>}

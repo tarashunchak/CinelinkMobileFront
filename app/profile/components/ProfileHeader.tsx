@@ -17,7 +17,7 @@ export function ProfileHeader({ user, onBack, isCurrentUser }: Props) {
       <ImageBackground
         source={user?.bg_img_url
           ? { uri: user?.bg_img_url }
-          : require("@/assets/images/profileBackground.png")}
+          : require("../assets/profileBackground.png")}
         style={styles.bgImage}
       />
       <View style={{ flexDirection: "row", justifyContent: "space-between" }}>

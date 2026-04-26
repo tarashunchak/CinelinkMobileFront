@@ -8,6 +8,7 @@ import { GetUserWatchlists } from "@/api/watchlist/watchlist";
 import WatchlistCard from "./components/WatchlistCard";
 import LibraryHeader from "./components/Header";
 import { useFocusEffect, useNavigation } from "expo-router";
+import ScreenBackground from "@/components/ui/screen-background";
 
 export default function WatchlistsScreen() {
   const navigator = useNavigation();
@@ -27,7 +28,7 @@ export default function WatchlistsScreen() {
 
   return (
     <View style={{ flex: 1 }}>
-      <ImageBackground source={require("@/assets/images/background.png")} style={viewStyle.imageBackground}>
+      <ScreenBackground>
         <LibraryHeader />
         <FlatList
           data={watchlists}
@@ -43,7 +44,7 @@ export default function WatchlistsScreen() {
             <View style={{ height: hp(14) }}></View>
           }
         />
-      </ImageBackground>
+      </ScreenBackground>
       <BottomBar />
     </View>
   );

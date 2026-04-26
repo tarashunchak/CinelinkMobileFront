@@ -1,10 +1,10 @@
-import { LoginRequest } from "@/api/auth/loginPageApi";
+import { LoginRequest } from "@/api/auth";
 import { backgroundStyle } from "@/styles/backgroundStyle";
 import { buttonStyle } from "@/styles/buttonStyle";
 import { textStyle } from "@/styles/textStyles";
 import * as WebBrowser from "expo-web-browser";
 import React, { useState } from "react";
-import { Image, Text, View } from "react-native";
+import { Keyboard, Image, Text, TouchableWithoutFeedback, View } from "react-native";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { PressableScale } from "react-native-pressable-scale";
 import Input from "./components/Input";
@@ -14,7 +14,7 @@ import { useNavigation } from "expo-router";
 WebBrowser.maybeCompleteAuthSession();
 
 export default function LoginScreen() {
-  const [login, setLogin] = useState<string>("");
+  const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const navigator = useNavigation();
 
@@ -24,83 +24,85 @@ export default function LoginScreen() {
 
   return (
     <ScreenBackground>
-      <View style={{ paddingHorizontal: "2%", alignItems: "center", marginTop: "20%" }}>
-        <Image source={require("@/assets/images/logo.png")}
-          style={[
-            {
-              height: "24%",
-              width: "65%",
-            }
-          ]} />
-        <Input
-          placeholder="Username"
-          text="Enter username"
-          type="text"
-          onChangeText={(text) => setLogin(text)}
-        />
-
-        <Input
-          placeholder="Password"
-          text="Enter password"
-          type="password"
-          onChangeText={(text) => setPassword(text)}
-        />
-
-        <PressableScale style={[buttonStyle.continueButton, { width: "100%", borderRadius: 8, marginTop: "5%" }]}
-          onPress={() => { LoginRequest(login, password) }}>
-          <Text style={[textStyle.white20]}>
-            Continue
-          </Text>
-        </PressableScale>
-
-        <View style={{ width: "100%", flexDirection: "row", justifyContent: "space-evenly", alignContent: "center", margin: "4%" }}>
-          <View style={[
-            {
-              backgroundColor: "white",
-              height: 0.5,
-              width: "20%",
-              alignSelf: "center"
-            }
-          ]} />
-          <PressableScale>
-            <Text style={textStyle.gray14}>Forgot password?</Text>
-          </PressableScale>
-          <View style={[
-            {
-              backgroundColor: "white",
-              height: 0.5,
-              width: "20%",
-              alignSelf: "center"
-            }
-          ]} />
-        </View>
-
-        <PressableScale style={[styles.googleButton.touchable]}
-          onPress={() => onSignIn("google")}>
-          <View style={[styles.googleButton.view]}>
-            <Image source={require("@/assets/images/google_icon.png")}
-              style={{
-                alignSelf: "center",
-                width: 36,
-                height: 36
-              }} />
-            <Text style={[
-              textStyle.black20,
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={{ paddingHorizontal: "2%", alignItems: "center", marginTop: "20%" }}>
+          <Image source={require("@/assets/images/logo.png")}
+            style={[
               {
+                height: "24%",
+                width: "65%",
+              }
+            ]} />
+          <Input
+            placeholder="Username"
+            text="Enter username"
+            type="text"
+            onChangeText={(text) => setUsername(text)}
+          />
+
+          <Input
+            placeholder="Password"
+            text="Enter password"
+            type="password"
+            onChangeText={(text) => setPassword(text)}
+          />
+
+          <PressableScale style={[buttonStyle.continueButton, { width: "100%", borderRadius: 8, marginTop: "10%", backgroundColor: "#DEB522" }]}
+            onPress={() => { LoginRequest({ username, password }) }}>
+            <Text style={[textStyle.white20]}>
+              Sign In
+            </Text>
+          </PressableScale>
+
+          <View style={{ width: "100%", flexDirection: "row", justifyContent: "space-evenly", alignContent: "center", margin: "6%" }}>
+            <View style={[
+              {
+                backgroundColor: "white",
+                height: 0.5,
+                width: "20%",
                 alignSelf: "center"
               }
-            ]}>Sign In with Google</Text>
+            ]} />
+            <PressableScale>
+              <Text style={textStyle.gray16}>Forgot password?</Text>
+            </PressableScale>
+            <View style={[
+              {
+                backgroundColor: "white",
+                height: 0.5,
+                width: "20%",
+                alignSelf: "center"
+              }
+            ]} />
           </View>
-        </PressableScale>
 
-        <PressableScale style={{ marginTop: "5%" }}
-          onPress={() => {
-            navigator.navigate("RegistrationScreen")
-          }}
-        >
-          <Text style={textStyle.white18}>Create account?</Text>
-        </PressableScale>
-      </View>
+          <PressableScale style={[styles.googleButton.touchable]}
+            onPress={() => onSignIn("google")}>
+            <View style={[styles.googleButton.view]}>
+              <Image source={require("@/assets/images/google_icon.png")}
+                style={{
+                  alignSelf: "center",
+                  width: 36,
+                  height: 36
+                }} />
+              <Text style={[
+                textStyle.black20,
+                {
+                  alignSelf: "center"
+                }
+              ]}>Sign In with Google</Text>
+            </View>
+          </PressableScale>
+
+          <PressableScale style={{ marginTop: "5%" }}
+            onPress={() => {
+              navigator.navigate("RegistrationScreen")
+            }}
+          >
+            <Text style={textStyle.white18}>Create account?</Text>
+          </PressableScale>
+        </View>
+      </TouchableWithoutFeedback>
     </ScreenBackground>
   );
 }

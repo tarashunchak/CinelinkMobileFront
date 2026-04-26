@@ -28,10 +28,10 @@ export function ProfileMain({
 
   const fullName: string =
     isLoading ? "**** ****"
-      : `${user?.first_name} ${user?.last_name}`;
+      : user?.first_name && `${user?.first_name} ${user?.last_name}`;
 
   const username: string =
-    isLoading ? "********" : user?.username || "********";
+    isLoading ? "********" : user?.username;
 
   const fetchJoinedAt = useMemo(() => {
     const date = new Date(user?.joined_at ?? null);
@@ -68,11 +68,13 @@ export function ProfileMain({
 
       </View>
 
-      <Text
-        style={textStyle.white20}
-      >
-        {fullName}
-      </Text>
+      {
+        fullName && <Text
+          style={textStyle.white20}
+        >
+          {fullName}
+        </Text>
+      }
       <Text
         style={textStyle.gray12}
       >

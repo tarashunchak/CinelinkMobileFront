@@ -67,19 +67,35 @@ export function makeMessageEditedMessage(props: Props) {
 
 export function makeMessageDeletedMessage(props: Props) {
   return JSON.stringify({
-
+    type: "message_deleted",
+    content: {
+      user_id: props.user_id,
+      chat_id: props.chat_id,
+      message_id: props.message_id,
+    }
   });
 };
 
 export function makeChatCreatedMessage(props: Props) {
   return JSON.stringify({
-
+    type: "message_created",
+    content: {
+      user_id: props.user_id,
+      chat_id: props.chat_id,
+      message_id: props.message_id,
+      message_type: props.message_type,
+      message: props.message,
+    }
   });
 };
 
 export function makeChatDeletedMessage(props: Props) {
   return JSON.stringify({
-
+    type: "message_deleted",
+    content: {
+      user_id: props.user_id,
+      chat_id: props.chat_id,
+    },
   });
 };
 

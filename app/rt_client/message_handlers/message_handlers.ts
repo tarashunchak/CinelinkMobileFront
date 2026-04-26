@@ -1,15 +1,15 @@
 import { ChatManager } from "../chat_manager/chat_manager";
-import { WSMessage } from "../ws_connector/ws_connector";
+import { Content, WSMessage } from "../ws_connector/ws_connector";
 
 type WSHandler = (msg: WSMessage, manager: ChatManager) => void;
 
 function handleTyping(msg: WSMessage, manager: ChatManager) {
-  const { chat_id, user_id, is_typing } = msg.content;
+  const { chat_id, user_id, is_typing }: Content = msg.content;
   manager.callbacks?.onTyping?.get(chat_id)?.(msg);
 };
 
 function handleOnline(msg: WSMessage, manager: ChatManager) {
-  const { chat_id, user_id, is_online } = msg.content;
+  const { chat_id, user_id, is_online }: Content = msg.content;
   manager.callbacks?.onOnline?.get(chat_id)?.(msg);
 };
 

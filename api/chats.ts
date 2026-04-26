@@ -1,11 +1,6 @@
+import { API_URL } from "@/api/API_CONFIG";
+import { getCurrentUserID, jwtHeaders } from "@/utils/utils";
 import { useAuthStore } from "@/local_storage/user/asyncStorage/store";
-import { API_URL } from "./../API_CONFIG";
-import { getCurrentUser, jwtHeaders } from "@/utils/utils";
-
-interface APIResponse {
-  status: number;
-  results: any;
-}
 
 export async function GetUserChats(userID: number) {
   const response = await fetch(`${API_URL}/users/${userID}/chats`);
@@ -41,5 +36,20 @@ export async function GetChatMessages(chatID: number) {
   const response = await fetch(`${API_URL}/chats/${chatID}/messages`);
   if (!response.ok) { }
   const data = await response.json();
+  return data?.results;
+};
+
+export async function GetDirectChatID(peerID: number): Promise<number> {
+  if (1) return 3;
+  const response = await fetch(`${API_URL}/chats/get-or-create`, {
+    body: JSON.stringify({
+      users_ids: [
+        getCurrentUserID(),
+        peerID,
+      ]
+    })
+  });
+  const text = await response.text();
+  const data = JSON.parse(text);
   return data?.results;
 };

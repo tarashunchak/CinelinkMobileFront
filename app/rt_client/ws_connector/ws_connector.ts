@@ -1,19 +1,19 @@
-import { Ping, ChatPresence, PagePresence, Online, Typing } from "../models/models";
-
 type MessageHandler = (message: any) => void;
+
+export interface Content {
+  user_id: number;
+  chat_id?: number;
+  message_id?: number;
+  message_type?: string;
+  message?: any;
+  is_typing?: boolean;
+  is_online?: boolean;
+  page?: string;
+};
 
 export interface WSMessage {
   type: string;
-  content?: {
-    user_id: number;
-    chat_id?: number;
-    message_id?: number;
-    message_type?: string;
-    message?: any;
-    is_typing?: boolean;
-    is_online?: boolean;
-    page?: string;
-  }
+  content?: Content,
 };
 
 export class WSConnector {

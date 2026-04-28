@@ -39,17 +39,14 @@ export async function GetChatMessages(chatID: number) {
   return data?.results;
 };
 
-export async function GetDirectChatID(peerID: number): Promise<number> {
-  if (1) return 3;
-  const response = await fetch(`${API_URL}/chats/get-or-create`, {
-    body: JSON.stringify({
-      users_ids: [
-        getCurrentUserID(),
-        peerID,
-      ]
-    })
+export async function GetDirectChatID(userID: number): Promise<number> {
+  //if (1) return 3;
+  console.warn("GETDirectChatID");
+  const response = await fetch(`${API_URL}/chats/get-or-create/${userID}`, {
+    headers: jwtHeaders(useAuthStore.getState().user?.jwt),
   });
   const text = await response.text();
   const data = JSON.parse(text);
+  console.warn("GETDIRECTCHATID: ", data?.results);
   return data?.results;
 };

@@ -10,11 +10,10 @@ import { getCurrentUserID } from "@/utils/utils";
 import FloatingButton from "./components/FloatingButton";
 import ScreenBackground from "@/components/ui/screen-background";
 import Spacer from "@/components/ui/spacer";
-import { hasPlatformFeatureAsync } from "expo-device";
-import { heightPercentageToDP } from "react-native-responsive-screen";
 
 export default function DirectChatScreen({ route }: any) {
-  const { chatID } = route?.params ?? { chatID: 3 };
+  //const { chatID } = route?.params ?? { chatID: 3 };
+  const { chatID } = route?.params;
   const [chat, setChat] = useState();
   const [messages, setMessages] = useState<RTMessage[]>();
   const [isFloatButtonVisible, setFloatButtonVisible] = useState<boolean>(false);

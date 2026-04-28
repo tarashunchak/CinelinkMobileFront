@@ -18,6 +18,7 @@ import { GetDirectChatID } from "../../api/chats";
 import { FlatList, GestureHandlerRootView } from "react-native-gesture-handler";
 import { textStyle } from "@/styles/textStyles";
 import ScreenBackground from "@/components/ui/screen-background";
+import { format } from "node:path";
 
 export default function UserProfileScreen({ route }: any) {
   const navigator = useNavigation();
@@ -27,6 +28,7 @@ export default function UserProfileScreen({ route }: any) {
   const { followers, loadFollowers, followersLoading } = useFollowers(userID);
   const [isCurrUser, setIsCurrUser] = useState<boolean>(false);
   const [list, setList] = useState<string>("Followers");
+  const [chatID, setChatID] = useState<number>(0);
 
   useFocusEffect(
     useCallback(() => {
@@ -35,6 +37,12 @@ export default function UserProfileScreen({ route }: any) {
       loadFollowers();
       setIsCurrUser(isCurrentUser(userID))
       console.warn(`User info: ${user?.followings}`);
+      async function load() {
+        console.warn("LOAD DIRECT CHATID");
+        const chatID = await GetDirectChatID(userID);
+        setChatID(chatID);
+      };
+      load();
     }, [])
   );
 
@@ -68,7 +76,7 @@ export default function UserProfileScreen({ route }: any) {
               }}
               onChat={async () => {
                 console.warn("On chat");
-                navigator.navigate("DirectChatScreen", { chatID: await GetDirectChatID(userID) });
+                navigator.navigate("DirectChatScreen", { chatID: chatID });
               }}
             />
 

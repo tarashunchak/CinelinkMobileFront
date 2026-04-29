@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { TouchableOpacity, Text, ImageBackground, View, FlatList } from "react-native";
+import { TouchableOpacity, Text, View, FlatList } from "react-native";
 import BottomBar from "../bars/bottomBar";
 import RecommendationCard, { RecommendedCard_T } from "./components/RecommendationCard";
 import ChatCard from "./components/ChatCard";
 import { textStyle } from "@/styles/textStyles";
-import { GetUserFollowers } from "@/api/followers/followers";
-import { GetUserRecommendations } from "@/api/recommendations/recommendations";
-import { GetUserChats } from "@/api/chats/chats";
 import { RTClient } from "../rt_client/rt_client";
 import { getCurrentUserID } from "@/utils/utils";
 import { UserCard_T } from "../types/user";
@@ -24,7 +21,7 @@ export default function SocialScreen() {
 
   useEffect(() => {
     async function loadContent() {
-      await RTClient.setPageEntering("social", getCurrentUserID() ?? 1);
+      await RTClient.setPageEntering("social", getCurrentUserID());
 
       const data = await GetSocial();
       setFriends(data?.friends);

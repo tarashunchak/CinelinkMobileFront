@@ -12,7 +12,6 @@ import ScreenBackground from "@/components/ui/screen-background";
 import Spacer from "@/components/ui/spacer";
 
 export default function DirectChatScreen({ route }: any) {
-  //const { chatID } = route?.params ?? { chatID: 3 };
   const { chatID } = route?.params;
   const [chat, setChat] = useState();
   const [messages, setMessages] = useState<RTMessage[]>();
@@ -23,14 +22,13 @@ export default function DirectChatScreen({ route }: any) {
       async function loadContent() {
         setChat(await RTClient.getChat(chatID));
         setMessages(await RTClient.getChatMessages(chatID));
-        setTimeout(() => {
-          RTClient.setChatEntering(chatID, getCurrentUserID());
-        },
-        )
+        setTimeout(async () => {
+          await RTClient.setChatEntering(chatID, getCurrentUserID());
+        }, 1000);
         return () => {
           console.log("Screen unfocused");
-        }
-      }
+        };
+      };
       loadContent();
     }, []));
 

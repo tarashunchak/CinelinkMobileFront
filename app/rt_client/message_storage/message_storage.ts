@@ -1,3 +1,6 @@
+import { useChatStore } from "../chat_state";
+import { ChatID } from "../models/models";
+
 export interface ChatMessage {
   chat_id: number;
   user_id: number;
@@ -16,11 +19,24 @@ export interface MessageEventsHandlers {
 
 export class MessageStorage {
   private messages: Map<number, ChatMessage> = new Map();
+  private chatID: ChatID;
   private lastMessageId: number = 0;
 
-  public loadMessages() {
+  constructor(chatID: ChatID) {
+    this.chatID = chatID;
+  };
 
-  }
+  public async loadMessages() {
+    const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/chats/${this.chatID}/messages`)
+    const text = await response?.text();
+    const data = JSON.parse(text);
+
+    if (!data?.results)
+      return [];
+
+    this.messages?.set(this.chatID, data?.results);
+    useChatStore.getState()._setChatMessages(this.chatID, data?.results?.reverse);
+  };
 
   public deleteMessage(message_id: number): ChatMessage[] {
     this.messages.delete(message_id);
@@ -39,7 +55,7 @@ export class MessageStorage {
   };
 
   public getChatMessages(): ChatMessage[] | [] {
-    return this.messages.values().toArray();
+    return Array.from(this.messages.values());
   };
 
   public getLastChatMessage(): ChatMessage | null {

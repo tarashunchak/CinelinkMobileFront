@@ -3,6 +3,8 @@ import { WSConnector, WSMessage } from "./ws_connector/ws_connector";
 import { Chat, ChatManager, ChatMessage } from "./chat_manager/chat_manager";
 import * as Makers from "./message_makers/message_makers";
 import { Handlers } from "./message_handlers/message_handlers";
+import { useEffect } from "react";
+import { ChatState, useChatStore } from "./chat_state";
 
 const WS_ADDRESS = (userID: UserID): string =>
   `${process.env.EXPO_PUBLIC_WS_URL}/${userID}`;
@@ -16,8 +18,6 @@ class RTClient_ {
 
   private onWSMessage(data: any) {
     const type = data?.type;
-    const chatID: number = data?.chat_id;
-    const callbacks = this.chatManager?.getCallbacks(chatID);
     const handler = Handlers.get(type);
     if (handler) {
       handler(data, this.chatManager);
@@ -56,13 +56,13 @@ class RTClient_ {
     ));
   };
 
+  public getChatMessagesRef(chatID: ChatID) {
+    return (state: ChatState) => state.messages[chatID] || [];
+  };
+
   public disconnect(userID: UserID) {
     this.setOnlineStatus(userID, false);
     this.wsConnections?.get(userID)?.disconnect();
-  };
-
-  public async getChatMessages(chatID: ChatID): Promise<ChatMessage[]> {
-    return this.chatManager.getChatMessages(chatID);
   };
 
   public async getChat(chatID: ChatID): Promise<Chat> {
@@ -133,6 +133,15 @@ class RTClient_ {
 
     return data?.results;
   };
+
+  public isLoaded = this.chatManager.isLoaded;
 };
 //export const RTClient: RTChatClient = new RTChatClient();
 export const RTClient: RTClient_ = new RTClient_();
+
+export const useChatMessages = (chatID: ChatID) => {
+  const messages = useChatStore(RTClient.getChatMessagesRef(chatID));
+  useEffect(() => {
+  }, [chatID]);
+  return messages;
+};

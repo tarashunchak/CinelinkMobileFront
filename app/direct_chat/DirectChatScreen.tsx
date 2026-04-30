@@ -3,25 +3,25 @@ import { KeyboardAvoidingView, Platform, FlatList, TouchableWithoutFeedback, Key
 import Header from "./components/HeaderBlock";
 import Input from "./components/Input";
 import { useFocusEffect } from "expo-router";
-import { RTClient } from "@/app/rt_client/rt_client";
+import { RTClient, useChatMessages } from "@/app/rt_client/rt_client";
 import { RTMessage } from "@/app/rt_client/models/models";
 import TextMessage from "./components/TextMessage";
 import { getCurrentUserID } from "@/utils/utils";
 import FloatingButton from "./components/FloatingButton";
 import ScreenBackground from "@/components/ui/screen-background";
 import Spacer from "@/components/ui/spacer";
+import { ChatMessage } from "../rt_client/message_storage/message_storage";
 
 export default function DirectChatScreen({ route }: any) {
   const { chatID } = route?.params;
   const [chat, setChat] = useState();
-  const [messages, setMessages] = useState<RTMessage[]>();
   const [isFloatButtonVisible, setFloatButtonVisible] = useState<boolean>(false);
+  const messages = useChatMessages(chatID)
 
   useFocusEffect(
     useCallback(() => {
       async function loadContent() {
         setChat(await RTClient.getChat(chatID));
-        setMessages(await RTClient.getChatMessages(chatID));
         setTimeout(async () => {
           await RTClient.setChatEntering(chatID, getCurrentUserID());
         }, 1000);
@@ -46,12 +46,12 @@ export default function DirectChatScreen({ route }: any) {
           <Header chatID={chat?.info?.chat_id} peer={chat?.peer} />
           <FlatList
             onScroll={() => setFloatButtonVisible(true)}
-            data={messages?.reverse()}
+            data={messages}
             keyExtractor={(_, index) => String(index)}
             renderItem={({ item }) => (
               <TextMessage chatID={chatID} message={item} />
             )}
-            ListFooterComponent={<Spacer spacing={8} />}
+            ListFooterComponent={<Spacer spacing={10} />}
             keyboardShouldPersistTaps="always"
             removeClippedSubviews
             inverted

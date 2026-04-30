@@ -3,6 +3,8 @@ import { ChatID, UserID } from "./../models/models";
 import { useAuthStore } from "@/local_storage/user/asyncStorage/store";
 import { WSMessage } from "../ws_connector/ws_connector";
 import { MessagesQueue } from "../messages_queue/messages_queue";
+import { MessageStorage } from "../message_storage/message_storage";
+import { ChatMessage } from "../message_storage/message_storage";
 
 export type Chat = {
   info: {
@@ -22,12 +24,13 @@ export type Chat = {
   };
 };
 
-export type ChatMessage = {
-  chat_id: ChatID,
-  sender_id: UserID,
-  timestamp: string,
-  message_type: string,
-  message: any,
+export type ChatEventType =
+  "message_edited" | "message_delete" | "message_add" | "message_seen"
+  | "seen_all" | "user_typing" | "chat_created" | "member_add" | "member_leave";
+
+export type ChatEvent = {
+  chat_id: number;
+  event: ChatEventType;
 };
 
 type Callbacks = {
@@ -38,9 +41,10 @@ type Callbacks = {
 };
 
 export class ChatManager {
-  private messages: Map<ChatID, ChatMessage[]> = new Map();
+  private messages: Map<ChatID, MessageStorage> = new Map();
   private loadedStatus: Map<ChatID, boolean> = new Map();
   private messagesQueue: MessagesQueue = new MessagesQueue();
+  private listeners: ((event: ChatEvent) => void)[] = [];
 
   public callbacks: Callbacks = {
     onMessage: new Map<ChatID, (_: WSMessage) => void>(),
@@ -49,8 +53,15 @@ export class ChatManager {
     onSend: new Map<ChatID, (_: WSMessage) => void>(),
   };
 
-  public setCallBack(chatID: ChatID, callBack: (_: WSMessage) => void) {
+  public async onEvent(handler: (event: ChatEvent) => void) {
+    this.listeners.push(handler);
+    return () => {
+      this.listeners = this.listeners.filter(l => l !== handler);
+    };
+  };
 
+  public async emit(event: ChatEvent) {
+    this.listeners.forEach(l => l(event));
   };
 
   public async setOnOnline(chatID: ChatID, callback: (_: WSMessage) => void) {
@@ -60,7 +71,7 @@ export class ChatManager {
 
   public async setOnTyping(chatID: ChatID, callback: (_: WSMessage) => void) {
     console.warn("Set on typing: ", chatID, " ", callback);
-    this.callbacks?.onTyping.set(chatID, callback);
+    this.callbacks?.onTyping?.set(chatID, callback);
   };
 
   public getCallbacks(chatID: ChatID): Callbacks {
@@ -68,8 +79,8 @@ export class ChatManager {
   };
 
   public async handleIncommingMessage(chatID: ChatID, message: ChatMessage) {
-    const current = this.messages?.get(chatID) ?? [];
-    this.messages.set(chatID, [message, ...current]);
+    this.messages.get(chatID)?.addMessage(message);
+    //this.messages.set(chatID, [message, ...current]);
   };
 
   public async getChat(chatID: ChatID): Promise<Chat> {
@@ -85,20 +96,14 @@ export class ChatManager {
     return data?.results;
   };
 
-  public async getChatMessages(chatID: ChatID): Promise<ChatMessage[]> {
-    if (this.loadedStatus?.get(chatID))
-      return this.messages?.get(chatID) ?? [];
-
-    const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/chats/${chatID}/messages`)
-    const text = await response?.text();
-    const data = JSON.parse(text);
-
-    if (!data?.results)
-      return [];
-
-    this.messages?.set(chatID, data?.results);
-    this.loadedStatus?.set(chatID, true);
-
-    return data?.results;
+  public getChatMessages(chatID: ChatID): ChatMessage[] {
+    if (!this.messages.get(chatID))
+      this.messages.set(chatID, new MessageStorage(chatID));
+    this.messages.get(chatID)?.loadMessages();
+    return this.messages.get(chatID)?.getChatMessages() ?? [];
   };
+
+  public isLoaded(chatID: ChatID): boolean {
+    return this.loadedStatus?.get(chatID) ?? false;
+  }
 };

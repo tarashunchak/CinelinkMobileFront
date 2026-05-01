@@ -1,6 +1,6 @@
 import { ChatID, UserID, RTMessage } from "./models/models";
 import { WSConnector, WSMessage } from "./ws_connector/ws_connector";
-import { Chat, ChatManager, ChatMessage } from "./chat_manager/chat_manager";
+import { Chat, ChatManager } from "./chat_manager/chat_manager";
 import * as Makers from "./message_makers/message_makers";
 import { Handlers } from "./message_handlers/message_handlers";
 import { useEffect } from "react";
@@ -56,9 +56,7 @@ class RTClient_ {
     ));
   };
 
-  public getChatMessagesRef(chatID: ChatID) {
-    return (state: ChatState) => state.messages[chatID] || [];
-  };
+  public getChatMessages = this.chatManager.getChatMessages;
 
   public disconnect(userID: UserID) {
     this.setOnlineStatus(userID, false);
@@ -136,12 +134,13 @@ class RTClient_ {
 
   public isLoaded = this.chatManager.isLoaded;
 };
-//export const RTClient: RTChatClient = new RTChatClient();
+
 export const RTClient: RTClient_ = new RTClient_();
 
 export const useChatMessages = (chatID: ChatID) => {
-  const messages = useChatStore(RTClient.getChatMessagesRef(chatID));
+  const messages = useChatStore(state => state.messages[chatID] || []);
   useEffect(() => {
+    RTClient.getChatMessages(chatID);
   }, [chatID]);
   return messages;
 };

@@ -96,11 +96,13 @@ export class ChatManager {
     return data?.results;
   };
 
-  public getChatMessages(chatID: ChatID): ChatMessage[] {
-    if (!this.messages.get(chatID))
-      this.messages.set(chatID, new MessageStorage(chatID));
-    this.messages.get(chatID)?.loadMessages();
-    return this.messages.get(chatID)?.getChatMessages() ?? [];
+  public async getChatMessages(chatID: ChatID) {
+    let storage = this.messages?.get(chatID);
+    if (!storage) {
+      storage = new MessageStorage(chatID);
+      this.messages?.set(chatID, storage);
+    }
+    await storage.loadMessages();
   };
 
   public isLoaded(chatID: ChatID): boolean {

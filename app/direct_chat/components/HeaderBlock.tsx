@@ -1,12 +1,11 @@
 import { RTClient } from "@/app/rt_client/rt_client";
 import LeafyReturnArrowButton from "@/components/ui/returnArrowButton";
 import { textStyle } from "@/styles/textStyles";
-import { getCurrentUserID } from "@/utils/utils";
 import { useNavigation } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { View, Text, Image, TouchableOpacity, Platform, StyleSheet } from "react-native";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
-import { ChatMember, DirectChat } from "@/app/rt_client/models/models";
+import { ChatMember } from "@/app/rt_client/models/models";
 import { calcLastSeen } from "../utils/utils";
 
 export default function Header({ chatID, peer }: { chatID: number, peer: ChatMember }) {
@@ -44,12 +43,7 @@ export default function Header({ chatID, peer }: { chatID: number, peer: ChatMem
     <View style={styles.view}>
       <View style={{ flexDirection: "row", gap: "5%" }}>
         <LeafyReturnArrowButton
-          onPress={
-            () => {
-              RTClient.setChatLeaving(chatID, getCurrentUserID());
-              navigator.goBack();
-            }
-          } />
+          onPress={navigator.goBack} />
 
         <View style={styles.chatpeer.view}>
           <TouchableOpacity

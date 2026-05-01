@@ -31,11 +31,13 @@ export class MessageStorage {
     const text = await response?.text();
     const data = JSON.parse(text);
 
+    console.warn("LoadMessages 1");
     if (!data?.results)
       return [];
 
+    console.warn("LoadMessages 2: ", data?.results);
     this.messages?.set(this.chatID, data?.results);
-    useChatStore.getState()._setChatMessages(this.chatID, data?.results?.reverse);
+    useChatStore.getState()._setChatMessages(this.chatID, data?.results?.reverse());
   };
 
   public deleteMessage(message_id: number): ChatMessage[] {

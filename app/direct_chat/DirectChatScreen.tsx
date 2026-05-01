@@ -4,33 +4,36 @@ import Header from "./components/HeaderBlock";
 import Input from "./components/Input";
 import { useFocusEffect } from "expo-router";
 import { RTClient, useChatMessages } from "@/app/rt_client/rt_client";
-import { RTMessage } from "@/app/rt_client/models/models";
 import TextMessage from "./components/TextMessage";
 import { getCurrentUserID } from "@/utils/utils";
 import FloatingButton from "./components/FloatingButton";
 import ScreenBackground from "@/components/ui/screen-background";
 import Spacer from "@/components/ui/spacer";
-import { ChatMessage } from "../rt_client/message_storage/message_storage";
 
 export default function DirectChatScreen({ route }: any) {
   const { chatID } = route?.params;
   const [chat, setChat] = useState();
   const [isFloatButtonVisible, setFloatButtonVisible] = useState<boolean>(false);
-  const messages = useChatMessages(chatID)
+  const messages = useChatMessages(chatID);
+  console.warn("Chat messages: ", messages)
 
   useFocusEffect(
     useCallback(() => {
+      let isActive = true;
+
       async function loadContent() {
-        setChat(await RTClient.getChat(chatID));
-        setTimeout(async () => {
-          await RTClient.setChatEntering(chatID, getCurrentUserID());
-        }, 1000);
-        return () => {
-          console.log("Screen unfocused");
-        };
+        const chatData = await RTClient.getChat(chatID);
+        if (isActive) setChat(chatData);
+        await RTClient.setChatEntering(chatID, getCurrentUserID());
       };
       loadContent();
-    }, []));
+      return () => {
+        isActive = false;
+        RTClient.setChatLeaving(chatID, getCurrentUserID());
+        console.log("Screen unfocused");
+      };
+
+    }, [chatID]));
 
   return (
     <TouchableWithoutFeedback

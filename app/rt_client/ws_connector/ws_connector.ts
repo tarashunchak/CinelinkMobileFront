@@ -51,9 +51,10 @@ export class WSConnector {
     };
 
     this.ws.onmessage = (event) => {
+      console.warn("WS OnMessage called");
       try {
         const data = JSON.parse(event.data);
-        console.warn("WS message: ", data);
+        console.warn("WS Message: ", data);
         this.onMessage(data);
       } catch (e) {
         console.error("Failed to parse WS message: ", e);

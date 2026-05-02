@@ -12,13 +12,17 @@ const Stack = createNativeStackNavigator();
 export default function SocialNavigatorStack() {
 
   return (
-      <Stack.Navigator>
-        <Stack.Screen name="SocialScreen" component={SocialScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="UserProfileScreen" component={UserProfileScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="ActorProfileScreen" component={ActorProfileScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="MovieCreditsScreen" component={MovieCreditsScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="MovieDetailScreen" component={MovieDetailScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="DirectChatScreen" component={DirectChatScreen} options={{ headerShown: false }} />
-      </Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      <Stack.Screen name="SocialScreen" component={SocialScreen} />
+      <Stack.Screen name="UserProfileScreen" component={UserProfileScreen} />
+      <Stack.Screen name="ActorProfileScreen" component={ActorProfileScreen} />
+      <Stack.Screen name="MovieCreditsScreen" component={MovieCreditsScreen} />
+      <Stack.Screen name="MovieDetailScreen" component={MovieDetailScreen} />
+      <Stack.Screen name="DirectChatScreen" component={DirectChatScreen} />
+    </Stack.Navigator>
   )
 }

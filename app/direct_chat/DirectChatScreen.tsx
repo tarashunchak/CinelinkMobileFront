@@ -9,13 +9,13 @@ import { getCurrentUserID } from "@/utils/utils";
 import FloatingButton from "./components/FloatingButton";
 import ScreenBackground from "@/components/ui/screen-background";
 import Spacer from "@/components/ui/spacer";
+import { ChatMessage } from "../rt_client/message_storage/message_storage";
 
 export default function DirectChatScreen({ route }: any) {
   const { chatID } = route?.params;
   const [chat, setChat] = useState();
   const [isFloatButtonVisible, setFloatButtonVisible] = useState<boolean>(false);
   const messages = useChatMessages(chatID);
-  console.warn("Chat messages: ", messages)
 
   useFocusEffect(
     useCallback(() => {
@@ -33,7 +33,7 @@ export default function DirectChatScreen({ route }: any) {
         console.log("Screen unfocused");
       };
 
-    }, [chatID]));
+    }, [chatID, messages?.length]));
 
   return (
     <TouchableWithoutFeedback
@@ -50,7 +50,7 @@ export default function DirectChatScreen({ route }: any) {
           <FlatList
             onScroll={() => setFloatButtonVisible(true)}
             data={messages}
-            keyExtractor={(_, index) => String(index)}
+            keyExtractor={(item, _) => String(item?.message_id)}
             renderItem={({ item }) => (
               <TextMessage chatID={chatID} message={item} />
             )}

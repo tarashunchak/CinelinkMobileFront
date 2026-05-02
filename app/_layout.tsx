@@ -16,7 +16,7 @@ export default function RootLayout() {
                     flex: 1,
                     backgroundColor: "#000000"
                 }}>
-                    <StatusBar translucent backgroundColor="transparent" style="light" />
+                    <StatusBar translucent backgroundColor="transparent" style="auto" />
                     <Slot />
                 </GestureHandlerRootView>
 

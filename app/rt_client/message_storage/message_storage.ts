@@ -17,27 +17,37 @@ export interface MessageEventsHandlers {
   handler: (message: ChatMessage) => any;
 };
 
+const EMPTY_ARRAY: ChatMessage[] = [];
+
 export class MessageStorage {
   private messages: Map<number, ChatMessage> = new Map();
   private chatID: ChatID;
   private lastMessageId: number = 0;
+  private isLoading: boolean = false;
 
   constructor(chatID: ChatID) {
     this.chatID = chatID;
   };
 
   public async loadMessages() {
-    const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/chats/${this.chatID}/messages`)
-    const text = await response?.text();
-    const data = JSON.parse(text);
+    if (this.isLoading) return;
+    this.isLoading = true;
 
-    console.warn("LoadMessages 1");
-    if (!data?.results)
-      return [];
+    try {
+      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/chats/${this.chatID}/messages`)
+      const data = await response?.json();
 
-    console.warn("LoadMessages 2: ", data?.results);
-    this.messages?.set(this.chatID, data?.results);
-    useChatStore.getState()._setChatMessages(this.chatID, data?.results?.reverse());
+      console.warn("LoadMessages 1");
+      if (data?.results) {
+        console.warn("LoadMessages 2: ",);
+        const reversed = [...data.results].reverse();
+        const current = useChatStore.getState().messages[this.chatID] || EMPTY_ARRAY;
+        if (JSON.stringify(current) !== JSON.stringify(reversed))
+          useChatStore.getState()._setChatMessages(this.chatID, reversed);
+      }
+    } finally {
+      this.isLoading = false;
+    }
   };
 
   public deleteMessage(message_id: number): ChatMessage[] {
@@ -45,9 +55,10 @@ export class MessageStorage {
     return Array.from(this.messages.values());
   };
 
-  public addMessage(message: ChatMessage): ChatMessage[] {
+  public addMessage(message: ChatMessage) {
+    console.log("Message addition in messageStore: ", message);
     this.messages.set(message?.message_id, message);
-    return Array.from(this.messages.values());
+    useChatStore.getState().messages[message?.chat_id].unshift(message);
   };
 
   public clearChat(): ChatMessage[] | [] {

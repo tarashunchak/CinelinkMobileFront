@@ -43,10 +43,8 @@ export default function Input({ chatID }: { chatID: number }) {
                 {
                   chat_id: chatID,
                   user_id: getCurrentUserID(),
-                  content: {
-                    message_type: "text",
-                    message: text,
-                  }
+                  message_type: "text",
+                  message: text,
                 })
               setText("")
             }}>

@@ -13,14 +13,13 @@ interface TextMessage_I {
   message_id: number;
   user_id: number;
   chat_id: number;
-  content: {
-    message: string;
-  };
+  message: string;
   timestamp: string;
 };
 
 export default function TextMessage({ message, chatID }: { message: TextMessage_I, chatID: number }) {
   const { showActionSheetWithOptions } = useActionSheet();
+  console.warn("text message: ", message);
 
   return (
     <PressableScale
@@ -56,7 +55,7 @@ export default function TextMessage({ message, chatID }: { message: TextMessage_
       delayLongPress={350}
     >
       <Text style={[textStyle.white16]}>
-        {message?.content?.message}
+        {message?.message}
       </Text>
       <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
         <Image

@@ -92,6 +92,9 @@ export default function Header({ chatID, peer }: { chatID: number, peer: ChatMem
 };
 
 const stylesR = StyleSheet.create({
+  view: {
+
+  },
   avatarImg: {
     width: 53,
     height: 53,

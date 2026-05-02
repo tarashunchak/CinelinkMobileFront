@@ -21,9 +21,9 @@ export default function TabNavigator() {
     }}
     >
       <Tab.Screen name="Home" component={HomeNavigatorStack} />
-      <Tab.Screen name="Social" component={SocialNavigatorStack} options={{ unmountOnBlur: true }} />
+      <Tab.Screen name="Social" component={SocialNavigatorStack} />
       <Tab.Screen name="Library" component={LibraryNavigatorStack} />
-      <Tab.Screen name="Profile" component={ProfileNavigatorStack} options={{ unmountOnBlur: true }} />
+      <Tab.Screen name="Profile" component={ProfileNavigatorStack} />
       <Tab.Screen name="Search" component={SearchNavigatorStack} />
     </Tab.Navigator >
   );

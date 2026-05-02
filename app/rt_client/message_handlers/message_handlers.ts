@@ -1,5 +1,7 @@
+import { GetChatMessages } from "@/api/chats";
 import { ChatManager } from "../chat_manager/chat_manager";
 import { Content, WSMessage } from "../ws_connector/ws_connector";
+import { ChatMessage } from "../message_storage/message_storage";
 
 type WSHandler = (msg: WSMessage, manager: ChatManager) => void;
 
@@ -18,7 +20,18 @@ function handleSeenAll(msg: WSMessage, manager: ChatManager) {
   //manager.callbacks?.onOnline?.get(chat_id)?.(msg);
 };
 
-function handleMessage(msg: WSMessage, manager: ChatManager) {
+function handleMessage(msg: any, manager: ChatManager) {
+  console.warn("HANDLE MESSAGE !!!!!!!!!!!!!!!!!");
+  const message = {
+    chat_id: msg?.chat_id,
+    user_id: msg?.user_id,
+    timestamp: msg?.timestamp ?? "...",
+    message_type: msg?.message_type ?? "text",
+    message: msg?.message,
+    message_id: msg?.message_id ?? 0,
+  };
+  console.warn("MESSSSSSSSSSAGE:       ", message);
+  manager.addMessage(msg?.chat_id, message);
 };
 
 function handleMessageEdited(msg: WSMessage, manager: ChatManager) {
@@ -49,4 +62,5 @@ export const Handlers = new Map<string, WSHandler>([
   ["chat_deleted", handleChatDeleted],
   ["message_edited", handleMessageEdited],
   ["message_deleted", handleMessageDeleted],
+  ["message", handleMessage],
 ]);

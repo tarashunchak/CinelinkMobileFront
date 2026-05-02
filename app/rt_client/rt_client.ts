@@ -5,6 +5,7 @@ import * as Makers from "./message_makers/message_makers";
 import { Handlers } from "./message_handlers/message_handlers";
 import { useEffect } from "react";
 import { ChatState, useChatStore } from "./chat_state";
+import { ChatMessage } from "./message_storage/message_storage";
 
 const WS_ADDRESS = (userID: UserID): string =>
   `${process.env.EXPO_PUBLIC_WS_URL}/${userID}`;
@@ -18,6 +19,14 @@ class RTClient_ {
 
   private onWSMessage(data: any) {
     const type = data?.type;
+    const chatID: number = data?.chat_id;
+    if (chatID) {
+      console.warn("ChatID: ", chatID, " message: ", data)
+      const handler = Handlers.get("message");
+      if (handler)
+        handler(data, this.chatManager);
+      return;
+    }
     const handler = Handlers.get(type);
     if (handler) {
       handler(data, this.chatManager);
@@ -93,6 +102,7 @@ class RTClient_ {
   };
 
   public async setChatEntering(chatID: ChatID, userID: UserID) {
+    this.chatManager.connect(chatID);
     this.wsConnections?.get(userID)?.send(
       Makers.makeChatEnteringMessage({ chat_id: chatID, user_id: userID })
     );
@@ -128,7 +138,11 @@ class RTClient_ {
       }
     );
     const data = await resp?.json();
-
+    if (data?.ok)
+      this.chatManager.addMessage(chatID, {
+        chat_id: message.content.chat_id,
+        user_id: message.content.user_id,
+      });
     return data?.results;
   };
 
@@ -137,10 +151,13 @@ class RTClient_ {
 
 export const RTClient: RTClient_ = new RTClient_();
 
+const EMPTY_ARRAY: ChatMessage[] = [];
+
 export const useChatMessages = (chatID: ChatID) => {
-  const messages = useChatStore(state => state.messages[chatID] || []);
+  const messages = useChatStore(state => state.messages[chatID] || EMPTY_ARRAY);
   useEffect(() => {
-    RTClient.getChatMessages(chatID);
-  }, [chatID]);
+    if (messages.length === 0)
+      RTClient.getChatMessages(chatID);
+  }, [chatID, messages.length]);
   return messages;
 };

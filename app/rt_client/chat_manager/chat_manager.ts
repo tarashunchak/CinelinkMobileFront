@@ -53,6 +53,10 @@ export class ChatManager {
     onSend: new Map<ChatID, (_: WSMessage) => void>(),
   };
 
+  public connect(chatID: ChatID) {
+    this.messages.set(chatID, new MessageStorage(chatID));
+  };
+
   public async onEvent(handler: (event: ChatEvent) => void) {
     this.listeners.push(handler);
     return () => {
@@ -79,6 +83,7 @@ export class ChatManager {
   };
 
   public async handleIncommingMessage(chatID: ChatID, message: ChatMessage) {
+    console.warn("HandleIncommingMessage: ", message);
     this.messages.get(chatID)?.addMessage(message);
     //this.messages.set(chatID, [message, ...current]);
   };
@@ -104,6 +109,11 @@ export class ChatManager {
     }
     await storage.loadMessages();
   };
+
+  public addMessage(chatID: ChatID, msg: ChatMessage) {
+    console.warn("Add message in chatManager");
+    this.messages?.get(chatID)?.addMessage(msg);
+  }
 
   public isLoaded(chatID: ChatID): boolean {
     return this.loadedStatus?.get(chatID) ?? false;

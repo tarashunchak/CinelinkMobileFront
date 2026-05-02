@@ -42,7 +42,7 @@ export default function Input({ chatID }: { chatID: number }) {
               RTClient.sendMessage(chatID,
                 {
                   chat_id: chatID,
-                  user_id: getCurrentUserID(),
+                  user_id: getCurrentUserID() ?? 0,
                   message_type: "text",
                   message: text,
                 })

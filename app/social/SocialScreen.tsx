@@ -14,10 +14,10 @@ import ScreenBackground from "@/components/ui/screen-background";
 export default function SocialScreen() {
   const tabs = ["Friends", "Recommendations", "Activity", "Chats"];
   const [activeTab, setActiveTab] = useState(tabs[0]);
-  const [friends, setFriends] = useState<UserCard_T[]>();
-  const [recommendations, setRecommendatoins] = useState<RecommendedCard_T[]>();
-  const [chats, setChats] = useState<any[]>();
-  const [activity, setActivity] = useState<any[]>();
+  const [friends, setFriends] = useState<UserCard_T[]>([]);
+  const [recommendations, setRecommendatoins] = useState<RecommendedCard_T[]>([]);
+  const [chats, setChats] = useState<any[]>([]);
+  const [activity, setActivity] = useState<any[]>([]);
 
   useEffect(() => {
     async function loadContent() {

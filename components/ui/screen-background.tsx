@@ -1,6 +1,6 @@
 import { useAuthStore } from "@/local_storage/user/asyncStorage/store";
 import React from "react";
-import { ImageBackground, KeyboardAvoidingView, StyleSheet } from "react-native";
+import { SafeAreaView, ImageBackground, KeyboardAvoidingView, StyleSheet } from "react-native";
 
 export default function ScreenBackground({ children }: any) {
   return (

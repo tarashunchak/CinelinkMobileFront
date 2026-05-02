@@ -38,7 +38,7 @@ export type Message = {
   message: any;
   message_id: number | null;
   chat_id: number | null;
-  sender_id: number;
+  user_id: number;
   timestamp: string;
 };
 

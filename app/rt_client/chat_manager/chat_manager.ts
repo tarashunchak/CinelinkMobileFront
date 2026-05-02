@@ -54,7 +54,8 @@ export class ChatManager {
   };
 
   public connect(chatID: ChatID) {
-    this.messages.set(chatID, new MessageStorage(chatID));
+    this.messages?.set(chatID, new MessageStorage(chatID));
+    this.messages?.get(chatID)?.loadMessages();
   };
 
   public async onEvent(handler: (event: ChatEvent) => void) {

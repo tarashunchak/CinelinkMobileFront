@@ -19,14 +19,6 @@ class RTClient_ {
 
   private onWSMessage(data: any) {
     const type = data?.type;
-    const chatID: number = data?.chat_id;
-    if (chatID) {
-      console.warn("ChatID: ", chatID, " message: ", data)
-      const handler = Handlers.get("message");
-      if (handler)
-        handler(data, this.chatManager);
-      return;
-    }
     const handler = Handlers.get(type);
     if (handler) {
       handler(data, this.chatManager);
@@ -129,22 +121,24 @@ class RTClient_ {
     );
   };
 
-  public async sendMessage(chatID: ChatID, message: RTMessage) {
+  public async sendMessage(chatID: ChatID, message: ChatMessage) {
     const resp = await fetch(HTTP_ADDRESS(chatID),
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(message)
+        body: JSON.stringify(Makers.makeMessageSendingMessage(message))
       }
     );
     const data = await resp?.json();
-    if (data?.ok)
-      this.chatManager.addMessage(chatID, {
-        chat_id: message.content.chat_id,
-        user_id: message.content.user_id,
-      });
+    const msg: ChatMessage = data?.results?.content;
+    if (resp?.ok && data?.status === 200) {
+      console.warn("Data ok: ", msg)
+      this.chatManager.addMessage(chatID, msg);
+    }
     return data?.results;
   };
+
+  public createMessageStorage = this.chatManager.connect;
 
   public isLoaded = this.chatManager.isLoaded;
 };
@@ -161,3 +155,9 @@ export const useChatMessages = (chatID: ChatID) => {
   }, [chatID, messages.length]);
   return messages;
 };
+
+export function useChatLastMessage(chatID: ChatID): string {
+  const lastMessage = useChatStore(state => state.lastMessage[chatID] ?? "")
+  useEffect(() => { }, [chatID])
+  return lastMessage;
+}

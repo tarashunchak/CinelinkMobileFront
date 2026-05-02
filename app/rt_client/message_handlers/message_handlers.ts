@@ -20,18 +20,18 @@ function handleSeenAll(msg: WSMessage, manager: ChatManager) {
   //manager.callbacks?.onOnline?.get(chat_id)?.(msg);
 };
 
-function handleMessage(msg: any, manager: ChatManager) {
+function handleMessage(msg: WSMessage, manager: ChatManager) {
   console.warn("HANDLE MESSAGE !!!!!!!!!!!!!!!!!");
   const message = {
-    chat_id: msg?.chat_id,
-    user_id: msg?.user_id,
-    timestamp: msg?.timestamp ?? "...",
-    message_type: msg?.message_type ?? "text",
-    message: msg?.message,
-    message_id: msg?.message_id ?? 0,
+    chat_id: msg?.content?.chat_id,
+    user_id: msg?.content?.user_id,
+    timestamp: msg?.content?.timestamp ?? "...",
+    message_type: msg?.content?.message_type ?? "text",
+    message: msg?.content?.message,
+    message_id: msg?.content?.message_id ?? 0,
   };
   console.warn("MESSSSSSSSSSAGE:       ", message);
-  manager.addMessage(msg?.chat_id, message);
+  manager.addMessage(msg?.content?.chat_id, message);
 };
 
 function handleMessageEdited(msg: WSMessage, manager: ChatManager) {

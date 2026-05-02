@@ -4,10 +4,10 @@ import { ChatID } from "../models/models";
 export interface ChatMessage {
   chat_id: number;
   user_id: number;
-  timestamp: string;
+  timestamp?: string;
   message_type: string;
   message: any;
-  message_id: number;
+  message_id?: number;
 };
 
 export type MessageEvents = "update" | "delete" | "add";
@@ -42,8 +42,10 @@ export class MessageStorage {
         console.warn("LoadMessages 2: ",);
         const reversed = [...data.results].reverse();
         const current = useChatStore.getState().messages[this.chatID] || EMPTY_ARRAY;
-        if (JSON.stringify(current) !== JSON.stringify(reversed))
+        if (JSON.stringify(current) !== JSON.stringify(reversed)) {
           useChatStore.getState()._setChatMessages(this.chatID, reversed);
+          useChatStore.getState()._setLastMessage(this.chatID, reversed[reversed.length - 1].message)
+        }
       }
     } finally {
       this.isLoading = false;
@@ -59,6 +61,7 @@ export class MessageStorage {
     console.log("Message addition in messageStore: ", message);
     this.messages.set(message?.message_id, message);
     useChatStore.getState().messages[message?.chat_id].unshift(message);
+    useChatStore.getState()._setLastMessage(this.chatID, message.message)
   };
 
   public clearChat(): ChatMessage[] | [] {

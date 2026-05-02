@@ -19,7 +19,6 @@ interface TextMessage_I {
 
 export default function TextMessage({ message, chatID }: { message: TextMessage_I, chatID: number }) {
   const { showActionSheetWithOptions } = useActionSheet();
-  console.warn("text message: ", message);
 
   return (
     <PressableScale

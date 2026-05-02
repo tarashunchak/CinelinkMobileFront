@@ -42,7 +42,7 @@ export function makeSeenAllMessage(props: Props) {
 
 export function makeMessageSendingMessage(props: Props) {
   return {
-    type: "message_sending",
+    type: "message",
     content: {
       user_id: props.user_id,
       chat_id: props.chat_id,

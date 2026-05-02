@@ -4,7 +4,7 @@ import { textStyle } from "@/styles/textStyles";
 import { useNavigation } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { View, Text, Image, TouchableOpacity, Platform, StyleSheet } from "react-native";
-import { heightPercentageToDP as hp } from "react-native-responsive-screen";
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { ChatMember } from "@/app/rt_client/models/models";
 import { calcLastSeen } from "../utils/utils";
 
@@ -41,7 +41,7 @@ export default function Header({ chatID, peer }: { chatID: number, peer: ChatMem
 
   return (
     <View style={styles.view}>
-      <View style={{ flexDirection: "row", gap: "5%" }}>
+      <View style={{ flexDirection: "row", gap: wp(5) }}>
         <LeafyReturnArrowButton
           onPress={navigator.goBack} />
 
@@ -112,7 +112,6 @@ const styles = {
   isOnline: {
     view: {
       flexDirection: "row",
-      gap: 5,
       alignItems: "center"
     },
     dot: {
@@ -138,14 +137,14 @@ const styles = {
     justifyContent: "space-between",
     paddingLeft: "2%",
     paddingRight: "3%",
-    paddingBottom: "2%",
+    paddingBottom: "3%",
     zIndex: 2,
   },
   chatpeer: {
     view: {
       flexDirection: "row",
       height: "100%",
-      gap: "6%",
+      gap: wp(3),
       alignItems: "center",
     },
     img: {

@@ -4,9 +4,11 @@ import { View, Text, Image, StyleSheet } from "react-native";
 import { PressableScale } from "react-native-pressable-scale";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { useNavigation } from "expo-router";
+import { RTClient, useChatLastMessage } from "@/app/rt_client/rt_client";
 
 export default function ChatCard({ item }: { item: any }) {
   const navigator = useNavigation();
+  RTClient.createMessageStorage(item?.chat_id);
 
   return (
     <PressableScale
@@ -26,7 +28,11 @@ export default function ChatCard({ item }: { item: any }) {
         />
         <View style={styles.textView}>
           <Text style={textStyle.yellow18}>{item.name}</Text>
-          <Text style={textStyle.gray16}>{"Go v minecraft"}</Text>
+          <Text
+            numberOfLines={1}
+            ellipsizeMode="tail"
+            style={[textStyle.gray16, { maxWidth: "40%" }]}
+          >{useChatLastMessage(item?.chat_id)}</Text>
         </View>
       </View>
     </PressableScale>
@@ -59,6 +65,7 @@ const styles = StyleSheet.create({
     borderRadius: 999,
   },
   textView: {
+    width: "100%",
     flexDirection: "column",
     justifyContent: "space-evenly",
   },

@@ -24,8 +24,8 @@ export const useChatStore = create<ChatState>((set) => ({
   _setTyping: (chatID, status) => set((s) => ({
     typingStatus: { ...s.typingStatus, [chatID]: status }
   })),
-  _setOnline: (chatID, status) => set((s) => ({
-    onlineStatus: { ...s.onlineStatus, [chatID]: status }
+  _setOnline: (userID, status) => set((s) => ({
+    onlineStatus: { ...s.onlineStatus, [userID]: status }
   })),
   _setLastMessage: (chatID, msg) => set((s) => ({
     lastMessage: { ...s.lastMessage, [chatID]: msg }

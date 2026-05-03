@@ -1,18 +1,19 @@
-import { GetChatMessages } from "@/api/chats";
 import { ChatManager } from "../chat_manager/chat_manager";
 import { Content, WSMessage } from "../ws_connector/ws_connector";
-import { ChatMessage } from "../message_storage/message_storage";
+import { useChatStore } from "../chat_state";
 
 type WSHandler = (msg: WSMessage, manager: ChatManager) => void;
 
 function handleTyping(msg: WSMessage, manager: ChatManager) {
   const { chat_id, user_id, is_typing }: Content = msg.content;
   manager.callbacks?.onTyping?.get(chat_id)?.(msg);
+  useChatStore.getState()._setTyping(msg.content?.chat_id, msg.content?.is_typing);
 };
 
 function handleOnline(msg: WSMessage, manager: ChatManager) {
   const { chat_id, user_id, is_online }: Content = msg.content;
-  manager.callbacks?.onOnline?.get(chat_id)?.(msg);
+  //manager.callbacks?.onOnline?.get(chat_id)?.(msg);
+  useChatStore.getState()._setOnline(msg.content?.user_id, msg.content?.is_online);
 };
 
 function handleSeenAll(msg: WSMessage, manager: ChatManager) {

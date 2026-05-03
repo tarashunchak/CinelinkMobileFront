@@ -44,7 +44,7 @@ export class MessageStorage {
         const current = useChatStore.getState().messages[this.chatID] || EMPTY_ARRAY;
         if (JSON.stringify(current) !== JSON.stringify(reversed)) {
           useChatStore.getState()._setChatMessages(this.chatID, reversed);
-          useChatStore.getState()._setLastMessage(this.chatID, reversed[reversed.length - 1].message)
+          useChatStore.getState()._setLastMessage(this.chatID, reversed[0].message)
         }
       }
     } finally {

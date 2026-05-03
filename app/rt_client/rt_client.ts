@@ -1,15 +1,15 @@
-import { ChatID, UserID, RTMessage } from "./models/models";
+import { ChatID, UserID } from "./models/models";
 import { WSConnector, WSMessage } from "./ws_connector/ws_connector";
 import { Chat, ChatManager } from "./chat_manager/chat_manager";
 import * as Makers from "./message_makers/message_makers";
 import { Handlers } from "./message_handlers/message_handlers";
 import { useEffect } from "react";
-import { ChatState, useChatStore } from "./chat_state";
+import { useChatStore } from "./chat_state";
 import { ChatMessage } from "./message_storage/message_storage";
 
 const WS_ADDRESS = (userID: UserID): string =>
   `${process.env.EXPO_PUBLIC_WS_URL}/${userID}`;
-//`ws://192.168.0.187:8080/ws/${userID}`;
+
 const HTTP_ADDRESS = (chatID: ChatID): string =>
   `${process.env.EXPO_PUBLIC_API_URL}/chats/${chatID}/messages`;
 
@@ -23,26 +23,7 @@ class RTClient_ {
     if (handler) {
       handler(data, this.chatManager);
     }
-    /*switch (type) {
-      case "message": {
-        console.log("Message received");
-        this.chatManager?.handleIncommingMessage(chatID, data);
-        callbacks?.onMessage?.get(chatID)?.(data);
-        break;
-      }
-      case "typing": {
-        console.log("Typing received");
-        console.warn("Callbacks: ", callbacks?.onTyping?.get(chatID));
-        callbacks?.onTyping?.get(chatID)?.(data);
-        break;
-      }
-      case "online": {
-        console.log(`User Is ${data?.content?.is_online ? "Online" : "Offline"}: `, data);
-        callbacks?.onOnline?.get(chatID)?.(data);
-        break;
-      }
-    }*/
-  }
+  };
 
   public connect(userID: UserID) {
     console.warn("User id in connect: ", userID);
@@ -157,7 +138,19 @@ export const useChatMessages = (chatID: ChatID) => {
 };
 
 export function useChatLastMessage(chatID: ChatID): string {
-  const lastMessage = useChatStore(state => state.lastMessage[chatID] ?? "")
-  useEffect(() => { }, [chatID])
+  const lastMessage = useChatStore(state => state.lastMessage[chatID] ?? "");
+  useEffect(() => { }, [chatID]);
   return lastMessage;
-}
+};
+
+export function useUserStatus(userID: UserID): boolean {
+  const status = useChatStore(state => state.onlineStatus[userID] ?? false);
+  useEffect(() => { }, [userID]);
+  return status;
+};
+
+export function useTypingStatus(chatID: ChatID): boolean {
+  const status = useChatStore(state => state.typingStatus[chatID] ?? false);
+  useEffect(() => { }, [chatID]);
+  return status;
+};

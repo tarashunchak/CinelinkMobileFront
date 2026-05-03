@@ -4,7 +4,7 @@ import { View, Text, Image, StyleSheet } from "react-native";
 import { PressableScale } from "react-native-pressable-scale";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { useNavigation } from "expo-router";
-import { RTClient, useChatLastMessage } from "@/app/rt_client/rt_client";
+import { RTClient, useChatLastMessage, useTypingStatus } from "@/app/rt_client/rt_client";
 
 export default function ChatCard({ item }: { item: any }) {
   const navigator = useNavigation();

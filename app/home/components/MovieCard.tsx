@@ -1,9 +1,10 @@
 import { useNavigation } from "expo-router";
 import React from "react";
-import { TouchableOpacity, Image, Text, View, StyleSheet } from "react-native";
+import { Text, View, StyleSheet } from "react-native";
 import { textStyle } from "@/styles/textStyles";
 import { MONTH } from "@/utils/month";
 import { PressableScale } from "react-native-pressable-scale";
+import { Image } from "expo-image";
 
 export interface MovieCard_I {
   movie_id: number;
@@ -23,8 +24,11 @@ export default function MovieCard({ data }: { data: MovieCard_I }) {
         }
       )}>
       <View>
-        <Image style={styles.poster}
-          source={{ uri: "https://image.tmdb.org/t/p/w200" + data?.poster_path }} />
+        <Image
+          style={styles.poster}
+          source={{ uri: "https://image.tmdb.org/t/p/w200" + data?.poster_path }}
+          cachePolicy="memory-disk"
+        />
         {
           data?.inCinemas &&
           <View style={styles.inCinemasView}>

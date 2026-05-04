@@ -34,8 +34,8 @@ interface MovieCardListParams {
 }
 
 export default function MovieCardList({ selectedGenre, movieID, movieGenre }: MovieCardListParams) {
-  const navigation = useNavigation();
   const [movies, setMovies] = useState<Movie[]>([]);
+  const navigation = useNavigation();
 
   useEffect(() => {
     async function loadmovies() {
@@ -82,6 +82,7 @@ export default function MovieCardList({ selectedGenre, movieID, movieGenre }: Mo
                   source={{ uri: "https://image.tmdb.org/t/p/w300" + movie.poster_path }}
                   style={movieCardStyle.moviePosterStyle}
                   pointerEvents="none"
+
                 />
                 <View style={{ flexDirection: "column", height: "100%", marginLeft: "6%", justifyContent: "space-evenly" }}>
                   <View style={{ flexDirection: "column", height: "30%" }}>
@@ -90,9 +91,18 @@ export default function MovieCardList({ selectedGenre, movieID, movieGenre }: Mo
                         pointerEvents="none"
                         numberOfLines={1}
                         ellipsizeMode="tail">{movie?.title}</Text>
-                      <Text style={[movieCardStyle.movieYearStyle, textStyle.gray16]} pointerEvents="none">{` (${movie?.release_date.slice(0, 4)})`}</Text>
+                      <Text
+                        style={[movieCardStyle.movieYearStyle, textStyle.gray16]}
+                        pointerEvents="none"
+                      >
+                        {` (${movie?.release_date.slice(0, 4)})`}
+                      </Text>
                     </View>
-                    <Text style={movieCardStyle.movieDirectorStyle} pointerEvents="none">{movie?.directors?.at(0)}</Text>
+                    <Text
+                      style={movieCardStyle.movieDirectorStyle}
+                      pointerEvents="none">
+                      {movie?.directors?.[0]}
+                    </Text>
                   </View>
                   <View style={{ flexDirection: "row", gap: "2%", height: 20 }}>
                     {

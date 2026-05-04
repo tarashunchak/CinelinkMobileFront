@@ -1,7 +1,7 @@
-import LeafyReturnArrowButton from "@/components/ui/returnArrowButton";
+import ReturnArrowButton from "@/components/ui/returnArrowButton";
 import { useNavigation } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { Image, ImageBackground, ScrollView, View, TouchableOpacity } from "react-native";
+import { Image, ImageBackground, View, TouchableOpacity } from "react-native";
 import BottomBar from "@/app/bars/bottomBar";
 import { GetWatchlistMovies } from "@/api/watchlist/watchlist";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen"
@@ -26,41 +26,36 @@ export default function WatchlistDetailsScreen({ route }: any) {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <ScreenBackground>
-        <ScrollView
-          style={{}}
-          showsVerticalScrollIndicator={false}
+        <ImageBackground
+          source={require("@/app/library/assets/NoBgWatchlist.jpeg")}
+          style={styles.bgImage}
         >
-          <ImageBackground
-            source={require("@/app/library/assets/NoBgWatchlist.jpeg")}
-            style={styles.bgImage}
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              padding: hp(1),
+            }}
           >
-            <View
+            <ReturnArrowButton onPress={() => navigator.goBack()} />
+            <TouchableOpacity
               style={{
                 flexDirection: "row",
                 justifyContent: "space-between",
-                padding: hp(1),
-              }}
-            >
-              <LeafyReturnArrowButton onPress={() => navigator.goBack()} />
-              <TouchableOpacity
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  padding: hp(1.5),
-                  paddingLeft: hp(0.5),
-                  paddingBottom: 0
-                }}>
-                <Image source={require("@/app/watchlist/assets/InfoIcon.png")}
-                  style={[{ height: 26, width: 26 }]} />
-              </TouchableOpacity>
-            </View>
+                alignItems: "center", padding: hp(1.5),
+                paddingLeft: hp(0.5),
+                paddingBottom: 0
+              }}>
+              <Image source={require("@/app/watchlist/assets/InfoIcon.png")}
+                style={[{ height: 26, width: 26 }]} />
+            </TouchableOpacity>
+          </View>
 
-            <HeaderBlock watchlist={watchlist} />
+          <HeaderBlock watchlist={watchlist} />
 
-          </ImageBackground>
-          <MoviesList movies={movies} />
-        </ScrollView >
+        </ImageBackground>
+        <MoviesList movies={movies} />
+
         <BottomBar />
       </ScreenBackground>
     </GestureHandlerRootView>

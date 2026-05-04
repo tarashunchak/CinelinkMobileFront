@@ -1,17 +1,27 @@
 import { useAuthStore } from "@/local_storage/user/asyncStorage/store";
 import React from "react";
-import { SafeAreaView, ImageBackground, KeyboardAvoidingView, StyleSheet } from "react-native";
+import { ImageBackground, View, StyleSheet } from "react-native";
+import { Image } from "expo-image";
 
 export default function ScreenBackground({ children }: any) {
   return (
-    <ImageBackground
-      source={useAuthStore?.getState()?.isAuthenticated ?
-        require("../../assets/images/background.png")
-        : require("../../assets/images/authBackground.png")}
-      style={styles.background}
-    >
-      {children}
-    </ImageBackground>
+    <View style={styles.background}>
+      <Image
+        source={
+          useAuthStore?.getState()?.isAuthenticated ?
+            require("../../assets/images/background.png")
+            : require("../../assets/images/authBackground.png")
+        }
+        style={{ ...StyleSheet.absoluteFillObject }}
+        contentFit="cover"
+        cachePolicy="memory-disk"
+      />
+      <View style={{ flex: 1 }}>
+        {children}
+
+      </View>
+    </View>
+
   )
 };
 
@@ -19,5 +29,5 @@ const styles = StyleSheet.create({
   background: {
     flex: 1,
     backgroundColor: "black",
-  }
+  },
 });

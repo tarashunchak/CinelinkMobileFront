@@ -1,9 +1,9 @@
 import BottomBar from "@/app/bars/bottomBar";
-import MovieCardList from "@/components/ui/leafy-film-list";
+import MovieCardList from "@/components/ui/movie-card-list";
 import { textStyle } from "@/styles/textStyles";
 import { useNavigation } from "expo-router";
 import React, { useEffect, useRef, useState } from "react";
-import { ImageBackground, ScrollView, Text } from "react-native";
+import { ScrollView, Text } from "react-native";
 import { Movie } from "./types";
 import MainInfo from "./components/MainInfo";
 import DetailsBlock from "./components/DetailsBlock";

@@ -1,9 +1,10 @@
 import React from "react";
-import { TouchableOpacity, View, Text, Image } from "react-native";
+import { View, Text } from "react-native";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen"
 import { textStyle } from "@/styles/textStyles";
 import { useNavigation } from "expo-router";
 import { PressableScale } from "react-native-pressable-scale";
+import { Image } from "expo-image";
 
 export type Watchlist = {
   id: number;
@@ -29,7 +30,10 @@ export default function WatchlistCard({ watchlist }: { watchlist: Watchlist }) {
               { uri: watchlist?.fg_img_url }
               : require("@/app/library/assets/NoFgWatchlist.png")
           }
-            style={styles.card.image} />
+            style={styles.card.image}
+            cachePolicy="memory-disk"
+          />
+
           <View style={styles.card.text.view}>
             <Text style={styles.card.text.name}>{watchlist.name}</Text>
             <Text style={styles.card.text.description}

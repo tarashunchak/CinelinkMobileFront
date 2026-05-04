@@ -137,7 +137,7 @@ export const useChatMessages = (chatID: ChatID) => {
   return messages;
 };
 
-export function useChatLastMessage(userID: UserID, chatID: ChatID): string {
+export function useChatLastMessage(chatID: ChatID): string {
   const lastMessage = useChatStore(state => state.lastMessage[chatID] ?? "");
   //const typing = useChatStore(state => state.typingStatus[userID] || false);
   useEffect(() => { }, [chatID]);

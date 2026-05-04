@@ -1,3 +1,4 @@
+import { useNavigation } from "expo-router";
 import { TouchableOpacity, Dimensions, Image, StyleSheet } from "react-native";
 import { PressableScale } from "react-native-pressable-scale";
 
@@ -10,6 +11,8 @@ export default function ReturnArrowButton(
     style = {},
   }
 ) {
+
+  const navigator = useNavigation();
 
   let buttonStyle = styles.leafyButton;
 
@@ -51,7 +54,7 @@ export default function ReturnArrowButton(
     returnLeft: require('@/assets/images/ReturnArrow.png'),
   };
   return (
-    <PressableScale style={finalStyle} onPress={onPress}>
+    <PressableScale style={finalStyle} onPress={navigator.goBack}>
       <Image source={images["returnLeft"]} ></Image>
     </PressableScale>
   );

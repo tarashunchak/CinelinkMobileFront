@@ -4,15 +4,15 @@ import { View, Text, Image, StyleSheet } from "react-native";
 import { PressableScale } from "react-native-pressable-scale";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { useNavigation } from "expo-router";
-import { RTClient, useChatLastMessage, useTypingStatus } from "@/app/rt_client/rt_client";
+import { RTClient, useChatLastMessage, useTypingStatus, useUserStatus } from "@/app/rt_client/rt_client";
 import { useAuthStore } from "@/local_storage/user/asyncStorage/store";
 
-export default function ChatCard({ item }: { item: any }) {
+export default function DirectChatCard({ item }: { item: any }) {
   const navigator = useNavigation();
   RTClient.createMessageStorage(item?.chat_id);
   RTClient.getChatMessages(item?.chat_id);
   RTClient.setChatEntering(item?.chat_id, useAuthStore.getState().user?.user_id ?? 1);
-  const isTyping = useTypingStatus(item?.members?.[0].user_id);
+  const isTyping = useTypingStatus(item?.chat_id);
   const lastMessage = useChatLastMessage(item?.chat_id);
 
   return (

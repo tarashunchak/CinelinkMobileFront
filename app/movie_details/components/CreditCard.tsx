@@ -1,8 +1,9 @@
 import React from "react";
 import { useNavigation } from "expo-router";
-import { Image, Text } from "react-native";
+import { StyleSheet, Text } from "react-native";
 import { textStyle } from "@/styles/textStyles";
 import { PressableScale } from "react-native-pressable-scale";
+import { Image } from "expo-image";
 
 export default function CreditCard({ credit }: { credit: any }) {
   const navigator = useNavigation();
@@ -11,11 +12,12 @@ export default function CreditCard({ credit }: { credit: any }) {
       style={styles.view}
       onPress={() => navigator?.push("CreditDetailScreen", { creditID: credit.id })}>
       <Image
-        source={{
-          uri: credit?.profile_path ? `https://image.tmdb.org/t/p/w200${credit?.profile_path}`
-            : "https://i.pinimg.com/736x/b9/bb/27/b9bb27a7fc1941680ce9f75481df60bb.jpg"
-        }}
-        style={styles.img} />
+        source={
+          credit?.profile_path ? { uri: `https://image.tmdb.org/t/p/w200${credit?.profile_path}` }
+            : require("../../search/assets/emptyMaleCredit.png")}
+        style={styles.img}
+        cachePolicy="memory-disk"
+      />
       <Text
         numberOfLines={1}
         ellipsizeMode="tail"
@@ -30,7 +32,7 @@ export default function CreditCard({ credit }: { credit: any }) {
   );
 }
 
-const styles = {
+const styles = StyleSheet.create({
   view: {
     flexDirection: "column",
     height: 175,
@@ -51,4 +53,4 @@ const styles = {
     borderTopLeftRadius: 6,
     borderTopRightRadius: 6
   },
-};
+});

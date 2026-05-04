@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import { View, FlatList } from "react-native";
 import BottomBar from "../bars/bottomBar";
 import RecommendationCard, { RecommendedCard_T } from "./components/RecommendationCard";
-import ChatCard from "./components/ChatCard";
+import DirectChatCard from "./components/DirectChatCard";
 import { RTClient } from "../rt_client/rt_client";
 import { getCurrentUserID } from "@/utils/utils";
 import { UserCard_T } from "../types/user";
@@ -45,7 +45,9 @@ export default function SocialScreen() {
       case "Activity":
         return null;
       case "Chats":
-        return <ChatCard item={item} />;
+        return item?.chat_type === "direct" ?
+          <DirectChatCard item={item} />
+          : null;
     };
   };
 

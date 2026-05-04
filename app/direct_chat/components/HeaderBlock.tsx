@@ -1,4 +1,4 @@
-import { RTClient } from "@/app/rt_client/rt_client";
+import { RTClient, useTypingStatus } from "@/app/rt_client/rt_client";
 import LeafyReturnArrowButton from "@/components/ui/returnArrowButton";
 import { textStyle } from "@/styles/textStyles";
 import { useNavigation } from "expo-router";
@@ -13,6 +13,7 @@ export default function Header({ chatID, peer }: { chatID: number, peer: ChatMem
   const [typing, setTyping] = useState<boolean>();
   const [status, setStatus] = useState<boolean>();
 
+  const isTyping = useTypingStatus(peer?.user_id);
   useEffect(() => {
     async function func() {
       RTClient.setOnOnlineCallBack(chatID, (data: any) => {
@@ -73,7 +74,7 @@ export default function Header({ chatID, peer }: { chatID: number, peer: ChatMem
               (
                 <View style={styles.isOnline.view}>
                   <Text style={styles.isOnline.text}>
-                    {typing ? `is typing ...` : `online`}
+                    {isTyping ? `is typing ...` : `online`}
                   </Text>
                 </View>
               )

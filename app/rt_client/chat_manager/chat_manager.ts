@@ -5,6 +5,8 @@ import { WSMessage } from "../ws_connector/ws_connector";
 import { MessagesQueue } from "../messages_queue/messages_queue";
 import { MessageStorage } from "../message_storage/message_storage";
 import { ChatMessage } from "../message_storage/message_storage";
+import { useCallback } from "react";
+import { useChatStore } from "../chat_state";
 
 export type Chat = {
   info: {
@@ -99,6 +101,16 @@ export class ChatManager {
     );
     const text = await response?.text();
     const data = JSON.parse(text);
+    const participants: any[] = data?.participants;
+
+    if (!participants?.length) return data?.results;
+
+    const newUsers: Map<number, any> = new Map(
+      ...participants.map(it => [it.user_id, it])
+    );
+
+    useChatStore.getState()._setUsersBatch(newUsers);
+
     return data?.results;
   };
 

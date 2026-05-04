@@ -12,6 +12,8 @@ export default function ChatCard({ item }: { item: any }) {
   RTClient.createMessageStorage(item?.chat_id);
   RTClient.getChatMessages(item?.chat_id);
   RTClient.setChatEntering(item?.chat_id, useAuthStore.getState().user?.user_id ?? 1);
+  const isTyping = useTypingStatus(item?.members?.[0].user_id);
+  const lastMessage = useChatLastMessage(item?.chat_id);
 
   return (
     <PressableScale
@@ -35,7 +37,7 @@ export default function ChatCard({ item }: { item: any }) {
             numberOfLines={1}
             ellipsizeMode="tail"
             style={[textStyle.gray16, { maxWidth: "40%" }]}
-          >{useChatLastMessage(item?.chat_id)}</Text>
+          >{isTyping ? "typing..." : lastMessage}</Text>
         </View>
       </View>
     </PressableScale>

@@ -1,9 +1,16 @@
 import { create } from "zustand";
 import { ChatMessage } from "./message_storage/message_storage";
 
+interface User {
+  id: number;
+  username: string;
+  avatar_url?: string;
+};
+
 export interface ChatState {
-  lastMessage: Record<number, string>;
+  users: Record<number, User>;
   messages: Record<number, ChatMessage[]>;
+  lastMessage: Record<number, string>;
   typingStatus: Record<number, boolean>;
   onlineStatus: Record<number, boolean>;
 
@@ -11,9 +18,12 @@ export interface ChatState {
   _setChatMessages: (chatID: number, msgs: ChatMessage[]) => void;
   _setTyping: (chatID: number, status: boolean) => void;
   _setLastMessage: (chatID: number, msg: string) => void;
+  _setUser: (userID: number, user: User) => void;
+  _setUsersBatch: (users: Map<number, User>) => void;
 };
 
 export const useChatStore = create<ChatState>((set) => ({
+  users: {},
   messages: {},
   typingStatus: {},
   onlineStatus: {},
@@ -29,5 +39,11 @@ export const useChatStore = create<ChatState>((set) => ({
   })),
   _setLastMessage: (chatID, msg) => set((s) => ({
     lastMessage: { ...s.lastMessage, [chatID]: msg }
+  })),
+  _setUser: (userID, user) => set((s) => ({
+    users: { ...s.users, [userID]: user }
+  })),
+  _setUsersBatch: (newUsers) => set((s) => ({
+    users: { ...s.users, ...newUsers }
   })),
 }));

@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { TouchableOpacity, Text, View, FlatList } from "react-native";
+import React, { useState, useEffect, useMemo } from "react";
+import { View, FlatList } from "react-native";
 import BottomBar from "../bars/bottomBar";
 import RecommendationCard, { RecommendedCard_T } from "./components/RecommendationCard";
 import ChatCard from "./components/ChatCard";
-import { textStyle } from "@/styles/textStyles";
 import { RTClient } from "../rt_client/rt_client";
 import { getCurrentUserID } from "@/utils/utils";
 import { UserCard_T } from "../types/user";
@@ -27,6 +26,7 @@ export default function SocialScreen() {
       await RTClient.setPageEntering("social", getCurrentUserID());
 
       const data = await GetSocial();
+      if (!data) return;
       setFriends(data?.friends);
       setRecommendatoins(data?.recommendations);
       setChats(data?.chats);
@@ -36,22 +36,31 @@ export default function SocialScreen() {
   }, [])
 
 
-  let data = null;
-  switch (activeTab) {
-    case "Friends": {
-      data = friends;
-      break;
-    } case "Recommendations": {
-      data = recommendations;
-      break;
-    } case "Activity": {
-      data = activity;
-      break;
-    } case "Chats": {
-      data = chats;
-      break;
+  const renderItem = ({ item }: { item: any }) => {
+    switch (activeTab) {
+      case "Friends":
+        return <FriendCard friend={item} />;
+      case "Recommendations":
+        return <RecommendationCard item={item} />;
+      case "Activity":
+        return null;
+      case "Chats":
+        return <ChatCard item={item} />;
+    };
+  };
+
+  const data = useMemo(() => {
+    switch (activeTab) {
+      case "Friends":
+        return friends;
+      case "Recommendations":
+        return recommendations;
+      case "Activity":
+        return activity;
+      case "Chats":
+        return chats;
     }
-  }
+  }, [activeTab]);
 
   return (
     <View style={{ flex: 1 }}>
@@ -60,70 +69,11 @@ export default function SocialScreen() {
         <SocialPageTopBar onTabChange={(tab: string) => setActiveTab(tab)} />
         <FlatList
           data={data}
-          keyExtractor={(item, index) => String(index)}
-          renderItem={({ item }) => (
-            <>
-              {
-                activeTab === "Friends" &&
-                <FriendCard friend={item} />
-              }
-              {
-                activeTab === "Recommendations" &&
-                <RecommendationCard item={item} />
-              }
-              {
-                activeTab === "Chats" &&
-                <ChatCard item={item} />
-              }
-              {
-                activeTab === "Activity" &&
-                null
-              }
-            </>
-          )
-          } />
+          keyExtractor={(_, index) => String(index)}
+          renderItem={renderItem}
+        />
       </ScreenBackground>
       <BottomBar />
     </View>
   );
 };
-
-const styles = {
-  topBar: {
-    view: {
-      height: 52,
-      marginTop: "10%",
-      marginBottom: "5%",
-      width: "100%",
-      alignSelf: "center",
-      borderWidth: 0.5,
-      borderColor: "rgba(255, 255, 255, 0.2)",
-      borderRadius: 6,
-      flexDirection: "row",
-      justifyContent: "space-between",
-      alignItems: "center",
-      padding: "1%",
-    },
-    buttons: {
-      view: {
-        paddingLeft: "2%",
-        paddingRight: "2%",
-        height: "98%",
-        alignItems: "center",
-        justifyContent: "center",
-      },
-      text: {
-        color: "white",
-        fontSize: 18,
-      }
-    },
-    activeButton: {
-      view: {
-        backgroundColor: "rgba(255, 255, 255, 0.1)",
-        borderColor: "rgba(255, 255, 255, 0.2)",
-        borderRadius: 4,
-        borderWidth: 0.5,
-      }
-    },
-  }
-}

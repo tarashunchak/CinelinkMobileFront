@@ -7,25 +7,7 @@ import { FlatList } from "react-native-gesture-handler";
 
 export default function MoviesList({ movies }: { movies: any[] }) {
   return (
-    <FlatList
-      data={movies}
-      keyExtractor={(_, index) => String(index)}
-      renderItem={({ item }) => (
-        <MovieCard movie={item} />
-      )}
-      ListEmptyComponent={
-        <Text
-          style={[
-            textStyle.gray32,
-            styles.emptyWatchlist
-          ]}>
-          Watchlist is empty
-        </Text>
-      }
-      ListFooterComponent={
-        <View style={styles.bottomSpacer}></View>
-      }
-    />
+    null
   )
 }
 

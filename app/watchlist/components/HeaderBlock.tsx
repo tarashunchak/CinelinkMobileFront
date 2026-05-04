@@ -7,7 +7,7 @@ import { useNavigation } from "expo-router";
 export default function HeaderBlock({ watchlist }: { watchlist: any }) {
   const navigator = useNavigation();
   return (
-    <View style={{ justifyContent: "flex-end", height: hp("41%") - 26 }}>
+    <View style={{ justifyContent: "flex-end", height: hp("41%") - 50 }}>
       <View style={[{ flexDirection: "row", justifyContent: "space-between" }]}>
         <View style={[styles.info.view]}>
           <Image source={watchlist?.fg_img_url ? { uri: watchlist?.fg_img_url } : require("@/app/library/assets/NoFgWatchlist.png")} style={styles.info.image} />

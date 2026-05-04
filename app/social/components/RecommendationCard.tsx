@@ -1,7 +1,8 @@
 import { textStyle } from "@/styles/textStyles";
 import { useNavigation } from "expo-router";
 import React from "react";
-import { TouchableOpacity, View, Text, Image } from "react-native";
+import { View, Text, Image, StyleSheet } from "react-native";
+import { PressableScale } from "react-native-pressable-scale";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 
 type RecommendedBy_T = {
@@ -23,27 +24,33 @@ export type RecommendedCard_T = {
 export default function RecommendedCard({ item }: { item: RecommendedCard_T }) {
   const navigation = useNavigation();
   return (
-    <TouchableOpacity style={styles.card.view}
-      onPress={() => navigation?.navigate("MovieDetailScreen", { movieID: item?.movie_id })} >
-      <Image style={styles.card.content.poster} source={{ uri: `https://image.tmdb.org/t/p/w300${item?.poster_path}` }} />
-      <View style={styles.card.content.columnInfo.view}>
-        <Text style={styles.card.content.columnInfo.title}
+    <PressableScale
+      activeScale={0.98}
+      style={styles.cardContainer}
+      onPress={() => navigation?.navigate("MovieDetailScreen", { movieID: item?.movie_id })}
+    >
+      <Image style={styles.poster} source={{ uri: `https://image.tmdb.org/t/p/w300${item?.poster_path}` }} />
+      <View style={styles.infoColumn}>
+        <Text style={[styles.title, textStyle.white20]}
           pointerEvents="none"
           numberOfLines={1}
-          ellipsizeMode="tail">{item?.title}</Text>
-        <View style={styles.card.content.columnInfo.imdb.view}>
-          <Text style={styles.card.content.columnInfo.imdb.text}>
+          ellipsizeMode="tail"
+        >
+          {item?.title}
+        </Text>
+        <View style={styles.imdbBadge}>
+          <Text style={[styles.imdbText, textStyle.black12]}>
             {`IMDb: ${item?.imdb_rating.toFixed(1)}`}
           </Text>
         </View>
-        <View style={styles.card.content.columnInfo.recommendedBy.view}>
-          <Text style={styles.card.content.columnInfo.recommendedBy.header}>
+        <View style={styles.recommendedSection}>
+          <Text style={textStyle.gray14}>
             Recommended by:
           </Text>
-          <View style={styles.card.content.columnInfo.recommendedBy.avatars.view}>
+          <View style={styles.avatarRow}>
             {
               item?.recommended_by?.slice(0, 3)?.map((user: any, index: number) => (
-                <Image key={index} style={styles.card.content.columnInfo.recommendedBy.avatars.item} source={{ uri: user?.avatar_url }} />
+                <Image key={index} style={styles.avatarItem} source={{ uri: user?.avatar_url }} />
               ))
             }
             {
@@ -53,85 +60,70 @@ export default function RecommendedCard({ item }: { item: RecommendedCard_T }) {
           </View>
         </View>
       </View>
-    </ TouchableOpacity>
+    </ PressableScale>
   );
 };
 
-const styles = {
-  card: {
-    view: {
-      flexDirection: "row",
-      gap: 10,
-      width: "100%",
-      height: hp("14.5%"),
-      backgroundColor: "rgba(255, 255, 255, 0.05)",
-      borderColor: "rgba(255, 255, 255, 0.2)",
-      borderWidth: 0.5,
-      borderRadius: 4,
-      paddingLeft: "3%",
-      marginBottom: 5,
-    },
-    content: {
-      poster: {
-        height: "98%",
-        aspectRatio: 2.2 / 3,
-        backgroundColor: "white",
-        alignSelf: "center",
-      },
-      columnInfo: {
-        view: {
-          flexDirection: "column",
-          justifyContent: "space-evenly",
-        },
-        title: [textStyle.white20, {
-          maxWidth: "85%",
-          minWidth: "85%",
-        }],
-        imdb: {
-          view: {
-            backgroundColor: "#DEB522",
-            width: 54,
-            height: 18,
-            borderRadius: 4,
-            alignItems: "center",
-            justifyContent: "center",
-          },
-          text: [textStyle.black12, {
-            alignSelf: "center",
-            textAlign: "center",
-          }]
-        },
-        recommendedBy: {
-          view: {
-            height: "40%",
-            width: 130,
-            flexDirection: "column",
-            justifyContent: "space-evenly",
-            backgroundColor: "rgba(0, 0, 0, 0.2)",
-            borderColor: "rgba(255, 255, 255, 0.2)",
-            borderWidth: 0.5,
-            borderRadius: 4,
-            paddingLeft: "1%",
-            paddingBottom: "1%",
-          },
-          header: [textStyle.gray12, {
-
-          }],
-          avatars: {
-            view: {
-              flexDirection: "row",
-              gap: 5,
-              paddingLeft: "2%",
-            },
-            item: {
-              minHeight: 28,
-              aspectRatio: 1 / 1,
-              borderRadius: 999,
-              backgroundColor: "white",
-            }
-          }
-        }
-      }
-    }
+const styles = StyleSheet.create({
+  cardContainer: {
+    flexDirection: "row",
+    gap: 10,
+    width: "100%",
+    height: hp("14.5%"),
+    backgroundColor: "rgba(255, 255, 255, 0.05)",
+    borderColor: "rgba(255, 255, 255, 0.2)",
+    borderWidth: 0.5,
+    borderRadius: 4,
+    paddingLeft: "3%",
+    marginBottom: 5,
+  },
+  poster: {
+    height: "98%",
+    aspectRatio: 2.2 / 3,
+    backgroundColor: "white",
+    alignSelf: "center",
+  },
+  infoColumn: {
+    flexDirection: "column",
+    justifyContent: "space-evenly",
+  },
+  title: {
+    maxWidth: "85%",
+    minWidth: "85%",
+  },
+  imdbBadge: {
+    backgroundColor: "#DEB522",
+    width: 54,
+    height: 18,
+    borderRadius: 4,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  imdbText: {
+    alignSelf: "center",
+    textAlign: "center",
+  },
+  recommendedSection: {
+    height: "40%",
+    width: 130,
+    flexDirection: "column",
+    justifyContent: "space-evenly",
+    backgroundColor: "rgba(0, 0, 0, 0.2)",
+    borderColor: "rgba(255, 255, 255, 0.2)",
+    borderWidth: 0.5,
+    borderRadius: 4,
+    paddingLeft: "1%",
+    paddingBottom: "1%",
+  },
+  avatarRow: {
+    flexDirection: "row",
+    gap: 5,
+    paddingLeft: "2%",
+  },
+  avatarItem: {
+    minHeight: 28,
+    aspectRatio: 1 / 1,
+    borderRadius: 999,
+    backgroundColor: "white",
   }
-};
+});

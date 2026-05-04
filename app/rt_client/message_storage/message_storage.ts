@@ -27,6 +27,7 @@ export class MessageStorage {
 
   constructor(chatID: ChatID) {
     this.chatID = chatID;
+    this.loadMessages();
   };
 
   public async loadMessages() {

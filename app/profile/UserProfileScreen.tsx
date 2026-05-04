@@ -64,7 +64,7 @@ export default function UserProfileScreen({ route }: any) {
           <View style={{ flexDirection: "column", gap: 5 }}>
             <ProfileMain
               isLoading={(userLoading ?? false) && true}
-              user={user}
+              user={{ ...user, user_id: userID }}
               isCurrentUser={isCurrUser}
               isFollowed={user?.is_following}
               onEdit={() => { }}

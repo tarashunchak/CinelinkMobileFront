@@ -10,6 +10,9 @@ import { UserCard_T } from "../types/user";
 import FriendCard from "./components/FriendCard";
 import { GetSocial } from "./services/services";
 import ScreenBackground from "@/components/ui/screen-background";
+import SocialPageTopBar from "./components/topBar";
+import Spacer from "@/components/ui/spacer";
+import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 
 export default function SocialScreen() {
   const tabs = ["Friends", "Recommendations", "Activity", "Chats"];
@@ -27,9 +30,6 @@ export default function SocialScreen() {
       setFriends(data?.friends);
       setRecommendatoins(data?.recommendations);
       setChats(data?.chats);
-      /*setFriends(await GetUserFollowers(currentUserID));
-      setRecommendatoins(await GetUserRecommendations(currentUserID))
-      setChats(await GetUserChats(currentUserID))*/
     };
 
     loadContent();
@@ -56,24 +56,8 @@ export default function SocialScreen() {
   return (
     <View style={{ flex: 1 }}>
       <ScreenBackground>
-        <View style={styles.topBar.view}>
-          {
-            tabs.map(tab => (
-              <TouchableOpacity
-                key={tab}
-                onPress={() => setActiveTab(tab)}
-                style={[
-                  styles.topBar.buttons.view,
-                  activeTab === tab
-                  &&
-                  styles.topBar.activeButton.view
-                ]}
-              >
-                <Text style={textStyle.white18}>{tab}</Text>
-              </TouchableOpacity>
-            ))
-          }
-        </View>
+        <Spacer orientation="v" spacing={hp(5)} />
+        <SocialPageTopBar onTabChange={(tab: string) => setActiveTab(tab)} />
         <FlatList
           data={data}
           keyExtractor={(item, index) => String(index)}
@@ -101,8 +85,8 @@ export default function SocialScreen() {
       </ScreenBackground>
       <BottomBar />
     </View>
-  )
-}
+  );
+};
 
 const styles = {
   topBar: {

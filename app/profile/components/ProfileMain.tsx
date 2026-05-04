@@ -5,6 +5,7 @@ import { UserProfile_T } from "../types";
 import { textStyle } from "@/styles/textStyles";
 import ProfilePhotoModal from "./ProfilePhotoModal";
 import { PressableScale } from "react-native-pressable-scale";
+import { useUserStatus } from "@/app/rt_client/rt_client";
 
 type Props = {
   isLoading: boolean;
@@ -54,7 +55,7 @@ export function ProfileMain({
             }
             style={{ width: "100%", height: "100%", borderRadius: 999 }}
           />
-          {user?.is_online && <View style={styles.isOnlineDot}></View>}
+          {useUserStatus(user?.user_id) && <View style={styles.isOnlineDot}></View>}
         </PressableScale>
 
         <ActionButton

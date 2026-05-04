@@ -4,6 +4,8 @@ import AuthNavigator from "@/navigation/AuthNavigator";
 import { useAuthStore } from "@/local_storage/user/asyncStorage/store"
 import { RTClient } from "./rt_client/rt_client";
 import * as Notifications from "@/utils/notifications";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 Notifications.configure();
 
@@ -14,8 +16,12 @@ export default function App() {
 
   RTClient.connect(useAuthStore?.getState()?.user?.user_id);
   return (
-    <>
-      {isHydrated ? (isAuthenticated ? <TabNavigator /> : <AuthNavigator />) : null}
-    </>
+    <GestureHandlerRootView style={{
+      flex: 1,
+    }}>
+      <BottomSheetModalProvider>
+        {isHydrated ? (isAuthenticated ? <TabNavigator /> : <AuthNavigator />) : null}
+      </BottomSheetModalProvider>
+    </GestureHandlerRootView>
   );
 };

@@ -1,12 +1,13 @@
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { textStyle } from "@/styles/textStyles";
+import { WatchlistSheetRef } from "./add-to-watchlist-modal/AddToWatchlistModal";
 
-export default function ActionButtonsBlock({ movieID }: { movieID: number | undefined }) {
+export default function ActionButtonsBlock({ movieID, onPress }: { movieID: number | undefined, onPress: () => void }) {
   return (
     <View style={styles.view}>
       <TouchableOpacity style={[styles.buttonView, styles.markAsWatchedBtn]}
-        onPress={() => { }}>
+        onPress={onPress}>
         <Text style={styles.buttonText}>Add to Watchlist</Text>
       </TouchableOpacity>
 

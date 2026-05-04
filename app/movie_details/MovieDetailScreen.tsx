@@ -14,7 +14,7 @@ import ProvidersBlock from "./components/ProvidersBlock";
 import TrailerBlock from "./components/TrailerBlock";
 import CreditCardsList from "./components/CreditCardsList";
 import { GetMovieYouTubeTrailerKey, LoadMovieDetails } from "./services/services";
-import { WatchlistSheetRef } from "./components/AddToWatchlistModal";
+import WatchlistSheet, { WatchlistSheetRef } from "./components/add-to-watchlist-modal/AddToWatchlistModal";
 import ScreenBackground from "@/components/ui/screen-background";
 
 export default function MovieDetailScreen({ route }: any) {
@@ -23,21 +23,21 @@ export default function MovieDetailScreen({ route }: any) {
   const { movieID, inCinemas } = route?.params;
 
   const sheetRef = useRef<WatchlistSheetRef>(null);
+
   useEffect(() => {
     async function load() {
       const data = await LoadMovieDetails(movieID);
       if (data) setMovie(data);
     }
     load();
-  }
-    , [movieID]);
+  }, [movieID]);
 
   const trailerKey = GetMovieYouTubeTrailerKey(movie?.videos);
   return (
     <ScreenBackground>
       <ScrollView showsVerticalScrollIndicator={false} style={{ padding: "1%" }}>
         <MainInfo movie={movie} inCinemas={inCinemas} />
-        <ActionButtonsBlock movieID={movie?.id} />
+        <ActionButtonsBlock movieID={movie?.id} onPress={sheetRef.current?.open} />
         <GenresBlock genres={movie?.genres} />
         <ProvidersBlock providers={movie?.providers} />
 
@@ -67,6 +67,7 @@ export default function MovieDetailScreen({ route }: any) {
           movieGenre={movie?.genres?.[0]?.id}
         />
       </ScrollView >
+      <WatchlistSheet ref={sheetRef} />
       <BottomBar />
     </ScreenBackground>
   );

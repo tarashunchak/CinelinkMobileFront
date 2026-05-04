@@ -4,6 +4,7 @@ import { View, StyleSheet, TextInput, Keyboard } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { PressableScale } from "react-native-pressable-scale";
+import WatchlistCard from "./components/WatchlistCard";
 
 export type WatchlistSheetRef = {
   open: () => void;
@@ -18,7 +19,7 @@ const WatchlistSheet = forwardRef<WatchlistSheetRef>((props: any, ref: any) => {
 
   useImperativeHandle(ref, () => ({
     open: () => {
-      sheetRef.current?.snapToIndex(0);
+      sheetRef.current?.expand();
       setState(true);
     },
     close: () => {
@@ -39,6 +40,11 @@ const WatchlistSheet = forwardRef<WatchlistSheetRef>((props: any, ref: any) => {
       enablePanDownToClose
       onClose={() => setState(false)}
       containerStyle={[styles.container, backgroundColor]}
+      animationConfigs={{
+        damping: 1000,
+        stiffness: 250,
+        mass: 0.8,
+      }}
     >
       <BottomSheetView style={{ height: "100%", backgroundColor: "black" }}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -53,7 +59,7 @@ const WatchlistSheet = forwardRef<WatchlistSheetRef>((props: any, ref: any) => {
               numColumns={3}
               keyExtractor={(item, index) => String(index)}
               renderItem={({ item }) => (
-                <PressableScale style={{ backgroundColor: "white", height: wp(27), width: wp(27), margin: wp(6.33 / 2), borderRadius: 6 }}></PressableScale >
+                <WatchlistCard watchlist={item} />
               )}
             />
           </View>

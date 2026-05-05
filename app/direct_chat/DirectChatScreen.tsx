@@ -72,7 +72,5 @@ export default function DirectChatScreen({ route }: any) {
 };
 
 const styles = StyleSheet.create({
-  view: {
 
-  }
 });

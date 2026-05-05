@@ -47,11 +47,11 @@ export default function Header({ chatID, peer }: { chatID: number, peer: ChatMem
           </TouchableOpacity>
 
           <View style={styles.chatpeer.text.view}>
-            <Text style={styles.chatpeer.text.name}>
+            <Text style={textStyle.white18}>
               {peer?.username}
             </Text>
             {!isOnline ? (
-              <Text style={styles.chatpeer.text.lastSeen}>
+              <Text style={textStyle.gray14}>
                 {`last seen ${calcLastSeen(lastSeen)}`}
               </Text>
             ) :

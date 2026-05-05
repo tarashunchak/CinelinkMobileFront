@@ -4,7 +4,7 @@ import { View, Text, Image, StyleSheet } from "react-native";
 import { PressableScale } from "react-native-pressable-scale";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { useNavigation } from "expo-router";
-import { RTClient, useChatLastMessage, useUserTypingInChatStatus } from "@/app/rt_client/rt_client";
+import { RTClient, useChatLastMessage, useUserStatus, useUserTypingInChatStatus } from "@/app/rt_client/rt_client";
 import { useAuthStore } from "@/local_storage/user/asyncStorage/store";
 
 export default function DirectChatCard({ item }: { item: any }) {
@@ -14,6 +14,7 @@ export default function DirectChatCard({ item }: { item: any }) {
   RTClient.setChatEntering(item?.chat_id, useAuthStore.getState().user?.user_id ?? 1);
   const isTyping = useUserTypingInChatStatus(3, item?.chat_id);
   const lastMessage = useChatLastMessage(item?.chat_id);
+  const isOnline = useUserStatus(item?.peer_id?.["Int32"]);
 
   return (
     <PressableScale
@@ -24,13 +25,16 @@ export default function DirectChatCard({ item }: { item: any }) {
       }}
     >
       <View style={styles.infoView}>
-        <Image
-          style={styles.image}
-          source={
-            item?.img_url ? { uri: item?.img_url } :
-              require("@/assets/images/giggaNigga.png")
-          }
-        />
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <Image
+            style={styles.image}
+            source={
+              item?.img_url ? { uri: item?.img_url } :
+                require("@/assets/images/giggaNigga.png")
+            }
+          />
+          {isOnline && <View style={styles.onlineDot}></View>}
+        </View>
         <View style={styles.textView}>
           <Text style={textStyle.yellow18}>{item.name}</Text>
           <Text
@@ -78,5 +82,16 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     margin: 5,
+  },
+  onlineDot: {
+    height: 12,
+    width: 12,
+    backgroundColor: "#329E4F",
+    borderRadius: 10,
+    position: "absolute",
+    right: 3,
+    bottom: 3,
+    borderColor: "white",
+    borderWidth: 1,
   }
 });

@@ -38,9 +38,7 @@ export class MessageStorage {
       const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/chats/${this.chatID}/messages`)
       const data = await response?.json();
 
-      console.warn("LoadMessages 1");
       if (data?.results) {
-        console.warn("LoadMessages 2: ",);
         const reversed = [...data.results].reverse();
         const current = useChatStore.getState().messages[this.chatID] || EMPTY_ARRAY;
         if (JSON.stringify(current) !== JSON.stringify(reversed)) {

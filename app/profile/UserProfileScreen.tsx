@@ -74,7 +74,7 @@ export default function UserProfileScreen({ route }: any) {
                 else
                   await FollowUser(userID) && loadUser();
               }}
-              onChat={async () => {
+              onChat={() => {
                 console.warn("On chat");
                 navigator.navigate("DirectChatScreen", { chatID: chatID });
               }}

@@ -77,6 +77,8 @@ const styles = {
       width: "35%",
       resizeMode: "cover",
       borderRadius: 4,
+      borderColor: "rgba(255, 255, 255, 0.2)",
+      borderWidth: 1,
     },
     text: {
       view: {

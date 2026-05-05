@@ -3,33 +3,33 @@ import BottomSheet, { BottomSheetView, TouchableWithoutFeedback } from "@gorhom/
 import { View, StyleSheet, TextInput, Keyboard } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
-import WatchlistCard from "./components/WatchlistCard";
-import { GetUserWatchlists } from "@/api/watchlist/watchlist";
+import UserCard from "./components/UserCard";
 import { getCurrentUserID } from "@/utils/utils";
 import Button from "./components/Button";
+import { GetUserFollowers } from "@/api/followers";
 
-export type WatchlistSheetRef = {
+export type UserSheetRef = {
   open: () => void;
   close: () => void;
 };
 
-type WatchlistSheetProps = {
+type UserSheetProps = {
   setIsActive: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const WatchlistSheet = forwardRef<WatchlistSheetRef, WatchlistSheetProps>(({ setIsActive }, ref: any) => {
+const UserSheet = forwardRef<UserSheetRef, UserSheetProps>(({ setIsActive }, ref: any) => {
   const sheetRef = useRef<BottomSheet>(null);
   const [state, setState] = useState<boolean>(false);
   const [value, setValue] = useState<string>("");
-  const [watchlists, setWatchlists] = useState<any[]>([]);
+  const [users, setUsers] = useState<any[]>([]);
   const [picked, setPicked] = useState<Map<number, boolean>>(new Map());
   const snapPoints = {};
 
   useEffect(() => {
     async function loadContent() {
-      const data = await GetUserWatchlists(getCurrentUserID());
-      if (data) setWatchlists(data);
-      console.warn("WATCHLISTS: ", data);
+      const data = await GetUserFollowers(getCurrentUserID() ?? 0);
+      if (data) setUsers(data);
+      console.warn("users: ", data);
     };
     loadContent();
   }, [state]);
@@ -76,11 +76,11 @@ const WatchlistSheet = forwardRef<WatchlistSheetRef, WatchlistSheetProps>(({ set
             />
             <FlatList
               style={{ height: "100%" }}
-              data={watchlists}
+              data={users}
               numColumns={3}
               keyExtractor={(item, index) => String(index)}
               renderItem={({ item }) => (
-                <WatchlistCard watchlist={item} onPick={(id, state) => {
+                <UserCard user={item} onPick={(id, state) => {
                 }} />
               )}
             />
@@ -94,7 +94,7 @@ const WatchlistSheet = forwardRef<WatchlistSheetRef, WatchlistSheetProps>(({ set
   )
 });
 
-export default WatchlistSheet;
+export default UserSheet;
 
 const styles = StyleSheet.create({
   container: {

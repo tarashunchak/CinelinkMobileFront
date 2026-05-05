@@ -1,8 +1,10 @@
 import { CommonActions } from "@react-navigation/native";
 import { useNavigation } from "expo-router";
 import React from "react";
-import { Image, TouchableOpacity } from "react-native";
+import { Text } from "react-native";
 import { PressableScale } from "react-native-pressable-scale";
+import { Image } from "expo-image";
+import { textStyle } from "@/styles/textStyles";
 
 const icons = {
   home: require('@/app/bars/assets/home.png'),
@@ -16,8 +18,9 @@ const styles = {
   alignItems: "center",
 }
 
-export default function BottomBarIconButton({ source, navigateTo, style }: { source: any, navigateTo: string, style: any }) {
+export default function BottomBarIconButton({ source, navigateTo, style }: { source: string, navigateTo: string, style: any }) {
   const navigator = useNavigation();
+
   return (
     <PressableScale
       activeScale={0.9}
@@ -29,7 +32,8 @@ export default function BottomBarIconButton({ source, navigateTo, style }: { sou
           })
         );
       }} style={style || styles}>
-      <Image source={icons[source]} style={{ width: 30, height: 30 }}></Image>
+      <Image source={icons[source]} style={{ width: 28, height: 28 }}></Image>
+      <Text style={textStyle.gray12}>{source}</Text>
     </PressableScale>
   )
 }

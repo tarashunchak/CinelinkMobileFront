@@ -1,14 +1,14 @@
 import { GetUserFollowers } from "@/api/followers/followers";
-import { textStyle } from "@/styles/textStyles";
 import UserCard from "@/components/userCard";
 import { heightPercentageToDP as hp, } from "react-native-responsive-screen";
-import { useFocusEffect, useNavigation } from "expo-router";
+import { useFocusEffect } from "expo-router";
 import React, { useCallback, useState } from "react";
-import { FlatList, View } from "react-native";
 import { UserCard_T } from "@/app/types/user";
+import Spacer from "@/components/ui/spacer";
+import { FlatList } from "react-native-gesture-handler";
 
 export default function FollowersList({ userID }: { userID: number }) {
-  const [followers, setFollowers] = useState<UserCard_T[]>();
+  const [followers, setFollowers] = useState<UserCard_T[]>([]);
 
   useFocusEffect(
     useCallback(() => {
@@ -16,6 +16,7 @@ export default function FollowersList({ userID }: { userID: number }) {
         const data: UserCard_T[] = await GetUserFollowers(userID);
         if (!data) return;
         setFollowers(data);
+        console.warn("FollowersList: ", data)
       }
       loadContent();
     }, [])
@@ -29,7 +30,7 @@ export default function FollowersList({ userID }: { userID: number }) {
       keyExtractor={(item: any, index: number) => String(item?.user_id)}
       showsVerticalScrollIndicator={false}
       renderItem={({ item }) => <UserCard user={item} />}
-      ListFooterComponent={<View style={{ height: hp(8) }}></View>}
+      ListFooterComponent={<Spacer spacing={hp(8)} />}
     />
   )
 }

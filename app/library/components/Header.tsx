@@ -62,7 +62,7 @@ const stylesR = StyleSheet.create({
 
 const styles = {
   view: {
-    backgroundColor: "rgba(255, 255, 255, 0.10)",
+    backgroundColor: "rgba(90, 90, 90, 1)",
     height: hp("12%"),
     width: widthPercentageToDP("100%"),
     flexDirection: "row",

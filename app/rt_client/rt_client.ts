@@ -140,7 +140,7 @@ export const useChatMessages = (chatID: ChatID) => {
 export function useChatLastMessage(chatID: ChatID): string {
   const lastMessage = useChatStore(state => state.lastMessage[chatID] ?? "");
   //const typing = useChatStore(state => state.typingStatus[userID] || false);
-  useEffect(() => { }, [chatID]);
+  useEffect(() => { }, [chatID, lastMessage]);
   return lastMessage;
 };
 
@@ -153,5 +153,11 @@ export function useUserStatus(userID: UserID): boolean {
 export function useTypingStatus(userID: UserID): boolean {
   const status = useChatStore(state => state.typingStatus[userID] ?? false);
   useEffect(() => { }, [userID, status]);
-  return status;
+  return status[userID];
 };
+
+export function useUserTypingInChatStatus(userID: UserID, chatID: ChatID): boolean {
+  const status = useChatStore(state => state.typingStatus[chatID] ?? false)
+  useEffect(() => { }, [userID, chatID]);
+  return status[userID];
+}

@@ -1,5 +1,5 @@
-import { RTClient, useTypingStatus } from "@/app/rt_client/rt_client";
-import LeafyReturnArrowButton from "@/components/ui/returnArrowButton";
+import { RTClient, useUserStatus, useUserTypingInChatStatus } from "@/app/rt_client/rt_client";
+import ReturnArrowButton from "@/components/ui/returnArrowButton";
 import { textStyle } from "@/styles/textStyles";
 import { useNavigation } from "expo-router";
 import React, { useEffect, useState } from "react";
@@ -10,10 +10,11 @@ import { calcLastSeen } from "../utils/utils";
 
 export default function Header({ chatID, peer }: { chatID: number, peer: ChatMember }) {
   const navigator = useNavigation();
-  const [typing, setTyping] = useState<boolean>();
   const [status, setStatus] = useState<boolean>();
 
-  const isTyping = useTypingStatus(peer?.user_id);
+  const isTyping = useUserTypingInChatStatus(peer?.user_id, chatID);
+  const isOnline = useUserStatus(peer?.user_id);
+
   useEffect(() => {
     async function func() {
       RTClient.setOnOnlineCallBack(chatID, (data: any) => {
@@ -21,17 +22,17 @@ export default function Header({ chatID, peer }: { chatID: number, peer: ChatMem
         setStatus(data.content.is_online);
       });
 
-      RTClient.setOnTypingCallBack(chatID, (data: any) => {
+      /*RTClient.setOnTypingCallBack(chatID, (data: any) => {
         console.warn("user typing status: ", data.content.is_typing);
         setTyping(data.content.is_typing);
-      });
+      });*/
 
       RTClient.setOnMessageCallBack(chatID, (data: any) => {
         console.warn("Message ===== ", data.content.message);
       });
 
-      setStatus(peer?.is_online);
-      setTyping(peer?.is_typing);
+      /*setStatus(peer?.is_online);
+      setTyping(peer?.is_typing);*/
 
       console.warn("chat_id = ", peer)
       console.warn("status = ", status)
@@ -43,7 +44,7 @@ export default function Header({ chatID, peer }: { chatID: number, peer: ChatMem
   return (
     <View style={styles.view}>
       <View style={{ flexDirection: "row", gap: wp(5) }}>
-        <LeafyReturnArrowButton
+        <ReturnArrowButton
           onPress={navigator.goBack} />
 
         <View style={styles.chatpeer.view}>
@@ -59,14 +60,14 @@ export default function Header({ chatID, peer }: { chatID: number, peer: ChatMem
               style={stylesR.avatarImg}
               source={{ uri: peer?.avatar_url }}
             />
-            {status && <View style={styles.isOnline.dot}></View>}
+            {isOnline && <View style={styles.isOnline.dot}></View>}
           </TouchableOpacity>
 
           <View style={styles.chatpeer.text.view}>
             <Text style={styles.chatpeer.text.name}>
               {peer?.username}
             </Text>
-            {!status ? (
+            {!isOnline ? (
               <Text style={styles.chatpeer.text.lastSeen}>
                 {`last seen ${calcLastSeen(peer?.last_seen)}`}
               </Text>

@@ -16,13 +16,17 @@ import CreditCardsList from "./components/CreditCardsList";
 import { GetMovieYouTubeTrailerKey, LoadMovieDetails } from "./services/services";
 import WatchlistSheet, { WatchlistSheetRef } from "./components/add-to-watchlist-modal/AddToWatchlistModal";
 import ScreenBackground from "@/components/ui/screen-background";
+import UserSheet, { UserSheetRef } from "./components/recommend-to-user-modal/RecommendToUser";
 
 export default function MovieDetailScreen({ route }: any) {
   const navigation = useNavigation();
   const [movie, setMovie] = useState<Movie>();
   const { movieID, inCinemas } = route?.params;
+  const [isActive, setIsActive] = useState<boolean>(true);
+  const [isActiveUsers, setIsActiveUsers] = useState<boolean>(true);
 
   const sheetRef = useRef<WatchlistSheetRef>(null);
+  const userSheetRef = useRef<UserSheetRef>(null);
 
   useEffect(() => {
     async function load() {
@@ -37,7 +41,11 @@ export default function MovieDetailScreen({ route }: any) {
     <ScreenBackground>
       <ScrollView showsVerticalScrollIndicator={false} style={{ padding: "1%" }}>
         <MainInfo movie={movie} inCinemas={inCinemas} />
-        <ActionButtonsBlock movieID={movie?.id} onPress={sheetRef.current?.open} />
+        <ActionButtonsBlock
+          movieID={movie?.id}
+          onAddToWatchlist={sheetRef.current?.open}
+          onRecommend={userSheetRef.current?.open}
+        />
         <GenresBlock genres={movie?.genres} />
         <ProvidersBlock providers={movie?.providers} />
 
@@ -67,8 +75,9 @@ export default function MovieDetailScreen({ route }: any) {
           movieGenre={movie?.genres?.[0]?.id}
         />
       </ScrollView >
-      <WatchlistSheet ref={sheetRef} />
-      <BottomBar />
+      <WatchlistSheet ref={sheetRef} setIsActive={setIsActive} />
+      <UserSheet ref={userSheetRef} setIsActive={setIsActiveUsers} />
+      {isActive || isActiveUsers && <BottomBar />}
     </ScreenBackground>
   );
 }

@@ -7,7 +7,10 @@ type WSHandler = (msg: WSMessage, manager: ChatManager) => void;
 function handleTyping(msg: WSMessage, manager: ChatManager) {
   const { chat_id, user_id, is_typing }: Content = msg.content;
   manager.callbacks?.onTyping?.get(chat_id)?.(msg);
-  useChatStore.getState()._setTyping(msg.content?.user_id, msg.content?.is_typing ?? false);
+  useChatStore.getState()._setTyping(msg.content?.chat_id, {
+    user_id: msg.content?.user_id,
+    status: msg.content?.is_typing ?? false
+  });
 };
 
 function handleOnline(msg: WSMessage, manager: ChatManager) {

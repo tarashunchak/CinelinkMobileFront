@@ -30,6 +30,7 @@ export default function SocialScreen() {
       setFriends(data?.friends);
       setRecommendatoins(data?.recommendations);
       setChats(data?.chats);
+      console.warn("Chats: ", data?.chats);
     };
 
     loadContent();

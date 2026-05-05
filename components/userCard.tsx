@@ -1,10 +1,12 @@
 import { textStyle } from "@/styles/textStyles";
 import React from "react";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
-import { View, Text, Image, StyleSheet } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import { useNavigation } from "expo-router";
 import { PressableScale } from "react-native-pressable-scale";
 import { useUserStatus } from "@/app/rt_client/rt_client";
+import { UserCard_T } from "@/app/types/user";
+import { Image } from "expo-image";
 
 interface Props {
   user_id: number;
@@ -14,7 +16,7 @@ interface Props {
   avatar_url: string | undefined;
 }
 
-export default function UserCard({ user }: { user: Props }) {
+export default function UserCard({ user }: { user: UserCard_T }) {
   const navigator = useNavigation();
   return (
     <PressableScale
@@ -28,6 +30,7 @@ export default function UserCard({ user }: { user: Props }) {
           <Image
             style={styles.image}
             source={{ uri: user?.avatar_url }}
+            cachePolicy="memory-disk"
           />
           {useUserStatus(user.user_id) && <View style={styles.isOnlineDot}></View>}
         </View>

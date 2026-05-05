@@ -77,7 +77,7 @@ export function ProfileMain({
         </Text>
       }
       <Text
-        style={textStyle.gray12}
+        style={textStyle.gray14}
       >
         {`@${username}`}
       </Text>

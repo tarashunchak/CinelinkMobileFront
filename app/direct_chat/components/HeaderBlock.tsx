@@ -7,39 +7,22 @@ import { View, Text, Image, TouchableOpacity, Platform, StyleSheet } from "react
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { ChatMember } from "@/app/rt_client/models/models";
 import { calcLastSeen } from "../utils/utils";
+import { GetUserLastSeenTimestamp } from "@/api/users";
 
 export default function Header({ chatID, peer }: { chatID: number, peer: ChatMember }) {
   const navigator = useNavigation();
-  const [status, setStatus] = useState<boolean>();
+  const [lastSeen, setLastSeen] = useState<string>();
 
   const isTyping = useUserTypingInChatStatus(peer?.user_id, chatID);
   const isOnline = useUserStatus(peer?.user_id);
 
   useEffect(() => {
-    async function func() {
-      RTClient.setOnOnlineCallBack(chatID, (data: any) => {
-        console.warn("user status: ", data.content.is_online);
-        setStatus(data.content.is_online);
-      });
-
-      /*RTClient.setOnTypingCallBack(chatID, (data: any) => {
-        console.warn("user typing status: ", data.content.is_typing);
-        setTyping(data.content.is_typing);
-      });*/
-
-      RTClient.setOnMessageCallBack(chatID, (data: any) => {
-        console.warn("Message ===== ", data.content.message);
-      });
-
-      /*setStatus(peer?.is_online);
-      setTyping(peer?.is_typing);*/
-
-      console.warn("chat_id = ", peer)
-      console.warn("status = ", status)
+    async function loadContent() {
+      const data = await GetUserLastSeenTimestamp(peer?.user_id);
+      if (data) setLastSeen(data);
     };
-
-    func();
-  }, [chatID]);
+    loadContent();
+  }, [chatID, isOnline]);
 
   return (
     <View style={styles.view}>
@@ -69,7 +52,7 @@ export default function Header({ chatID, peer }: { chatID: number, peer: ChatMem
             </Text>
             {!isOnline ? (
               <Text style={styles.chatpeer.text.lastSeen}>
-                {`last seen ${calcLastSeen(peer?.last_seen)}`}
+                {`last seen ${calcLastSeen(lastSeen)}`}
               </Text>
             ) :
               (

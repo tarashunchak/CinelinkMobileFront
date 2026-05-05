@@ -3,7 +3,7 @@ import { KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard, Sty
 import Header from "./components/HeaderBlock";
 import Input from "./components/Input";
 import { useFocusEffect } from "expo-router";
-import { RTClient, useChatMessages } from "@/app/rt_client/rt_client";
+import { RTClient, useChatMessages, useUserStatus } from "@/app/rt_client/rt_client";
 import TextMessage from "./components/TextMessage";
 import { getCurrentUserID } from "@/utils/utils";
 import FloatingButton from "./components/FloatingButton";

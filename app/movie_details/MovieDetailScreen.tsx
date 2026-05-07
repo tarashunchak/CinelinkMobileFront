@@ -101,7 +101,7 @@ export default function MovieDetailScreen({ route }: any) {
   return (
     <ScreenBackground>
       <FlashList
-        style={{ flex: 1 }}
+        style={{ flex: 1, padding: "1%" }}
         data={sections}
         renderItem={renderItem}
         showsVerticalScrollIndicator={false}

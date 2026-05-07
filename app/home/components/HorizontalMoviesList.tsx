@@ -3,6 +3,8 @@ import { FlatList, StyleSheet } from "react-native";
 import MovieCard from "./MovieCard";
 import { Movie_I } from "../models/movie";
 import EmptyMovieCard from "./EmptyMovieCard";
+import { FlashList } from "@shopify/flash-list";
+import { Skeleton } from "react-native-skeletons";
 
 export default function HorizontalMoviesList(
   { moviesList, inCinemas }:
@@ -11,17 +13,18 @@ export default function HorizontalMoviesList(
       inCinemas: boolean
     }
 ) {
-  const [movies, setMovies] = useState<Movie_I[]>(Array.from({ length: 10 }));
+  const [movies, setMovies] = useState<any[]>(Array.from({ length: 10 }));
 
   useEffect(() => {
-    async function load() {
-      setMovies(moviesList)
+    async function loadContent() {
+      if (moviesList.length > 0)
+        setMovies([...moviesList])
     }
-    load();
+    loadContent();
   }, [moviesList]);
 
   return (
-    <FlatList
+    <FlashList
       style={styles.flatList}
       horizontal
       data={movies}
@@ -35,9 +38,10 @@ export default function HorizontalMoviesList(
               inCinemas,
               maximum: item?.maximum,
             }}
-          /> : <EmptyMovieCard />
+          /> : <Skeleton height={"99%"} width={100} style={styles.skeleton} />
       )
       }
+      ListFooterComponent={<EmptyMovieCard onPress={() => { }} />}
     />
   )
 }
@@ -54,4 +58,13 @@ const styles = StyleSheet.create({
     marginLeft: "-1%",
     marginRight: "-1%",
   },
+  skeleton: {
+    marginRight: 5,
+    height: "99%",
+    width: 100,
+    backgroundColor: "rgba(255, 255, 255, 0.05)",
+    borderRadius: 8,
+    borderWidth: 0.5,
+    borderColor: "rgba(255, 255, 255, 0.2)",
+  }
 });

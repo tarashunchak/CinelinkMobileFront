@@ -1,7 +1,8 @@
 import React from "react";
-import { Linking, Text, TouchableOpacity, View } from "react-native";
+import { Linking, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { textStyle } from "@/styles/textStyles";
 import InfoRow from "./InfoRow";
+import { PressableScale } from "react-native-pressable-scale";
 
 interface Credits {
   cast: any[];
@@ -34,21 +35,20 @@ export default function InfoBlock({ creditInfo }: { creditInfo: CreditInfo_I }) 
         <InfoRow left="Popularity" right={String(creditInfo?.popularity?.toFixed(4))} />
       </View>
 
-      <TouchableOpacity style={styles.imdbBtn.view}
+      <PressableScale style={styles.imdbBtnView}
         onPress={async () => {
           const url = `https://www.imdb.com/name/${creditInfo?.imdb_id}`;
           const sup = await Linking.canOpenURL(url);
           if (sup) Linking.openURL(url);
         }}
       >
-
-        <Text style={styles.imdbBtn.text}>IMDb</Text>
-      </TouchableOpacity>
+        <Text style={styles.imdbBtnText}>IMDb</Text>
+      </PressableScale >
     </View >
   )
 };
 
-const styles = {
+const styles = StyleSheet.create({
   mainView: {
     flexDirection: "column",
     marginLeft: "3%",
@@ -61,24 +61,22 @@ const styles = {
     padding: "1.5%",
     justifyContent: "space-between",
   },
-  imdbBtn: {
-    view: {
-      backgroundColor: "#deb522",
-      height: 24,
-      borderRadius: 5,
-      width: 76,
-      flexDirection: "column",
-      justifyContent: "center",
-    },
-    text: {
-      textAlign: "center",
-      fontSize: 14,
-      color: "black",
-      fontWeight: "bold",
-    },
+  imdbBtnView: {
+    backgroundColor: "#deb522",
+    height: 24,
+    borderRadius: 5,
+    width: 76,
+    flexDirection: "column",
+    justifyContent: "center",
+  },
+  imdbBtnText: {
+    textAlign: "center",
+    fontSize: 14,
+    color: "black",
+    fontWeight: "bold",
   },
   starsView: {
     flexDirection: "column",
     maxWidth: "100%",
   },
-}
+});

@@ -14,7 +14,7 @@ export default function BiographyModal({ bio }: { bio: string }) {
         <Text style={textStyle.yellow18}>Biography</Text>
         <Text
           onPress={() => setOpen(true)}
-          style={[textStyle.white16]}
+          style={[textStyle.white16, styles.text]}
         >
           {bio}
         </Text>
@@ -66,6 +66,9 @@ const styles = StyleSheet.create({
     borderColor: "rgba(255, 255, 255, 0.2)",
     borderRadius: 12
   },
+  text: {
+    maxHeight: "90%"
+  },
   imageBackground: {
     width: "100%",
     height: "100%",
@@ -74,7 +77,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.8)",
   },
   view: {
-    width: "90%",
+    width: "96%",
     backgroundColor: "rgba(38, 37, 44, 0.95)",
     padding: "2%",
     borderRadius: 12,

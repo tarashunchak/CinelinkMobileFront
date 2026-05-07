@@ -8,6 +8,7 @@ import PhotosModal from "./components/PhotosModal";
 import MainInfo from "./components/MainInfo";
 import ActionButtonsBlock from "./components/ActionButtonsBlock";
 import ScreenBackground from "@/components/ui/screen-background";
+import { FlashList } from "@shopify/flash-list";
 
 export default function CreditDetailScreen({ route }: any) {
   const { creditID } = route?.params;
@@ -35,23 +36,34 @@ export default function CreditDetailScreen({ route }: any) {
 
   }, []);
 
+  const sections = [
+    { type: "main" },
+    { type: "actions" },
+    { type: "bio" },
+    { type: "photos" },
+  ];
+
+  const renderItem = ({ item }: any) => {
+    switch (item.type) {
+      case "main":
+        return <MainInfo credit={credit} backdrop={backdrop} />;
+      case "actions":
+        return <ActionButtonsBlock />;
+      case "bio":
+        return <BiographyModal bio={credit?.biography || "It`s empty here for now..."} />;
+      case "photos":
+        return <PhotosModal images={images} backdrop={backdrop} />;
+    }
+  };
+
   return (
-    <View style={{ flex: 1 }}>
-      <ScreenBackground>
-        <ScrollView
-          nestedScrollEnabled={true}
-          showsVerticalScrollIndicator={false}
-          style={{ padding: "1%", flex: 1 }}
-        >
-          <MainInfo credit={credit} backdrop={backdrop} />
-
-          <ActionButtonsBlock />
-
-          <BiographyModal bio={credit?.biography || "It`s empty here for now..."} />
-          <PhotosModal images={images} backdrop={backdrop} />
-        </ScrollView >
-      </ScreenBackground>
+    <ScreenBackground>
+      <FlashList
+        data={sections}
+        renderItem={renderItem}
+        showsVerticalScrollIndicator={false}
+      />
       <BottomBar />
-    </View >
+    </ScreenBackground>
   );
 }

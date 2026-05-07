@@ -2,9 +2,11 @@ import { getMovieOfTheDay } from "@/api/tmdbApi";
 import { textStyle } from "@/styles/textStyles";
 import { useFocusEffect, useNavigation } from "expo-router";
 import React, { useCallback, useState } from "react";
-import { Text, View, Image, ImageBackground } from "react-native";
+import { Text, View, ImageBackground } from "react-native";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { PressableScale } from "react-native-pressable-scale";
+import { Image } from "expo-image";
+import { Skeleton } from "react-native-skeletons";
 
 export default function MovieOfTheDay() {
   const navigator = useNavigation();
@@ -22,17 +24,18 @@ export default function MovieOfTheDay() {
   )
 
   return (
-    <ImageBackground
-      source={{
-        uri: `https://image.tmdb.org/t/p/w300${movie?.backdrop_path
-          || movie?.poster_path}`
-      }}
-      style={styles.backdrop}>
+    <>
+      <Image
+        source={{
+          uri: `https://image.tmdb.org/t/p/w300${movie?.backdrop_path
+            || movie?.poster_path}`
+        }}
+        style={styles.backdrop} />
       <View style={styles.background}>
-
         <Image
           style={styles.logo}
           source={require("@/app/home/assets/logo.png")}
+          cachePolicy="disk"
         />
 
         <Text
@@ -62,10 +65,12 @@ export default function MovieOfTheDay() {
           </View>
           <Image
             source={{ uri: `https://image.tmdb.org/t/p/w300${movie?.poster_path}` }}
-            style={styles.poster} />
+            style={styles.poster}
+            cachePolicy="disk"
+          />
         </PressableScale>
       </View>
-    </ImageBackground>
+    </>
   )
 }
 
@@ -82,9 +87,15 @@ const styles = {
     marginBottom: hp(5)
   },
   background: {
-    height: "100%",
-    width: "100%",
-    backgroundColor: "rgba(0, 0, 0, 0.8)"
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    height: hp("47%"),
+    width: "104%",
+    margin: "-2%",
+    paddingTop: "5%",
+    backgroundColor: "rgba(0, 0, 0, 0.8)",
   },
   view: {
     flexDirection: "row",

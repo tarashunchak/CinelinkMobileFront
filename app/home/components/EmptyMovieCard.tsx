@@ -1,24 +1,25 @@
 import React from "react";
-import { Image, Text, TouchableOpacity } from "react-native";
-import { useNavigation } from "expo-router";
+import { StyleSheet, Text } from "react-native";
 import { textStyle } from "@/styles/textStyles";
+import { PressableScale } from "react-native-pressable-scale";
+import { Image } from "expo-image";
 
 export default function EmptyMovieCard({ onPress }: { onPress: () => void }) {
   return (
-    <TouchableOpacity
-      key={20}
+    <PressableScale
       onPress={onPress}
       style={styles.view}>
       <Image
         source={require("@/assets/images/threeDots.png")}
         style={styles.image}
+        cachePolicy="disk"
       />
       <Text style={[textStyle.gray20]}>More</Text>
-    </TouchableOpacity>
+    </PressableScale>
   )
 };
 
-const styles = {
+const styles = StyleSheet.create({
   view: {
     flexDirection: "column",
     height: "99%",
@@ -27,16 +28,13 @@ const styles = {
     borderRadius: 8,
     borderWidth: 0.5,
     borderColor: "rgba(255, 255, 255, 0.2)",
-    marginRight: 5,
     justifyContent: "center",
     alignItems: "center",
     padding: 0.5,
+    gap: 10,
   },
   image: {
-    height: 20,
-    width: 20,
-    borderTopLeftRadius: 6,
-    borderTopRightRadius: 6,
-    alignSelf: "center"
+    height: 17,
+    width: "70%",
   }
-};
+});

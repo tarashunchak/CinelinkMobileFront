@@ -3,7 +3,7 @@ import MovieCardList from "@/components/ui/movie-card-list";
 import { textStyle } from "@/styles/textStyles";
 import { useNavigation } from "expo-router";
 import React, { useEffect, useRef, useState } from "react";
-import { ScrollView, Text } from "react-native";
+import { Text } from "react-native";
 import { Movie } from "./types";
 import MainInfo from "./components/MainInfo";
 import DetailsBlock from "./components/DetailsBlock";
@@ -17,6 +17,7 @@ import { GetMovieYouTubeTrailerKey, LoadMovieDetails } from "./services/services
 import WatchlistSheet, { WatchlistSheetRef } from "./components/add-to-watchlist-modal/AddToWatchlistModal";
 import ScreenBackground from "@/components/ui/screen-background";
 import UserSheet, { UserSheetRef } from "./components/recommend-to-user-modal/RecommendToUser";
+import { FlashList } from "@shopify/flash-list";
 
 export default function MovieDetailScreen({ route }: any) {
   const navigation = useNavigation();
@@ -37,46 +38,78 @@ export default function MovieDetailScreen({ route }: any) {
   }, [movieID]);
 
   const trailerKey = GetMovieYouTubeTrailerKey(movie?.videos);
-  return (
-    <ScreenBackground>
-      <ScrollView showsVerticalScrollIndicator={false} style={{ padding: "1%" }}>
-        <MainInfo movie={movie} inCinemas={inCinemas} />
-        <ActionButtonsBlock
+
+  const sections = [
+    { type: "main" },
+    { type: "actions" },
+    { type: "genres" },
+    { type: "providers" },
+    { type: "trailer" },
+    { type: "overview" },
+    { type: "details" },
+    { type: "cast" },
+    { type: "crew" },
+    { type: "similar" },
+  ];
+
+  const renderItem = ({ item }: any) => {
+    switch (item.type) {
+      case "main":
+        return <MainInfo movie={movie} inCinemas={inCinemas} />
+      case "actions":
+        return <ActionButtonsBlock
           movieID={movie?.id}
           onAddToWatchlist={sheetRef.current?.open}
           onRecommend={userSheetRef.current?.open}
         />
-        <GenresBlock genres={movie?.genres} />
-        <ProvidersBlock providers={movie?.providers} />
+      case "genres":
+        return <GenresBlock genres={movie?.genres} />
+      case "providers":
+        return <ProvidersBlock providers={movie?.providers} />
+      case "trailer":
+        return <TrailerBlock trailerKey={trailerKey} />
+      case "overview":
+        return <OverviewBlock text={movie?.overview} />
+      case "detailes":
+        return <DetailsBlock movie={movie} />
+      case "cast":
+        return (<>
+          <Text style={styles.title}>Cast</Text>
+          <CreditCardsList
+            movieID={movieID}
+            credits={movie?.credits?.cast}
+            poster_path={movie?.poster_path}
+          /></>)
+      case "crew":
+        return (<>
+          <Text style={styles.title}>Crew</Text>
+          <CreditCardsList
+            movieID={movieID}
+            credits={movie?.credits?.crew}
+            poster_path={movie?.poster_path}
+          /></>)
+      case "similar":
+        return (<>
+          <Text style={styles.title}>Similar movies</Text>
+          <MovieCardList
+            movieID={movie?.id}
+            movieGenre={movie?.genres?.[0]?.id}
+          /></>)
+    };
+  };
 
-        <Text style={styles.title}>Trailer</Text>
-        <TrailerBlock trailerKey={trailerKey} />
+  return (
+    <ScreenBackground>
+      <FlashList
+        style={{ flex: 1 }}
+        data={sections}
+        renderItem={renderItem}
+        showsVerticalScrollIndicator={false}
+      />
 
-        <OverviewBlock text={movie?.overview} />
-        <DetailsBlock movie={movie} />
-
-        <Text style={styles.title}>Cast</Text>
-        <CreditCardsList
-          movieID={movieID}
-          credits={movie?.credits?.cast}
-          poster_path={movie?.poster_path}
-        />
-
-        <Text style={styles.title}>Crew</Text>
-        <CreditCardsList
-          movieID={movieID}
-          credits={movie?.credits?.crew}
-          poster_path={movie?.poster_path}
-        />
-
-        <Text style={styles.title}>Similar movies</Text>
-        <MovieCardList
-          movieID={movie?.id}
-          movieGenre={movie?.genres?.[0]?.id}
-        />
-      </ScrollView >
       <WatchlistSheet ref={sheetRef} setIsActive={(state) => setIsActive(state)} />
       <UserSheet ref={userSheetRef} setIsActive={(state) => setIsActiveUsers(state)} />
+
       {(isActive || isActiveUsers) && <BottomBar />}
     </ScreenBackground>
   );

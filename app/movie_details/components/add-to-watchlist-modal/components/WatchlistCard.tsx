@@ -32,11 +32,12 @@ const notPicked = StyleSheet.create({
     height: wp(27),
     width: wp(27),
     margin: wp(6.3333 / 2),
-    borderRadius: 6,
+    borderRadius: 8,
+    opacity: 0.4,
   },
   img: {
     flex: 1,
-    borderRadius: 6,
+    borderRadius: 8,
   },
 });
 
@@ -45,14 +46,14 @@ const picked = StyleSheet.create({
     height: wp(27),
     width: wp(27),
     margin: wp(6.3333 / 2),
-    borderRadius: 8,
-    borderColor: "#329E4F",
+    borderRadius: 10,
+    borderColor: "#909090",
     borderWidth: 2,
-    padding: 5,
+    padding: 4,
   },
   img: {
     backgroundColor: "white",
     flex: 1,
-    borderRadius: 3,
+    borderRadius: 6,
   },
 });

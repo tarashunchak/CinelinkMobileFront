@@ -18,11 +18,12 @@ import WatchlistSheet, { WatchlistSheetRef } from "./components/add-to-watchlist
 import ScreenBackground from "@/components/ui/screen-background";
 import UserSheet, { UserSheetRef } from "./components/recommend-to-user-modal/RecommendToUser";
 import { FlashList } from "@shopify/flash-list";
+import { FlatList } from "react-native-gesture-handler";
 
 export default function MovieDetailScreen({ route }: any) {
   const navigation = useNavigation();
   const [movie, setMovie] = useState<Movie>();
-  const { movieID, inCinemas } = route?.params;
+  const { movieID, inCinemas, maximum } = route?.params;
   const [isActive, setIsActive] = useState<boolean>(true);
   const [isActiveUsers, setIsActiveUsers] = useState<boolean>(true);
 
@@ -37,10 +38,9 @@ export default function MovieDetailScreen({ route }: any) {
     load();
   }, [movieID]);
 
-  const trailerKey = GetMovieYouTubeTrailerKey(movie?.videos);
+  const trailerKey = GetMovieYouTubeTrailerKey(movie?.videos || null);
 
   const sections = [
-    { type: "main" },
     { type: "actions" },
     { type: "genres" },
     { type: "providers" },
@@ -54,8 +54,6 @@ export default function MovieDetailScreen({ route }: any) {
 
   const renderItem = ({ item }: any) => {
     switch (item.type) {
-      case "main":
-        return <MainInfo movie={movie} inCinemas={inCinemas} />
       case "actions":
         return <ActionButtonsBlock
           movieID={movie?.id}
@@ -67,7 +65,7 @@ export default function MovieDetailScreen({ route }: any) {
       case "providers":
         return <ProvidersBlock providers={movie?.providers} />
       case "trailer":
-        return <TrailerBlock trailerKey={trailerKey} />
+        return <TrailerBlock trailerKey={trailerKey} />;
       case "overview":
         return <OverviewBlock text={movie?.overview} />
       case "detailes":
@@ -100,11 +98,12 @@ export default function MovieDetailScreen({ route }: any) {
 
   return (
     <ScreenBackground>
-      <FlashList
-        style={{ flex: 1, padding: "1%" }}
+      <FlatList
+        contentContainerStyle={{ padding: "1%" }}
         data={sections}
         renderItem={renderItem}
         showsVerticalScrollIndicator={false}
+        ListHeaderComponent={<MainInfo movie={movie} inCinemas={inCinemas} maximum={maximum} />}
       />
 
       <WatchlistSheet ref={sheetRef} setIsActive={(state) => setIsActive(state)} />

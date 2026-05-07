@@ -1,15 +1,14 @@
 import React, { useCallback, useState } from "react";
-import { KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard, StyleSheet } from "react-native";
+import { FlatList, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard, StyleSheet } from "react-native";
 import Header from "./components/HeaderBlock";
 import Input from "./components/Input";
 import { useFocusEffect } from "expo-router";
-import { RTClient, useChatMessages, useUserStatus } from "@/app/rt_client/rt_client";
+import { RTClient, useChatMessages } from "./../rt_client/rt_client";
 import TextMessage from "./components/TextMessage";
 import { getCurrentUserID } from "@/utils/utils";
 import FloatingButton from "./components/FloatingButton";
-import ScreenBackground from "@/components/ui/screen-background";
-import Spacer from "@/components/ui/spacer";
-import { FlashList } from "@shopify/flash-list";
+import ScreenBackground from "./../../components/ui/screen-background";
+import Spacer from "./../../components/ui/screen-background";
 import { useEditMode } from "./hooks";
 import EditHeader from "./components/EditHeader";
 
@@ -51,7 +50,7 @@ export default function DirectChatScreen({ route }: any) {
       >
         <ScreenBackground>
           {isEditMode ? <EditHeader /> : <Header chatID={chat?.info?.chat_id} peer={chat?.peer} />}
-          <FlashList
+          <FlatList
             onScroll={() => setFloatButtonVisible(true)}
             data={messages}
             keyExtractor={(item, _) => item?.message_id}

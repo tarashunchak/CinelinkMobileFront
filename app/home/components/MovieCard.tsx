@@ -9,7 +9,7 @@ import { Image } from "expo-image";
 export interface MovieCard_I {
   movie_id: number;
   poster_path: string;
-  maximum: string | null;
+  maximum?: string;
   inCinemas: boolean;
 }
 
@@ -21,6 +21,7 @@ export default function MovieCard({ data }: { data: MovieCard_I }) {
         {
           movieID: data?.movie_id,
           inCinemas: data?.inCinemas,
+          maximum: data?.maximum,
         }
       )}>
       <View>

@@ -1,6 +1,7 @@
 import React from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { Text, View } from "react-native";
 import { textStyle } from "@/styles/textStyles";
+import { PressableScale } from "react-native-pressable-scale";
 
 export default function ActionButtonsBlock({ movieID, onAddToWatchlist, onRecommend }
   : {
@@ -10,16 +11,16 @@ export default function ActionButtonsBlock({ movieID, onAddToWatchlist, onRecomm
   }) {
   return (
     <View style={styles.view}>
-      <TouchableOpacity style={[styles.buttonView, styles.markAsWatchedBtn]}
+      <PressableScale style={[styles.buttonView, styles.markAsWatchedBtn]}
         onPress={onAddToWatchlist}>
         <Text style={styles.buttonText}>Add to Watchlist</Text>
-      </TouchableOpacity>
+      </PressableScale>
 
-      <TouchableOpacity style={[styles.buttonView, styles.shareBtn]}
+      <PressableScale style={[styles.buttonView, styles.shareBtn]}
         onPress={onRecommend}
       >
         <Text style={styles.buttonText}>Recommend</Text>
-      </TouchableOpacity>
+      </PressableScale>
     </View >
   )
 }

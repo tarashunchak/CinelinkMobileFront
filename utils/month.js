@@ -1,4 +1,3 @@
-
 export const MONTH = {
   "01": "Jan",
   "02": "Feb",
@@ -12,4 +11,4 @@ export const MONTH = {
   "10": "Oct",
   "11": "Nov",
   "12": "Dec"
-}
+};

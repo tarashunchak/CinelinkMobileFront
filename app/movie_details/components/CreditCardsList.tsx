@@ -7,10 +7,11 @@ export default function CreditCardsList(
   { movieID, credits, poster_path }:
     {
       movieID: number,
-      credits: any[],
+      credits?: any[],
       poster_path: string
     }
 ) {
+  if (!credits) credits = Array.from({ length: 10 })
   return (
     <FlatList
       horizontal
@@ -18,12 +19,6 @@ export default function CreditCardsList(
       data={credits}
       keyExtractor={(item: any, index: number) => String(index)}
       renderItem={({ item }) => <CreditCard credit={item} />}
-      ListFooterComponent={
-        <EmptyCreditCard
-          movieID={movieID}
-          poster_path={poster_path}
-        />
-      }
     />
   )
 }

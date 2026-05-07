@@ -3,7 +3,6 @@ import { FlatList, StyleSheet } from "react-native";
 import MovieCard from "./MovieCard";
 import { Movie_I } from "../models/movie";
 import EmptyMovieCard from "./EmptyMovieCard";
-import { FlashList } from "@shopify/flash-list";
 import { Skeleton } from "react-native-skeletons";
 
 export default function HorizontalMoviesList(
@@ -17,18 +16,18 @@ export default function HorizontalMoviesList(
 
   useEffect(() => {
     async function loadContent() {
-      if (moviesList.length > 0)
+      if (moviesList.length)
         setMovies([...moviesList])
     }
     loadContent();
   }, [moviesList]);
 
   return (
-    <FlashList
+    <FlatList
       style={styles.flatList}
       horizontal
       data={movies}
-      keyExtractor={(_, index) => String(index)}
+      keyExtractor={(item, _) => String(item?.id)}
       renderItem={({ item }) => (
         item ?
           <MovieCard

@@ -3,6 +3,7 @@ import { Linking, Text, TouchableOpacity, View } from "react-native";
 import { textStyle } from "@/styles/textStyles";
 import InfoRow from "./InfoRow";
 import { Movie } from "../types";
+import { Skeleton } from "react-native-skeletons";
 
 interface Credits {
   cast: any[];
@@ -19,7 +20,7 @@ interface MovieInfo {
 };
 
 export default function InfoBlock({ movieInfo }: { movieInfo: Movie | undefined }) {
-  if (!movieInfo) return null
+  if (!movieInfo) return <Skeleton style={styles.mainView} />
   return (
     <View style={styles.mainView}>
       <InfoRow left="Year" right={movieInfo?.release_date?.slice(0, 4)} />

@@ -80,6 +80,8 @@ const styles = StyleSheet.create({
     width: hp("13%"),
     aspectRatio: 1,
     borderRadius: 4,
+    borderWidth: 0.5,
+    borderColor: "#909090",
   },
   infoView: {
     height: hp("15%"),

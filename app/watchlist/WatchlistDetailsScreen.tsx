@@ -13,16 +13,17 @@ import { FlashList } from "@shopify/flash-list";
 import MovieCard from "./components/MovieCard";
 import { textStyle } from "@/styles/textStyles";
 import Spacer from "@/components/ui/spacer";
+import { Skeleton } from "react-native-skeletons";
 
 export default function WatchlistDetailsScreen({ route }: any) {
-  const [movies, setMovies] = useState<any>();
   const watchlist = route?.params?.watchlist;
+  const [movies, setMovies] = useState<any[]>(Array.from({ length: watchlist.movies_quantity }));
 
   const navigator = useNavigation();
   useEffect(() => {
     async function loadWatchlistMovies() {
       const movies = await GetWatchlistMovies(watchlist?.id);
-      setMovies(movies);
+      if (movies?.length) setMovies(movies);
     }
     loadWatchlistMovies();
   }, []);
@@ -31,7 +32,7 @@ export default function WatchlistDetailsScreen({ route }: any) {
     <ScreenBackground>
       <FlashList
         data={movies}
-        keyExtractor={(item, index) => String(item?.imdb_id)}
+        keyExtractor={(item, _) => String(item?.imdb_id)}
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={() => (
           <View>
@@ -55,7 +56,8 @@ export default function WatchlistDetailsScreen({ route }: any) {
           </View>
         )}
         renderItem={({ item }) => (
-          <MovieCard movie={item} />
+          item ? <MovieCard movie={item} />
+            : <Skeleton />
         )}
         ListEmptyComponent={
           <Text

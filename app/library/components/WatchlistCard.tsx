@@ -5,6 +5,7 @@ import { textStyle } from "@/styles/textStyles";
 import { useNavigation } from "expo-router";
 import { PressableScale } from "react-native-pressable-scale";
 import { Image } from "expo-image";
+import { Skeleton } from "react-native-skeletons";
 
 export type Watchlist = {
   id: number;

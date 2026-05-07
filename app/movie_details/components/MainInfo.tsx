@@ -1,80 +1,92 @@
 import React, { useState } from "react";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
-import { Image, ImageBackground, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import ReturnArrowButton from "@/components/ui/returnArrowButton";
 import { textStyle } from "@/styles/textStyles";
-import { useNavigation } from "expo-router";
 import InfoBlock from "./InfoBlock";
 import { Movie } from "../types";
 import { PressableScale } from "react-native-pressable-scale";
 import PosterModal from "./PosterModal";
+import { MONTH } from "@/utils/month";
+import { Skeleton } from "react-native-skeletons";
+import { Image } from "expo-image";
 
 export default function MainInfo(
-  { movie, inCinemas = false }
+  { movie, inCinemas = false, maximum }
     : {
-      movie: Movie,
+      movie?: Movie,
       inCinemas: boolean,
+      maximum?: string,
     }
 ) {
-  const maximum = null;
-  const navigation = useNavigation();
   const backdropPath = movie?.images?.backdrops[movie?.images?.backdrops?.length - 1]?.file_path;
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
+  const poster = (
+    <>
+      <Image
+        source={{ uri: "https://image.tmdb.org/t/p/w300" + movie?.poster_path }}
+        style={styles.posterImage}
+        cachePolicy="memory-disk"
+      />
+      {
+        inCinemas && maximum && (
+          <View style={styles.inCinemasStripe}>
+            <Text style={[textStyle.white12, styles.inCinemasStripeText]}>
+              {`In cinemas till ${maximum?.slice(8, 10) + ' ' + MONTH[maximum.slice(5, 7)]}`}
+            </Text>
+          </View>
+        )
+      }
+    </>
+  )
+
   return (
     <View>
-      <ReturnArrowButton style={{ marginTop: "5%", zIndex: 2 }} onPress={() => navigation.goBack()} />
-      <ImageBackground
+      <ReturnArrowButton style={{ marginTop: "5%", zIndex: 2 }} />
+      <Image
         source={{ uri: `https://image.tmdb.org/t/p/w500${backdropPath}` }}
-        style={styles.backdrop}>
-        <View style={styles.darkRect}>
-          <View style={{ flexDirection: "column", marginLeft: "3%", marginTop: "20%", justifyContent: "space-between" }}>
+        style={styles.backdrop}
+        cachePolicy="memory-disk"
+      />
+      <View style={styles.darkRect}>
+        <View style={{ flexDirection: "column", marginLeft: "3%", marginTop: "20%", justifyContent: "space-between" }}>
 
-            <Text style={[textStyle.white26, { marginTop: "5%" }]}
-              numberOfLines={1}
-              ellipsizeMode="tail"
+          <Text style={[textStyle.white26, { marginTop: "5%" }]}
+            numberOfLines={1}
+            ellipsizeMode="tail"
+          >
+            {movie?.title}
+          </Text>
+
+          <View style={
+            {
+              flexDirection: "row",
+              marginTop: "3%",
+              width: "90%",
+              height: 220,
+              justifyContent: "space-between"
+            }
+          }>
+
+            <PressableScale
+              onPress={() => { setIsOpen(true); }}
+              style={styles.posterView}
             >
-              {movie?.title}
-            </Text>
-
-            <View style={
-              {
-                flexDirection: "row",
-                marginTop: "3%",
-                width: "90%",
-                height: 220,
-                justifyContent: "space-between"
-              }
-            }>
-
-              <PressableScale
-                onPress={() => { setIsOpen(true); }}
-                style={styles.posterView}
-              >
-                <Image
-                  source={{ uri: "https://image.tmdb.org/t/p/w300" + movie?.poster_path }}
-                  style={styles.posterImage} />
-                {
-                  inCinemas && (
-                    <View style={styles.inCinemasStripe}>
-                      <Text style={[textStyle.white12, styles.inCinemasStripeText]}>
-                        {`In cinemas till ${maximum && (maximum?.slice(3, 5) + ' ' + MONTH[maximum.slice(0, 2)])}`}
-                      </Text>
-                    </View>
-                  )
-                }
-              </PressableScale>
-              <InfoBlock movieInfo={movie} />
-            </View>
+              {movie ? poster : <Skeleton style={styles.posterImage} />}
+            </PressableScale>
+            <InfoBlock movieInfo={movie} />
           </View>
         </View>
-      </ImageBackground >
-      <PosterModal
-        isOpen={isOpen}
-        posterUrl={movie?.poster_path}
-        onClose={() => { setIsOpen(false) }}
-      />
+      </View>
+      {
+        movie && <PosterModal
+          isOpen={isOpen}
+          posterUrl={movie?.poster_path}
+          onClose={() => { setIsOpen(false) }}
+        />
+      }
     </View >
   )
 }
@@ -82,16 +94,18 @@ export default function MainInfo(
 const styles = StyleSheet.create({
   backdrop: {
     height: hp("40%"),
-    width: "104%",
     marginLeft: "-3%",
-    marginRight: "-3%",
     marginTop: "-25%",
+    marginBottom: "5%",
   },
   darkRect: {
     backgroundColor: "rgba(0, 0, 0, 0.75)",
     marginRight: "-2%",
-    marginTop: "1%",
+    marginTop: "-2%",
     height: hp("40%"),
+    position: "absolute",
+    margin: "-2%",
+    width: "104%",
   },
   posterView: {
     width: "42%",

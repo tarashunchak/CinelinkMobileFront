@@ -5,10 +5,12 @@ import { Movie } from "../../movie_details/types";
 import { useNavigation } from "expo-router";
 import GenresLayout from "./genresLayout";
 import { PressableScale } from "react-native-pressable-scale";
+import { Skeleton } from "react-native-skeletons";
 
 
 export default function MovieCard({ movie }: { movie: Movie }) {
   const navigator = useNavigation();
+  if (!movie) return <Skeleton height={118} width={"100%"} style={styles.backgroundStyle} />
   return (
     <PressableScale
       activeScale={0.98}

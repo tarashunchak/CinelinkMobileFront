@@ -29,7 +29,6 @@ const WatchlistSheet = forwardRef<WatchlistSheetRef, WatchlistSheetProps>(({ set
     async function loadContent() {
       const data = await GetUserWatchlists(getCurrentUserID());
       if (data) setWatchlists(data);
-      console.warn("WATCHLISTS: ", data);
     };
     loadContent();
   }, [state]);

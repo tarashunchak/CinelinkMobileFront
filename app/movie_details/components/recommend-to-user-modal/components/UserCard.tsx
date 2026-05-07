@@ -48,9 +48,11 @@ const notPicked = StyleSheet.create({
   view: {
     height: wp(22),
     width: wp(22),
-    margin: wp(6.3333 / 2),
+    margin: wp(11.3333 / 2),
     borderRadius: 999,
-    opacity: 0.4,
+    opacity: 0.3,
+    borderColor: "#909090",
+    borderWidth: 0.5,
   },
   img: {
     flex: 1,
@@ -62,7 +64,7 @@ const picked = StyleSheet.create({
   view: {
     height: wp(22),
     width: wp(22),
-    margin: wp(6.3333 / 2),
+    margin: wp(11.3333 / 2),
     borderRadius: 999,
     borderColor: "#909090",
     borderWidth: 2,

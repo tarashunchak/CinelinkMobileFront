@@ -25,12 +25,12 @@ export default function MessageContainer({
       style={isSelected ? picked.mainView : notPicked.mainView}
       onPress={() => {
         if (isEditMode) {
-          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+          //Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
         }
       }}
       onLongPress={() => {
         if (!isEditMode) {
-          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+          //Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
           enable();
         }
       }

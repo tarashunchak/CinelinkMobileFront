@@ -75,9 +75,9 @@ export default function MovieDetailScreen({ route }: any) {
           movieGenre={movie?.genres?.[0]?.id}
         />
       </ScrollView >
-      <WatchlistSheet ref={sheetRef} setIsActive={setIsActive} />
-      <UserSheet ref={userSheetRef} setIsActive={setIsActiveUsers} />
-      {isActive || isActiveUsers && <BottomBar />}
+      <WatchlistSheet ref={sheetRef} setIsActive={(state) => setIsActive(state)} />
+      <UserSheet ref={userSheetRef} setIsActive={(state) => setIsActiveUsers(state)} />
+      {(isActive || isActiveUsers) && <BottomBar />}
     </ScreenBackground>
   );
 }

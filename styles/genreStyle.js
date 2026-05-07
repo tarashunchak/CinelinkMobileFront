@@ -25,6 +25,7 @@ export const genreStyle = {
     marginRight: 6,
     borderWidth: 1,
     justifyContent: "center",
+    backgroundColor: "rgba(255, 255, 255, 0.05)",
   },
   genreCellText: {
     fontFamily: "sans-serif-condensed",

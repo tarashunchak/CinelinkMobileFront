@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useEffect, useMemo } from "react";
 import { textStyle } from "@/styles/textStyles";
-import { Text, View, Image, ImageBackground, Modal, StyleSheet } from "react-native";
+import { Text, View, ImageBackground, Modal, StyleSheet } from "react-native";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import * as ImagePicker from "expo-image-picker";
 import { useState } from "react";
 import { PressableScale } from "react-native-pressable-scale";
+import { Image } from "expo-image";
+import { Skeleton } from "react-native-skeletons";
 
 interface Props {
   isOpen: boolean;
@@ -15,6 +17,22 @@ interface Props {
 
 export default function ProfilePhotoModal({ isOpen, avatarUrl, onClose, isCurrentUser }: Props) {
   const [avatarUri, setAvatarUri] = useState<string>(avatarUrl)
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
+
+  const avatar = useMemo(() => {
+    if (isLoaded)
+      return (
+        <View style={styles.avatarView}>
+          <Image
+            source={{ uri: avatarUri }}
+            style={styles.avatarImage}
+            cachePolicy="memory-disk"
+            onLoadEnd={() => setIsLoaded(true)} />
+        </View>
+      );
+
+    return <Skeleton style={styles.avatarView} />;
+  }, [isLoaded])
 
   return (
     <Modal
@@ -44,7 +62,8 @@ export default function ProfilePhotoModal({ isOpen, avatarUrl, onClose, isCurren
             <Image
               source={{ uri: avatarUri }}
               style={styles.avatarImage}
-            />
+              cachePolicy="memory-disk"
+              onLoadEnd={() => setIsLoaded(true)} />
           </View>
           {
             isCurrentUser &&
@@ -85,6 +104,7 @@ const styles = StyleSheet.create({
     borderRadius: 999,
     borderColor: "rgba(255, 255, 255, 0.5)",
     borderWidth: 0.5,
+    backgroundColor: "rgba(255, 255, 255, 0.05)",
   },
   avatarImage: {
     width: "100%",

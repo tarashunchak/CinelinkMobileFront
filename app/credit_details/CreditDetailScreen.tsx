@@ -2,13 +2,12 @@ import { getFilmographyByPerson } from "@/api/tmdbApi";
 import BottomBar from "@/app/bars/bottomBar";
 import { useNavigation } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { ScrollView, View } from "react-native";
 import BiographyModal from "./components/BiographyModal";
 import PhotosModal from "./components/PhotosModal";
 import MainInfo from "./components/MainInfo";
 import ActionButtonsBlock from "./components/ActionButtonsBlock";
 import ScreenBackground from "@/components/ui/screen-background";
-import { FlashList } from "@shopify/flash-list";
+import { FlatList } from "react-native-gesture-handler";
 
 export default function CreditDetailScreen({ route }: any) {
   const { creditID } = route?.params;
@@ -37,7 +36,6 @@ export default function CreditDetailScreen({ route }: any) {
   }, []);
 
   const sections = [
-    { type: "main" },
     { type: "actions" },
     { type: "bio" },
     { type: "photos" },
@@ -45,8 +43,6 @@ export default function CreditDetailScreen({ route }: any) {
 
   const renderItem = ({ item }: any) => {
     switch (item.type) {
-      case "main":
-        return <MainInfo credit={credit} backdrop={backdrop} />;
       case "actions":
         return <ActionButtonsBlock />;
       case "bio":
@@ -58,10 +54,12 @@ export default function CreditDetailScreen({ route }: any) {
 
   return (
     <ScreenBackground>
-      <FlashList
+      <FlatList
         data={sections}
         renderItem={renderItem}
         showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ padding: "1%", }}
+        ListHeaderComponent={<MainInfo credit={credit} backdrop={backdrop} />}
       />
       <BottomBar />
     </ScreenBackground>

@@ -1,5 +1,4 @@
 import { API_URL } from "@/api/API_CONFIG";
-import { Movie } from "../types";
 
 export async function GetMovieDetails(movieID: number) {
   const response = await fetch(`${API_URL}/movies/${movieID}`);

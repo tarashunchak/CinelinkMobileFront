@@ -1,15 +1,11 @@
 import { getMoviesByGenre, getPopularMovies, getSimilarMovies } from "@/api/tmdbApi";
 import { getCurrentGenre, setCurrentGenre } from "@/utils/homePage";
 import { nowPlayingMoviesId } from "@/utils/nowPlaying";
-import { movieCardStyle } from "@/styles/movieCardStyle";
 import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
-import { Linking, Platform, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Platform, StyleSheet, View } from "react-native";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { Float } from "react-native/Libraries/Types/CodegenTypes";
-import { textStyle } from "../../styles/textStyles";
-import { PressableScale } from "react-native-pressable-scale";
-import { Image } from "expo-image";
 import MovieCard from "./movie-card";
 
 interface Genre {

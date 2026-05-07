@@ -1,47 +1,44 @@
 import { getMovieGenres } from "@/api/tmdbApi";
 import { genreStyle, genresInfo } from "@/styles/genreStyle";
 import React, { useEffect, useState } from "react";
-import { TouchableOpacity, Pressable, ScrollView, Text, View } from "react-native";
+import { TouchableOpacity, Pressable, ScrollView, Text, View, FlatList } from "react-native";
+import { PressableScale } from "react-native-pressable-scale";
+import { Skeleton } from "react-native-skeletons";
 
 
 export default function GenresList({ setSelectedGenre }: { setSelectedGenre: (icon: number) => void }) {
-  let [genreItems, setGenres] = useState<any[]>([]);
+  let [genreItems, setGenres] = useState<any[]>(Array.from({ length: 6 }));
 
   useEffect(() => {
     async function loadMovies() {
       const data = await getMovieGenres();
-      if (!data) return;
-
-      setGenres(data);
+      if (data)
+        setGenres([{ name: "All" }, ...data]);
     }
     loadMovies();
   }, []);
 
   return (
     <View style={genreStyle.genreCellView}>
-      <ScrollView horizontal={true}
+      <FlatList
+        data={genreItems}
+        horizontal={true}
         style={{ width: "100%", margin: 0, borderRadius: 22, height: 44, backgroundColor: "rgba(255, 255, 255, 0.03)" }}
         contentContainerStyle={{ paddingHorizontal: 10 }}
         showsHorizontalScrollIndicator={false}
-      >
-        {[
-          (<Pressable key={0} style={[genreStyle.genreCell, { backgroundColor: genresInfo["All"].color, borderColor: genresInfo["All"]?.borderColor }]} onPress={() => { setSelectedGenre(0); }}>
-            <Text style={[genreStyle.genreCellText]}>{"All"}</Text>
-          </Pressable>)
-          ,
-          genreItems.map((genre, index) => {
-            const name = genre.name;
-            return (
-              <TouchableOpacity key={genre?.id || index}
-                style={[genreStyle.genreCell, { backgroundColor: genresInfo[genre.name].color, borderColor: genresInfo[genre.name]?.borderColor }]}
-                onPress={() => { console.log(`Genre: ${genre.id}\n`); setSelectedGenre(genre?.id); }}
-              >
-                <Text style={[genreStyle.genreCellText]}>{name}</Text>
-              </TouchableOpacity>
-            )
-          })
-        ]}
-      </ScrollView>
-    </View>
+        keyExtractor={(item: any, index: number) => String(item?.id ?? index)}
+        renderItem={({ item }) => {
+          if (!item) return <Skeleton style={genreStyle.genreCell} />
+          return (
+            <PressableScale
+              style={[genreStyle.genreCell, { backgroundColor: genresInfo[item?.name]?.color, borderColor: genresInfo[item?.name]?.borderColor }]}
+              onPress={() => { console.log(`Genre: ${item?.id}\n`); setSelectedGenre(item?.id); }}
+            >
+              <Text style={[genreStyle.genreCellText]}>{item?.name}</Text>
+            </PressableScale>
+          )
+        }}
+      />
+    </View >
   )
 }

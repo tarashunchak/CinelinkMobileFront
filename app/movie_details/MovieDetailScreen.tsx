@@ -17,7 +17,6 @@ import { GetMovieYouTubeTrailerKey, LoadMovieDetails } from "./services/services
 import WatchlistSheet, { WatchlistSheetRef } from "./components/add-to-watchlist-modal/AddToWatchlistModal";
 import ScreenBackground from "@/components/ui/screen-background";
 import UserSheet, { UserSheetRef } from "./components/recommend-to-user-modal/RecommendToUser";
-import { FlashList } from "@shopify/flash-list";
 import { FlatList } from "react-native-gesture-handler";
 
 export default function MovieDetailScreen({ route }: any) {

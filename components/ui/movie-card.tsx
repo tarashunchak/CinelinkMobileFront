@@ -4,7 +4,6 @@ import { Linking, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import { Image } from "expo-image";
 import { useNavigation } from "expo-router";
 import { textStyle } from "@/styles/textStyles";
-import { text } from "node:stream/consumers";
 import { Skeleton } from "react-native-skeletons";
 
 export interface MovieCard_I {

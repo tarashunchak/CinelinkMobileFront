@@ -1,10 +1,11 @@
 import { useNavigation } from "expo-router";
-import React from "react";
+import React, { memo } from "react";
 import { Text, View, StyleSheet } from "react-native";
 import { textStyle } from "@/styles/textStyles";
 import { MONTH } from "@/utils/month";
 import { PressableScale } from "react-native-pressable-scale";
 import { Image } from "expo-image";
+import { Skeleton } from "react-native-skeletons";
 
 export interface MovieCard_I {
   movie_id: number;
@@ -13,8 +14,9 @@ export interface MovieCard_I {
   inCinemas: boolean;
 }
 
-export default function MovieCard({ data }: { data: MovieCard_I }) {
+function MovieCard({ data }: { data: MovieCard_I }) {
   const navigator = useNavigation();
+  if (!data) return <Skeleton style={styles.view} />
   return (
     <PressableScale style={styles.view}
       onPress={() => navigator?.push("MovieDetailScreen",
@@ -41,7 +43,9 @@ export default function MovieCard({ data }: { data: MovieCard_I }) {
       </View>
     </PressableScale >
   )
-}
+};
+
+export default memo(MovieCard);
 
 const styles = StyleSheet.create({
   view: {

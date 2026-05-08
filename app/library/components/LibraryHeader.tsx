@@ -9,7 +9,7 @@ import { heightPercentageToDP as hp, widthPercentageToDP } from "react-native-re
 export default function LibraryHeader() {
   const navigator = useNavigation();
   return (
-    <View style={styles.view}>
+    <View style={stylesR.view}>
       <View style={styles.left.view}>
         <TouchableOpacity
           onPress={() => navigator?.navigate(
@@ -41,23 +41,15 @@ export default function LibraryHeader() {
 
 const stylesR = StyleSheet.create({
   view: {
-    backgroundColor: "rgba(255, 255, 255, 0.05)",
+    backgroundColor: "rgba(90, 90, 90, 1)",
     height: hp("12%"),
     width: widthPercentageToDP("100%"),
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     padding: "2%",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 10,
-    },
-    shadowOpacity: 0.51,
-    shadowRadius: 13.16,
-
-    elevation: 24,
-  }
+    marginBottom: "2%",
+  },
 });
 
 const styles = {

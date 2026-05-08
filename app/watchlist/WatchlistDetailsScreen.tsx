@@ -14,6 +14,7 @@ import MovieCard from "./components/MovieCard";
 import { textStyle } from "@/styles/textStyles";
 import Spacer from "@/components/ui/spacer";
 import { Skeleton } from "react-native-skeletons";
+import { FlatList } from "react-native-gesture-handler";
 
 export default function WatchlistDetailsScreen({ route }: any) {
   const watchlist = route?.params?.watchlist;
@@ -32,7 +33,7 @@ export default function WatchlistDetailsScreen({ route }: any) {
     <ScreenBackground>
       <FlashList
         data={movies}
-        keyExtractor={(item, _) => String(item?.imdb_id)}
+        keyExtractor={(item, index) => String(item?.imdb_id ?? index)}
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={() => (
           <View>
@@ -47,7 +48,7 @@ export default function WatchlistDetailsScreen({ route }: any) {
                 <Image
                   source={require("@/app/watchlist/assets/InfoIcon.png")}
                   style={styles.infoBtnImage}
-                  cachePolicy="disk"
+                  cachePolicy="memory"
                 />
               </PressableScale>
             </View>
@@ -56,8 +57,7 @@ export default function WatchlistDetailsScreen({ route }: any) {
           </View>
         )}
         renderItem={({ item }) => (
-          item ? <MovieCard movie={item} />
-            : <Skeleton />
+          <MovieCard movie={item} />
         )}
         ListEmptyComponent={
           <Text

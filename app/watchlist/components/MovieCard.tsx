@@ -1,6 +1,6 @@
 import { textStyle } from "@/styles/textStyles";
-import React from "react";
-import { Linking, TouchableOpacity, View, Text, Image } from "react-native";
+import React, { memo } from "react";
+import { Linking, TouchableOpacity, View, Text, Image, StyleSheet } from "react-native";
 import { Movie } from "../../movie_details/types";
 import { useNavigation } from "expo-router";
 import GenresLayout from "./genresLayout";
@@ -8,9 +8,10 @@ import { PressableScale } from "react-native-pressable-scale";
 import { Skeleton } from "react-native-skeletons";
 
 
-export default function MovieCard({ movie }: { movie: Movie }) {
+function MovieCard({ movie }: { movie: Movie | null }) {
   const navigator = useNavigation();
   if (!movie) return <Skeleton height={118} width={"100%"} style={styles.backgroundStyle} />
+
   return (
     <PressableScale
       activeScale={0.98}
@@ -43,14 +44,14 @@ export default function MovieCard({ movie }: { movie: Movie }) {
           </Text>
         </View>
 
-        <TouchableOpacity style={styles.imdbText.view}
+        <TouchableOpacity style={styles.imdbView}
           onPress={async () => {
             const url = `https://www.imdb.com/title/${movie?.imdb_id}`;
             const sup = await Linking.canOpenURL(url);
             if (sup) Linking.openURL(url);
           }}
         >
-          <Text style={styles.imdbText.text}>
+          <Text style={styles.imdbText}>
             {`IMDb: ${movie?.imdb_rating?.toFixed(1)}`}
           </Text>
         </TouchableOpacity>
@@ -61,7 +62,9 @@ export default function MovieCard({ movie }: { movie: Movie }) {
   );
 };
 
-const styles = {
+export default memo(MovieCard);
+
+const styles = StyleSheet.create({
   backgroundStyle: {
     backgroundColor: "rgba(255, 255, 255, 0.03)",
     borderWidth: 0.5,
@@ -97,21 +100,19 @@ const styles = {
     fontFamily: "sans-serif-condensed",
     marginTop: 2,
   },
+  imdbView: {
+    backgroundColor: "#deb522",
+    height: 20,
+    borderRadius: 4,
+    width: 64,
+    flexDirection: "column",
+    justifyContent: "center"
+  },
   imdbText: {
-    view: {
-      backgroundColor: "#deb522",
-      height: 20,
-      borderRadius: 4,
-      width: 64,
-      flexDirection: "column",
-      justifyContent: "center"
-    },
-    text: {
-      textAlign: "center",
-      fontSize: 12,
-      color: "black",
-      fontWeight: "bold",
-    }
+    textAlign: "center",
+    fontSize: 12,
+    color: "black",
+    fontWeight: "bold",
   },
   moviePosterStyle: {
     width: 73,
@@ -120,4 +121,4 @@ const styles = {
     borderWidth: 1,
     borderColor: "rgba(255, 255, 255, 0.1)",
   },
-};
+});

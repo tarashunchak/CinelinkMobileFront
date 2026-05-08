@@ -1,12 +1,11 @@
 import React, { useState, useCallback } from "react";
-import { FlatList, ImageBackground, ScrollView, View } from "react-native";
+import { FlatList, View } from "react-native";
 import BottomBar from "../bars/bottomBar";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen"
-import { viewStyle } from "@/styles/viewStyle";
 import { textStyle } from "@/styles/textStyles";
 import { GetUserWatchlists } from "@/api/watchlist/watchlist";
 import WatchlistCard from "./components/WatchlistCard";
-import LibraryHeader from "./components/Header";
+import LibraryHeader from "./components/LibraryHeader";
 import { useFocusEffect, useNavigation } from "expo-router";
 import ScreenBackground from "@/components/ui/screen-background";
 
@@ -18,8 +17,7 @@ export default function WatchlistsScreen() {
     useCallback(() => {
       async function loadWatchlists() {
         const data = await GetUserWatchlists(1);
-        if (!data) return;
-        setWatchlists(data);
+        if (data) setWatchlists(data);
       }
 
       loadWatchlists();
@@ -27,26 +25,22 @@ export default function WatchlistsScreen() {
   )
 
   return (
-    <View style={{ flex: 1 }}>
-      <ScreenBackground>
-        <LibraryHeader />
-        <FlatList
-          data={watchlists}
-          keyExtractor={(_: any, index: number) => String(index)}
-          ItemSeparatorComponent={(<View style={{ height: 5 }}></View>)}
-          renderItem={({ item }) =>
-            <WatchlistCard watchlist={item} />
-          }
-          ListHeaderComponent={
-            <View style={{ height: 10 }}></View>
-          }
-          ListFooterComponent={
-            <View style={{ height: hp(14) }}></View>
-          }
-        />
-      </ScreenBackground>
+    <ScreenBackground>
+      <FlatList
+        data={watchlists}
+        keyExtractor={(item: any, index: number) => String(item?.id ?? index)}
+        renderItem={({ item }) =>
+          <WatchlistCard watchlist={item} />
+        }
+        ListHeaderComponent={
+          <LibraryHeader />
+        }
+        ListFooterComponent={
+          <View style={{ height: hp(14) }}></View>
+        }
+      />
       <BottomBar />
-    </View>
+    </ScreenBackground>
   );
 }
 

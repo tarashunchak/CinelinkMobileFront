@@ -1,7 +1,7 @@
 import { CommonActions } from "@react-navigation/native";
 import { useNavigation } from "expo-router";
-import React from "react";
-import { Text } from "react-native";
+import React, { memo } from "react";
+import { StyleSheet, Text } from "react-native";
 import { PressableScale } from "react-native-pressable-scale";
 import { Image } from "expo-image";
 import { textStyle } from "@/styles/textStyles";
@@ -14,26 +14,40 @@ const icons = {
   library: require('@/app/bars/assets/bookmark.png'),
 };
 
-const styles = {
-  alignItems: "center",
-}
+const styles = StyleSheet.create({
+  main: {
+    alignItems: "center",
+  },
+  image: {
+    width: 28,
+    height: 28,
+  },
+});
 
-export default function BottomBarIconButton({ source, navigateTo, style }: { source: string, navigateTo: string, style: any }) {
+function BottomBarIconButton({ source, navigateTo }: { source: string, navigateTo: string }) {
   const navigator = useNavigation();
 
   return (
     <PressableScale
       activeScale={0.9}
       onPress={() => {
-        navigator.dispatch(
+        navigator.jumpTo(navigateTo);
+        /*navigator.dispatch(
           CommonActions.reset({
             index: 0,
             routes: [{ name: navigateTo }]
           })
-        );
-      }} style={style || styles}>
-      <Image source={icons[source]} style={{ width: 28, height: 28 }}></Image>
+        );*/
+      }} style={styles.main}>
+      <Image
+        source={icons[source]}
+        style={styles.image}
+        cachePolicy="memory"
+      />
       <Text style={textStyle.gray12}>{source}</Text>
     </PressableScale>
   )
-}
+};
+
+
+export default memo(BottomBarIconButton);

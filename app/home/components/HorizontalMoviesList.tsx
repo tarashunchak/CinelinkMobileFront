@@ -3,7 +3,6 @@ import { FlatList, StyleSheet } from "react-native";
 import MovieCard from "./MovieCard";
 import { Movie_I } from "../models/movie";
 import EmptyMovieCard from "./EmptyMovieCard";
-import { Skeleton } from "react-native-skeletons";
 
 export default function HorizontalMoviesList(
   { moviesList, inCinemas }:
@@ -29,15 +28,14 @@ export default function HorizontalMoviesList(
       data={movies}
       keyExtractor={(item, _) => String(item?.id)}
       renderItem={({ item }) => (
-        item ?
-          <MovieCard
-            data={{
-              movie_id: item?.id,
-              poster_path: item?.poster_path,
-              inCinemas,
-              maximum: item?.maximum,
-            }}
-          /> : <Skeleton height={"99%"} width={100} style={styles.skeleton} />
+        <MovieCard
+          data={{
+            movie_id: item?.id,
+            poster_path: item?.poster_path,
+            inCinemas,
+            maximum: item?.maximum,
+          }}
+        />
       )
       }
       ListFooterComponent={<EmptyMovieCard onPress={() => { }} />}

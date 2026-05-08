@@ -58,13 +58,7 @@ export default function ProfilePhotoModal({ isOpen, avatarUrl, onClose, isCurren
           >
             <Image style={{ height: "100%", width: "100%" }} source={require("@/app/profile/assets/Icon.png")} />
           </PressableScale>
-          <View style={styles.avatarView}>
-            <Image
-              source={{ uri: avatarUri }}
-              style={styles.avatarImage}
-              cachePolicy="memory-disk"
-              onLoadEnd={() => setIsLoaded(true)} />
-          </View>
+          {avatar}
           {
             isCurrentUser &&
             <PressableScale
@@ -121,6 +115,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     alignItems: "center",
     justifyContent: "center",
+    alignContent: "center",
   },
   editBtnImage: {
     height: 30,

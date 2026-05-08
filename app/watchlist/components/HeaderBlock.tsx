@@ -4,9 +4,11 @@ import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-nat
 import { textStyle } from "@/styles/textStyles";
 import { useNavigation } from "expo-router";
 import { Image } from "expo-image";
+import { Skeleton } from "react-native-skeletons";
 
 export default function HeaderBlock({ watchlist }: { watchlist: any }) {
   const navigator = useNavigation();
+  if (!watchlist) return <Skeleton style={styles.container} />;
   return (
     <View style={styles.container}>
       <View style={styles.mainView}>

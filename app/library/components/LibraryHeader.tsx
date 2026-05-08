@@ -3,15 +3,17 @@ import { textStyle } from "@/styles/textStyles";
 import { getCurrentUserID } from "@/utils/utils";
 import { useNavigation } from "expo-router";
 import React from "react";
-import { View, Text, Image, TouchableOpacity, Platform, StyleSheet } from "react-native";
+import { View, Text, Image, Platform, StyleSheet } from "react-native";
 import { heightPercentageToDP as hp, widthPercentageToDP } from "react-native-responsive-screen";
+import { PressableScale } from "react-native-pressable-scale";
 
 export default function LibraryHeader() {
   const navigator = useNavigation();
   return (
     <View style={stylesR.view}>
       <View style={styles.left.view}>
-        <TouchableOpacity
+        <PressableScale
+          activeScale={0.9}
           onPress={() => navigator?.navigate(
             "UserProfileScreen",
             {
@@ -22,18 +24,18 @@ export default function LibraryHeader() {
             style={styles.left.avatar}
             source={{ uri: useAuthStore.getState().user?.avatar_url }}
           />
-        </TouchableOpacity>
+        </PressableScale>
         <Text style={styles.left.text}>
           Your watchlists
         </Text>
       </View>
       <View style={styles.right.view}>
-        <TouchableOpacity>
+        <PressableScale>
           <Image style={styles.right.img} source={require("@/app/library/assets/icon.png")} />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigator.navigate("AddWatchlist")}>
+        </PressableScale>
+        <PressableScale onPress={() => navigator.navigate("AddWatchlist")}>
           <Image style={styles.right.img} source={require("@/app/library/assets/plus.png")} />
-        </TouchableOpacity>
+        </PressableScale>
       </View>
     </View>
   );

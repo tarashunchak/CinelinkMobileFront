@@ -10,24 +10,24 @@ import { Skeleton } from "react-native-skeletons";
 
 function MovieCard({ movie }: { movie: Movie | null }) {
   const navigator = useNavigation();
-  if (!movie) return <Skeleton height={118} width={"100%"} style={styles.backgroundStyle} />
+  if (!movie) return <Skeleton height={118} width={"100%"} style={styles.mainView} />
 
   return (
     <PressableScale
       activeScale={0.98}
-      style={[styles?.backgroundStyle]}
+      style={[styles?.mainView]}
       onPress={() => {
         navigator?.push("MovieDetailScreen",
           { movieID: movie?.movie_id });
       }}>
       <Image
         source={{ uri: `https://image.tmdb.org/t/p/w300${movie.poster_path}` }}
-        style={styles.moviePosterStyle}
+        style={styles.poster}
         pointerEvents="none"
       />
       <View style={{ flexDirection: "column", height: "100%", marginLeft: "4%", justifyContent: "space-evenly" }}>
         <View style={{ flexDirection: "row", justifyContent: "flex-start" }}>
-          <Text style={styles.movieTitleStyle}
+          <Text style={[...textStyle.white16, styles.titleText]}
             pointerEvents="none"
             numberOfLines={1}
             ellipsizeMode="tail"
@@ -36,7 +36,7 @@ function MovieCard({ movie }: { movie: Movie | null }) {
           </Text>
           <Text
             style={[
-              styles.movieYearStyle,
+              styles.yearText,
               textStyle.gray16
             ]}
             pointerEvents="none">
@@ -46,7 +46,7 @@ function MovieCard({ movie }: { movie: Movie | null }) {
 
         <TouchableOpacity style={styles.imdbView}
           onPress={async () => {
-            const url = `https://www.imdb.com/title/${movie?.imdb_id}`;
+            const url = `https://www.imdb.com/titleText/${movie?.imdb_id}`;
             const sup = await Linking.canOpenURL(url);
             if (sup) Linking.openURL(url);
           }}
@@ -65,7 +65,7 @@ function MovieCard({ movie }: { movie: Movie | null }) {
 export default memo(MovieCard);
 
 const styles = StyleSheet.create({
-  backgroundStyle: {
+  mainView: {
     backgroundColor: "rgba(255, 255, 255, 0.03)",
     borderWidth: 0.5,
     borderColor: "rgba(255, 255, 255, 0.20)",
@@ -78,23 +78,19 @@ const styles = StyleSheet.create({
     paddingLeft: "5%",
     flexDirection: "row",
   },
-  movieTitleStyle: {
-    fontSize: 16,
+  titleText: {
     marginTop: "-1%",
-    color: "white",
-    fontFamily: "sans-serif-condensed",
     minWidth: "1%",
     maxWidth: "75%",
-    textAlign: "left",
   },
-  movieYearStyle: {
+  yearText: {
     fontSize: 16,
     marginTop: "-1%",
     color: "white",
     fontFamily: "sans-serif-condensed",
     textAlign: "left",
   },
-  movieDirectorStyle: {
+  directorText: {
     fontSize: 12,
     color: "#ACACAC",
     fontFamily: "sans-serif-condensed",
@@ -114,7 +110,7 @@ const styles = StyleSheet.create({
     color: "black",
     fontWeight: "bold",
   },
-  moviePosterStyle: {
+  poster: {
     width: 73,
     height: "100%",
     borderRadius: 5,

@@ -1,24 +1,25 @@
-import React, { useState, useEffect, useMemo } from "react";
-import { View, FlatList } from "react-native";
+import React, { useState, useEffect, useCallback } from "react";
+import { View } from "react-native";
 import BottomBar from "../bars/bottomBar";
-import RecommendationCard, { RecommendedCard_T } from "./components/RecommendationCard";
-import DirectChatCard from "./components/DirectChatCard";
+import { RecommendedCard_T } from "./components/RecommendationsList";
+import ChatsList from "./components/DirectChatsList";
 import { RTClient } from "../rt_client/rt_client";
 import { getCurrentUserID } from "@/utils/utils";
 import { UserCard_T } from "../types/user";
-import FriendCard from "./components/FriendCard";
+import FriendsList from "./components/FriendsList";
 import { GetSocial } from "./services/services";
 import ScreenBackground from "@/components/ui/screen-background";
 import SocialPageTopBar from "./components/topBar";
 import Spacer from "@/components/ui/spacer";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
+import RecommendationsList from "./components/RecommendationsList";
 
 export default function SocialScreen() {
   const tabs = ["Friends", "Recommendations", "Activity", "Chats"];
   const [activeTab, setActiveTab] = useState(tabs[0]);
-  const [friends, setFriends] = useState<UserCard_T[]>([]);
+  const [friends, setFriends] = useState<UserCard_T[]>(Array.from({ length: 8 }));
   const [recommendations, setRecommendatoins] = useState<RecommendedCard_T[]>([]);
-  const [chats, setChats] = useState<any[]>([]);
+  const [chats, setChats] = useState<any[]>(Array.from({ length: 8 }));
   const [activity, setActivity] = useState<any[]>([]);
 
   useEffect(() => {
@@ -26,55 +27,35 @@ export default function SocialScreen() {
       await RTClient.setPageEntering("social", getCurrentUserID());
 
       const data = await GetSocial();
-      if (!data) return;
-      setFriends(data?.friends);
-      setRecommendatoins(data?.recommendations);
-      setChats(data?.chats);
-      console.warn("Chats: ", data?.chats);
+      if (data) {
+        setFriends(data?.friends);
+        setRecommendatoins(data?.recommendations);
+        setChats(data?.chats);
+      }
     };
 
     loadContent();
-  }, [])
+  }, []);
 
-
-  const renderItem = ({ item }: { item: any }) => {
+  const renderList = useCallback(() => {
     switch (activeTab) {
       case "Friends":
-        return <FriendCard friend={item} />;
+        return <FriendsList friends={friends} />
       case "Recommendations":
-        return <RecommendationCard item={item} />;
+        return <RecommendationsList items={recommendations} />
       case "Activity":
         return null;
       case "Chats":
-        return item?.chat_type === "direct" ?
-          <DirectChatCard item={item} />
-          : null;
-    };
-  };
-
-  const data = useMemo(() => {
-    switch (activeTab) {
-      case "Friends":
-        return friends;
-      case "Recommendations":
-        return recommendations;
-      case "Activity":
-        return activity;
-      case "Chats":
-        return chats;
+        return <ChatsList chats={chats} />;
     }
-  }, [activeTab]);
+  }, [activeTab, friends, chats, recommendations, activity]);
 
   return (
     <View style={{ flex: 1 }}>
       <ScreenBackground>
         <Spacer orientation="v" spacing={hp(5)} />
         <SocialPageTopBar onTabChange={(tab: string) => setActiveTab(tab)} />
-        <FlatList
-          data={data}
-          keyExtractor={(_, index) => String(index)}
-          renderItem={renderItem}
-        />
+        {renderList()}
       </ScreenBackground>
       <BottomBar />
     </View>

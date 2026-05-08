@@ -1,25 +1,26 @@
-import React from "react";
+import React, { memo, useCallback } from "react";
 import { textStyle } from "@/styles/textStyles";
-import { View, Text, Image, StyleSheet } from "react-native";
+import { FlatList, View, Text, Image, StyleSheet } from "react-native";
 import { PressableScale } from "react-native-pressable-scale";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { useNavigation } from "expo-router";
 import { RTClient, useChatLastMessage, useUserStatus, useUserTypingInChatStatus } from "@/app/rt_client/rt_client";
 import { useAuthStore } from "@/local_storage/user/asyncStorage/store";
 
-export default function DirectChatCard({ item }: { item: any }) {
+const DirectChatCard = memo(({ item }: { item: any }) => {
   const navigator = useNavigation();
   RTClient.createMessageStorage(item?.chat_id);
   RTClient.getChatMessages(item?.chat_id);
   RTClient.setChatEntering(item?.chat_id, useAuthStore.getState().user?.user_id ?? 1);
-  const isTyping = useUserTypingInChatStatus(3, item?.chat_id);
+  const peerID = item?.peer_id?.["Int32"];
+  const isTyping = useUserTypingInChatStatus(peerID, item?.chat_id);
   const lastMessage = useChatLastMessage(item?.chat_id);
-  const isOnline = useUserStatus(item?.peer_id?.["Int32"]);
+  const isOnline = useUserStatus(peerID);
 
   return (
     <PressableScale
       activeScale={0.98}
-      style={styles.view}
+      style={styles.mainView}
       onPress={() => {
         navigator?.navigate("DirectChatScreen", { chatID: item?.chat_id });
       }}
@@ -46,17 +47,34 @@ export default function DirectChatCard({ item }: { item: any }) {
       </View>
     </PressableScale>
   );
+});
+
+function ChatsList({ chats }: { chats: any[] }) {
+  const renderItem = useCallback(({ item }: any) => (
+    <DirectChatCard item={item} />
+  ), [chats]);
+
+  return (
+    <FlatList
+      data={chats}
+      keyExtractor={(item: any, index: number) => String(item?.user_id ?? index)}
+      renderItem={renderItem}
+      contentContainerStyle={styles.contentContainer}
+    />
+  );
 }
 
+export default memo(ChatsList)
+
 const styles = StyleSheet.create({
-  view: {
+  mainView: {
     flexDirection: "row",
     width: "100%",
     height: hp("8.5%"),
-    backgroundColor: "rgba(255, 255, 255, 0.05)",
+    backgroundColor: "rgba(255, 255, 255, 0.03)",
     borderColor: "rgba(255, 255, 255, 0.2)",
     borderWidth: 0.5,
-    borderRadius: 4,
+    borderRadius: 15,
     justifyContent: "space-between",
     paddingLeft: "3%",
     marginBottom: 5,
@@ -93,5 +111,8 @@ const styles = StyleSheet.create({
     bottom: 3,
     borderColor: "white",
     borderWidth: 1,
-  }
+  },
+  contentContainer: {
+    paddingHorizontal: "1%",
+  },
 });

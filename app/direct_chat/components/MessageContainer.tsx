@@ -17,7 +17,7 @@ export default function MessageContainer({
   const { enable, disable, toggle } = useEditMode(3);
 
   useEffect(() => {
-    console.warn("isEditMode: ", isEditMode)
+    //console.warn("isEditMode: ", isEditMode)
   }, []);
 
   return (
@@ -25,12 +25,13 @@ export default function MessageContainer({
       style={isSelected ? picked.mainView : notPicked.mainView}
       onPress={() => {
         if (isEditMode) {
-          //Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+          enable();
         }
       }}
       onLongPress={() => {
         if (!isEditMode) {
-          //Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
           enable();
         }
       }

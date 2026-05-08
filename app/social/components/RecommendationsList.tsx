@@ -1,7 +1,8 @@
 import { textStyle } from "@/styles/textStyles";
 import { useNavigation } from "expo-router";
-import React from "react";
+import React, { memo, useCallback } from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
+import { FlatList } from "react-native-gesture-handler";
 import { PressableScale } from "react-native-pressable-scale";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 
@@ -21,7 +22,7 @@ export type RecommendedCard_T = {
   recommended_by: RecommendedBy_T[];
 };
 
-export default function RecommendedCard({ item }: { item: RecommendedCard_T }) {
+const RecommendationItem = memo(({ item }: { item: RecommendedCard_T }) => {
   const navigation = useNavigation();
   return (
     <PressableScale
@@ -62,7 +63,24 @@ export default function RecommendedCard({ item }: { item: RecommendedCard_T }) {
       </View>
     </ PressableScale>
   );
+});
+
+function RecommendationsList({ items }: { items: RecommendedCard_T[] | any[] }) {
+  const renderItem = useCallback(({ item }: any) => (
+    <RecommendationItem item={item} />
+  ), [items]);
+
+  return (
+    <FlatList
+      data={items}
+      keyExtractor={(item: any, index: number) => String(item?.user_id ?? index)}
+      renderItem={renderItem}
+      contentContainerStyle={styles.contentContainer}
+    />
+  );
 };
+
+export default memo(RecommendationsList);
 
 const styles = StyleSheet.create({
   cardContainer: {
@@ -70,17 +88,19 @@ const styles = StyleSheet.create({
     gap: 10,
     width: "100%",
     height: hp("14.5%"),
-    backgroundColor: "rgba(255, 255, 255, 0.05)",
+    backgroundColor: "rgba(255, 255, 255, 0.03)",
     borderColor: "rgba(255, 255, 255, 0.2)",
     borderWidth: 0.5,
-    borderRadius: 4,
+    borderRadius: 15,
     paddingLeft: "3%",
     marginBottom: 5,
   },
   poster: {
-    height: "98%",
-    aspectRatio: 2.2 / 3,
-    backgroundColor: "white",
+    width: 73,
+    height: "94%",
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.1)",
     alignSelf: "center",
   },
   infoColumn: {
@@ -125,5 +145,8 @@ const styles = StyleSheet.create({
     aspectRatio: 1 / 1,
     borderRadius: 999,
     backgroundColor: "white",
-  }
+  },
+  contentContainer: {
+    paddingHorizontal: "1%",
+  },
 });

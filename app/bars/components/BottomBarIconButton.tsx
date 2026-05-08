@@ -31,13 +31,12 @@ function BottomBarIconButton({ source, navigateTo }: { source: string, navigateT
     <PressableScale
       activeScale={0.9}
       onPress={() => {
-        navigator.jumpTo(navigateTo);
-        /*navigator.dispatch(
+        navigator.dispatch(
           CommonActions.reset({
             index: 0,
             routes: [{ name: navigateTo }]
           })
-        );*/
+        );
       }} style={styles.main}>
       <Image
         source={icons[source]}

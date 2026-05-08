@@ -11,7 +11,6 @@ import ScreenBackground from "./../../components/ui/screen-background";
 import Spacer from "./../../components/ui/screen-background";
 import { useEditMode } from "./hooks";
 import EditHeader from "./components/EditHeader";
-import { FlashList } from "@shopify/flash-list";
 
 export default function DirectChatScreen({ route }: any) {
   const { chatID } = route?.params;
@@ -31,6 +30,7 @@ export default function DirectChatScreen({ route }: any) {
         await RTClient.setChatEntering(chatID, getCurrentUserID());
       };
       loadContent();
+
       return () => {
         isActive = false;
         RTClient.setChatLeaving(chatID, getCurrentUserID());
@@ -39,9 +39,10 @@ export default function DirectChatScreen({ route }: any) {
 
     }, [chatID, messages?.length]));
 
-  const renderItem = useCallback(({ item }: any) => (
-    <TextMessage chatID={chatID} message={item} />
-  ), [chatID]);
+  const renderItem = useCallback(({ item }: any) => {
+    if (item?.message_type === "text")
+      return <TextMessage chatID={chatID} message={item} />
+  }, [chatID]);
 
   return (
     <TouchableWithoutFeedback

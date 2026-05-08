@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import * as Haptics from "expo-haptics";
 import { Image, View, StyleSheet, Text } from "react-native";
 import { isCurrentUser } from "@/utils/utils";
@@ -15,7 +15,7 @@ interface TextMessage_I {
   timestamp: string;
 };
 
-export default function TextMessage({ message, chatID }: { message: TextMessage_I, chatID: number }) {
+function TextMessage({ message, chatID }: { message: TextMessage_I, chatID: number }) {
   return (
     <MessageContainer
       style={[
@@ -32,7 +32,7 @@ export default function TextMessage({ message, chatID }: { message: TextMessage_
       <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
         <Image
           source={require("../assets/checkGray.png")}
-          style={{ width: 20, height: 20 }}
+          style={styles.image}
         />
         <Text style={
           [
@@ -48,6 +48,8 @@ export default function TextMessage({ message, chatID }: { message: TextMessage_
     </MessageContainer>
   );
 };
+
+export default memo(TextMessage);
 
 const styles = StyleSheet.create({
   messageView: {
@@ -75,5 +77,9 @@ const styles = StyleSheet.create({
   },
   notCurrentUserTS: {
     alignSelf: "flex-end",
+  },
+  image: {
+    width: 20,
+    height: 20,
   },
 });

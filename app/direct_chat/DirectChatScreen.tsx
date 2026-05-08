@@ -11,6 +11,7 @@ import ScreenBackground from "./../../components/ui/screen-background";
 import Spacer from "./../../components/ui/screen-background";
 import { useEditMode } from "./hooks";
 import EditHeader from "./components/EditHeader";
+import { FlashList } from "@shopify/flash-list";
 
 export default function DirectChatScreen({ route }: any) {
   const { chatID } = route?.params;
@@ -38,6 +39,10 @@ export default function DirectChatScreen({ route }: any) {
 
     }, [chatID, messages?.length]));
 
+  const renderItem = useCallback(({ item }: any) => (
+    <TextMessage chatID={chatID} message={item} />
+  ), [chatID]);
+
   return (
     <TouchableWithoutFeedback
       onPress={Keyboard.dismiss}
@@ -51,15 +56,13 @@ export default function DirectChatScreen({ route }: any) {
         <ScreenBackground>
           {isEditMode ? <EditHeader /> : <Header chatID={chat?.info?.chat_id} peer={chat?.peer} />}
           <FlatList
-            onScroll={() => setFloatButtonVisible(true)}
             data={messages}
-            keyExtractor={(item, _) => item?.message_id}
-            renderItem={({ item }) => (
-              <TextMessage chatID={chatID} message={item} />
-            )}
+            scrollEventThrottle={16}
+            keyExtractor={(item, index) => String(item.message_id)}
+            renderItem={renderItem}
+            estimatedItemSize={90}
             ListFooterComponent={<Spacer spacing={10} />}
             keyboardShouldPersistTaps="always"
-            removeClippedSubviews
             inverted
           />
           <FloatingButton isVisible={isFloatButtonVisible} />

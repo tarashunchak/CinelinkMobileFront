@@ -3,7 +3,7 @@ import React, { memo } from "react";
 import { Linking, TouchableOpacity, View, Text, Image, StyleSheet } from "react-native";
 import { Movie } from "../../movie_details/types";
 import { useNavigation } from "expo-router";
-import GenresLayout from "./genresLayout";
+import GenresLayout from "./GenresLayout";
 import { PressableScale } from "react-native-pressable-scale";
 import { Skeleton } from "react-native-skeletons";
 

@@ -6,6 +6,7 @@ import WatchlistsLibraryScreen from "../../app/library/WatchlistsLibraryScreen";
 import WatchlistDetailsScreen from "../../app/watchlist/WatchlistDetailsScreen";
 import HomePageScreen from "../../app/home/HomeScreen";
 import CreditDetailScreen from "../../app/credit_details/CreditDetailScreen";
+import OnboardingScreen from "@/app/OnboardingScreen";
 const Stack = createNativeStackNavigator();
 
 export default function HomeNavigatorStack() {

@@ -2,7 +2,7 @@ import BottomBar from "@/app/bars/bottomBar";
 import MovieCardList from "@/components/ui/movie-card-list";
 import { textStyle } from "@/styles/textStyles";
 import { useNavigation } from "expo-router";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Text } from "react-native";
 import { Movie } from "./types";
 import MainInfo from "./components/MainInfo";
@@ -51,7 +51,7 @@ export default function MovieDetailScreen({ route }: any) {
     { type: "similar" },
   ];
 
-  const renderItem = ({ item }: any) => {
+  const renderItem = useCallback(({ item }: any) => {
     switch (item.type) {
       case "actions":
         return <ActionButtonsBlock
@@ -93,7 +93,7 @@ export default function MovieDetailScreen({ route }: any) {
             movieGenre={movie?.genres?.[0]?.id}
           /></>)
     };
-  };
+  }, []);
 
   return (
     <ScreenBackground>

@@ -1,5 +1,5 @@
 import { textStyle } from "@/styles/textStyles";
-import React from "react";
+import React, { memo } from "react";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { View, Text, StyleSheet } from "react-native";
 import { useNavigation } from "expo-router";
@@ -7,17 +7,20 @@ import { PressableScale } from "react-native-pressable-scale";
 import { useUserStatus } from "@/app/rt_client/rt_client";
 import { UserCard_T } from "@/app/types/user";
 import { Image } from "expo-image";
+import { Skeleton } from "react-native-skeletons";
 
 interface Props {
-  user_id: number;
-  username: string;
-  first_name: string | undefined;
-  last_name: string | undefined;
-  avatar_url: string | undefined;
+  user_id?: number;
+  username?: string;
+  first_name?: string | undefined;
+  last_name?: string | undefined;
+  avatar_url?: string | undefined;
 }
 
-export default function UserCard({ user }: { user: UserCard_T }) {
+function UserCard({ user }: { user: Props }) {
   const navigator = useNavigation();
+  const isOnline = useUserStatus(user?.user_id);
+  if (!user) return <Skeleton style={styles.cardContainer} />;
   return (
     <PressableScale
       activeScale={0.98}
@@ -32,7 +35,7 @@ export default function UserCard({ user }: { user: UserCard_T }) {
             source={{ uri: user?.avatar_url }}
             cachePolicy="memory-disk"
           />
-          {useUserStatus(user.user_id) && <View style={styles.isOnlineDot}></View>}
+          {isOnline && <View style={styles.isOnlineDot}></View>}
         </View>
         <View style={styles.textView}>
           <Text style={textStyle.white18}>
@@ -47,6 +50,8 @@ export default function UserCard({ user }: { user: UserCard_T }) {
     </PressableScale>
   );
 };
+
+export default memo(UserCard);
 
 const styles = StyleSheet.create({
   cardView: {

@@ -3,7 +3,7 @@ import { textStyle } from "@/styles/textStyles";
 import { getCurrentUserID } from "@/utils/utils";
 import { useNavigation } from "expo-router";
 import React from "react";
-import { View, Text, Image, Platform, StyleSheet } from "react-native";
+import { View, Text, Image, StyleSheet } from "react-native";
 import { heightPercentageToDP as hp, widthPercentageToDP } from "react-native-responsive-screen";
 import { PressableScale } from "react-native-pressable-scale";
 

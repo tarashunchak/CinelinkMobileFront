@@ -23,12 +23,12 @@ export type RecommendedCard_T = {
 };
 
 const RecommendationItem = memo(({ item }: { item: RecommendedCard_T }) => {
-  const navigation = useNavigation();
+  const navigator = useNavigation();
   return (
     <PressableScale
       activeScale={0.98}
       style={styles.cardContainer}
-      onPress={() => navigation?.navigate("MovieDetailScreen", { movieID: item?.movie_id })}
+      onPress={() => navigator?.navigate("MovieDetailScreen", { movieID: item?.movie_id })}
     >
       <Image style={styles.poster} source={{ uri: `https://image.tmdb.org/t/p/w300${item?.poster_path}` }} />
       <View style={styles.infoColumn}>

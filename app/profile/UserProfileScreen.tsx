@@ -1,24 +1,21 @@
 import React, { useCallback, useState } from "react";
-import { Text, View, StyleSheet } from "react-native";
-import { PressableScale } from "react-native-pressable-scale";
+import { View, StyleSheet } from "react-native";
 import BottomBar from "../bars/bottomBar";
-import { userPage } from "./styles";
 import { useFocusEffect, useNavigation } from "expo-router";
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { getCurrentUserID, isCurrentUser } from "@/utils/utils";
 import { useUserProfile } from "./hooks/useUserProfile";
 import { ProfileHeader } from "./components/ProfileHeader";
-import { ProfileMain } from "./components/ProfileMain";
+import ProfileMain from "./components/ProfileMain";
 import { FollowUser, UnfollowUser } from "@/api/followers/followers";
 import FollowingsList from "./components/FollowingsList";
 import FollowersList from "./components/FollowersList";
 import { useFollowings } from "./hooks/useFollowings";
 import { useFollowers } from "./hooks/useFollowers";
 import { GetDirectChatID } from "../../api/chats";
-import { FlatList, GestureHandlerRootView } from "react-native-gesture-handler";
-import { textStyle } from "@/styles/textStyles";
+import { FlatList, GestureHandlerRootView, ScrollView } from "react-native-gesture-handler";
 import ScreenBackground from "@/components/ui/screen-background";
-import { format } from "node:path";
+import UserStats from "./components/Stats";
 
 export default function UserProfileScreen({ route }: any) {
   const navigator = useNavigation();
@@ -46,67 +43,65 @@ export default function UserProfileScreen({ route }: any) {
     }, [])
   );
 
-  const statsStyle = (statName: string) => {
-    return statName === list
-      ? styles.activeStatsView
-      : styles.inactiveStatsView;
-  }
+  const sections = [
+    { type: "header" },
+    { type: "main" },
+    { type: "stats" },
+    { type: "line" },
+    { type: "list" },
+  ];
+
+  const renterItem = useCallback(({ item }: any) => {
+    switch (item.type) {
+      case "main":
+        return
+      case "stats":
+        return
+      case "line":
+        return
+      case "list":
+        return <>
+
+        </>
+    }
+  }, []);
 
   return (
     <GestureHandlerRootView>
       <ScreenBackground>
-        <View style={[{ padding: "2%", paddingTop: "5%" }]}>
+        <ScrollView
+          nestedScrollEnabled
+          showsVerticalScrollIndicator={false}
+        >
           <ProfileHeader
-            user={user}
+            bgUrl={user?.bg_img_url}
             onBack={navigator.goBack}
             isCurrentUser={isCurrUser}
           />
-          <View style={{ flexDirection: "column", gap: 5 }}>
-            <ProfileMain
-              isLoading={(userLoading ?? false) && true}
-              user={{ ...user, user_id: userID }}
-              isCurrentUser={isCurrUser}
-              isFollowed={user?.is_following}
-              onEdit={() => { }}
-              onToggleFollow={async () => {
-                if (user?.is_following)
-                  await UnfollowUser(userID) && loadUser();
-                else
-                  await FollowUser(userID) && loadUser();
-              }}
-              onChat={() => {
-                console.warn("On chat");
-                navigator.navigate("DirectChatScreen", { chatID: chatID });
-              }}
-            />
-
-            <View style={userPage.stats.view}>
-
-              <PressableScale style={statsStyle("Followings")}
-                onPress={() => {
-                  setList("Followings");
-                }}>
-                <Text style={textStyle.white14}>{followings?.length || "*"}</Text>
-                <Text style={textStyle.white14}>Followings</Text>
-              </PressableScale>
-
-              <PressableScale style={statsStyle("Followers")}
-                onPress={() => {
-                  setList("Followers");
-                }}>
-                <Text style={textStyle.white14}>{followers?.length || "*"}</Text>
-                <Text style={textStyle.white14}>Followers</Text>
-              </PressableScale>
-
-              <PressableScale style={userPage.stats.item}>
-                <Text style={textStyle.white14}>{user?.posts || "*"}</Text>
-                <Text style={textStyle.white14}>Posts</Text>
-              </PressableScale>
-            </View>
-
-          </View>
-
-          <View style={styles.line}></View>
+          <ProfileMain
+            isLoading={(userLoading ?? false) && true}
+            user={{ ...user, user_id: userID }}
+            isCurrentUser={isCurrUser}
+            isFollowed={user?.is_following}
+            onEdit={() => { }}
+            onToggleFollow={async () => {
+              if (user?.is_following)
+                await UnfollowUser(userID) && loadUser();
+              else
+                await FollowUser(userID) && loadUser();
+            }}
+            onChat={() => {
+              console.warn("On chat");
+              navigator.navigate("DirectChatScreen", { chatID: chatID });
+            }}
+          />
+          <UserStats
+            followersCnt={followers?.length}
+            followingsCnt={followings?.length}
+            postsCnt={user?.posts?.length}
+            onPress={setList}
+          />
+          <View style={styles.line} />
           {
             list === "Followings"
             && <FollowingsList userID={userID} />
@@ -115,11 +110,10 @@ export default function UserProfileScreen({ route }: any) {
             list === "Followers"
             && <FollowersList userID={userID} />
           }
-
-        </View >
+        </ScrollView>
         <BottomBar />
-      </ScreenBackground>
-    </GestureHandlerRootView>
+      </ScreenBackground >
+    </GestureHandlerRootView >
   );
 };
 

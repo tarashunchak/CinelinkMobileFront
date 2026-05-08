@@ -1,30 +1,32 @@
 import React from "react";
 import ReturnArrowButton from "@/components/ui/returnArrowButton";
-import { ImageBackground, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { UserProfile_T } from "../types";
 import { LogOutButton } from "./LogOutButton";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
+import { Image } from "expo-image";
 
 type Props = {
-  user: UserProfile_T;
+  bgUrl?: string;
   onBack: () => void;
   isCurrentUser: boolean;
 };
 
-export function ProfileHeader({ user, onBack, isCurrentUser }: Props) {
+export function ProfileHeader({ bgUrl, onBack, isCurrentUser }: Props) {
   return (
-    <>
-      <ImageBackground
-        source={user?.bg_img_url
-          ? { uri: user?.bg_img_url }
+    <View>
+      <Image
+        source={bgUrl
+          ? { uri: bgUrl }
           : require("../assets/profileBackground.png")}
         style={styles.bgImage}
+        cachePolicy="memory-disk"
       />
-      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+      <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: "5%", paddingHorizontal: "1%" }}>
         <ReturnArrowButton onPress={onBack} />
         <LogOutButton isVisible={isCurrentUser} />
       </View>
-    </>
+    </View>
   );
 };
 

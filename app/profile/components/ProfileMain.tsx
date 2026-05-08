@@ -1,11 +1,12 @@
-import React, { useCallback, useMemo, useState } from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React, { memo, useCallback, useMemo, useState } from "react";
+import { StyleSheet, Text, View } from "react-native";
 import { ActionButton } from "./ActionButton";
 import { UserProfile_T } from "../types";
 import { textStyle } from "@/styles/textStyles";
 import ProfilePhotoModal from "./ProfilePhotoModal";
 import { PressableScale } from "react-native-pressable-scale";
 import { useUserStatus } from "@/app/rt_client/rt_client";
+import { Image } from "expo-image";
 
 type Props = {
   isLoading: boolean;
@@ -17,7 +18,7 @@ type Props = {
   onChat: () => void;
 };
 
-export function ProfileMain({
+function ProfileMain({
   isLoading,
   user,
   isCurrentUser,
@@ -27,9 +28,17 @@ export function ProfileMain({
   onChat,
 }: Props) {
 
-  const fullName: string =
+  /*const fullName: string =
     isLoading ? "**** ****"
       : user?.first_name && `${user?.first_name} ${user?.last_name}`;
+      */
+
+  const fullName = useMemo(() => {
+    if (isLoading)
+      return "**** ****";
+    else
+      return user?.first_name && `${user?.first_name} ${user?.last_name}`;
+  }, [isLoading])
 
   const username: string =
     isLoading ? "********" : user?.username;
@@ -38,10 +47,11 @@ export function ProfileMain({
     const date = new Date(user?.joined_at ?? null);
     return new Intl.DateTimeFormat('en-US').format(date ?? new Date())
   }, [isLoading]);
+
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   return (
-    <>
+    <View style={{ padding: "1%" }}>
       <View style={styles.view}>
         <PressableScale
           style={styles.avatar}
@@ -103,10 +113,11 @@ export function ProfileMain({
         avatarUrl={user?.avatar_url}
         onClose={() => setIsOpen(false)}
       />
-    </>
+    </View>
   );
 };
 
+export default memo(ProfileMain);
 
 const styles = StyleSheet.create({
   view: {

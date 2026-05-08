@@ -2,35 +2,50 @@ import { GetUserFollowers } from "@/api/followers/followers";
 import UserCard from "@/components/userCard";
 import { heightPercentageToDP as hp, } from "react-native-responsive-screen";
 import { useFocusEffect } from "expo-router";
-import React, { useCallback, useState } from "react";
+import React, { memo, useCallback, useState } from "react";
 import { UserCard_T } from "@/app/types/user";
 import Spacer from "@/components/ui/spacer";
-import { FlatList } from "react-native-gesture-handler";
+import { FlatList, StyleSheet } from "react-native";
 
-export default function FollowersList({ userID }: { userID: number }) {
-  const [followers, setFollowers] = useState<UserCard_T[]>([]);
+function FollowersList({ userID }: { userID: number }) {
+  const [followers, setFollowers] = useState<UserCard_T[]>(Array.from({ length: 10 }));
 
   useFocusEffect(
     useCallback(() => {
       async function loadContent() {
         const data: UserCard_T[] = await GetUserFollowers(userID);
-        if (!data) return;
-        setFollowers(data);
-        console.warn("FollowersList: ", data)
+        if (data) setFollowers(data);
+        //console.warn("FollowersList: ", data)
       }
       loadContent();
     }, [])
   );
 
+  const renderItem = ({ item }: any) => {
+    return <UserCard user={item} />;
+  };
+
   return (
     <FlatList
-      style={{ paddingTop: 5 }}
+      scrollEnabled={false}
+      style={styles.view}
       data={followers}
-      scrollEnabled={true}
-      keyExtractor={(item: any, index: number) => String(item?.user_id)}
+      keyExtractor={(item: any, index: number) => String(item?.user_id ?? index)}
       showsVerticalScrollIndicator={false}
-      renderItem={({ item }) => <UserCard user={item} />}
+      renderItem={renderItem}
       ListFooterComponent={<Spacer spacing={hp(8)} />}
+      contentContainerStyle={styles.contentContainer}
     />
   )
-}
+};
+
+export default memo(FollowersList);
+
+const styles = StyleSheet.create({
+  view: {
+    paddingTop: 5,
+  },
+  contentContainer: {
+    padding: hp(0.5),
+  },
+});

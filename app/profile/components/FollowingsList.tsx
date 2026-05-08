@@ -9,28 +9,33 @@ import Spacer from "@/components/ui/spacer";
 import { FlatList } from "react-native-gesture-handler";
 
 export default function FollowingsList({ userID }: { userID: number }) {
-  const [followings, setFollowings] = useState<UserCard_T[]>([]);
+  const [followings, setFollowings] = useState<UserCard_T[]>(Array.from({ length: 10 }));
 
   useFocusEffect(
     useCallback(() => {
       async function loadContent() {
         const data: UserCard_T[] = await GetUserFollowings(userID);
-        if (!data) return;
-
-        setFollowings(data);
+        if (data)
+          setFollowings(data);
       }
       loadContent();
     }, [])
   );
 
+  const renderItem = ({ item }: any) => {
+    return <UserCard user={item} />;
+  };
+
   return (
     <FlatList
+      scrollEnabled={false}
       style={styles.view}
       data={followings}
-      keyExtractor={(item: any, _: number) => String(item?.user_id)}
+      keyExtractor={(item: any, index: number) => String(item?.user_id ?? index)}
       showsVerticalScrollIndicator={false}
-      renderItem={({ item }) => <UserCard user={item} />}
+      renderItem={renderItem}
       ListFooterComponent={<Spacer spacing={hp(8)} />}
+      contentContainerStyle={styles.contentContainer}
     />
   )
 };
@@ -38,5 +43,8 @@ export default function FollowingsList({ userID }: { userID: number }) {
 const styles = StyleSheet.create({
   view: {
     paddingTop: 5,
-  }
+  },
+  contentContainer: {
+    padding: hp(0.5),
+  },
 });

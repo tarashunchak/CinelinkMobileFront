@@ -1,7 +1,7 @@
 import React, { memo } from "react";
 import { useNavigation } from "expo-router";
 import { StyleSheet, Text } from "react-native";
-import { textStyle } from "@/styles/textStyles";
+import { textStyle } from "./../../../styles/textStyles";
 import { PressableScale } from "react-native-pressable-scale";
 import { Image } from "expo-image";
 import { Skeleton } from "react-native-skeletons";
@@ -14,9 +14,7 @@ function CreditCard({ credit }: { credit?: any }) {
       style={styles.view}
       onPress={() => navigator?.push("CreditDetailScreen", { creditID: credit.id })}>
       <Image
-        source={
-          credit?.profile_path ? { uri: `https://image.tmdb.org/t/p/w200${credit?.profile_path}` }
-            : require("../../search/assets/emptyMaleCredit.png")}
+        source={{ uri: `https://image.tmdb.org/t/p/w200${credit?.profile_path}` }}
         style={styles.img}
         cachePolicy="memory-disk"
       />

@@ -4,25 +4,29 @@ import { FlatList, View, Text, Image, StyleSheet } from "react-native";
 import { PressableScale } from "react-native-pressable-scale";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { useNavigation } from "expo-router";
-import { RTClient, useChatLastMessage, useUserStatus, useUserTypingInChatStatus } from "@/app/rt_client/rt_client";
-import { useAuthStore } from "@/local_storage/user/asyncStorage/store";
+import { RTClient, useChatLastMessage, useUnseenMessageCount, useUserStatus, useUserTypingInChatStatus } from "@/app/rt_client/rt_client";
+import { useChatStore } from "@/app/rt_client/chat_state";
 
 const DirectChatCard = memo(({ item }: { item: any }) => {
+  const chatID = item?.chat_id;
   const navigator = useNavigation();
-  RTClient.createMessageStorage(item?.chat_id);
-  RTClient.getChatMessages(item?.chat_id);
-  RTClient.setChatEntering(item?.chat_id, useAuthStore.getState().user?.user_id ?? 1);
+  RTClient.createMessageStorage(chatID);
+  RTClient.getChatMessages(chatID);
+  //RTClient.setChatEntering(chatID, useAuthStore.getState().user?.user_id ?? 1);
   const peerID = item?.peer_id?.["Int32"];
-  const isTyping = useUserTypingInChatStatus(peerID, item?.chat_id);
-  const lastMessage = useChatLastMessage(item?.chat_id);
+  const isTyping = useUserTypingInChatStatus(peerID, chatID);
+  const lastMessage = useChatLastMessage(chatID);
   const isOnline = useUserStatus(peerID);
+  const username = useChatStore.getState().users[lastMessage?.user_id]?.username;
+
+  const unSeenMessageCnt = useUnseenMessageCount(chatID);
 
   return (
     <PressableScale
       activeScale={0.98}
       style={styles.mainView}
       onPress={() => {
-        navigator?.navigate("DirectChatScreen", { chatID: item?.chat_id });
+        navigator?.navigate("DirectChatScreen", { chatID: chatID });
       }}
     >
       <View style={styles.infoView}>
@@ -41,9 +45,20 @@ const DirectChatCard = memo(({ item }: { item: any }) => {
           <Text
             numberOfLines={1}
             ellipsizeMode="tail"
-            style={[textStyle.gray16, { maxWidth: "40%" }]}
-          >{isTyping ? "typing..." : lastMessage?.message}</Text>
+            style={[textStyle.gray16, { maxWidth: "100%" }]}
+          >{isTyping ? "typing..." : `${username}: ` + lastMessage?.message}</Text>
         </View>
+      </View>
+      <View style={{
+        backgroundColor: "white",
+        borderRadius: 999,
+        height: 20,
+        width: 20,
+        alignSelf: "flex-start",
+        margin: "2%",
+        alignItems: "center",
+      }}>
+        <Text style={textStyle.black14, { fontWeight: "bold", textAlign: "center" }}>{unSeenMessageCnt}</Text>
       </View>
     </PressableScale>
   );
@@ -92,7 +107,7 @@ const styles = StyleSheet.create({
     borderRadius: 999,
   },
   textView: {
-    width: "100%",
+    width: "70%",
     flexDirection: "column",
     justifyContent: "space-evenly",
   },

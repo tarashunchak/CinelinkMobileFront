@@ -2,7 +2,6 @@ import { LoginRequest } from "@/api/auth";
 import { backgroundStyle } from "@/styles/backgroundStyle";
 import { buttonStyle } from "@/styles/buttonStyle";
 import { textStyle } from "@/styles/textStyles";
-import * as WebBrowser from "expo-web-browser";
 import React, { useState } from "react";
 import { Keyboard, Image, Text, TouchableWithoutFeedback, View } from "react-native";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
@@ -10,8 +9,6 @@ import { PressableScale } from "react-native-pressable-scale";
 import Input from "./components/Input";
 import ScreenBackground from "@/components/ui/screen-background";
 import { useNavigation } from "expo-router";
-
-WebBrowser.maybeCompleteAuthSession();
 
 export default function LoginScreen() {
   const [username, setUsername] = useState<string>("");

@@ -1,8 +1,9 @@
 import { textStyle } from "@/styles/textStyles";
 import { useNavigation } from "expo-router";
 import React from "react";
-import { View, Text, Image, StyleSheet } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import { PressableScale } from "react-native-pressable-scale";
+import { Image } from "expo-image";
 
 interface CreditCard_I {
   credit_id: number;
@@ -15,13 +16,8 @@ interface CreditCard_I {
 export default function CreditCard({ credit }: { credit: CreditCard_I }) {
   const navigator = useNavigation();
 
-  const creditProfile = (credit?.profile_path && credit?.profile_path != "")
-    ? { uri: `https://image.tmdb.org/t/p/w300/${credit?.profile_path}` }
-    : (
-      credit?.gender === 1
-        ? require("./../assets/emptyFemaleCredit.png")
-        : require("./../assets/emptyMaleCredit.png")
-    )
+  const creditProfile = { uri: `https://image.tmdb.org/t/p/w300/${credit?.profile_path}` };
+
 
   return (
     < PressableScale style={styles.view}
@@ -37,6 +33,7 @@ export default function CreditCard({ credit }: { credit: CreditCard_I }) {
         <Image
           style={styles.profile}
           source={creditProfile}
+          cachePolicy="memory-disk"
         />
         <View style={{ flexDirection: "column" }}>
           <Text

@@ -56,7 +56,7 @@ const UserSheet = forwardRef<UserSheetRef, UserSheetProps>(({ setIsActive }, ref
       snapPoints={["50%", "90%"]}
       enablePanDownToClose
       onClose={() => {
-        setIsActive(true);
+        setIsActive?.(true);
         setState(false);
       }}
       containerStyle={[styles.container, backgroundColor]}

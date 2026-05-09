@@ -10,6 +10,7 @@ import PosterModal from "./PosterModal";
 import { MONTH } from "@/utils/month";
 import { Skeleton } from "react-native-skeletons";
 import { Image } from "expo-image";
+import Animated from "react-native-reanimated";
 
 export default function MainInfo(
   { movie, inCinemas = false, maximum }
@@ -25,10 +26,10 @@ export default function MainInfo(
 
   const poster = (
     <>
-      <Image
+      <Animated.Image
+        sharedTransitionTag={`movie-${movie?.id}-poster`}
         source={{ uri: "https://image.tmdb.org/t/p/w300" + movie?.poster_path }}
         style={styles.posterImage}
-        cachePolicy="memory-disk"
       />
       {
         inCinemas && maximum && (
@@ -45,10 +46,10 @@ export default function MainInfo(
   return (
     <View>
       <ReturnArrowButton style={{ marginTop: "5%", zIndex: 2 }} />
-      <Image
+      <Animated.Image
+        sharedTransitionTag={`movie-${movie?.id}`}
         source={{ uri: `https://image.tmdb.org/t/p/w500${backdropPath}` }}
         style={styles.backdrop}
-        cachePolicy="memory-disk"
       />
       <View style={styles.darkRect}>
         <View style={{ flexDirection: "column", marginLeft: "3%", marginTop: "20%", justifyContent: "space-between" }}>
@@ -89,7 +90,7 @@ export default function MainInfo(
       }
     </View >
   )
-}
+};
 
 const styles = StyleSheet.create({
   backdrop: {

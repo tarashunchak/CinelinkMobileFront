@@ -1,6 +1,6 @@
-import BottomBar from "@/app/bars/bottomBar";
-import MovieCardList from "@/components/ui/movie-card-list";
-import { textStyle } from "@/styles/textStyles";
+import BottomBar from "./../../app/bars/bottomBar";
+import MovieCardList from "./../../components/ui/movie-card-list";
+import { textStyle } from "./../../styles/textStyles";
 import { useNavigation } from "expo-router";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Text } from "react-native";
@@ -15,7 +15,7 @@ import TrailerBlock from "./components/TrailerBlock";
 import CreditCardsList from "./components/CreditCardsList";
 import { GetMovieYouTubeTrailerKey, LoadMovieDetails } from "./services/services";
 import WatchlistSheet, { WatchlistSheetRef } from "./components/add-to-watchlist-modal/AddToWatchlistModal";
-import ScreenBackground from "@/components/ui/screen-background";
+import ScreenBackground from "./../../components/ui/screen-background";
 import UserSheet, { UserSheetRef } from "./components/recommend-to-user-modal/RecommendToUser";
 import { FlatList } from "react-native-gesture-handler";
 

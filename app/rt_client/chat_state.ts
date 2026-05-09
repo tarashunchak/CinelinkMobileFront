@@ -18,6 +18,7 @@ export interface ChatState {
   lastMessage: Record<number, ChatMessage>;
   typingStatus: Record<number, Record<number, boolean>>;
   onlineStatus: Record<number, boolean>;
+  lastSeenMessageID: Record<number, number>;
 
   _setOnline: (userID: number, status: boolean) => void;
   _setChatMessages: (chatID: number, msgs: ChatMessage[]) => void;
@@ -25,6 +26,8 @@ export interface ChatState {
   _setLastMessage: (chatID: number, msg: ChatMessage) => void;
   _setUser: (userID: number, user: User) => void;
   _setUsersBatch: (users: Map<number, User>) => void;
+  _addChatMessage: (chatID: number, msg: ChatMessage) => void;
+  _setLastSeenMessageID: (chatID: number, msgID: number) => void;
 };
 
 export const useChatStore = create<ChatState>((set) => ({
@@ -33,6 +36,7 @@ export const useChatStore = create<ChatState>((set) => ({
   typingStatus: {},
   onlineStatus: {},
   lastMessage: {},
+  lastSeenMessageID: {},
   _setChatMessages: (chatID, msgs) => set((s) => ({
     messages: { ...s.messages, [chatID]: msgs }
   })),
@@ -43,6 +47,9 @@ export const useChatStore = create<ChatState>((set) => ({
         [status.user_id]: status.status
       }
     }
+  })),
+  _addChatMessage: (chatID, msgs) => set((s) => ({
+    messages: { ...s.messages, [chatID]: [msgs, ...(s.messages[chatID] || [])] }
   })),
   _setOnline: (userID, status) => set((s) => ({
     onlineStatus: { ...s.onlineStatus, [userID]: status }
@@ -55,5 +62,8 @@ export const useChatStore = create<ChatState>((set) => ({
   })),
   _setUsersBatch: (newUsers) => set((s) => ({
     users: { ...s.users, ...newUsers }
+  })),
+  _setLastSeenMessageID: (chatID, msgID) => set((s) => ({
+    lastSeenMessageID: { ...s.lastSeenMessageID, [chatID]: msgID }
   })),
 }));

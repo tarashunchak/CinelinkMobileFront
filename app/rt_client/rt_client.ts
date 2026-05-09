@@ -82,6 +82,9 @@ class RTClient_ {
     this.wsConnections?.get(userID)?.send(
       Makers.makeSeenAllMessage({ chat_id: chatID, user_id: userID })
     );
+
+    const messageID: number = [...useChatStore.getState().messages[chatID] || []].reverse()[0]?.message_id ?? 0;
+    useChatStore.getState()._setLastSeenMessageID(chatID, messageID);
   };
 
   public async setChatLeaving(chatID: ChatID, userID: UserID) {
@@ -117,6 +120,11 @@ class RTClient_ {
       this.chatManager.addMessage(chatID, msg);
     }
     return data?.results;
+  };
+
+  public getLastSeenMessageID(chatID: ChatID) {
+    const messageID = useChatStore.getState().lastSeenMessageID[chatID];
+    return messageID;
   };
 
   public createMessageStorage = this.chatManager.connect;
@@ -160,4 +168,9 @@ export function useUserTypingInChatStatus(userID: UserID, chatID: ChatID): boole
   const status = useChatStore(state => state.typingStatus[chatID] ?? false)
   useEffect(() => { }, [userID, chatID]);
   return status[userID];
-}
+};
+
+export function useUnseenMessageCount(chatID: ChatID): number {
+  const lastMessage = useChatStore(state => state.lastMessage[chatID]?.message_id ?? 0);
+  return lastMessage;
+};

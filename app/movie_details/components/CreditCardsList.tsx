@@ -17,7 +17,7 @@ export default function CreditCardsList(
       horizontal
       style={styles.view}
       data={credits}
-      keyExtractor={(item: any, index: number) => String(item?.id)}
+      keyExtractor={(item: any, index: number) => String(item?.id ?? index)}
       renderItem={({ item }) => <CreditCard credit={item} />}
       ListFooterComponent={
         <EmptyCreditCard

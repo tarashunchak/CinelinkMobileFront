@@ -7,6 +7,7 @@ import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-nat
 import { PressableScale } from "react-native-pressable-scale";
 import { Image } from "expo-image";
 import { Skeleton } from "react-native-skeletons";
+import Animated from "react-native-reanimated";
 
 export default function MovieOfTheDay() {
   const navigator = useNavigation();
@@ -25,12 +26,14 @@ export default function MovieOfTheDay() {
 
   return (
     <>
-      <Image
+      <Animated.Image
+        sharedTransitionTag={`movie-${movie?.movie_id}-backdrop`}
         source={{
           uri: `https://image.tmdb.org/t/p/w300${movie?.backdrop_path
             || movie?.poster_path}`
         }}
-        style={styles.backdrop} />
+        style={styles.backdrop}
+      />
       <View style={styles.background}>
         <Image
           style={styles.logo}
@@ -63,16 +66,17 @@ export default function MovieOfTheDay() {
               {`(${movie?.release_date?.slice(0, 4)})`}
             </Text>
           </View>
-          <Image
+
+          <Animated.Image
+            sharedTransitionTag={`movie-${movie?.movie_id}-poster`}
             source={{ uri: `https://image.tmdb.org/t/p/w300${movie?.poster_path}` }}
             style={styles.poster}
-            cachePolicy="disk"
           />
         </PressableScale>
       </View>
     </>
   )
-}
+};
 
 const styles = {
   logo: {

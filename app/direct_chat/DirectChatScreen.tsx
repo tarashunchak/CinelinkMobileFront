@@ -11,6 +11,9 @@ import ScreenBackground from "./../../components/ui/screen-background";
 import Spacer from "./../../components/ui/screen-background";
 import { useEditMode } from "./hooks";
 import EditHeader from "./components/EditHeader";
+import { heightPercentageToDP } from "react-native-responsive-screen";
+import Animated, { useAnimatedStyle } from "react-native-reanimated";
+import { useKeyboardAnimation, useKeyboardController } from "react-native-keyboard-controller";
 
 export default function DirectChatScreen({ route }: any) {
   const { chatID } = route?.params;
@@ -19,6 +22,12 @@ export default function DirectChatScreen({ route }: any) {
   const messages = useChatMessages(chatID);
   const { isEditMode, enable, disable, toggle } = useEditMode(3);
   const [selected, setSelected] = useState<Set<number>>(new Set());
+
+  const keyboard = useKeyboardAnimation();
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    marginBottom: keyboard.height,
+  }));
 
   useFocusEffect(
     useCallback(() => {
@@ -44,36 +53,29 @@ export default function DirectChatScreen({ route }: any) {
       return <TextMessage chatID={chatID} message={item} />
   }, [chatID]);
 
+
   return (
-    <TouchableWithoutFeedback
-      onPress={Keyboard.dismiss}
-    >
-      <KeyboardAvoidingView
-        style={{ flexGrow: 1 }}
-        enabled={true}
-        behavior="padding"
-        keyboardVerticalOffset={Platform.OS === "ios" ? 60 : 0}
-      >
-        <ScreenBackground>
-          {isEditMode ? <EditHeader /> : <Header chatID={chat?.info?.chat_id} peer={chat?.peer} />}
-          <FlatList
-            data={messages}
-            scrollEventThrottle={16}
-            keyExtractor={(item, index) => String(item.message_id)}
-            renderItem={renderItem}
-            estimatedItemSize={90}
-            ListFooterComponent={<Spacer spacing={10} />}
-            keyboardShouldPersistTaps="always"
-            inverted
-          />
-          <FloatingButton isVisible={isFloatButtonVisible} />
+    <ScreenBackground>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        {isEditMode ? <EditHeader /> : <Header chatID={chat?.info?.chat_id} peer={chat?.peer} />}
+        <Animated.FlatList
+          data={messages}
+          scrollEventThrottle={16}
+          keyExtractor={(item, index) => String(item.message_id)}
+          renderItem={renderItem}
+          estimatedItemSize={90}
+          contentContainerStyle={{ paddingTop: heightPercentageToDP(10) }}
+          keyboardShouldPersistTaps="always"
+          inverted
+        />
+        <FloatingButton isVisible={isFloatButtonVisible} />
+        <Animated.View style={[animatedStyle]}>
           <Input chatID={chatID} />
-        </ScreenBackground>
-      </KeyboardAvoidingView>
-    </TouchableWithoutFeedback >
+        </Animated.View>
+      </TouchableWithoutFeedback>
+    </ScreenBackground>
   );
 };
 
 const styles = StyleSheet.create({
-
 });

@@ -45,6 +45,8 @@ export class MessageStorage {
           useChatStore.getState()._setChatMessages(this.chatID, reversed);
           useChatStore.getState()._setLastMessage(this.chatID, reversed[0])
         }
+
+        this.lastSeenMessageId = reversed[0]?.message_id;
       }
     } finally {
       this.isLoading = false;
@@ -59,8 +61,8 @@ export class MessageStorage {
   public addMessage(message: ChatMessage) {
     console.log("Message addition in messageStore: ", message);
     this.messages.set(message?.message_id, message);
-    useChatStore.getState().messages[message?.chat_id].unshift(message);
-    useChatStore.getState()._setLastMessage(this.chatID, message.message)
+    useChatStore.getState()._addChatMessage(this.chatID, message);
+    useChatStore.getState()._setLastMessage(this.chatID, message);
   };
 
   public clearChat(): ChatMessage[] | [] {
@@ -80,4 +82,8 @@ export class MessageStorage {
   public setEventHandler(handlers: MessageEventsHandlers) {
 
   };
+
+  public setLastSeenMessageID(chatID: number, messageID: number) {
+    useChatStore.getState()._setLastSeenMessageID(chatID, messageID);
+  }
 };

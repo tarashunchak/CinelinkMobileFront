@@ -37,7 +37,7 @@ const WatchlistSheet = forwardRef<WatchlistSheetRef, WatchlistSheetProps>(({ set
     open: () => {
       sheetRef.current?.snapToIndex(0);
       setState(true);
-      setIsActive(false);
+      setIsActive?.(false);
     },
     close: () => {
       sheetRef.current?.close();

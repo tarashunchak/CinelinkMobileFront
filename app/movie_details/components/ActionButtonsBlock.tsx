@@ -22,8 +22,8 @@ export default function ActionButtonsBlock({ movieID, onAddToWatchlist, onRecomm
         <Text style={styles.buttonText}>Recommend</Text>
       </PressableScale>
     </View >
-  )
-}
+  );
+};
 
 const styles = {
   view: {

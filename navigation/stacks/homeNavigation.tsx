@@ -14,7 +14,8 @@ export default function HomeNavigatorStack() {
     <Stack.Navigator
       screenOptions={{
         headerShown: false,
-        contentStyle: { flex: 1, backgroundColor: "transparent" }
+        contentStyle: { flex: 1, backgroundColor: "transparent" },
+        animation: "ios_from_right",
       }}
     >
       <Stack.Screen name="HomePage" component={HomePageScreen} />

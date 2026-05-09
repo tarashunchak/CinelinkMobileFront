@@ -18,6 +18,7 @@ export default function TabNavigator() {
         position: "absolute",
         display: "none",
       },
+      animation: "fade",
     }}
     >
       <Tab.Screen name="Home" component={HomeNavigatorStack} />

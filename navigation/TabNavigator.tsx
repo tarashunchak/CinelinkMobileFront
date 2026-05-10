@@ -18,14 +18,14 @@ export default function TabNavigator() {
         position: "absolute",
         display: "none",
       },
-      animation: "fade",
+      animation: "shift",
     }}
     >
       <Tab.Screen name="Home" component={HomeNavigatorStack} />
-      <Tab.Screen name="Social" component={SocialNavigatorStack} />
       <Tab.Screen name="Library" component={LibraryNavigatorStack} />
-      <Tab.Screen name="Profile" component={ProfileNavigatorStack} />
       <Tab.Screen name="Search" component={SearchNavigatorStack} />
+      <Tab.Screen name="Social" component={SocialNavigatorStack} />
+      <Tab.Screen name="Profile" component={ProfileNavigatorStack} />
     </Tab.Navigator >
   );
 }

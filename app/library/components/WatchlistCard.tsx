@@ -4,8 +4,9 @@ import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-nat
 import { textStyle } from "@/styles/textStyles";
 import { useNavigation } from "expo-router";
 import { PressableScale } from "react-native-pressable-scale";
-import { Image } from "expo-image";
+import Animated, { SharedTransition } from "react-native-reanimated";
 import { Skeleton } from "react-native-skeletons";
+import { Image } from "expo-image";
 
 export type Watchlist = {
   id: number;
@@ -23,17 +24,19 @@ function WatchlistCard({ watchlist }: { watchlist: Watchlist | null }) {
   const navigator = useNavigation();
 
   if (!watchlist) return <Skeleton style={styles.view} />;
+  const AnimatedFastImage = Animated.createAnimatedComponent(Image);
 
   return (
     <PressableScale style={styles.view}
       onPress={() => { navigator.navigate("WatchlistDetailsScreen", { watchlist: watchlist }) }}>
       <View style={{ width: "80%", height: "100%", flexDirection: "row" }}>
         <View style={{ flexDirection: "row", gap: 5 }}>
-          <Image source={
-            watchlist?.fg_img_url ?
-              { uri: watchlist?.fg_img_url }
-              : require("@/app/library/assets/NoFgWatchlist.png")
-          }
+
+          <AnimatedFastImage
+            sharedTransitionTag={`watchlist-fg-${watchlist?.id}`}
+            source={
+             { uri: watchlist?.fg_img_url }
+            }
             style={styles.image}
             cachePolicy="memory-disk"
           />

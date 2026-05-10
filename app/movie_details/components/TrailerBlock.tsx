@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Text, StyleSheet, View } from "react-native";
 import { textStyle } from "@/styles/textStyles";
 import { Skeleton } from "react-native-skeletons";
-import { heightPercentageToDP, widthPercentageToDP } from "react-native-responsive-screen";
+import { widthPercentageToDP as wp} from "react-native-responsive-screen";
 import YoutubeIframe from "react-native-youtube-iframe";
 
 export default function TrailerBlock({ trailerKey }: { trailerKey?: string }) {
@@ -16,7 +16,7 @@ export default function TrailerBlock({ trailerKey }: { trailerKey?: string }) {
   return (
     <View style={styles.view}>
       <Text style={[styles.title, textStyle.yellow20]}>Trailer</Text>
-      <YoutubeIframe height={250} width={widthPercentageToDP(100)} play={false} videoId={trailerKey} />
+      <YoutubeIframe height={250} width={wp(100)} play={false} videoId={trailerKey} />
     </View>
   );
 };

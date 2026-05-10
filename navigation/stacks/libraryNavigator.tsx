@@ -14,7 +14,11 @@ const Stack = createNativeStackNavigator();
 
 export default function LibraryNavigatorStack() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={{
+        animation:"default",
+      }}
+    >
       <Stack.Screen name="WatchlistsLibraryScreen" component={WatchlistsLibraryScreen} options={{ headerShown: false }} />
       <Stack.Screen name="UserProfileScreen" component={UserProfileScreen} options={{ headerShown: false }} />
       <Stack.Screen name="MovieDetailScreen" component={MovieDetailScreen} options={{ headerShown: false }} />

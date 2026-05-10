@@ -1,11 +1,12 @@
 import { useNavigation } from "expo-router";
 import React, { memo } from "react";
-import { Text, View, StyleSheet } from "react-native";
+import { Text, View, StyleSheet, useAnimatedValue } from "react-native";
 import { textStyle } from "@/styles/textStyles";
 import { MONTH } from "@/utils/month";
 import { PressableScale } from "react-native-pressable-scale";
 import { Image } from "expo-image";
 import { Skeleton } from "react-native-skeletons";
+import Animated, { createAnimatedComponent, useAnimatedProps } from "react-native-reanimated";
 
 export interface MovieCard_I {
   movie_id: number;
@@ -17,6 +18,9 @@ export interface MovieCard_I {
 function MovieCard({ data }: { data: MovieCard_I }) {
   const navigator = useNavigation();
   if (!data) return <Skeleton style={styles.view} />
+
+  const AnimatedFastImage = createAnimatedComponent(Image);
+
   return (
     <PressableScale style={styles.view}
       onPress={() => navigator?.push("MovieDetailScreen",
@@ -24,12 +28,14 @@ function MovieCard({ data }: { data: MovieCard_I }) {
           movieID: data?.movie_id,
           inCinemas: data?.inCinemas,
           maximum: data?.maximum,
+          posterPath: data?.poster_path,
         }
       )}>
       <View>
-        <Image
+        <AnimatedFastImage
+          sharedTransitionTag={`movie-${data?.movie_id}-poster`}
           style={styles.poster}
-          source={{ uri: "https://image.tmdb.org/t/p/w200" + data?.poster_path }}
+          source={{ uri: "https://image.tmdb.org/t/p/w300" + data?.poster_path }}
           cachePolicy="memory-disk"
         />
         {

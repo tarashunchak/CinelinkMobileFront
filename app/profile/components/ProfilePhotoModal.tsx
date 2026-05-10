@@ -1,12 +1,13 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useMemo } from "react";
 import { textStyle } from "@/styles/textStyles";
-import { Text, View, ImageBackground, Modal, StyleSheet } from "react-native";
+import { Text, View, Modal, StyleSheet } from "react-native";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import * as ImagePicker from "expo-image-picker";
 import { useState } from "react";
 import { PressableScale } from "react-native-pressable-scale";
 import { Image } from "expo-image";
 import { Skeleton } from "react-native-skeletons";
+import {BlurView} from "expo-blur";
 
 interface Props {
   isOpen: boolean;
@@ -35,14 +36,17 @@ export default function ProfilePhotoModal({ isOpen, avatarUrl, onClose, isCurren
   }, [isLoaded])
 
   return (
-    <Modal
+    <Modal 
       statusBarTranslucent={true}
       visible={isOpen}
       transparent={true}
       animationType="slide"
     >
-      <ImageBackground
-        style={styles.background}>
+      <BlurView
+        intensity={30}
+        tint="dark"
+        style={styles.background}
+      >
         <View style={{}}>
           <PressableScale
             style={{
@@ -79,7 +83,7 @@ export default function ProfilePhotoModal({ isOpen, avatarUrl, onClose, isCurren
             </PressableScale>
           }
         </View>
-      </ImageBackground>
+      </BlurView>
     </Modal>
   )
 };

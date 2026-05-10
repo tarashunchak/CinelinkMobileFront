@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { FlatList, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard, StyleSheet } from "react-native";
+import { TouchableWithoutFeedback, Keyboard, StyleSheet } from "react-native";
 import Header from "./components/HeaderBlock";
 import Input from "./components/Input";
 import { useFocusEffect } from "expo-router";
@@ -8,7 +8,6 @@ import TextMessage from "./components/TextMessage";
 import { getCurrentUserID } from "@/utils/utils";
 import FloatingButton from "./components/FloatingButton";
 import ScreenBackground from "./../../components/ui/screen-background";
-import Spacer from "./../../components/ui/screen-background";
 import { useEditMode } from "./hooks";
 import EditHeader from "./components/EditHeader";
 import { heightPercentageToDP } from "react-native-responsive-screen";
@@ -55,25 +54,25 @@ export default function DirectChatScreen({ route }: any) {
 
 
   return (
-    <ScreenBackground>
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        {isEditMode ? <EditHeader /> : <Header chatID={chat?.info?.chat_id} peer={chat?.peer} />}
-        <Animated.FlatList
-          data={messages}
-          scrollEventThrottle={16}
-          keyExtractor={(item, index) => String(item.message_id)}
-          renderItem={renderItem}
-          estimatedItemSize={90}
-          contentContainerStyle={{ paddingTop: heightPercentageToDP(10) }}
-          keyboardShouldPersistTaps="always"
-          inverted
-        />
-        <FloatingButton isVisible={isFloatButtonVisible} />
-        <Animated.View style={[animatedStyle]}>
-          <Input chatID={chatID} />
-        </Animated.View>
-      </TouchableWithoutFeedback>
-    </ScreenBackground>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <ScreenBackground>
+          {isEditMode ? <EditHeader /> : <Header chatID={chat?.info?.chat_id} peer={chat?.peer} />}
+          <Animated.FlatList
+            data={messages}
+            scrollEventThrottle={16}
+            keyExtractor={(item, index) => String(item.message_id)}
+            renderItem={renderItem}
+            estimatedItemSize={90}
+            contentContainerStyle={{ paddingTop: heightPercentageToDP(10) }}
+            keyboardShouldPersistTaps="always"
+            inverted
+          />
+          <FloatingButton isVisible={isFloatButtonVisible} />
+          <Animated.View style={[animatedStyle]}>
+            <Input chatID={chatID} />
+          </Animated.View>
+      </ScreenBackground>
+    </TouchableWithoutFeedback>
   );
 };
 

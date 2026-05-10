@@ -1,16 +1,20 @@
 import { textStyle } from "@/styles/textStyles";
 import React, { memo } from "react";
-import { Linking, TouchableOpacity, View, Text, Image, StyleSheet } from "react-native";
+import { Linking, TouchableOpacity, View, Text, StyleSheet } from "react-native";
 import { Movie } from "../../movie_details/types";
 import { useNavigation } from "expo-router";
 import GenresLayout from "./GenresLayout";
 import { PressableScale } from "react-native-pressable-scale";
 import { Skeleton } from "react-native-skeletons";
+import { createAnimatedComponent } from "react-native-reanimated";
+import { Image } from "expo-image";
 
 
 function MovieCard({ movie }: { movie: Movie | null }) {
   const navigator = useNavigation();
   if (!movie) return <Skeleton height={118} width={"100%"} style={styles.mainView} />
+
+  const AnimatedFastImage = createAnimatedComponent(Image);
 
   return (
     <PressableScale
@@ -18,12 +22,14 @@ function MovieCard({ movie }: { movie: Movie | null }) {
       style={[styles?.mainView]}
       onPress={() => {
         navigator?.push("MovieDetailScreen",
-          { movieID: movie?.movie_id });
+          { movieID: movie?.movie_id, posterPath: movie?.poster_path });
       }}>
-      <Image
+      <AnimatedFastImage
+        sharedTransitionStyle={`movie-${movie?.movie_id}-poster`}
         source={{ uri: `https://image.tmdb.org/t/p/w300${movie.poster_path}` }}
         style={styles.poster}
         pointerEvents="none"
+        cachePolicy="memory"
       />
       <View style={{ flexDirection: "column", height: "100%", marginLeft: "4%", justifyContent: "space-evenly" }}>
         <View style={{ flexDirection: "row", justifyContent: "flex-start" }}>

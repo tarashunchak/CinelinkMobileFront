@@ -9,27 +9,34 @@ import { PressableScale } from "react-native-pressable-scale";
 import PosterModal from "./PosterModal";
 import { MONTH } from "@/utils/month";
 import { Skeleton } from "react-native-skeletons";
+import Animated, { createAnimatedComponent } from "react-native-reanimated";
 import { Image } from "expo-image";
-import Animated from "react-native-reanimated";
 
 export default function MainInfo(
-  { movie, inCinemas = false, maximum }
+  { movie, inCinemas = false, maximum, posterPath, backdropPath}
     : {
       movie?: Movie,
       inCinemas: boolean,
       maximum?: string,
+      posterPath?: string,
+      backdropPath?: string,
     }
 ) {
-  const backdropPath = movie?.images?.backdrops[movie?.images?.backdrops?.length - 1]?.file_path;
+
+  if (!backdropPath)
+    backdropPath = movie?.images?.backdrops[movie?.images?.backdrops?.length - 1]?.file_path;
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
+  const AnimatedFastImage = createAnimatedComponent(Image);
+
   const poster = (
     <>
-      <Animated.Image
+      <AnimatedFastImage
         sharedTransitionTag={`movie-${movie?.id}-poster`}
-        source={{ uri: "https://image.tmdb.org/t/p/w300" + movie?.poster_path }}
+        source={{ uri: `https://image.tmdb.org/t/p/w300${posterPath ?? movie?.poster_path}`}}
         style={styles.posterImage}
+        cachePolicy="memory-disk"
       />
       {
         inCinemas && maximum && (
@@ -41,15 +48,16 @@ export default function MainInfo(
         )
       }
     </>
-  )
+  );
 
   return (
     <View>
       <ReturnArrowButton style={{ marginTop: "5%", zIndex: 2 }} />
-      <Animated.Image
-        sharedTransitionTag={`movie-${movie?.id}`}
+      <AnimatedFastImage
+        sharedTransitionTag={`movie-${movie?.id}-backdrop`}
         source={{ uri: `https://image.tmdb.org/t/p/w500${backdropPath}` }}
         style={styles.backdrop}
+        cachePolicy="memory-disk"
       />
       <View style={styles.darkRect}>
         <View style={{ flexDirection: "column", marginLeft: "3%", marginTop: "20%", justifyContent: "space-between" }}>
@@ -75,7 +83,7 @@ export default function MainInfo(
               onPress={() => { setIsOpen(true); }}
               style={styles.posterView}
             >
-              {movie ? poster : <Skeleton style={styles.posterImage} />}
+              {poster}
             </PressableScale>
             <InfoBlock movieInfo={movie} />
           </View>

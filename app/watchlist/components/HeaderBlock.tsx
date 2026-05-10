@@ -5,20 +5,23 @@ import { textStyle } from "@/styles/textStyles";
 import { useNavigation } from "expo-router";
 import { Image } from "expo-image";
 import { Skeleton } from "react-native-skeletons";
+import Animated from "react-native-reanimated";
 
 export default function HeaderBlock({ watchlist }: { watchlist: any }) {
   const navigator = useNavigation();
   if (!watchlist) return <Skeleton style={styles.container} />;
+  const AnimatedFastImage = Animated.createAnimatedComponent(Image);
   return (
     <View style={styles.container}>
       <View style={styles.mainView}>
         <View style={[styles.infoView]}>
-          <Image
+          <AnimatedFastImage
+            sharedTransitionTag={`watchlist-fg-${watchlist?.id}`}
             source={
-              watchlist?.fg_img_url ? { uri: watchlist?.fg_img_url }
-                : require("@/app/library/assets/NoFgWatchlist.png")}
+             { uri: watchlist?.fg_img_url }
+            }
             style={styles.image}
-            cachePolicy="memory"
+            cachePolicy="memory-disk"
           />
 
           <View style={styles.textView}>
@@ -48,8 +51,8 @@ export default function HeaderBlock({ watchlist }: { watchlist: any }) {
         </Text>
       </View>
     </View>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: {

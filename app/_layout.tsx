@@ -13,7 +13,7 @@ export default function RootLayout() {
             }}>
                 <BottomSheetModalProvider>
                     <StatusBar translucent backgroundColor="transparent" style="auto" />
-                    <Slot screenOptions={{ Animation: "fade" }} />
+                    <Slot screenOptions={{ animation: "default" }} />
                 </BottomSheetModalProvider>
             </GestureHandlerRootView>
         </ActionSheetProvider>

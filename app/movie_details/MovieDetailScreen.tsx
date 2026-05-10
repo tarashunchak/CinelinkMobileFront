@@ -11,18 +11,17 @@ import OverviewBlock from "./components/OverviewBlock";
 import ActionButtonsBlock from "./components/ActionButtonsBlock";
 import GenresBlock from "./components/GenresBlock";
 import ProvidersBlock from "./components/ProvidersBlock";
-import TrailerBlock from "./components/TrailerBlock";
 import CreditCardsList from "./components/CreditCardsList";
 import { GetMovieYouTubeTrailerKey, LoadMovieDetails } from "./services/services";
-import WatchlistSheet, { WatchlistSheetRef } from "./components/add-to-watchlist-modal/AddToWatchlistModal";
+import  { WatchlistSheetRef } from "./components/add-to-watchlist-modal/AddToWatchlistModal";
 import ScreenBackground from "./../../components/ui/screen-background";
-import UserSheet, { UserSheetRef } from "./components/recommend-to-user-modal/RecommendToUser";
+import { UserSheetRef } from "./components/recommend-to-user-modal/RecommendToUser";
 import { FlatList } from "react-native-gesture-handler";
 
 export default function MovieDetailScreen({ route }: any) {
   const navigation = useNavigation();
   const [movie, setMovie] = useState<Movie>();
-  const { movieID, inCinemas, maximum } = route?.params;
+  const { movieID, inCinemas, maximum, backdropPath, posterPath } = route?.params;
   const [isActive, setIsActive] = useState<boolean>(true);
   const [isActiveUsers, setIsActiveUsers] = useState<boolean>(true);
 
@@ -63,8 +62,6 @@ export default function MovieDetailScreen({ route }: any) {
         return <GenresBlock genres={movie?.genres} />
       case "providers":
         return <ProvidersBlock providers={movie?.providers} />
-      case "trailer":
-        return <TrailerBlock trailerKey={trailerKey} />;
       case "overview":
         return <OverviewBlock text={movie?.overview} />
       case "detailes":
@@ -102,11 +99,15 @@ export default function MovieDetailScreen({ route }: any) {
         data={sections}
         renderItem={renderItem}
         showsVerticalScrollIndicator={false}
-        ListHeaderComponent={<MainInfo movie={movie} inCinemas={inCinemas} maximum={maximum} />}
+        ListHeaderComponent={
+        <MainInfo 
+          movie={movie} 
+          inCinemas={inCinemas} 
+          maximum={maximum} 
+          posterPath={posterPath}
+          backdropPath={backdropPath}
+        />}
       />
-
-      <WatchlistSheet ref={sheetRef} setIsActive={(state) => setIsActive(state)} />
-      <UserSheet ref={userSheetRef} setIsActive={(state) => setIsActiveUsers(state)} />
 
       {(isActive || isActiveUsers) && <BottomBar />}
     </ScreenBackground>

@@ -1,15 +1,14 @@
 import { getMovieOfTheDay } from "@/api/tmdbApi";
 import { textStyle } from "@/styles/textStyles";
 import { useFocusEffect, useNavigation } from "expo-router";
-import React, { useCallback, useState } from "react";
-import { Text, View, ImageBackground } from "react-native";
+import React, { memo, useCallback, useState } from "react";
+import { Text, View, ImageBackground, StyleSheet } from "react-native";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { PressableScale } from "react-native-pressable-scale";
 import { Image } from "expo-image";
-import { Skeleton } from "react-native-skeletons";
-import Animated from "react-native-reanimated";
+import Animated, { createAnimatedComponent } from "react-native-reanimated";
 
-export default function MovieOfTheDay() {
+function MovieOfTheDay() {
   const navigator = useNavigation();
   const [movie, setMovie] = useState();
 
@@ -22,17 +21,20 @@ export default function MovieOfTheDay() {
 
       loadMovie();
     }, [])
-  )
+  );
+
+  const AnimatedFastImage = createAnimatedComponent(Image);
 
   return (
     <>
-      <Animated.Image
+      <AnimatedFastImage 
         sharedTransitionTag={`movie-${movie?.movie_id}-backdrop`}
         source={{
           uri: `https://image.tmdb.org/t/p/w300${movie?.backdrop_path
             || movie?.poster_path}`
         }}
         style={styles.backdrop}
+        cachePolicy="memory-disk"
       />
       <View style={styles.background}>
         <Image
@@ -51,7 +53,7 @@ export default function MovieOfTheDay() {
         <PressableScale style={{}}
           onPress={() =>
             navigator?.navigate("MovieDetailScreen",
-              { movieID: movie?.movie_id }
+              { movieID: movie?.movie_id, backdropPath: movie?.backdrop_path, posterPath: movie?.poster_path }
             )
           }>
           <View style={styles.view}>
@@ -67,10 +69,11 @@ export default function MovieOfTheDay() {
             </Text>
           </View>
 
-          <Animated.Image
+          <AnimatedFastImage 
             sharedTransitionTag={`movie-${movie?.movie_id}-poster`}
             source={{ uri: `https://image.tmdb.org/t/p/w300${movie?.poster_path}` }}
             style={styles.poster}
+            cachePolicy="memory-disk"
           />
         </PressableScale>
       </View>
@@ -78,7 +81,9 @@ export default function MovieOfTheDay() {
   )
 };
 
-const styles = {
+export default memo(MovieOfTheDay);
+
+const styles = StyleSheet.create({
   logo: {
     height: "10%",
     width: "20%",
@@ -119,4 +124,4 @@ const styles = {
     borderColor: "rgba(255, 255, 255, 0.2)",
     borderWidth: 0.5
   },
-}
+});

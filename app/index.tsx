@@ -6,6 +6,7 @@ import { RTClient } from "./rt_client/rt_client";
 import * as Notifications from "@/utils/notifications";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { KeyboardProvider } from "react-native-keyboard-controller";
 
 Notifications.configure();
 
@@ -19,9 +20,11 @@ export default function App() {
     <GestureHandlerRootView style={{
       flex: 1,
     }}>
-      <BottomSheetModalProvider>
-        {isHydrated ? (isAuthenticated ? <TabNavigator /> : <AuthNavigator />) : null}
-      </BottomSheetModalProvider>
+      <KeyboardProvider>
+        <BottomSheetModalProvider>
+          {isHydrated ? (isAuthenticated ? <TabNavigator /> : <AuthNavigator />) : null}
+        </BottomSheetModalProvider>
+      </KeyboardProvider>
     </GestureHandlerRootView>
   );
 };

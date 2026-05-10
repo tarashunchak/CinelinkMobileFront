@@ -1,10 +1,12 @@
 import { textStyle } from "@/styles/textStyles";
 import { useNavigation } from "expo-router";
 import React, { memo, useCallback } from "react";
-import { View, Text, Image, StyleSheet } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { PressableScale } from "react-native-pressable-scale";
+import { createAnimatedComponent } from "react-native-reanimated";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
+import { Image } from "expo-image";
 
 type RecommendedBy_T = {
   user_id: number;
@@ -22,15 +24,22 @@ export type RecommendedCard_T = {
   recommended_by: RecommendedBy_T[];
 };
 
+const AnimatedFastImage = createAnimatedComponent(Image);
+
 const RecommendationItem = memo(({ item }: { item: RecommendedCard_T }) => {
   const navigator = useNavigation();
   return (
     <PressableScale
       activeScale={0.98}
       style={styles.cardContainer}
-      onPress={() => navigator?.navigate("MovieDetailScreen", { movieID: item?.movie_id })}
+      onPress={() => navigator?.navigate("MovieDetailScreen", { movieID: item?.movie_id, posterPath: item?.poster_path })}
     >
-      <Image style={styles.poster} source={{ uri: `https://image.tmdb.org/t/p/w300${item?.poster_path}` }} />
+      <AnimatedFastImage 
+        sharedTransitionTag={`movie-${item?.movie_id}-poster`}
+        style={styles.poster} 
+        source={{ uri: `https://image.tmdb.org/t/p/w300${item?.poster_path}` }} 
+        cachePolicy="memory"
+      />
       <View style={styles.infoColumn}>
         <Text style={[styles.title, textStyle.white20]}
           pointerEvents="none"
@@ -51,7 +60,7 @@ const RecommendationItem = memo(({ item }: { item: RecommendedCard_T }) => {
           <View style={styles.avatarRow}>
             {
               item?.recommended_by?.slice(0, 3)?.map((user: any, index: number) => (
-                <Image key={index} style={styles.avatarItem} source={{ uri: user?.avatar_url }} />
+                <Image key={user?.user_id} style={styles.avatarItem} source={{ uri: user?.avatar_url }} />
               ))
             }
             {

@@ -1,5 +1,5 @@
 import { textStyle } from "@/styles/textStyles";
-import React, { memo } from "react";
+import React, { memo, useCallback, useMemo } from "react";
 import { Linking, TouchableOpacity, View, Text, StyleSheet } from "react-native";
 import { Movie } from "../../movie_details/types";
 import { useNavigation } from "expo-router";
@@ -9,23 +9,39 @@ import { Skeleton } from "react-native-skeletons";
 import { createAnimatedComponent } from "react-native-reanimated";
 import { Image } from "expo-image";
 
+const AnimatedFastImage = createAnimatedComponent(Image);
 
 function MovieCard({ movie }: { movie: Movie | null }) {
   const navigator = useNavigation();
   if (!movie) return <Skeleton height={118} width={"100%"} style={styles.mainView} />
 
-  const AnimatedFastImage = createAnimatedComponent(Image);
+  const handlerPress = useCallback(()=>{
+    if(!movie) return;
+    navigator?.push("MovieDetailScreen", { 
+      movieID: movie?.movie_id, 
+      posterPath: movie?.poster_path,
+    });
+  }, [movie?.movie_id, movie?.poster_path]);
+
+  const openIMDb = useCallback(async () => {
+    if(!movie?.imdb_id) return;
+    const url = `https://www.imdb.com/titleText/${movie?.imdb_id}`;
+    const sup = await Linking.canOpenURL(url);
+    if (sup) Linking.openURL(url);
+  }, [movie?.imdb_id]);
+
+  const releaseYear = useMemo(()=> 
+    movie?.release_date ? ` (${movie?.release_date?.slice(0, 4)})` : "0.0",
+  [movie?.release_date]);
 
   return (
     <PressableScale
       activeScale={0.98}
-      style={[styles?.mainView]}
-      onPress={() => {
-        navigator?.push("MovieDetailScreen",
-          { movieID: movie?.movie_id, posterPath: movie?.poster_path });
-      }}>
+      style={styles?.mainView}
+      onPress={handlerPress}
+    >
       <AnimatedFastImage
-        sharedTransitionStyle={`movie-${movie?.movie_id}-poster`}
+        sharedTransitionTag={`movie-${movie?.movie_id}-poster`}
         source={{ uri: `https://image.tmdb.org/t/p/w300${movie.poster_path}` }}
         style={styles.poster}
         pointerEvents="none"
@@ -33,7 +49,7 @@ function MovieCard({ movie }: { movie: Movie | null }) {
       />
       <View style={{ flexDirection: "column", height: "100%", marginLeft: "4%", justifyContent: "space-evenly" }}>
         <View style={{ flexDirection: "row", justifyContent: "flex-start" }}>
-          <Text style={[...textStyle.white16, styles.titleText]}
+          <Text style={[textStyle.white16, styles.titleText]}
             pointerEvents="none"
             numberOfLines={1}
             ellipsizeMode="tail"
@@ -46,16 +62,12 @@ function MovieCard({ movie }: { movie: Movie | null }) {
               textStyle.gray16
             ]}
             pointerEvents="none">
-            {` (${movie?.release_date?.slice(0, 4)})`}
+            {releaseYear}
           </Text>
         </View>
 
         <TouchableOpacity style={styles.imdbView}
-          onPress={async () => {
-            const url = `https://www.imdb.com/titleText/${movie?.imdb_id}`;
-            const sup = await Linking.canOpenURL(url);
-            if (sup) Linking.openURL(url);
-          }}
+          onPress={openIMDb}
         >
           <Text style={styles.imdbText}>
             {`IMDb: ${movie?.imdb_rating?.toFixed(1)}`}

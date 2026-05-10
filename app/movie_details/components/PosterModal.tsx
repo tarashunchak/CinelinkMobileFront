@@ -2,15 +2,17 @@ import React from "react";
 import { Image, Modal, StyleSheet, View } from "react-native";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { PressableScale } from "react-native-pressable-scale";
+import AnimatedFastImage from "@/components/ui/animated-fast-image";
 
 interface Props {
   isOpen: boolean;
   posterUrl: string;
   onClose: () => void;
+  movieID?: number;
 };
 
 export default function PosterModal(
-  { isOpen, posterUrl, onClose }: Props
+  { isOpen, posterUrl, onClose, movieID }: Props
 ) {
   return (
     <Modal
@@ -40,9 +42,11 @@ export default function PosterModal(
             />
           </PressableScale>
           <View style={styles.posterView}>
-            <Image
+            <AnimatedFastImage
+              sharedTransitionTag={`movie-${movieID}-poster`}
               style={styles.posterImage}
-              source={{ uri: "https://image.tmdb.org/t/p/w500" + posterUrl }}
+              source={{ uri: "https://image.tmdb.org/t/p/w300" + posterUrl }}
+              cachePolicy="memory"
             />
           </View>
         </View>

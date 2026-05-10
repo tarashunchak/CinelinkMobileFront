@@ -14,16 +14,6 @@ const icons = {
   library: require('@/app/bars/assets/bookmark.png'),
 };
 
-const styles = StyleSheet.create({
-  main: {
-    alignItems: "center",
-  },
-  image: {
-    width: 28,
-    height: 28,
-  },
-});
-
 function BottomBarIconButton({ source, navigateTo }: { source: string, navigateTo: string }) {
   const navigator = useNavigation();
 
@@ -49,5 +39,14 @@ function BottomBarIconButton({ source, navigateTo }: { source: string, navigateT
   )
 };
 
-
 export default memo(BottomBarIconButton);
+
+const styles = StyleSheet.create({
+  main: {
+    alignItems: "center",
+  },
+  image: {
+    width: 28,
+    height: 28,
+  },
+});

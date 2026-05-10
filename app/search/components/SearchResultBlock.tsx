@@ -9,6 +9,7 @@ import ScreenBackground from "@/components/ui/screen-background";
 import SearchInput from "./SearchInput";
 import Spacer from "@/components/ui/spacer";
 import { heightPercentageToDP } from "react-native-responsive-screen";
+import BottomBar from "@/app/bars/bottomBar";
 
 type Search = {
 
@@ -56,6 +57,7 @@ export default function SearchResultBlock({ route }: any) {
       <Spacer orientation="v" spacing={heightPercentageToDP(5)} />
       <SearchInput placeholder="Enter query..." value={_value} setValue={setValue} onChangeText={load} />
       <ContentBlock query={_value} />
+      <BottomBar/>
     </ScreenBackground>
   )
 };

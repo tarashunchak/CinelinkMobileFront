@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { memo, useState } from "react";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { StyleSheet, Text, View } from "react-native";
 import ReturnArrowButton from "@/components/ui/returnArrowButton";
@@ -8,11 +8,9 @@ import { Movie } from "../types";
 import { PressableScale } from "react-native-pressable-scale";
 import PosterModal from "./PosterModal";
 import { MONTH } from "@/utils/month";
-import { Skeleton } from "react-native-skeletons";
-import Animated, { createAnimatedComponent } from "react-native-reanimated";
-import { Image } from "expo-image";
+import AnimatedFastImage from "@/components/ui/animated-fast-image";
 
-export default function MainInfo(
+function MainInfo(
   { movie, inCinemas = false, maximum, posterPath, backdropPath}
     : {
       movie?: Movie,
@@ -27,8 +25,6 @@ export default function MainInfo(
     backdropPath = movie?.images?.backdrops[movie?.images?.backdrops?.length - 1]?.file_path;
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
-
-  const AnimatedFastImage = createAnimatedComponent(Image);
 
   const poster = (
     <>
@@ -94,11 +90,14 @@ export default function MainInfo(
           isOpen={isOpen}
           posterUrl={movie?.poster_path}
           onClose={() => { setIsOpen(false) }}
+          movieID={movie?.id}
         />
       }
     </View >
   )
 };
+
+export default memo(MainInfo);
 
 const styles = StyleSheet.create({
   backdrop: {

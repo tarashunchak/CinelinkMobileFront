@@ -20,10 +20,11 @@ export default function CreditCardsList(
       keyExtractor={(item: any, index: number) => String(item?.id ?? index)}
       renderItem={({ item }) => <CreditCard credit={item} />}
       ListFooterComponent={
-        <EmptyCreditCard
+        credits?.length ? <EmptyCreditCard
           movieID={movieID}
           poster_path={poster_path}
         />
+        : null
       }
     />
   )

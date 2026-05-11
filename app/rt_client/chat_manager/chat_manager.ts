@@ -130,5 +130,5 @@ export class ChatManager {
 
   public isLoaded(chatID: ChatID): boolean {
     return this.loadedStatus?.get(chatID) ?? false;
-  }
+  };
 };

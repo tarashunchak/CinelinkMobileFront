@@ -10,6 +10,11 @@ export interface Content {
   message?: any;
   is_typing?: boolean;
   is_online?: boolean;
+  name?: string;
+  image_url: string;
+  avatar_url: string;
+  chat_type?: 'direct' | 'group';
+  participants_ids?: number[];
   page?: string;
 };
 

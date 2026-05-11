@@ -1,6 +1,6 @@
 import { ChatManager } from "../chat_manager/chat_manager";
 import { Content, WSMessage } from "../ws_connector/ws_connector";
-import { useChatStore } from "../chat_state";
+import { useChatStore } from "../app_state";
 
 type WSHandler = (msg: WSMessage, manager: ChatManager) => void;
 
@@ -45,9 +45,18 @@ function handleMessageDeleted(msg: WSMessage, manager: ChatManager) {
 };
 
 function handleChatCreated(msg: WSMessage, manager: ChatManager) {
+  useChatStore.getState()._setChat(msg.content?.chat_id, 
+    {
+      chat_id: msg.content?.chat_id,
+      image_url: msg.content?.image_url,
+      name: msg.content?.name,
+      type: msg.content?.chat_type,
+      participatns_ids: msg.content?.participants_ids,
+    });
 };
 
 function handleChatDeleted(msg: WSMessage, manager: ChatManager) {
+  useChatStore.getState()._removeChat(msg.content?.chat_id);
 };
 
 function handleChatEntering(msg: WSMessage, manager: ChatManager) {

@@ -1,6 +1,14 @@
 import { create } from "zustand";
 import { ChatMessage } from "./message_storage/message_storage";
 
+interface Chat {
+  chat_id: number;
+  participatns_ids: number[];
+  image_url: string;
+  name: string;
+  chat_type: 'direct' | 'group';
+};
+
 interface User {
   id: number;
   username: string;
@@ -14,6 +22,7 @@ interface TypingStatus {
 
 export interface ChatState {
   users: Record<number, User>;
+  chats: Record<number, Chat>;
   messages: Record<number, ChatMessage[]>;
   lastMessage: Record<number, ChatMessage>;
   typingStatus: Record<number, Record<number, boolean>>;
@@ -28,10 +37,15 @@ export interface ChatState {
   _setUsersBatch: (users: Map<number, User>) => void;
   _addChatMessage: (chatID: number, msg: ChatMessage) => void;
   _setLastSeenMessageID: (chatID: number, msgID: number) => void;
+  _setChat: (chatID: number, chat: Chat) => void;
+  _removeChat: (chatID: number) => void;
+  _removeUser: (userID: number) => void;
+  _setChatsBatch: (chats: Map<number, Chat>) => void;
 };
 
 export const useChatStore = create<ChatState>((set) => ({
   users: {},
+  chats: {},
   messages: {},
   typingStatus: {},
   onlineStatus: {},
@@ -65,5 +79,19 @@ export const useChatStore = create<ChatState>((set) => ({
   })),
   _setLastSeenMessageID: (chatID, msgID) => set((s) => ({
     lastSeenMessageID: { ...s.lastSeenMessageID, [chatID]: msgID }
+  })),
+  _setChat: (chatID, chat) => set((s)=>({
+    chats: {...s.chats, [chatID]: chat}
+  })),
+  _removeChat: (chatID) => set((s) => {
+    const {[chatID]: _, ...remainingChats} = s.chats;
+    return {chats: remainingChats}
+  }),
+  _removeUser: (userID) => set((s) => {
+    const {[userID]: _, ...remainingUsers} = s.users;
+    return {users: remainingUsers}
+  }),
+  _setChatsBatch: (newChats) => set((s) => ({
+    chats: { ...s.chats, ...newChats}
   })),
 }));

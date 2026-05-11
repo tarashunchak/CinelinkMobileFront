@@ -2,6 +2,8 @@ import { kMaxLength } from "node:buffer";
 
 export type ChatID = number;
 export type UserID = number;
+export type WatchlistID = number;
+export type MessageID = number;
 
 interface Chat {
   chat_id: number;

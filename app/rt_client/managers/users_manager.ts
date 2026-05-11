@@ -47,7 +47,21 @@ const useUserStore = create<UserState>((set) => ({
   })),
 }));
 
-class UsersManager_ extends EntinyManager<User_T> {
+export class UsersManager extends EntinyManager<User_T> {
+  private currUserID: number = 0;
+  private static instance: UsersManager;
+
+  public static getInstance(): UsersManager {
+    if(!UsersManager.instance)
+      UsersManager.instance = new UsersManager();
+    return UsersManager.instance;
+  };
+
+  public init(userID: UserID){
+    this.currUserID = userID;
+    this.load(userID);
+  };
+
   public async load(userID: UserID) {
     const resp = await fetch(`${API_URL}/users/init/${userID}`);
     const data = await resp.json();
@@ -89,8 +103,6 @@ class UsersManager_ extends EntinyManager<User_T> {
     return users;
   };
 };
-
-export const usersManager = new UsersManager_();
 
 export function useUsers():any[] {
   const users = useUserStore(useShallow((s) => Object.values(s.users)));

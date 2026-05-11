@@ -1,6 +1,7 @@
 import { API_URL } from "@/api/API_CONFIG";
 import { UserID } from "../models/models";
 import { create } from "zustand";
+import { EntinyManager } from "./base_class";
 
 type User_T = {
   user_id: number;
@@ -43,17 +44,9 @@ const useUserStore = create<UserState>((set) => ({
   })),
 }));
 
-abstract class EntinyManager<T>{
-  abstract load(currUserID: number): void;
-  abstract add(id: number, item: T): void;
-  abstract addMany(items: Map<number, T>): void;
-  abstract remove(id: number): void;
-  abstract update(id: number, data: Partial<T>): void;
-};
-
-export class UsersManager extends EntinyManager<any> {
+export class UsersManager extends EntinyManager<User_T> {
   public async load(userID: UserID) {
-    const resp = await fetch(`${API_URL}`);
+    const resp = await fetch(`${API_URL}/load-users/${userID}`);
     const data = await resp.json();
     if(!resp.ok || data?.status !== 200)
       return;

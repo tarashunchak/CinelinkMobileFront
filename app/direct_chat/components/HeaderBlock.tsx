@@ -1,20 +1,23 @@
-import { RTClient, useUserStatus, useUserTypingInChatStatus } from "@/app/rt_client/rt_client";
 import ReturnArrowButton from "@/components/ui/returnArrowButton";
 import { textStyle } from "@/styles/textStyles";
 import { useNavigation } from "expo-router";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { View, Text, Image, TouchableOpacity, Platform, StyleSheet } from "react-native";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { ChatMember } from "@/app/rt_client/models/models";
 import { calcLastSeen } from "../utils/utils";
 import { GetUserLastSeenTimestamp } from "@/api/users";
+import { useChat } from "@/app/rt_client/managers/chats_manager";
+import { useUserStatus } from "@/app/rt_client/managers/users_manager";
+import AnimatedFastImage from "@/components/ui/animated-fast-image";
 
 export default function Header({ chatID, peer }: { chatID: number, peer: ChatMember }) {
   const navigator = useNavigation();
   const [lastSeen, setLastSeen] = useState<string>();
+  const chat = useChat(chatID);
 
-  const isTyping = useUserTypingInChatStatus(peer?.user_id, chatID);
   const isOnline = useUserStatus(peer?.user_id);
+  const isTyping = false;
 
   useEffect(() => {
     async function loadContent() {
@@ -39,16 +42,18 @@ export default function Header({ chatID, peer }: { chatID: number, peer: ChatMem
               });
             }}
           >
-            <Image
+            <AnimatedFastImage
+              sharedTransitionTag={`chat-${chat?.chat_id}-image`}
               style={stylesR.avatarImg}
-              source={{ uri: peer?.avatar_url }}
+              source={{ uri: chat?.img_url}}
+              cachePolicy="memory"
             />
             {isOnline && <View style={styles.isOnline.dot}></View>}
           </TouchableOpacity>
 
           <View style={styles.chatpeer.text.view}>
             <Text style={textStyle.white18}>
-              {peer?.username}
+              {chat?.name}
             </Text>
             {!isOnline ? (
               <Text style={textStyle.gray14}>

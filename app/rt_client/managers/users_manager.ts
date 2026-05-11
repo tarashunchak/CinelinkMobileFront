@@ -2,11 +2,14 @@ import { API_URL } from "@/api/API_CONFIG";
 import { UserID } from "../models/models";
 import { create } from "zustand";
 import { EntinyManager } from "./base_class";
+import { useEffect } from "react";
+import {useShallow} from "zustand/react/shallow";
 
 type User_T = {
   user_id: number;
   username: string;
   avatar_url: string;
+  is_online: boolean;
 };
 
 interface UserState {
@@ -27,13 +30,13 @@ const useUserStore = create<UserState>((set) => ({
     onlineStatus: {...s.onlineStatus, [userID]: status}
   })),
   _setManyOnlineStatus: (statuses) => set((s) => ({
-    onlineStatus: {...s.onlineStatus, ...statuses}
+    onlineStatus: {...s.onlineStatus, ...Object.fromEntries(statuses)}
   })),
   _add: (userID, user) => set((s) => ({
     users: {...s.users, [userID]: user}
   })),
   _addMany: (newUsers) => set((s) => ({
-    users: {...s.users, ...newUsers}
+    users: {...s.users, ...Object.fromEntries(newUsers)}
   })),
   _remove: (userID) => set((s)=>{
     const {[userID]: _, ...remainingUsers } = s.users;
@@ -44,14 +47,25 @@ const useUserStore = create<UserState>((set) => ({
   })),
 }));
 
-export class UsersManager extends EntinyManager<User_T> {
+class UsersManager_ extends EntinyManager<User_T> {
   public async load(userID: UserID) {
-    const resp = await fetch(`${API_URL}/load-users/${userID}`);
+    const resp = await fetch(`${API_URL}/users/init/${userID}`);
     const data = await resp.json();
-    if(!resp.ok || data?.status !== 200)
+    if(!resp.ok || data?.status !== 200){
+      console.log("Users init err: ", resp);
       return;
+    };
 
-    useUserStore.getState()._addMany(data?.results);
+    const map = new Map();
+    const statuses = new Map();
+
+    data?.results?.forEach((user: User_T)=>{
+      map.set(user.user_id, user);
+      statuses.set(user.user_id, user.is_online);
+    });
+
+    useUserStore.getState()._addMany(map);
+    useUserStore.getState()._setManyOnlineStatus(statuses);
   };
 
   public add(userID: UserID, user: any){
@@ -69,4 +83,23 @@ export class UsersManager extends EntinyManager<User_T> {
   public update(userID: UserID, data: Partial<any>) {
     useUserStore.getState()._update(userID, data);
   };
+
+  public get(userID: UserID = 0): any{
+    const users = useUserStore(s => s.users[1]);
+    return users;
+  };
+};
+
+export const usersManager = new UsersManager_();
+
+export function useUsers():any[] {
+  const users = useUserStore(useShallow((s) => Object.values(s.users)));
+  useEffect(()=>{}, [users?.length]);
+  return users;
+};
+
+export function useUserStatus(userID: UserID): boolean {
+  const status = useUserStore(state => state.onlineStatus[userID] ?? false);
+  useEffect(() => {}, [userID, status]);
+  return status;
 };

@@ -1,12 +1,15 @@
 import { API_URL } from "@/api/API_CONFIG";
-import { ChatID } from "../models/models";
+import { ChatID, UserID } from "../models/models";
 import { create } from "zustand";
 import { EntinyManager } from "./base_class";
+import { useEffect } from "react";
+import { useShallow } from "zustand/react/shallow";
+import { ChatManager } from "../chat_manager/chat_manager";
 
 type Chat_T = {
   chat_id: number;
-  chatname: string;
-  avatar_url: string;
+  name: string;
+  img_url: string;
 };
 
 interface ChatState {
@@ -29,7 +32,7 @@ const useChatStore = create<ChatState>((set) => ({
     chats: {...s.chats, [chatID]: chat}
   })),
   _addMany: (newChats) => set((s) => ({
-    chats: {...s.chats, ...newChats}
+    chats: {...s.chats, ...Object.fromEntries(newChats)}
   })),
   _remove: (chatID) => set((s)=>{
     const {[chatID]: _, ...remainingChats } = s.chats;
@@ -41,13 +44,33 @@ const useChatStore = create<ChatState>((set) => ({
 }));
 
 export class ChatsManager extends EntinyManager<Chat_T> {
-  public async load(chatID: ChatID) {
-    const resp = await fetch(`${API_URL}`);
+  private static instance: ChatsManager;
+  private currUserID: number = 0;
+  constructor(){
+    super();
+  };
+
+  public static getInstance(): ChatsManager {
+    if(!ChatsManager.instance)
+      ChatsManager.instance = new ChatsManager();
+    return ChatsManager.instance;
+  };
+
+  public init(userID: UserID){
+    this.currUserID = userID;
+    this.load(userID);
+  };
+
+  public async load(userID: UserID = 0) {
+    const resp = await fetch(`${API_URL}/users/${userID ?? this.currUserID}/chats`);
     const data = await resp.json();
     if(!resp.ok || data?.status !== 200)
       return;
 
-    useChatStore.getState()._addMany(data?.results);
+    const map = new Map<number, Chat_T>(data?.results?.map((chat: Chat_T)=> [chat.chat_id, chat]));
+    console.log("Chats init: ", map);
+
+    useChatStore.getState()._addMany(map);
   };
 
   public add(chatID: ChatID, chat: any){
@@ -65,4 +88,22 @@ export class ChatsManager extends EntinyManager<Chat_T> {
   public update(chatID: ChatID, data: Partial<any>) {
     useChatStore.getState()._update(chatID, data);
   };
+
+  public get(chatID: number): void {
+    
+  };
+};
+
+export function useUserChats(): any[]{
+  const chats = useChatStore(useShallow((s) => Object.values(s.chats)))
+  if(!chats || chats.length === 0)
+    ChatsManager.getInstance().load();
+  useEffect(()=>{}, []);
+  return chats;
+};
+
+export function useChat(chatID: ChatID): any {
+  const chat = useChatStore(s => s.chats[chatID]);
+  useEffect(()=>{}, [chatID]);
+  return chat;
 };

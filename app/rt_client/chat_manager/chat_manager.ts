@@ -1,12 +1,11 @@
 import { jwtHeaders } from "@/utils/utils";
-import { ChatID, UserID } from "./../models/models";
+import { ChatID } from "./../models/models";
 import { useAuthStore } from "@/local_storage/user/asyncStorage/store";
 import { WSMessage } from "../ws_connector/ws_connector";
 import { MessagesQueue } from "../messages_queue/messages_queue";
 import { MessageStorage } from "../message_storage/message_storage";
 import { ChatMessage } from "../message_storage/message_storage";
-import { useCallback } from "react";
-import { useChatStore } from "../chat_state";
+import { useChatStore } from "../app_state";
 
 export type Chat = {
   info: {

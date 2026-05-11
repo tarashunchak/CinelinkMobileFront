@@ -17,7 +17,7 @@ import RecommendationsList from "./components/RecommendationsList";
 export default function SocialScreen() {
   const tabs = ["Friends", "Recommendations", "Activity", "Chats"];
   const [activeTab, setActiveTab] = useState(tabs[0]);
-  const [friends, setFriends] = useState<UserCard_T[]>(Array.from({ length: 8 }));
+  //const [friends, setFriends] = useState<UserCard_T[]>(Array.from({ length: 8 }));
   const [recommendations, setRecommendatoins] = useState<RecommendedCard_T[]>([]);
   const [chats, setChats] = useState<any[]>(Array.from({ length: 8 }));
   const [activity, setActivity] = useState<any[]>([]);
@@ -25,10 +25,9 @@ export default function SocialScreen() {
   useEffect(() => {
     async function loadContent() {
       await RTClient.setPageEntering("social", getCurrentUserID());
-
       const data = await GetSocial();
       if (data) {
-        setFriends(data?.friends);
+        //setFriends(data?.friends);
         setRecommendatoins(data?.recommendations);
         setChats(data?.chats);
       }
@@ -40,7 +39,7 @@ export default function SocialScreen() {
   const renderList = useCallback(() => {
     switch (activeTab) {
       case "Friends":
-        return <FriendsList friends={friends} />
+        return <FriendsList />
       case "Recommendations":
         return <RecommendationsList items={recommendations} />
       case "Activity":

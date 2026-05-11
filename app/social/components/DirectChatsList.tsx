@@ -5,19 +5,18 @@ import { PressableScale } from "react-native-pressable-scale";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { useNavigation } from "expo-router";
 import { RTClient, useChatLastMessage, useUnseenMessageCount, useUserStatus, useUserTypingInChatStatus } from "@/app/rt_client/rt_client";
-import { useChatStore } from "@/app/rt_client/chat_state";
+import { useChats, useUserChats } from "@/app/rt_client/managers/chats_manager";
+import AnimatedFastImage from "@/components/ui/animated-fast-image";
 
 const DirectChatCard = memo(({ item }: { item: any }) => {
   const chatID = item?.chat_id;
   const navigator = useNavigation();
   RTClient.createMessageStorage(chatID);
   RTClient.getChatMessages(chatID);
-  //RTClient.setChatEntering(chatID, useAuthStore.getState().user?.user_id ?? 1);
   const peerID = item?.peer_id?.["Int32"];
   const isTyping = useUserTypingInChatStatus(peerID, chatID);
   const lastMessage = useChatLastMessage(chatID);
   const isOnline = useUserStatus(peerID);
-  const username = useChatStore.getState().users[lastMessage?.user_id]?.username;
 
   const unSeenMessageCnt = useUnseenMessageCount(chatID);
 
@@ -31,12 +30,11 @@ const DirectChatCard = memo(({ item }: { item: any }) => {
     >
       <View style={styles.infoView}>
         <View style={{ flexDirection: "row", alignItems: "center" }}>
-          <Image
+          <AnimatedFastImage
+            sharedTransitionTag={`chat-${item?.chat_id}-image`}
             style={styles.image}
-            source={
-              item?.img_url ? { uri: item?.img_url } :
-                require("@/assets/images/giggaNigga.png")
-            }
+            source={{ uri: item?.img_url }}
+            cachePolicy="memory"
           />
           {isOnline && <View style={styles.onlineDot}></View>}
         </View>
@@ -46,7 +44,7 @@ const DirectChatCard = memo(({ item }: { item: any }) => {
             numberOfLines={1}
             ellipsizeMode="tail"
             style={[textStyle.gray16, { maxWidth: "100%" }]}
-          >{isTyping ? "typing..." : `${username}: ` + lastMessage?.message}</Text>
+          >{isTyping ? "typing..." : lastMessage?.message}</Text>
         </View>
       </View>
       <View style={{
@@ -68,6 +66,8 @@ function ChatsList({ chats }: { chats: any[] }) {
   const renderItem = useCallback(({ item }: any) => (
     <DirectChatCard item={item} />
   ), [chats]);
+
+  chats = useUserChats();
 
   return (
     <FlatList

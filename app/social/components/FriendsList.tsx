@@ -1,12 +1,12 @@
 import { textStyle } from "@/styles/textStyles";
-import React, { memo, useCallback } from "react";
+import React, { memo, useCallback, useMemo } from "react";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { FlatList, View, Text, StyleSheet } from "react-native";
 import { useNavigation } from "expo-router";
 import { PressableScale } from "react-native-pressable-scale";
-import { useUserStatus } from "@/app/rt_client/rt_client";
 import { Skeleton } from "react-native-skeletons";
 import { Image } from "expo-image";
+import { useUsers, useUserStatus } from "@/app/rt_client/managers/users_manager";
 
 interface Props {
   user_id: number;
@@ -50,14 +50,15 @@ const FriendCard = memo(({ friend }: { friend: Props }) => {
   );
 });
 
-function FriendsList({ friends }: { friends: any[] }) {
+function FriendsList() {
+  const users = useUsers();
   const renderItem = useCallback(({ item }: any) => (
     <FriendCard friend={item} />
   ), []);
 
   return (
     <FlatList
-      data={friends}
+      data={users}
       keyExtractor={(item: any, index: number) => String(item?.user_id ?? index)}
       renderItem={renderItem}
       removeClippedSubviews

@@ -4,4 +4,5 @@ export abstract class EntinyManager<T>{
   abstract addMany(items: Map<number, T>): void;
   abstract remove(id: number): void;
   abstract update(id: number, data: Partial<T>): void;
+  abstract get(id: number): void;
 };

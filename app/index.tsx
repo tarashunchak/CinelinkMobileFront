@@ -7,6 +7,7 @@ import * as Notifications from "@/utils/notifications";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { KeyboardProvider } from "react-native-keyboard-controller";
+import { ChatsManager } from "./rt_client/managers/chats_manager";
 
 Notifications.configure();
 
@@ -14,6 +15,8 @@ export default function App() {
   useAuthStore.getState().init();
   const isAuthenticated = useAuthStore(state => state.isAuthenticated);
   const isHydrated = useAuthStore(state => state.isHydrated);
+  
+  ChatsManager.getInstance().init(1);
 
   RTClient.connect(useAuthStore?.getState()?.user?.user_id);
   return (

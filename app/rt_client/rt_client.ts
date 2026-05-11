@@ -4,8 +4,9 @@ import { Chat, ChatManager } from "./chat_manager/chat_manager";
 import * as Makers from "./message_makers/message_makers";
 import { Handlers } from "./message_handlers/message_handlers";
 import { useEffect } from "react";
-import { useChatStore } from "./chat_state";
+import { useChatStore } from "./app_state";
 import { ChatMessage } from "./message_storage/message_storage";
+import { usersManager } from "./managers/users_manager";
 
 const WS_ADDRESS = (userID: UserID): string =>
   `${process.env.EXPO_PUBLIC_WS_URL}/${userID}`;
@@ -16,6 +17,11 @@ const HTTP_ADDRESS = (chatID: ChatID): string =>
 class RTClient_ {
   private wsConnections: Map<UserID, WSConnector> = new Map();
   private chatManager: ChatManager = new ChatManager();
+  private currUserID: UserID = 0;
+
+  public getCurrUserID(): number {
+    return this.currUserID;
+  };
 
   private onWSMessage(data: any) {
     const type = data?.type;
@@ -27,6 +33,7 @@ class RTClient_ {
 
   public connect(userID: UserID) {
     console.warn("User id in connect: ", userID);
+    this.currUserID = userID;
     //const url = `${process.env.EXPO_PUBLIC_WS_URL}/` + userID;
     const url = WS_ADDRESS(userID);
     console.warn("url: ", url);
@@ -173,4 +180,20 @@ export function useUserTypingInChatStatus(userID: UserID, chatID: ChatID): boole
 export function useUnseenMessageCount(chatID: ChatID): number {
   const lastMessage = useChatStore(state => state.lastMessage[chatID]?.message_id ?? 0);
   return lastMessage;
+};
+
+export function useChatTypingUsers(chatID: ChatID): string {
+  return "a";
+};
+
+
+export function useChat(chatID: ChatID){
+  const messages = useChatMessages(chatID);
+  const typingListener = (e: Event)=>{
+    if(typeof e === FocusEvent)
+    RTClient.setTypingStatus(chatID, RTClient.getCurrUserID(), status);
+  };
+  return {
+    messages,
+  };
 };

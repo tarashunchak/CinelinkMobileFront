@@ -1,13 +1,15 @@
+import AnimatedFastImage from "@/components/ui/animated-fast-image";
 import { textStyle } from "@/styles/textStyles";
 import { useNavigation } from "expo-router";
-import React from "react";
-import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
+import React, { memo } from "react";
+import { View, Text, Image, StyleSheet } from "react-native";
+import { PressableScale } from "react-native-pressable-scale";
 
-export default function MovieCard({ movie }: { movie: any }) {
+function MovieCard({ movie }: { movie: any }) {
   const navigator = useNavigation();
   console.warn("Movie card data: ", movie);
   return (
-    <TouchableOpacity style={styles.view}
+    <PressableScale style={styles.view}
       onPress={() => {
         navigator.navigate(
           "MovieDetailScreen",
@@ -16,9 +18,11 @@ export default function MovieCard({ movie }: { movie: any }) {
       }}
     >
       <View style={{ flexDirection: "row", gap: 10 }}>
-        <Image
+        <AnimatedFastImage
+          sharedTransitionTag={`movie-${movie?.id}-poster`}
           style={styles.poster}
           source={{ uri: `https://image.tmdb.org/t/p/w300/${movie?.poster_path}` }}
+          cachePolicy="memory"
         />
         <View style={styles.infoView}>
           <Text
@@ -52,9 +56,11 @@ export default function MovieCard({ movie }: { movie: any }) {
           />
         </View>
       </View>
-    </TouchableOpacity >
-  )
-}
+    </PressableScale >
+  );
+};
+
+export default memo(MovieCard);
 
 const styles = StyleSheet.create({
   view: {

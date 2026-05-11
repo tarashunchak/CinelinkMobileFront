@@ -24,6 +24,7 @@ export default function MovieDetailScreen({ route }: any) {
   const { movieID, inCinemas, maximum, backdropPath, posterPath } = route?.params;
   const [isActive, setIsActive] = useState<boolean>(true);
   const [isActiveUsers, setIsActiveUsers] = useState<boolean>(true);
+  const [credits, setCredits] = useState<any[]>([]);
 
   const sheetRef = useRef<WatchlistSheetRef>(null);
   const userSheetRef = useRef<UserSheetRef>(null);
@@ -31,7 +32,11 @@ export default function MovieDetailScreen({ route }: any) {
   useEffect(() => {
     async function load() {
       const data = await LoadMovieDetails(movieID);
-      if (data) setMovie(data);
+      if (data) {
+        setMovie({...data, ...{credits: {}}});
+        setCredits(data?.credits);
+        console.warn("Movie details: ", data);
+      };
     }
     load();
   }, [movieID]);
@@ -71,7 +76,7 @@ export default function MovieDetailScreen({ route }: any) {
           <Text style={styles.title}>Cast</Text>
           <CreditCardsList
             movieID={movieID}
-            credits={movie?.credits?.cast}
+            credits={credits?.cast}
             poster_path={movie?.poster_path}
           /></>)
       case "crew":
@@ -79,7 +84,7 @@ export default function MovieDetailScreen({ route }: any) {
           <Text style={styles.title}>Crew</Text>
           <CreditCardsList
             movieID={movieID}
-            credits={movie?.credits?.crew}
+            credits={credits?.crew}
             poster_path={movie?.poster_path}
           /></>)
       case "similar":
@@ -90,7 +95,7 @@ export default function MovieDetailScreen({ route }: any) {
             movieGenre={movie?.genres?.[0]?.id}
           /></>)
     };
-  }, []);
+  }, [movie, credits]);
 
   return (
     <ScreenBackground>

@@ -1,10 +1,11 @@
-import React, { memo } from "react";
+import React, { memo, useCallback } from "react";
 import { PressableScale } from "react-native-pressable-scale";
 import { Linking, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Image } from "expo-image";
 import { useNavigation } from "expo-router";
 import { textStyle } from "@/styles/textStyles";
 import { Skeleton } from "react-native-skeletons";
+import AnimatedFastImage from "./animated-fast-image";
 
 export interface MovieCard_I {
   id?: number;
@@ -28,15 +29,22 @@ function MovieCard({ movie }: { movie: MovieCard_I | null }) {
     />
   ));
 
+  const openIMDb = useCallback(async () => {
+    const url = `https://www.imdb.com/title/${movie?.imdb_id}`;
+    const sup = await Linking.canOpenURL(url);
+    if (sup) Linking.openURL(url);
+  }, [movie?.imdb_id])
+
   return (
     <PressableScale style={styles.mainView} onPress={() => {
       navigation?.push("MovieDetailScreen", { movieID: movie?.id });
     }}>
-      <Image
-        source={{ uri: "https://image.tmdb.org/t/p/w300" + movie?.poster_path }}
+      <AnimatedFastImage
+        sharedTransitionTag={`movie-${movie?.id}-poster`}
+        source={{ uri: `https://image.tmdb.org/t/p/w300${movie?.poster_path}`}}
         style={styles.poster}
         pointerEvents="none"
-
+        cachePolicy="memory"
       />
       <View style={styles.mainInfoView}>
         <View style={styles.columnTextInfo}>
@@ -62,11 +70,7 @@ function MovieCard({ movie }: { movie: MovieCard_I | null }) {
         </View>
 
         <TouchableOpacity style={styles.imdbView}
-          onPress={async () => {
-            const url = `https://www.imdb.com/title/${movie?.imdb_id}`;
-            const sup = await Linking.canOpenURL(url);
-            if (sup) Linking.openURL(url);
-          }}
+          onPress={openIMDb}
         >
           <Text style={[textStyle.black12, styles.imdbText]}>
             {`IMDb: ${movie?.vote_average?.toFixed(1)}`}

@@ -6,9 +6,10 @@ import { PressableScale } from "react-native-pressable-scale";
 import { Image } from "expo-image";
 import { Skeleton } from "react-native-skeletons";
 
-function CreditCard({ credit }: { credit?: any }) {
+function CreditCard({ credit }: { credit: any}) {
   const navigator = useNavigation();
   if (!credit) return <Skeleton style={styles.view} />
+
   return (
     <PressableScale
       style={styles.view}

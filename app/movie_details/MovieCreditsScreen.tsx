@@ -1,14 +1,11 @@
-import LeafyReturnArrowButton from "@/components/ui/returnArrowButton";
-import { textStyle } from "@/styles/textStyles";
-import React, { useEffect, useMemo, useState } from "react";
-import { ImageBackground, SectionList, StyleSheet, Text, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { ImageBackground, StyleSheet } from "react-native";
 import BottomBar from "../bars/bottomBar";
 import CreditCard from "./components/CreditCard";
-import { useNavigation } from "expo-router";
 import { GetMovieCredits } from "./services/services";
 import { FlatList } from "react-native-gesture-handler";
 import ReturnArrowButton from "@/components/ui/returnArrowButton";
-import { FlashList } from "@shopify/flash-list";
+import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 
 type Credit = {
   id: number;
@@ -61,7 +58,6 @@ export default function MovieCreditsScreen({ route }: any) {
 
       <BottomBar />
     </ImageBackground>
-
   )
 };
 
@@ -79,6 +75,6 @@ const styles = StyleSheet.create({
   contentContainer: {
     padding: "5%",
     paddingHorizontal: "2%",
-    paddingBottom: "10%"
+    paddingBottom: hp("10%"),
   },
 });

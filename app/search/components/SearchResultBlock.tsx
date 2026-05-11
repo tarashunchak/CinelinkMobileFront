@@ -54,7 +54,7 @@ export default function SearchResultBlock({ route }: any) {
 
   return (
     <ScreenBackground>
-      <Spacer orientation="v" spacing={heightPercentageToDP(5)} />
+      <Spacer spacing={heightPercentageToDP(5)} />
       <SearchInput placeholder="Enter query..." value={_value} setValue={setValue} onChangeText={load} />
       <ContentBlock query={_value} />
       <BottomBar/>

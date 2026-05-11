@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { FlatList, StyleSheet } from "react-native";
 import CreditCard from "./CreditCard";
 import EmptyCreditCard from "./EmptyCreditCard";
@@ -7,22 +7,28 @@ export default function CreditCardsList(
   { movieID, credits, poster_path }:
     {
       movieID: number,
-      credits?: any[],
+      credits: any[],
       poster_path: string
     }
 ) {
-  if (!credits) credits = Array.from({ length: 10 })
+
+  const isLoading = !credits || credits.length === 0;
+
+  const posterPath = useMemo(()=> poster_path, [movieID]);
+
+  const data = isLoading ? Array.from({ length: 10 }) : credits;
+
   return (
     <FlatList
       horizontal
       style={styles.view}
-      data={credits}
-      keyExtractor={(item: any, index: number) => String(item?.id ?? index)}
+      data={data}
+      keyExtractor={(item: any, index: number) => String(item?.credit_id ?? `skeleton${index}`)}
       renderItem={({ item }) => <CreditCard credit={item} />}
       ListFooterComponent={
-        credits?.length ? <EmptyCreditCard
+        credits?.[0] ? <EmptyCreditCard
           movieID={movieID}
-          poster_path={poster_path}
+          poster_path={posterPath}
         />
         : null
       }

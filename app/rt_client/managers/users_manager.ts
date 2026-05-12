@@ -90,6 +90,10 @@ export class UsersManager extends EntinyManager<User_T> {
     useUserStore.getState()._addMany(users);
   };
 
+  public addArray(id: number, items: User_T[]): void {
+    
+  };
+
   public remove(userID: UserID) {
     useUserStore.getState()._remove(userID);
   };

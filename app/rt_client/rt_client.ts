@@ -143,14 +143,14 @@ export const RTClient: RTClient_ = new RTClient_();
 
 const EMPTY_ARRAY: ChatMessage[] = [];
 
-export const useChatMessages = (chatID: ChatID) => {
+/*export const useChatMessages = (chatID: ChatID) => {
   const messages = useChatStore(state => state.messages[chatID] || EMPTY_ARRAY);
   useEffect(() => {
     if (messages.length === 0)
       RTClient.getChatMessages(chatID);
   }, [chatID, messages.length]);
   return messages;
-};
+};*/
 
 export function useChatLastMessage(chatID: ChatID): string {
   const lastMessage = useChatStore(state => state.lastMessage[chatID] ?? "");
@@ -188,12 +188,8 @@ export function useChatTypingUsers(chatID: ChatID): string {
 
 
 export function useChat(chatID: ChatID){
-  const messages = useChatMessages(chatID);
   const typingListener = (e: Event)=>{
     if(typeof e === FocusEvent)
     RTClient.setTypingStatus(chatID, RTClient.getCurrUserID(), status);
-  };
-  return {
-    messages,
   };
 };

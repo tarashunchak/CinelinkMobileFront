@@ -12,9 +12,20 @@ type Chat_T = {
   img_url: string;
 };
 
+type LastMessage_T = {
+  message_id: number,
+  message_type: string;
+  message: any,
+  user_id: number;
+  chat_id: number;
+  timestamp: string;
+};
+
 interface ChatState {
   chats: Record<ChatID, Chat_T>;
   typingStatus: Record<ChatID, boolean>;
+  lastMessages: Record<number, LastMessage_T>;
+  _setLastMessage: (chatID: ChatID, msg: LastMessage_T) => void;
   _setTypingStatus: (chatID: ChatID, status: boolean) =>  void;
   _add: (chatID: ChatID, chat: Chat_T) => void;
   _addMany: (chats: Map<ChatID, Chat_T>) => void;
@@ -25,6 +36,10 @@ interface ChatState {
 const useChatStore = create<ChatState>((set) => ({
   chats: {},
   typingStatus: {},
+  lastMessages: {},
+  _setLastMessage: (chatID, msg) => set((s) => ({
+    lastMessages: {...s.lastMessages, [chatID]: msg}
+  })),
   _setTypingStatus: (chatID, status) => set((s) => ({
     typingStatus: {...s.typingStatus, [chatID]: status}
   })),
@@ -90,7 +105,7 @@ export class ChatsManager extends EntinyManager<Chat_T> {
   };
 
   public get(chatID: number): void {
-    
+    // nothing
   };
 };
 

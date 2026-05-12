@@ -4,18 +4,20 @@ import { FlatList, View, Text, Image, StyleSheet } from "react-native";
 import { PressableScale } from "react-native-pressable-scale";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { useNavigation } from "expo-router";
-import { RTClient, useChatLastMessage, useUnseenMessageCount, useUserStatus, useUserTypingInChatStatus } from "@/app/rt_client/rt_client";
-import { useChats, useUserChats } from "@/app/rt_client/managers/chats_manager";
+import { RTClient, useUnseenMessageCount, useUserStatus, useUserTypingInChatStatus } from "@/app/rt_client/rt_client";
+import { useUserChats } from "@/app/rt_client/managers/chats_manager";
 import AnimatedFastImage from "@/components/ui/animated-fast-image";
+import { MessagesManager, useLastChatMessage } from "@/app/rt_client/managers/messages_manager";
 
 const DirectChatCard = memo(({ item }: { item: any }) => {
   const chatID = item?.chat_id;
+  MessagesManager.getInstance().init(chatID);
   const navigator = useNavigation();
   RTClient.createMessageStorage(chatID);
   RTClient.getChatMessages(chatID);
   const peerID = item?.peer_id?.["Int32"];
   const isTyping = useUserTypingInChatStatus(peerID, chatID);
-  const lastMessage = useChatLastMessage(chatID);
+  //const lastMessage = useLastChatMessage(chatID);
   const isOnline = useUserStatus(peerID);
 
   const unSeenMessageCnt = useUnseenMessageCount(chatID);
@@ -44,7 +46,7 @@ const DirectChatCard = memo(({ item }: { item: any }) => {
             numberOfLines={1}
             ellipsizeMode="tail"
             style={[textStyle.gray16, { maxWidth: "100%" }]}
-          >{isTyping ? "typing..." : lastMessage?.message}</Text>
+          >{isTyping ? "typing..." : "last_message"}</Text>
         </View>
       </View>
       <View style={{

@@ -19,7 +19,7 @@ type UserProfile_T = {
 
 interface UserState {
   users: Record<UserID, User_T>;
-  userPdofiles: Record<UserID, UserProfile_T>,
+  userProfiles: Record<UserID, UserProfile_T>,
   onlineStatus: Record<UserID, boolean>;
   _setOnlineStatus: (userID: UserID, status: boolean) =>  void;
   _setManyOnlineStatus: (statuses: Map<UserID, boolean>) => void;
@@ -31,7 +31,7 @@ interface UserState {
 
 const useUserStore = create<UserState>((set) => ({
   users: {},
-  userPdofiles: {},
+  userProfiles: {},
   onlineStatus: {},
   _setOnlineStatus: (userID, status) => set((s) => ({
     onlineStatus: {...s.onlineStatus, [userID]: status}
@@ -57,6 +57,7 @@ const useUserStore = create<UserState>((set) => ({
 export class UsersManager extends EntinyManager<User_T> {
   private currUserID: number = 0;
   private static instance: UsersManager;
+  private isLoading: boolean = false;
 
   public static getInstance(): UsersManager {
     if(!UsersManager.instance)
@@ -70,27 +71,38 @@ export class UsersManager extends EntinyManager<User_T> {
   };
 
   public async load(userID: UserID = 0) {
-    let resp: any;
-    if(!userID)
-      resp = await fetch(`${API_URL}/users/init/${this.currUserID}`);
-    else 
-      resp = await fetch(`${API_URL}/users/${userID}`);
-    const data = await resp.json();
-    if(!resp.ok || data?.status !== 200){
-      console.log("Users init err: ", resp);
-      return;
-    };
+    if(this.isLoading) return;
 
-    const map = new Map();
-    const statuses = new Map();
+    this.isLoading = true;
+    try {
+      let resp: any;
+      if(!userID)
+        resp = await fetch(`${API_URL}/users/init/${this.currUserID}`);
+      else 
+        resp = await fetch(`${API_URL}/users/${userID}`);
+      const data = await resp.json();
+      if(!resp.ok || data?.status !== 200){
+        console.log("Users init err: ", resp);
+        return;
+      };
 
-    data?.results?.forEach((user: User_T)=>{
-      map.set(user.user_id, user);
-      statuses.set(user.user_id, user.is_online);
-    });
+      const map = new Map();
+      const statuses = new Map();
 
-    useUserStore.getState()._addMany(map);
-    useUserStore.getState()._setManyOnlineStatus(statuses);
+      data?.results?.forEach((user: User_T)=>{
+        map.set(user.user_id, user);
+        statuses.set(user.user_id, user.is_online);
+      });
+
+      useUserStore.getState()._addMany(map);
+      useUserStore.getState()._setManyOnlineStatus(statuses);
+    }finally{
+      this.isLoading = false;
+    }
+  };
+
+  public setOnlineStatus(userID: UserID, status: boolean){
+    useUserStore.getState()._setOnlineStatus(userID, status);
   };
 
   public add(userID: UserID, user: any){
@@ -126,6 +138,7 @@ async function load(userID: UserID = 0){
 export function useUsers():any[] {
   const users = useUserStore(useShallow((s) => Object.values(s.users)));
   useEffect(()=>{
+    console.warn("useUsers");
     if(users.length === 0)
       load();
   }, [users?.length]);
@@ -134,13 +147,17 @@ export function useUsers():any[] {
 
 export function useUserStatus(userID: UserID): boolean {
   const status = useUserStore(state => state.onlineStatus[userID] ?? false);
-  useEffect(() => {}, [userID, status]);
+  useEffect(() => {
+    console.warn("useUserStatus");
+  }, [userID, status]);
   return status;
 };
 
 export function useUser(userID: UserID): User_T {
   const user = useUserStore(s => s.users[userID] || EMPTY_OBJECT);
-  if(!user) load(userID);
-  useEffect(()=>{}, [userID]);
+  useEffect(()=>{
+    if(!user) load(userID);
+    console.warn("useUser");
+  }, [userID]);
   return user;
 };

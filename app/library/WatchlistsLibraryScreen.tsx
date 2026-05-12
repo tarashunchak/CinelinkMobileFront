@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { FlatList, View } from "react-native";
 import BottomBar from "../bars/bottomBar";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen"
@@ -8,23 +8,20 @@ import WatchlistCard from "./components/WatchlistCard";
 import LibraryHeader from "./components/LibraryHeader";
 import { useFocusEffect, useNavigation } from "expo-router";
 import ScreenBackground from "@/components/ui/screen-background";
-import { useUserWatchlists } from "../rt_client/managers/watchlists_manager";
+import { useUserWatchlists, WatchlistsManager } from "../rt_client/managers/watchlists_manager";
 
 export default function WatchlistsScreen() {
   const navigator = useNavigation();
   //const [watchlists, setWatchlists] = useState<any>(null);
   const watchlists = useUserWatchlists();
 
-  useFocusEffect(
-    useCallback(() => {
-      /*async function loadWatchlists() {
-        //const data = await GetUserWatchlists(1);
-        //if (data) setWatchlists(data);
-      }
-
-      //loadWatchlists();*/
-    }, [watchlists?.length])
-  )
+  useEffect(() => {
+    const unsubscribe = navigator.addListener("focus", ()=>{
+      WatchlistsManager.getInstance().load();
+      console.warn("Load watchlists")
+    });
+    return unsubscribe;
+  }, [navigator]);
 
   return (
     <ScreenBackground>

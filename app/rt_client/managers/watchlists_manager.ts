@@ -65,8 +65,14 @@ export class WatchlistsManager extends EntinyManager<Watchlist_T> {
     if(!resp.ok || data?.status !== 200)
       return;
 
+    const current =  useWatchlistStore.getState().watchlists;
     const map = new Map<number, Watchlist_T>(data?.results?.map((item: Watchlist_T)=> [item.id, item]));
-    useWatchlistStore.getState()._addMany(map);
+    const same = 
+      Object.keys(current).length === map.size 
+      && [...map.keys()].every(id => current[id]);
+
+    if(!same)
+      useWatchlistStore.getState()._addMany(map);
   };
 
   public add(watchlistID: WatchlistID, watchlist: any){
@@ -103,6 +109,6 @@ export function useUserWatchlists(): Watchlist_T[] {
   useEffect(()=>{
     if(watchlists.length === 0)
       load();
-  }, [watchlists.length]);
+  }, [watchlists]);
   return watchlists;
 };

@@ -1,13 +1,13 @@
 import ReturnArrowButton from "@/components/ui/returnArrowButton";
 import { textStyle } from "@/styles/textStyles";
 import { useNavigation } from "expo-router";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, Image, TouchableOpacity, Platform, StyleSheet } from "react-native";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { ChatMember } from "@/app/rt_client/models/models";
 import { calcLastSeen } from "../utils/utils";
 import { GetUserLastSeenTimestamp } from "@/api/users";
-import { useChat } from "@/app/rt_client/managers/chats_manager";
+import { useChat, useTypingStatus } from "@/app/rt_client/managers/chats_manager";
 import { useUserStatus } from "@/app/rt_client/managers/users_manager";
 import AnimatedFastImage from "@/components/ui/animated-fast-image";
 
@@ -17,7 +17,7 @@ export default function Header({ chatID, peer }: { chatID: number, peer: ChatMem
   const chat = useChat(chatID);
 
   const isOnline = useUserStatus(peer?.user_id);
-  const isTyping = false;
+  const isTyping = useTypingStatus(chatID, peer?.user_id);
 
   useEffect(() => {
     async function loadContent() {

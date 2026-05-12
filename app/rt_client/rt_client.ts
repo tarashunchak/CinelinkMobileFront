@@ -6,10 +6,9 @@ import { Handlers } from "./message_handlers/message_handlers";
 import { useEffect } from "react";
 import { useChatStore } from "./app_state";
 import { ChatMessage } from "./message_storage/message_storage";
-import { usersManager } from "./managers/users_manager";
 
 const WS_ADDRESS = (userID: UserID): string =>
-  `${process.env.EXPO_PUBLIC_WS_URL}/${userID}`;
+  `${process.env.EXPO_PUBLIC_WS_URL}/ws/${userID}`;
 
 const HTTP_ADDRESS = (chatID: ChatID): string =>
   `${process.env.EXPO_PUBLIC_API_URL}/chats/${chatID}/messages`;
@@ -26,9 +25,8 @@ class RTClient_ {
   private onWSMessage(data: any) {
     const type = data?.type;
     const handler = Handlers.get(type);
-    if (handler) {
+    if (handler)
       handler(data, this.chatManager);
-    }
   };
 
   public connect(userID: UserID) {

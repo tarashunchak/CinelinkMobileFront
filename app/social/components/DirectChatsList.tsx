@@ -1,22 +1,21 @@
 import React, { memo, useCallback } from "react";
 import { textStyle } from "@/styles/textStyles";
-import { FlatList, View, Text, Image, StyleSheet } from "react-native";
+import { FlatList, View, Text, StyleSheet } from "react-native";
 import { PressableScale } from "react-native-pressable-scale";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { useNavigation } from "expo-router";
-import { RTClient, useUnseenMessageCount, useUserStatus, useUserTypingInChatStatus } from "@/app/rt_client/rt_client";
-import { useUserChats } from "@/app/rt_client/managers/chats_manager";
+import { useUnseenMessageCount, useUserStatus } from "@/app/rt_client/rt_client";
+import { useTypingStatus, useUserChats } from "@/app/rt_client/managers/chats_manager";
 import AnimatedFastImage from "@/components/ui/animated-fast-image";
-import { MessagesManager, useLastChatMessage } from "@/app/rt_client/managers/messages_manager";
+import { useLastChatMessage } from "@/app/rt_client/managers/messages_manager";
 
 const DirectChatCard = memo(({ item }: { item: any }) => {
   const chatID = item?.chat_id;
-  MessagesManager.getInstance().init(chatID);
   const navigator = useNavigation();
-  RTClient.createMessageStorage(chatID);
-  RTClient.getChatMessages(chatID);
+  //RTClient.createMessageStorage(chatID);
+  //RTClient.getChatMessages(chatID);
   const peerID = item?.peer_id?.["Int32"];
-  const isTyping = useUserTypingInChatStatus(peerID, chatID);
+  const isTyping = useTypingStatus(chatID, peerID);
   const lastMessage = useLastChatMessage(chatID);
   const isOnline = useUserStatus(peerID);
 

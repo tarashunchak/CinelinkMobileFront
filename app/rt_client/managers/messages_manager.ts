@@ -1,7 +1,8 @@
 import { create } from "zustand";
 import { EntinyManager } from "./base_class";
-import { ChatID, EMPTY_ARRAY, EMPTY_OBJECT, UserID } from "../models/models";
+import { ChatID } from "../models/models";
 import { useEffect } from "react";
+import { API_URL } from "@/api/API_CONFIG";
 
 type Message_T = {
   user_id: number;
@@ -49,13 +50,12 @@ export class MessagesManager extends EntinyManager<Message_T> {
     if(this.isLoading) return;
 
     this.isLoading = true;
-
     try {
-      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/chats/${chatID}/messages`)
+      const response = await fetch(`${API_URL}/chats/${chatID}/messages`)
       const data = await response?.json();
       if (data?.results) {
         const reversed = [...data.results].reverse();
-        const current = this.get(chatID);
+        const current = useMessageStore.getState().messages;
         if (JSON.stringify(current) !== JSON.stringify(reversed)) {
           this.addArray(chatID, reversed);
           //useChatStore.getState()._setLastMessage(this.chatID, reversed[0])
@@ -97,19 +97,19 @@ async function load(chatID: ChatID){
 };
 
 export function useChatMessages(chatID: ChatID): Message_T [] {
-  const messages: Message_T[] = useMessageStore(s => s.messages[chatID] || EMPTY_ARRAY);
+  const messages: Message_T[] = useMessageStore(s => s.messages[chatID]);
   useEffect(()=>{
-    if (messages === EMPTY_ARRAY) load(chatID);
-  }, [chatID, messages.length]);
+    if (!messages) load(chatID);
+  }, [chatID, messages]);
   return messages;
 };
 
 
 
 export function useLastChatMessage(chatID: ChatID): Message_T {
-  const message: Message_T = useMessageStore(s => s.messages[chatID]?.[0] || EMPTY_OBJECT);
+  const message: Message_T = useMessageStore(s => s.messages[chatID]?.[0]);
   useEffect(()=>{
-    if (message === EMPTY_OBJECT) load(chatID);
+    if (!message) load(chatID);
   }, [chatID]);
-  return message;
+  return message ?? {};
 };

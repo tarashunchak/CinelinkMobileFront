@@ -2,6 +2,7 @@ export const EMPTY_OBJECT = {};
 export const EMPTY_ARRAY:any[] = [];
 
 export type ChatID = number;
+export type MovieID = number;
 export type UserID = number;
 export type WatchlistID = number;
 export type MessageID = number;

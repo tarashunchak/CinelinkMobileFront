@@ -16,7 +16,8 @@ import { GetMovieYouTubeTrailerKey, LoadMovieDetails } from "./services/services
 import  { WatchlistSheetRef } from "./components/add-to-watchlist-modal/AddToWatchlistModal";
 import ScreenBackground from "./../../components/ui/screen-background";
 import { UserSheetRef } from "./components/recommend-to-user-modal/RecommendToUser";
-import { FlatList } from "react-native-gesture-handler";
+import { AnimatedFlashList } from "@shopify/flash-list";
+import Animated, { useAnimatedScrollHandler, useAnimatedStyle, useSharedValue } from "react-native-reanimated";
 
 export default function MovieDetailScreen({ route }: any) {
   const navigation = useNavigation();
@@ -29,13 +30,29 @@ export default function MovieDetailScreen({ route }: any) {
   const sheetRef = useRef<WatchlistSheetRef>(null);
   const userSheetRef = useRef<UserSheetRef>(null);
 
+  const scrollY = useSharedValue(0);
+  const onScroll = useAnimatedScrollHandler({
+    onScroll: (event)=>{
+      scrollY.value = event.contentOffset.y;
+    },
+  });
+
+  const animatedStyle = useAnimatedStyle(()=>{
+    return {
+      transform: [
+        {
+          translateY: scrollY.value * 0.5,
+        },
+      ],
+    };
+  });
+
   useEffect(() => {
     async function load() {
       const data = await LoadMovieDetails(movieID);
       if (data) {
         setMovie({...data, ...{credits: {}}});
         setCredits(data?.credits);
-        console.warn("Movie details: ", data);
       };
     }
     load();
@@ -99,13 +116,15 @@ export default function MovieDetailScreen({ route }: any) {
 
   return (
     <ScreenBackground>
-      <FlatList
-        contentContainerStyle={{ padding: "1%" }}
+      <Animated.FlatList 
+        onScroll={onScroll}
+        contentContainerStyle={{ padding: "1%"}}
         data={sections}
         renderItem={renderItem}
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={
         <MainInfo 
+          style={animatedStyle}
           movie={movie} 
           inCinemas={inCinemas} 
           maximum={maximum} 
@@ -117,7 +136,7 @@ export default function MovieDetailScreen({ route }: any) {
       {(isActive || isActiveUsers) && <BottomBar />}
     </ScreenBackground>
   );
-}
+};
 
 const styles = {
   title: [

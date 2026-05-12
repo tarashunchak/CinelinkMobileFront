@@ -13,6 +13,14 @@ import { WatchlistsManager } from "./rt_client/managers/watchlists_manager";
 
 Notifications.configure();
 
+const originalFetch = globalThis.fetch;
+
+globalThis.fetch = async (...args) => {
+  console.warn("FETCH:", args[0]);
+
+  return originalFetch(...args);
+};
+
 export default function App() {
   useAuthStore.getState().init();
   const isAuthenticated = useAuthStore(state => state.isAuthenticated);

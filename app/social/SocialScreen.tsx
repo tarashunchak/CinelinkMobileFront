@@ -5,7 +5,6 @@ import { RecommendedCard_T } from "./components/RecommendationsList";
 import ChatsList from "./components/DirectChatsList";
 import { RTClient } from "../rt_client/rt_client";
 import { getCurrentUserID } from "@/utils/utils";
-import { UserCard_T } from "../types/user";
 import FriendsList from "./components/FriendsList";
 import { GetSocial } from "./services/services";
 import ScreenBackground from "@/components/ui/screen-background";

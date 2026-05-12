@@ -21,12 +21,15 @@ type LastMessage_T = {
   timestamp: string;
 };
 
+type TypingStatus_T = {
+};
+
 interface ChatState {
   chats: Record<ChatID, Chat_T>;
-  typingStatus: Record<ChatID, boolean>;
+  typingStatus: Record<ChatID, Record<number, boolean>>;
   lastMessages: Record<number, LastMessage_T>;
   _setLastMessage: (chatID: ChatID, msg: LastMessage_T) => void;
-  _setTypingStatus: (chatID: ChatID, status: boolean) =>  void;
+  _setTypingStatus: (chatID: ChatID, userID: UserID, status: boolean ) =>  void;
   _add: (chatID: ChatID, chat: Chat_T) => void;
   _addMany: (chats: Map<ChatID, Chat_T>) => void;
   _remove: (chatID: ChatID) => void;
@@ -40,8 +43,13 @@ const useChatStore = create<ChatState>((set) => ({
   _setLastMessage: (chatID, msg) => set((s) => ({
     lastMessages: {...s.lastMessages, [chatID]: msg}
   })),
-  _setTypingStatus: (chatID, status) => set((s) => ({
-    typingStatus: {...s.typingStatus, [chatID]: status}
+  _setTypingStatus: (chatID, userID, status) => set((s) => ({
+    typingStatus: {
+      ...s.typingStatus, [chatID]: { 
+        ...s.typingStatus[chatID], 
+        [userID]: status
+      }
+    }
   })),
   _add: (chatID, chat) => set((s) => ({
     chats: {...s.chats, [chatID]: chat}
@@ -86,6 +94,11 @@ export class ChatsManager extends EntinyManager<Chat_T> {
     useChatStore.getState()._addMany(map);
   };
 
+  public setTypingStatus(chatID: ChatID, userID: UserID, status: boolean){
+    console.warn("SET TYPING STATUS: ", chatID, " ", userID, " ", status);
+    useChatStore.getState()._setTypingStatus(chatID, userID, status);
+  };
+
   public add(chatID: ChatID, chat: any){
     useChatStore.getState()._add(chatID, chat);
   };
@@ -119,6 +132,7 @@ export function useUserChats(): Chat_T[]{
   const chats = useChatStore(useShallow((s) => Object.values(s.chats)))
   useEffect(()=>{
     if(chats.length === 0) load();
+    console.warn("useUserChats");
   }, [chats.length]);
   return chats;
 };
@@ -127,6 +141,15 @@ export function useChat(chatID: ChatID): any {
   const chat = useChatStore(s => s.chats[chatID] || EMPTY_OBJECT);
   useEffect(()=>{
     if(chat === EMPTY_OBJECT) load(chatID);
+    console.warn("useChat");
   }, [chatID, chat]);
   return chat;
+};
+
+export function useTypingStatus(chatID: ChatID, userID: UserID): boolean{
+  const status = useChatStore(s => s.typingStatus[chatID]?.[userID] || false)
+  useEffect(()=>{
+    console.warn("STATUS: ", status);
+  }, [chatID, userID, status]);
+  return status;
 };

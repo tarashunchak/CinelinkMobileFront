@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { EntinyManager } from "./base_class";
-import { ChatID, UserID } from "../models/models";
+import { ChatID, EMPTY_ARRAY, EMPTY_OBJECT, UserID } from "../models/models";
 import { useEffect } from "react";
 
 type Message_T = {
@@ -90,9 +90,6 @@ export class MessagesManager extends EntinyManager<Message_T> {
 
   };
 };
-
-const EMPTY_OBJECT = {};
-const EMPTY_ARRAY:any[] = [];
 
 export function useChatMessages(chatID: ChatID): Message_T [] {
   const messages: Message_T[] = useMessageStore(s => s.messages[chatID] || EMPTY_ARRAY);

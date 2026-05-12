@@ -13,7 +13,7 @@ import FollowersList from "./components/FollowersList";
 import { useFollowings } from "./hooks/useFollowings";
 import { useFollowers } from "./hooks/useFollowers";
 import { GetDirectChatID } from "../../api/chats";
-import { FlatList, GestureHandlerRootView, ScrollView } from "react-native-gesture-handler";
+import { GestureHandlerRootView, ScrollView } from "react-native-gesture-handler";
 import ScreenBackground from "@/components/ui/screen-background";
 import UserStats from "./components/Stats";
 

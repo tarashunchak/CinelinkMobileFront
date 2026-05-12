@@ -1,4 +1,5 @@
-import { kMaxLength } from "node:buffer";
+export const EMPTY_OBJECT = {};
+export const EMPTY_ARRAY:any[] = [];
 
 export type ChatID = number;
 export type UserID = number;

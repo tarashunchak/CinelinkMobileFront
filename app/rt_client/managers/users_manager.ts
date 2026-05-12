@@ -1,5 +1,5 @@
 import { API_URL } from "@/api/API_CONFIG";
-import { UserID } from "../models/models";
+import { EMPTY_OBJECT, UserID } from "../models/models";
 import { create } from "zustand";
 import { EntinyManager } from "./base_class";
 import { useEffect } from "react";
@@ -12,8 +12,14 @@ type User_T = {
   is_online: boolean;
 };
 
+type UserProfile_T = {
+  user_id: number;
+  username: string;
+};
+
 interface UserState {
   users: Record<UserID, User_T>;
+  userPdofiles: Record<UserID, UserProfile_T>,
   onlineStatus: Record<UserID, boolean>;
   _setOnlineStatus: (userID: UserID, status: boolean) =>  void;
   _setManyOnlineStatus: (statuses: Map<UserID, boolean>) => void;
@@ -25,6 +31,7 @@ interface UserState {
 
 const useUserStore = create<UserState>((set) => ({
   users: {},
+  userPdofiles: {},
   onlineStatus: {},
   _setOnlineStatus: (userID, status) => set((s) => ({
     onlineStatus: {...s.onlineStatus, [userID]: status}
@@ -62,8 +69,8 @@ export class UsersManager extends EntinyManager<User_T> {
     this.load(userID);
   };
 
-  public async load(userID: UserID) {
-    const resp = await fetch(`${API_URL}/users/init/${userID}`);
+  public async load(userID: UserID = 0) {
+    const resp = await fetch(`${API_URL}/users/init/${userID ?? this.currUserID}`);
     const data = await resp.json();
     if(!resp.ok || data?.status !== 200){
       console.log("Users init err: ", resp);
@@ -118,4 +125,11 @@ export function useUserStatus(userID: UserID): boolean {
   const status = useUserStore(state => state.onlineStatus[userID] ?? false);
   useEffect(() => {}, [userID, status]);
   return status;
+};
+
+export function useUser(userID: UserID): User_T {
+  const user = useUserStore(s => s.users[userID] || EMPTY_OBJECT);
+  if(!user) UsersManager.getInstance().load()
+  useEffect(()=>{}, [userID]);
+  return user;
 };

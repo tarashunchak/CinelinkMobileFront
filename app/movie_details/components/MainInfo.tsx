@@ -12,9 +12,8 @@ import AnimatedFastImage from "@/components/ui/animated-fast-image";
 import Animated, { AnimatedStyle } from "react-native-reanimated";
 
 function MainInfo(
-  { style, movie, inCinemas = false, maximum, posterPath, backdropPath}
+  { movie, inCinemas = false, maximum, posterPath, backdropPath}
     : {
-      style: AnimatedStyle,
       movie?: Movie,
       inCinemas: boolean,
       maximum?: string,
@@ -49,7 +48,7 @@ function MainInfo(
   );
 
   return (
-    <Animated.View style={style}>
+    <View>
       <ReturnArrowButton style={{ marginTop: "5%", zIndex: 2 }} />
       <AnimatedFastImage
         sharedTransitionTag={`movie-${movie?.id}-backdrop`}
@@ -95,7 +94,7 @@ function MainInfo(
           movieID={movie?.id}
         />
       }
-    </Animated.View>
+    </View>
   )
 };
 

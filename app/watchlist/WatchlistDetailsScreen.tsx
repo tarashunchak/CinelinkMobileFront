@@ -9,11 +9,9 @@ import HeaderBlock from "./components/HeaderBlock";
 import ScreenBackground from "@/components/ui/screen-background";
 import { Image } from "expo-image";
 import { PressableScale } from "react-native-pressable-scale";
-import { FlashList } from "@shopify/flash-list";
 import MovieCard from "./components/MovieCard";
 import { textStyle } from "@/styles/textStyles";
 import Spacer from "@/components/ui/spacer";
-import { Skeleton } from "react-native-skeletons";
 import { FlatList } from "react-native-gesture-handler";
 
 export default function WatchlistDetailsScreen({ route }: any) {
@@ -31,7 +29,7 @@ export default function WatchlistDetailsScreen({ route }: any) {
 
   return (
     <ScreenBackground>
-      <FlashList
+      <FlatList
         data={movies}
         keyExtractor={(item, index) => String(item?.imdb_id ?? index)}
         showsVerticalScrollIndicator={false}

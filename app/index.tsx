@@ -10,6 +10,7 @@ import { KeyboardProvider } from "react-native-keyboard-controller";
 import { ChatsManager } from "./rt_client/managers/chats_manager";
 import { UsersManager } from "./rt_client/managers/users_manager";
 import { WatchlistsManager } from "./rt_client/managers/watchlists_manager";
+import BottomBar from "./bars/bottomBar";
 
 Notifications.configure();
 
@@ -39,6 +40,7 @@ export default function App() {
         <BottomSheetModalProvider>
           {isHydrated ? (isAuthenticated ? <TabNavigator /> : <AuthNavigator />) : null}
         </BottomSheetModalProvider>
+        <BottomBar/>
       </KeyboardProvider>
     </GestureHandlerRootView>
   );

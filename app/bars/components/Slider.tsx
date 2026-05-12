@@ -1,19 +1,29 @@
 import React, { memo } from "react";
-import { View, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated";
-import { heightPercentageToDP as hp} from "react-native-responsive-screen";
+import { heightPercentageToDP as hp, widthPercentageToDP } from "react-native-responsive-screen";
 
-function Slider(){
+const TAB_POS = {
+  "WatchlistsLibraryScreen": 0,
+  "Search": 1,
+  "HomePage": 2,
+  "SocialScreen": 3,
+  "UserProfileScreen": 4,
+};
+
+function Slider({activeTab}:{activeTab: string}){
   const offset = useSharedValue(0);
-  offset.value = withSpring(100, {
+
+  console.log("Slide update: ", activeTab);
+  offset.value = withSpring(TAB_POS[activeTab] * widthPercentageToDP(96/5-3), {
     damping: 10,
     stiffness: 100,
-    mass: 1,
-    overshootClamping: false,
   });
 
   const animatedStyle = useAnimatedStyle(()=>({
-    transform: [{translateX: offset.value}],
+    transform: [{
+      translateX: offset.value,
+    }],
   }));
 
   return (
@@ -27,14 +37,12 @@ export default memo(Slider);
 
 const styles = StyleSheet.create({
   mainView: {
-    height: 4,
-    width: 50,
+    height:  hp("8%"), 
+    width:  hp("8%"),
     borderRadius: 999,
-    backgroundColor: "rgba(255, 255, 255, 0.2)",
-    borderWidth: 0.15,
-    borderColor: "white",
+    backgroundColor: "rgba(255, 255, 255, 1)",
     position: "absolute",
-    bottom: 8,
+    alignSelf:"center",
     left: "7.5%",
   },
 });

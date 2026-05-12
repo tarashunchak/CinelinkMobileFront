@@ -14,13 +14,13 @@ const icons = {
   library: require('@/app/bars/assets/bookmark.png'),
 };
 
-function BottomBarIconButton({ source, navigateTo }: { source: string, navigateTo: string }) {
+function BottomBarIconButton({ source, navigateTo, onPress }: { source: string, navigateTo: string, onPress: ()=>void }) {
   const navigator = useNavigation();
-
   return (
     <PressableScale
       activeScale={0.9}
       onPress={() => {
+        onPress?.();
         /*navigator.dispatch(
           CommonActions.reset({
             index: 0,
@@ -34,7 +34,6 @@ function BottomBarIconButton({ source, navigateTo }: { source: string, navigateT
         style={styles.image}
         cachePolicy="memory"
       />
-      <Text style={textStyle.gray12}>{source}</Text>
     </PressableScale>
   )
 };
@@ -46,7 +45,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   image: {
-    width: 28,
-    height: 28,
+    width: 30,
+    height: 30,
   },
 });

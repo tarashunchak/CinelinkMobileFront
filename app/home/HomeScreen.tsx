@@ -1,4 +1,4 @@
-import BottomBar from "@/app/bars/bottomBar";
+import SVGBottomBar from "@/app/bars/bottomBar";
 import GenresList from "@/components/ui/leafy-genres-list";
 import { textStyle } from "@/styles/textStyles";
 import React, { useEffect, useState } from "react";
@@ -53,7 +53,6 @@ export default function HomePageScreen() {
         <GenresList setSelectedGenre={setSelectedGenre} />
 
       </ScrollView>
-      <BottomBar />
     </ScreenBackground>
   );
 }

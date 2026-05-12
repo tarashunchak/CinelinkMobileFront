@@ -15,8 +15,8 @@ export default function TabNavigator() {
     <Tab.Navigator screenOptions={{
       headerShown: false,
       tabBarStyle: {
-        position: "absolute",
         display: "none",
+        position: "absolute",
       },
       animation: "shift",
     }}
@@ -28,4 +28,4 @@ export default function TabNavigator() {
       <Tab.Screen name="Profile" component={ProfileNavigatorStack} />
     </Tab.Navigator >
   );
-}
+};

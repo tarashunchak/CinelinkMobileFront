@@ -1,5 +1,5 @@
 export abstract class EntinyManager<T>{
-  abstract load(currUserID: number): void;
+  abstract load(id: number): void;
   abstract add(id: number, item: T): void;
   abstract addMany(items: Map<number, T>): void;
   abstract addArray(id: number, items: T[]): void;

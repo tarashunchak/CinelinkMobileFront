@@ -45,7 +45,7 @@ export class MessagesManager extends EntinyManager<Message_T> {
     this.load(chatID);
   };
 
-  public async load(chatID: ChatID = 0): Promise<void> {
+  public async load(chatID: ChatID): Promise<void> {
     if(this.isLoading) return;
 
     this.isLoading = true;
@@ -71,7 +71,8 @@ export class MessagesManager extends EntinyManager<Message_T> {
     useMessageStore.getState()._add(id, item)
   };
 
-  public addMany(msgs: Map<number, Message_T[]>): void {
+  public addMany(msgs: Map<number, Message_T>): void {
+    // nothing
   };
 
   public addArray(id: number, items: Message_T[]): void {
@@ -91,16 +92,24 @@ export class MessagesManager extends EntinyManager<Message_T> {
   };
 };
 
+async function load(chatID: ChatID){
+  await MessagesManager.getInstance().load(chatID);
+};
+
 export function useChatMessages(chatID: ChatID): Message_T [] {
   const messages: Message_T[] = useMessageStore(s => s.messages[chatID] || EMPTY_ARRAY);
-  if (!messages || messages.length) MessagesManager.getInstance().load(chatID);
-  useEffect(()=>{}, [chatID, messages.length]);
+  useEffect(()=>{
+    if (messages === EMPTY_ARRAY) load(chatID);
+  }, [chatID, messages.length]);
   return messages;
 };
 
+
+
 export function useLastChatMessage(chatID: ChatID): Message_T {
-  const message: Message_T = useMessageStore(s => s.messages[chatID][0] || EMPTY_OBJECT);
-  if (!message) MessagesManager.getInstance().load(chatID);
-  useEffect(()=>{}, [chatID, message]);
+  const message: Message_T = useMessageStore(s => s.messages[chatID]?.[0] || EMPTY_OBJECT);
+  useEffect(()=>{
+    if (message === EMPTY_OBJECT) load(chatID);
+  }, [chatID]);
   return message;
 };

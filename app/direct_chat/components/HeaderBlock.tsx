@@ -46,7 +46,7 @@ export default function Header({ chatID, peer }: { chatID: number, peer: ChatMem
               sharedTransitionTag={`chat-${chat?.chat_id}-image`}
               style={stylesR.avatarImg}
               source={{ uri: chat?.img_url}}
-              cachePolicy="memory"
+              cachePolicy="memory-disk"
             />
             {isOnline && <View style={styles.isOnline.dot}></View>}
           </TouchableOpacity>

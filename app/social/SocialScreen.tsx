@@ -45,9 +45,9 @@ export default function SocialScreen() {
       case "Activity":
         return null;
       case "Chats":
-        return <ChatsList chats={chats} />;
+        return <ChatsList />;
     }
-  }, [activeTab, friends, chats, recommendations, activity]);
+  }, [activeTab, chats, recommendations, activity]);
 
   return (
     <View style={{ flex: 1 }}>

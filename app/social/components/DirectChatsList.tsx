@@ -17,7 +17,7 @@ const DirectChatCard = memo(({ item }: { item: any }) => {
   RTClient.getChatMessages(chatID);
   const peerID = item?.peer_id?.["Int32"];
   const isTyping = useUserTypingInChatStatus(peerID, chatID);
-  //const lastMessage = useLastChatMessage(chatID);
+  const lastMessage = useLastChatMessage(chatID);
   const isOnline = useUserStatus(peerID);
 
   const unSeenMessageCnt = useUnseenMessageCount(chatID);
@@ -36,7 +36,7 @@ const DirectChatCard = memo(({ item }: { item: any }) => {
             sharedTransitionTag={`chat-${item?.chat_id}-image`}
             style={styles.image}
             source={{ uri: item?.img_url }}
-            cachePolicy="memory"
+            cachePolicy="memory-disk"
           />
           {isOnline && <View style={styles.onlineDot}></View>}
         </View>
@@ -46,7 +46,7 @@ const DirectChatCard = memo(({ item }: { item: any }) => {
             numberOfLines={1}
             ellipsizeMode="tail"
             style={[textStyle.gray16, { maxWidth: "100%" }]}
-          >{isTyping ? "typing..." : "last_message"}</Text>
+          >{isTyping ? "typing..." : lastMessage?.message}</Text>
         </View>
       </View>
       <View style={{
@@ -64,12 +64,12 @@ const DirectChatCard = memo(({ item }: { item: any }) => {
   );
 });
 
-function ChatsList({ chats }: { chats: any[] }) {
+function ChatsList() {
+  const chats = useUserChats();
+
   const renderItem = useCallback(({ item }: any) => (
     <DirectChatCard item={item} />
-  ), [chats]);
-
-  chats = useUserChats();
+  ), []);
 
   return (
     <FlatList

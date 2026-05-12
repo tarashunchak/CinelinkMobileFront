@@ -1,5 +1,5 @@
 import { API_URL } from "@/api/API_CONFIG";
-import { ChatID, UserID } from "../models/models";
+import { ChatID, EMPTY_ARRAY, EMPTY_OBJECT, UserID } from "../models/models";
 import { create } from "zustand";
 import { EntinyManager } from "./base_class";
 import { useEffect } from "react";
@@ -77,14 +77,12 @@ export class ChatsManager extends EntinyManager<Chat_T> {
   };
 
   public async load(userID: UserID = 0) {
-    const resp = await fetch(`${API_URL}/users/${userID ?? this.currUserID}/chats`);
+    const resp = await fetch(`${API_URL}/users/${this.currUserID}/chats`);
     const data = await resp.json();
     if(!resp.ok || data?.status !== 200)
       return;
 
     const map = new Map<number, Chat_T>(data?.results?.map((chat: Chat_T)=> [chat.chat_id, chat]));
-    console.log("Chats init: ", map);
-
     useChatStore.getState()._addMany(map);
   };
 
@@ -109,16 +107,22 @@ export class ChatsManager extends EntinyManager<Chat_T> {
   };
 };
 
-export function useUserChats(): any[]{
+async function load(chatID: ChatID = 0){
+  await ChatsManager.getInstance().load(chatID);
+}
+
+export function useUserChats(): Chat_T[]{
   const chats = useChatStore(useShallow((s) => Object.values(s.chats)))
-  if(!chats || chats.length === 0)
-    ChatsManager.getInstance().load();
-  useEffect(()=>{}, []);
+  useEffect(()=>{
+    if(chats.length === 0) load();
+  }, [chats.length]);
   return chats;
 };
 
 export function useChat(chatID: ChatID): any {
-  const chat = useChatStore(s => s.chats[chatID]);
-  useEffect(()=>{}, [chatID]);
+  const chat = useChatStore(s => s.chats[chatID] || EMPTY_OBJECT);
+  useEffect(()=>{
+    if(chat === EMPTY_OBJECT) load(chatID);
+  }, [chatID, chat]);
   return chat;
 };

@@ -3,9 +3,7 @@ import {
   FlatList,
   KeyboardAvoidingView,
   Keyboard,
-  StyleSheet,
   Platform,
-  View  // додайте
 } from "react-native";
 import Header from "./components/HeaderBlock";
 import Input from "./components/Input";

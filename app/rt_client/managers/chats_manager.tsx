@@ -94,6 +94,10 @@ export class ChatsManager extends EntinyManager<Chat_T> {
     useChatStore.getState()._addMany(chats);
   };
 
+  public addArray(id: number, items: Chat_T[]): void {
+    // nothing
+  };
+
   public remove(chatID: ChatID) {
     useChatStore.getState()._remove(chatID);
   };
@@ -109,7 +113,7 @@ export class ChatsManager extends EntinyManager<Chat_T> {
 
 async function load(chatID: ChatID = 0){
   await ChatsManager.getInstance().load(chatID);
-}
+};
 
 export function useUserChats(): Chat_T[]{
   const chats = useChatStore(useShallow((s) => Object.values(s.chats)))

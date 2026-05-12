@@ -7,6 +7,7 @@ import ProfilePhotoModal from "./ProfilePhotoModal";
 import { PressableScale } from "react-native-pressable-scale";
 import { useUserStatus } from "@/app/rt_client/rt_client";
 import { Image } from "expo-image";
+import AnimatedFastImage from "@/components/ui/animated-fast-image";
 
 type Props = {
   isLoading: boolean;
@@ -28,11 +29,6 @@ function ProfileMain({
   onChat,
 }: Props) {
 
-  /*const fullName: string =
-    isLoading ? "**** ****"
-      : user?.first_name && `${user?.first_name} ${user?.last_name}`;
-      */
-
   const fullName = useMemo(() => {
     if (isLoading)
       return "**** ****";
@@ -40,8 +36,7 @@ function ProfileMain({
       return user?.first_name && `${user?.first_name} ${user?.last_name}`;
   }, [isLoading])
 
-  const username: string =
-    isLoading ? "********" : user?.username;
+  const username: string = isLoading ? "********" : user?.username;
 
   const fetchJoinedAt = useMemo(() => {
     const date = new Date(user?.joined_at ?? null);
@@ -57,13 +52,11 @@ function ProfileMain({
           style={styles.avatar}
           onPress={() => setIsOpen(true)}
         >
-          <Image
-            source={
-              user?.avatar_url
-                ? { uri: user?.avatar_url }
-                : require("../assets/oscar.jpg")
-            }
+          <AnimatedFastImage
+            sharedTransitionTag={`user-${user?.user_id}-avatar`}
+            source={user?.avatar_url}
             style={{ width: "100%", height: "100%", borderRadius: 999 }}
+            cachePolicy="memory"
           />
           {useUserStatus(user?.user_id) && <View style={styles.isOnlineDot}></View>}
         </PressableScale>

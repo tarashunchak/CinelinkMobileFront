@@ -7,6 +7,7 @@ import { PressableScale } from "react-native-pressable-scale";
 import Animated, { SharedTransition } from "react-native-reanimated";
 import { Skeleton } from "react-native-skeletons";
 import { Image } from "expo-image";
+import AnimatedFastImage from "@/components/ui/animated-fast-image";
 
 export type Watchlist = {
   id: number;
@@ -24,7 +25,6 @@ function WatchlistCard({ watchlist }: { watchlist: Watchlist | null }) {
   const navigator = useNavigation();
 
   if (!watchlist) return <Skeleton style={styles.view} />;
-  const AnimatedFastImage = Animated.createAnimatedComponent(Image);
 
   return (
     <PressableScale style={styles.view}

@@ -7,6 +7,7 @@ import { PressableScale } from "react-native-pressable-scale";
 import { Skeleton } from "react-native-skeletons";
 import { Image } from "expo-image";
 import { useUsers, useUserStatus } from "@/app/rt_client/managers/users_manager";
+import AnimatedFastImage from "@/components/ui/animated-fast-image";
 
 interface Props {
   user_id: number;
@@ -30,9 +31,11 @@ const FriendCard = memo(({ friend }: { friend: Props }) => {
       }}>
       <View style={styles.mainView}>
         <View style={styles.infoView}>
-          <Image
+          <AnimatedFastImage
+            sharedTransitionTag={`user-${friend?.user_id}-avatar`}
             style={styles.image}
             source={{ uri: friend?.avatar_url }}
+            cachePolicy="memory"
           />
           {isOnline && <View style={styles.isOnlineDot}></View>}
         </View>

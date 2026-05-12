@@ -9,7 +9,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { KeyboardProvider } from "react-native-keyboard-controller";
 import { ChatsManager } from "./rt_client/managers/chats_manager";
 import { UsersManager } from "./rt_client/managers/users_manager";
-import { MessagesManager } from "./rt_client/managers/messages_manager";
+import { WatchlistsManager } from "./rt_client/managers/watchlists_manager";
 
 Notifications.configure();
 
@@ -20,6 +20,7 @@ export default function App() {
   
   ChatsManager.getInstance().init(1);
   UsersManager.getInstance().init(1);
+  WatchlistsManager.getInstance().init(1);
 
   RTClient.connect(useAuthStore?.getState()?.user?.user_id);
   return (

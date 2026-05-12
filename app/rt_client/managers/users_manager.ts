@@ -66,11 +66,15 @@ export class UsersManager extends EntinyManager<User_T> {
 
   public init(userID: UserID){
     this.currUserID = userID;
-    this.load(userID);
+    this.load();
   };
 
   public async load(userID: UserID = 0) {
-    const resp = await fetch(`${API_URL}/users/init/${userID ?? this.currUserID}`);
+    let resp: any;
+    if(!userID)
+      resp = await fetch(`${API_URL}/users/init/${this.currUserID}`);
+    else 
+      resp = await fetch(`${API_URL}/users/${userID}`);
     const data = await resp.json();
     if(!resp.ok || data?.status !== 200){
       console.log("Users init err: ", resp);
@@ -115,9 +119,16 @@ export class UsersManager extends EntinyManager<User_T> {
   };
 };
 
+async function load(userID: UserID = 0){
+  await UsersManager.getInstance().load(userID);
+};
+
 export function useUsers():any[] {
   const users = useUserStore(useShallow((s) => Object.values(s.users)));
-  useEffect(()=>{}, [users?.length]);
+  useEffect(()=>{
+    if(users.length === 0)
+      load();
+  }, [users?.length]);
   return users;
 };
 
@@ -129,7 +140,7 @@ export function useUserStatus(userID: UserID): boolean {
 
 export function useUser(userID: UserID): User_T {
   const user = useUserStore(s => s.users[userID] || EMPTY_OBJECT);
-  if(!user) UsersManager.getInstance().load()
+  if(!user) load(userID);
   useEffect(()=>{}, [userID]);
   return user;
 };

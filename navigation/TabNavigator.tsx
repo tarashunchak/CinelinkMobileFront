@@ -5,13 +5,28 @@ import SocialNavigatorStack from "./stacks/socialNavigator";
 import ProfileNavigatorStack from "./stacks/profileNavigation";
 import HomeNavigatorStack from "./stacks/homeNavigation";
 import SearchNavigatorStack from "./stacks/searchNavigation";
-import * as Notifications from "@/utils/notifications";
+//import * as Notifications from "@/utils/notifications";
+import { ChatsManager } from "../app/rt_client/managers/chats_manager";
+import { UsersManager } from "../app/rt_client/managers/users_manager";
+import { WatchlistsManager } from "../app/rt_client/managers/watchlists_manager";
+import { useAuthStore } from "@/local_storage/user/asyncStorage/store"
+import { RTClient } from "../app/rt_client/rt_client";
 
 const Tab = createBottomTabNavigator();
 
 export default function TabNavigator() {
-  Notifications.requestUserPermission();
+  //Notifications.requestUserPermission();
+
+  const currentUserID = useAuthStore?.getState()?.user?.user_id;
+  
+  ChatsManager.getInstance().init(currentUserID);
+  UsersManager.getInstance().init(currentUserID);
+  WatchlistsManager.getInstance().init(currentUserID);
+
+  RTClient.connect(currentUserID);
+
   return (
+    <>
     <Tab.Navigator screenOptions={{
       headerShown: false,
       tabBarStyle: {
@@ -27,5 +42,6 @@ export default function TabNavigator() {
       <Tab.Screen name="Social" component={SocialNavigatorStack} />
       <Tab.Screen name="Profile" component={ProfileNavigatorStack} />
     </Tab.Navigator >
+</>
   );
 };

@@ -1,5 +1,5 @@
 import { textStyle } from "@/styles/textStyles";
-import React, { memo, useCallback, useMemo } from "react";
+import React, { memo, useCallback } from "react";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { FlatList, View, Text, StyleSheet } from "react-native";
 import { useNavigation } from "expo-router";
@@ -8,6 +8,7 @@ import { Skeleton } from "react-native-skeletons";
 import { Image } from "expo-image";
 import { useUsers, useUserStatus } from "@/app/rt_client/managers/users_manager";
 import AnimatedFastImage from "@/components/ui/animated-fast-image";
+import Spacer from "@/components/ui/spacer";
 
 interface Props {
   user_id: number;
@@ -67,6 +68,7 @@ function FriendsList() {
       removeClippedSubviews
       initialNumToRender={10}
       contentContainerStyle={styles.contentContainer}
+      ListFooterComponent={<Spacer spacing={hp(10)}/>}
     />
   );
 };

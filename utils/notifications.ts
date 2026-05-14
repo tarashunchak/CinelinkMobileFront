@@ -1,4 +1,4 @@
-import { API_URL } from "@/api/API_CONFIG";
+/*import { API_URL } from "@/api/API_CONFIG";
 import { Platform } from "react-native";
 import * as Notifications from "expo-notifications";
 import * as Device from "expo-device";
@@ -50,4 +50,4 @@ export async function configure() {
       shouldShowList: true,
     }),
   });
-};
+};*/

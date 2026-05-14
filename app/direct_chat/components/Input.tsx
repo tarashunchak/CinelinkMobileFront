@@ -31,6 +31,7 @@ export default function Input({ chatID }: { chatID: number }) {
                 onBlur={handleBlur}
                 multiline={true}
                 numberOfLines={10}
+                editable
             />
             {isFocused && (
                 <TouchableOpacity

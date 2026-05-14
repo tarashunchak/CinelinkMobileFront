@@ -1,10 +1,8 @@
-import { CommonActions } from "@react-navigation/native";
-import { useNavigation } from "expo-router";
+import { CommonActions, useNavigation } from "@react-navigation/native";
 import React, { memo } from "react";
-import { StyleSheet, Text } from "react-native";
+import { StyleSheet } from "react-native";
 import { PressableScale } from "react-native-pressable-scale";
 import { Image } from "expo-image";
-import { textStyle } from "@/styles/textStyles";
 
 const icons = {
   home: require('@/app/bars/assets/home.png'),
@@ -27,7 +25,7 @@ function BottomBarIconButton({ source, navigateTo, onPress }: { source: string, 
             routes: [{ name: navigateTo }]
           })
         );*/
-        navigator.navigate(navigateTo);
+        navigator?.navigate(navigateTo);
       }} style={styles.main}>
       <Image
         source={icons[source]}

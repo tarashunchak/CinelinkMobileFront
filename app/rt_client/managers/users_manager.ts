@@ -92,6 +92,7 @@ export class UsersManager extends EntinyManager<User_T> {
       data?.results?.forEach((user: User_T)=>{
         map.set(user.user_id, user);
         statuses.set(user.user_id, user.is_online);
+        console.log("user ", user?.user_id, " is online: ", user.is_online);
       });
 
       useUserStore.getState()._addMany(map);

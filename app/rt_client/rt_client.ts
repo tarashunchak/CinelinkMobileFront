@@ -6,6 +6,7 @@ import { Handlers } from "./message_handlers/message_handlers";
 import { useEffect } from "react";
 import { useChatStore } from "./app_state";
 import { ChatMessage } from "./message_storage/message_storage";
+import { MessagesManager } from "./managers/messages_manager";
 
 const WS_ADDRESS = (userID: UserID): string =>
   `${process.env.EXPO_PUBLIC_WS_URL}/ws/${userID}`;
@@ -111,6 +112,7 @@ class RTClient_ {
   };
 
   public async sendMessage(chatID: ChatID, message: ChatMessage) {
+    if(message.message?.length === 0) return;
     const resp = await fetch(HTTP_ADDRESS(chatID),
       {
         method: "POST",
@@ -122,7 +124,7 @@ class RTClient_ {
     const msg: ChatMessage = data?.results?.content;
     if (resp?.ok && data?.status === 200) {
       console.warn("Data ok: ", msg)
-      this.chatManager.addMessage(chatID, msg);
+      MessagesManager.getInstance().add(chatID, msg);
     }
     return data?.results;
   };

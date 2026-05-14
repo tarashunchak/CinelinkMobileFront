@@ -1,13 +1,13 @@
-import React, { memo, useCallback, useMemo, useState } from "react";
+import React, { memo, useMemo, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { ActionButton } from "./ActionButton";
 import { UserProfile_T } from "../types";
 import { textStyle } from "@/styles/textStyles";
 import ProfilePhotoModal from "./ProfilePhotoModal";
 import { PressableScale } from "react-native-pressable-scale";
-import { useUserStatus } from "@/app/rt_client/rt_client";
 import { Image } from "expo-image";
 import AnimatedFastImage from "@/components/ui/animated-fast-image";
+import { useUserStatus } from "@/app/rt_client/managers/users_manager";
 
 type Props = {
   isLoading: boolean;
@@ -28,6 +28,8 @@ function ProfileMain({
   onToggleFollow,
   onChat,
 }: Props) {
+
+  const isOnline = useUserStatus(user?.user_id);
 
   const fullName = useMemo(() => {
     if (isLoading)
@@ -58,7 +60,7 @@ function ProfileMain({
             style={{ width: "100%", height: "100%", borderRadius: 999 }}
             cachePolicy="memory"
           />
-          {useUserStatus(user?.user_id) && <View style={styles.isOnlineDot}></View>}
+          {isOnline && <View style={styles.isOnlineDot}></View>}
         </PressableScale>
 
         <ActionButton

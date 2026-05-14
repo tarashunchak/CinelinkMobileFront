@@ -22,6 +22,7 @@ function handleOnline(msg: WSMessage, manager: ChatManager) {
   //const { chat_id, user_id, is_online }: Content = msg.content;
   //manager.callbacks?.onOnline?.get(chat_id)?.(msg);
   //useChatStore.getState()._setOnline(msg.content?.user_id, msg.content?.is_online);
+  console.warn("ONLINE: ",msg);
   UsersManager.getInstance().setOnlineStatus(msg.content?.user_id, msg.content?.is_online);
 };
 

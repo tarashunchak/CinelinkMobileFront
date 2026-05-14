@@ -8,11 +8,12 @@ import MovieOfTheDay from "./components/MovieOfTheDay";
 import { GetHomeMovies } from "@/api/home/home";
 import { Movie_I } from "./models/movie";
 import ScreenBackground from "@/components/ui/screen-background";
+import BottomBar from "@/app/bars/bottomBar";
 
 interface Movies_I {
   popular: Movie_I[],
   now_playing: Movie_I[],
-}
+};
 
 export default function HomePageScreen() {
   const [selectedGenre, setSelectedGenre] = useState<number>(0);
@@ -53,6 +54,7 @@ export default function HomePageScreen() {
         <GenresList setSelectedGenre={setSelectedGenre} />
 
       </ScrollView>
+      <BottomBar/>
     </ScreenBackground>
   );
 }

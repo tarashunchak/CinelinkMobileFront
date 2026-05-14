@@ -2,7 +2,7 @@ import { getMovieOfTheDay } from "@/api/tmdbApi";
 import { textStyle } from "@/styles/textStyles";
 import { useFocusEffect, useNavigation } from "expo-router";
 import React, { memo, useCallback, useState } from "react";
-import { Text, View, ImageBackground, StyleSheet } from "react-native";
+import { Text, View, StyleSheet } from "react-native";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { PressableScale } from "react-native-pressable-scale";
 import { Image } from "expo-image";

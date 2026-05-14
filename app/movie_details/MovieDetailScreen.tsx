@@ -2,7 +2,7 @@ import BottomBar from "./../../app/bars/bottomBar";
 import MovieCardList from "./../../components/ui/movie-card-list";
 import { textStyle } from "./../../styles/textStyles";
 import { useNavigation } from "expo-router";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Text } from "react-native";
 import { Movie } from "./types";
 import MainInfo from "./components/MainInfo";
@@ -13,21 +13,16 @@ import GenresBlock from "./components/GenresBlock";
 import ProvidersBlock from "./components/ProvidersBlock";
 import CreditCardsList from "./components/CreditCardsList";
 import { GetMovieYouTubeTrailerKey, LoadMovieDetails } from "./services/services";
-import  { WatchlistSheetRef } from "./components/add-to-watchlist-modal/AddToWatchlistModal";
 import ScreenBackground from "./../../components/ui/screen-background";
-import { UserSheetRef } from "./components/recommend-to-user-modal/RecommendToUser";
 import { FlatList } from "react-native-gesture-handler";
 
-export default function MovieDetailScreen({ route }: any) {
+function MovieDetailScreen({ route }: any) {
   const navigation = useNavigation();
+  const { movieID, inCinemas, maximum, backdropPath, posterPath, title } = route?.params;
   const [movie, setMovie] = useState<Movie>();
-  const { movieID, inCinemas, maximum, backdropPath, posterPath } = route?.params;
   const [isActive, setIsActive] = useState<boolean>(true);
   const [isActiveUsers, setIsActiveUsers] = useState<boolean>(true);
   const [credits, setCredits] = useState<any[]>([]);
-
-  const sheetRef = useRef<WatchlistSheetRef>(null);
-  const userSheetRef = useRef<UserSheetRef>(null);
 
   useEffect(() => {
     async function load() {
@@ -41,7 +36,6 @@ export default function MovieDetailScreen({ route }: any) {
   }, [movieID]);
 
   const trailerKey = GetMovieYouTubeTrailerKey(movie?.videos || null);
-
   const sections = [
     { type: "actions" },
     { type: "genres" },
@@ -59,8 +53,8 @@ export default function MovieDetailScreen({ route }: any) {
       case "actions":
         return <ActionButtonsBlock
           movieID={movie?.id}
-          onAddToWatchlist={sheetRef.current?.open}
-          onRecommend={userSheetRef.current?.open}
+          onAddToWatchlist={()=>{}}
+          onRecommend={()=>{}}
         />
       case "genres":
         return <GenresBlock genres={movie?.genres} />
@@ -94,7 +88,7 @@ export default function MovieDetailScreen({ route }: any) {
             movieGenre={movie?.genres?.[0]?.id}
           /></>)
     };
-  }, [movie, credits]);
+  }, [movieID, credits]);
 
   return (
     <ScreenBackground>
@@ -110,13 +104,15 @@ export default function MovieDetailScreen({ route }: any) {
           maximum={maximum} 
           posterPath={posterPath}
           backdropPath={backdropPath}
+          title={title}
         />}
       />
-
       {(isActive || isActiveUsers) && <BottomBar />}
     </ScreenBackground>
   );
 };
+
+export default memo(MovieDetailScreen);
 
 const styles = {
   title: [

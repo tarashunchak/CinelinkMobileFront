@@ -7,6 +7,7 @@ import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-nat
 import { PressableScale } from "react-native-pressable-scale";
 import { Image } from "expo-image";
 import Animated, { createAnimatedComponent } from "react-native-reanimated";
+import AnimatedFastText from "@/components/ui/animated-fast-text";
 
 function MovieOfTheDay() {
   const navigator = useNavigation();
@@ -53,17 +54,21 @@ function MovieOfTheDay() {
         <PressableScale style={{}}
           onPress={() =>
             navigator?.navigate("MovieDetailScreen",
-              { movieID: movie?.movie_id, backdropPath: movie?.backdrop_path, posterPath: movie?.poster_path }
+              { movieID: movie?.movie_id, backdropPath: movie?.backdrop_path, posterPath: movie?.poster_path, title: movie?.title }
             )
           }>
           <View style={styles.view}>
-            <Text
+
+            <AnimatedFastText
               style={[
                 textStyle.white24,
-                styles.text
               ]}
+              sharedTransitionTag={`movie-${movie?.movie_id}-title`}
               numberOfLines={1}
-              ellipsizeMode="tail">{movie?.title}</Text>
+              ellipsizeMode="tail"
+              >
+                {movie?.title}
+              </AnimatedFastText>
             <Text style={textStyle.white24}>
               {`(${movie?.release_date?.slice(0, 4)})`}
             </Text>

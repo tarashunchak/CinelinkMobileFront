@@ -10,15 +10,17 @@ import PosterModal from "./PosterModal";
 import { MONTH } from "@/utils/month";
 import AnimatedFastImage from "@/components/ui/animated-fast-image";
 import Animated, { AnimatedStyle } from "react-native-reanimated";
+import AnimatedFastText from "@/components/ui/animated-fast-text";
 
 function MainInfo(
-  { movie, inCinemas = false, maximum, posterPath, backdropPath}
+  { movie, inCinemas = false, maximum, posterPath, backdropPath, title}
     : {
       movie?: Movie,
       inCinemas: boolean,
       maximum?: string,
       posterPath?: string,
       backdropPath?: string,
+      title?: string,
     }
 ) {
 
@@ -59,12 +61,13 @@ function MainInfo(
       <View style={styles.darkRect}>
         <View style={{ flexDirection: "column", marginLeft: "3%", marginTop: "20%", justifyContent: "space-between" }}>
 
-          <Text style={[textStyle.white26, { marginTop: "5%" }]}
+          <AnimatedFastText style={[textStyle.white24]}
+            sharedTransitionTag={`movie-${movie?.id}-title`}
             numberOfLines={1}
             ellipsizeMode="tail"
           >
-            {movie?.title}
-          </Text>
+            {title ?? movie?.title}
+          </AnimatedFastText>
 
           <View style={
             {

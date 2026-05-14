@@ -56,7 +56,7 @@ function MainInfo(
         sharedTransitionTag={`movie-${movie?.id}-backdrop`}
         source={{ uri: `https://image.tmdb.org/t/p/w500${backdropPath}` }}
         style={styles.backdrop}
-        cachePolicy="memory-disk"
+        cachePolicy="disk"
       />
       <View style={styles.darkRect}>
         <View style={{ flexDirection: "column", marginLeft: "3%", marginTop: "20%", justifyContent: "space-between" }}>

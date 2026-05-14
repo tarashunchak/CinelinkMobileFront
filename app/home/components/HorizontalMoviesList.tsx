@@ -34,6 +34,7 @@ export default function HorizontalMoviesList(
             poster_path: item?.poster_path,
             inCinemas,
             maximum: item?.maximum,
+            title: item?.title,
           }}
         />
       )

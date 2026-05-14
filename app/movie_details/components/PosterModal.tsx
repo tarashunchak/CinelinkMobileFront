@@ -3,6 +3,7 @@ import { Image, Modal, StyleSheet, View } from "react-native";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { PressableScale } from "react-native-pressable-scale";
 import AnimatedFastImage from "@/components/ui/animated-fast-image";
+import { BlurView } from "expo-blur";
 
 interface Props {
   isOpen: boolean;
@@ -22,7 +23,10 @@ export default function PosterModal(
       animationType="slide"
       style={{ flex: 1 }}
     >
-      <View style={styles.background}>
+      <BlurView 
+        tint="dark"
+        style={styles.background}
+      >
         <View style={{}}>
           <PressableScale
             style={{
@@ -50,7 +54,7 @@ export default function PosterModal(
             />
           </View>
         </View>
-      </View>
+      </BlurView>
     </Modal>
   )
 }

@@ -28,8 +28,11 @@ interface ChatState {
   chats: Record<ChatID, Chat_T>;
   typingStatus: Record<ChatID, Record<number, boolean>>;
   lastMessages: Record<number, LastMessage_T>;
+  lastSeenMessagesIDs: Record<number, number>;
   _setLastMessage: (chatID: ChatID, msg: LastMessage_T) => void;
   _setTypingStatus: (chatID: ChatID, userID: UserID, status: boolean ) =>  void;
+  _setLastSeenMessagesIDs: (chatID: ChatID, messageID: number) => void;
+  _setManyLastSeenMessagesIDs: (items: Map<ChatID, number>) => void;
   _add: (chatID: ChatID, chat: Chat_T) => void;
   _addMany: (chats: Map<ChatID, Chat_T>) => void;
   _remove: (chatID: ChatID) => void;
@@ -40,8 +43,15 @@ const useChatStore = create<ChatState>((set) => ({
   chats: {},
   typingStatus: {},
   lastMessages: {},
+  lastSeenMessagesIDs: {},
   _setLastMessage: (chatID, msg) => set((s) => ({
     lastMessages: {...s.lastMessages, [chatID]: msg}
+  })),
+  _setLastSeenMessagesIDs: (chatID, messageID) => set((s)=>({
+    lastSeenMessagesIDs: {...s.lastSeenMessagesIDs, [chatID]: messageID}
+  })),
+  _setManyLastSeenMessagesIDs: (items) => set((s)=>({
+
   })),
   _setTypingStatus: (chatID, userID, status) => set((s) => ({
     typingStatus: {
@@ -152,4 +162,8 @@ export function useTypingStatus(chatID: ChatID, userID: UserID): boolean{
     console.warn("STATUS: ", status);
   }, [chatID, userID, status]);
   return status;
+};
+
+export function useUnseenMessagesCount(chatID: ChatID = 0): number{
+  return 0;
 };

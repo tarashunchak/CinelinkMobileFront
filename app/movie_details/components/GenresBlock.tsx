@@ -1,45 +1,56 @@
-import React from "react";
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import React, { memo } from "react";
+import { Text, View } from "react-native";
 import { textStyle } from "@/styles/textStyles";
 import { genresInfo } from "@/styles/genreStyle";
+import { Skeleton } from "react-native-skeletons";
+import { PressableScale } from "react-native-pressable-scale";
 
 interface Genre {
   id: number;
   name: string;
 };
 
-export default function GenresBlock({ genres }: { genres: Genre[] | undefined }) {
+const GenreItem = memo(({ name }: { name: string }) => {
+  const info = genresInfo[name] || { color: "#ccc", borderColor: "#999" };
+  const dynamicStyle = {
+    backgroundColor: info?.color,
+    borderColor: info?.borderColor
+  };
   return (
-    <View style={styles.view}>
-      <Text style={[textStyle.yellow18, { padding: 0, marginBottom: 5 }]}>Genres</Text>
-      <ScrollView horizontal={true}
-        style={styles.genreCellView}
-        contentContainerStyle={{ paddingHorizontal: 10 }}
-        showsHorizontalScrollIndicator={false}
-      >
-        {
-          genres?.map((genre, index) => {
-            const name: string = genre.name;
-            return (
-              <TouchableOpacity key={index}
-                style={
-                  [
-                    styles.genreCell,
-                    {
-                      backgroundColor: genresInfo[name]?.color,
-                      borderColor: genresInfo[name]?.borderColor
-                    }
-                  ]
-                }>
-                <Text style={[styles.genreCellText]}>{name}</Text>
-              </TouchableOpacity>
-            )
-          })
-        }
-      </ScrollView>
+    <PressableScale style={[styles.genreCell, dynamicStyle]}>
+      <Text style={textStyle?.white14}>{name}</Text>
+    </PressableScale >
+  );
+});
+
+function GenresBlock({ genres }: { genres: Genre[] | undefined }) {
+  if(!genres || genres.length === 0)
+    return (
+      <Skeleton style={[styles.view, {height: 60}]}>
+        <Text style={[textStyle.yellow18, { padding: 0, marginBottom: 5 }]}>Genres</Text>
+      </Skeleton>
+    );
+
+  return (
+  <View style={styles.view}>
+    <Text style={[textStyle.yellow18, { padding: 0, marginBottom: 5 }]}>Genres</Text>
+    <View style={{flexDirection: "row"}}>
+      {
+        genres?.map((genre, index) => {
+          return (
+            <GenreItem 
+              key={genre?.id ?? index} 
+              name={genre.name}
+            />
+          );
+        })
+      }
     </View>
+  </View>
   )
-}
+};
+
+export default memo(GenresBlock);
 
 const styles = {
   view: {

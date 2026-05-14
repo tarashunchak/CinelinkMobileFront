@@ -1,19 +1,28 @@
-import React from "react";
-import { Text, View } from "react-native";
+import React, { memo } from "react";
+import { StyleSheet, Text, View } from "react-native";
 import { textStyle } from "@/styles/textStyles";
+import { Skeleton } from "react-native-skeletons";
 
-export default function OverviewBlock({ text }: { text: string }) {
+function OverviewBlock({ text }: { text: string }) {
+  if (!text || text?.length === 0) 
+    return (
+      <Skeleton style={styles.view}>
+        <Text style={textStyle.yellow20}>Overview</Text>
+      </Skeleton>
+    );
   return (
     <View style={styles.view}>
       <Text style={textStyle.yellow20}>Overview</Text>
-      <Text style={styles.text}>
+      <Text style={[textStyle.white16, styles.text]}>
         {text}
       </Text>
     </View>
   )
-}
+};
 
-const styles = {
+export default memo(OverviewBlock);
+
+const styles = StyleSheet.create({
   view: {
     backgroundColor: "rgba(255, 255, 255, 0.05)",
     padding: 6,
@@ -22,13 +31,11 @@ const styles = {
     borderColor: "rgba(255, 255, 255, 0.2)",
     borderRadius: 12,
     marginTop: "3%",
-    flexDirection: "column"
+    flexDirection: "column",
+    minHeight: 100,
   },
-  text: [
-    textStyle.white16,
-    {
-      width: "100%",
-      textAlign: "justify",
-    },
-  ]
-};
+  text: {
+    width: "100%",
+    textAlign: "justify",
+  },
+});

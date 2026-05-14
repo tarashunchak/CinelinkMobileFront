@@ -4,6 +4,8 @@ import { textStyle } from "@/styles/textStyles";
 import InfoRow from "./InfoRow";
 import { Movie } from "../types";
 import { Skeleton } from "react-native-skeletons";
+import { JumpingTransition } from "react-native-reanimated";
+import { PressableScale } from "react-native-pressable-scale";
 
 interface Credits {
   cast: any[];
@@ -43,20 +45,21 @@ export default function InfoBlock({ movieInfo }: { movieInfo: Movie | undefined 
 
       <InfoRow left="Runtime" right={`${movieInfo.runtime} min`} />
 
-      <TouchableOpacity style={styles.imdbBtn.view}
+      <PressableScale 
+        activeScale={0.95}
+        style={styles.imdbBtn.view}
         onPress={async () => {
           const url = `https://www.imdb.com/title/${movieInfo?.imdb_id}`;
           const sup = await Linking.canOpenURL(url);
           if (sup) Linking.openURL(url);
         }}
       >
-
         <Text style={styles.imdbBtn.text}>
           {
             `IMDb: ${movieInfo?.vote_average.toFixed(1)}`
           }
         </Text>
-      </TouchableOpacity>
+      </PressableScale>
     </View >
   )
 };
@@ -72,6 +75,7 @@ const styles = {
     borderColor: "rgba(255, 255, 255, 0.10)",
     borderRadius: 5,
     padding: "1.5%",
+    justifyContent: "space-evenly",
   },
   imdbBtn: {
     view: {

@@ -7,8 +7,8 @@ import { PressableScale } from "react-native-pressable-scale";
 export let getActiveTab = () => { };
 
 export default function SocialPageTopBar({ onTabChange }: { onTabChange: (tab: string) => void }) {
-  const tabs = ["Friends", "Recommendations", "Activity", "Chats"];
-  const [activeTab, setActiveTab] = useState("Friends");
+  const tabs = ["Chats", "Recommendations", "Activity", "Friends"];
+  const [activeTab, setActiveTab] = useState("Chats");
 
   return (
     <View style={styles.mainContainer}>

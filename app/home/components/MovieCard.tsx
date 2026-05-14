@@ -7,12 +7,14 @@ import { PressableScale } from "react-native-pressable-scale";
 import { Image } from "expo-image";
 import { Skeleton } from "react-native-skeletons";
 import Animated, { createAnimatedComponent, useAnimatedProps } from "react-native-reanimated";
+import AnimatedFastText from "@/components/ui/animated-fast-text";
 
 export interface MovieCard_I {
   movie_id: number;
   poster_path: string;
   maximum?: string;
   inCinemas: boolean;
+  title: string;
 }
 
 function MovieCard({ data }: { data: MovieCard_I }) {
@@ -29,6 +31,7 @@ function MovieCard({ data }: { data: MovieCard_I }) {
           inCinemas: data?.inCinemas,
           maximum: data?.maximum,
           posterPath: data?.poster_path,
+          title: data?.title,
         }
       )}>
       <View>
@@ -36,7 +39,7 @@ function MovieCard({ data }: { data: MovieCard_I }) {
           sharedTransitionTag={`movie-${data?.movie_id}-poster`}
           style={styles.poster}
           source={{ uri: "https://image.tmdb.org/t/p/w300" + data?.poster_path }}
-          cachePolicy="memory-disk"
+          cachePolicy="disk"
         />
         {
           data?.inCinemas &&
@@ -47,6 +50,12 @@ function MovieCard({ data }: { data: MovieCard_I }) {
           </View>
         }
       </View>
+      <AnimatedFastText
+        sharedTransitionTag={`movie-${data?.movie_id}-title`}
+        style={{opacity: 0,}}
+      >
+        {data?.title}
+      </AnimatedFastText>
     </PressableScale >
   )
 };

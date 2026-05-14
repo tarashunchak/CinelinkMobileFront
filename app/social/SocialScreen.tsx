@@ -14,7 +14,7 @@ import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import RecommendationsList from "./components/RecommendationsList";
 
 export default function SocialScreen() {
-  const tabs = ["Friends", "Recommendations", "Activity", "Chats"];
+  const tabs = ["Chats", "Recommendations", "Activity", "Friends"];
   const [activeTab, setActiveTab] = useState(tabs[0]);
   //const [friends, setFriends] = useState<UserCard_T[]>(Array.from({ length: 8 }));
   const [recommendations, setRecommendatoins] = useState<RecommendedCard_T[]>([]);

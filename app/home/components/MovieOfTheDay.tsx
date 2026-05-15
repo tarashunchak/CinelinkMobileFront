@@ -1,7 +1,7 @@
 import { getMovieOfTheDay } from "@/api/tmdbApi";
 import { textStyle } from "@/styles/textStyles";
 import { useFocusEffect, useNavigation } from "expo-router";
-import React, { memo, useCallback, useState } from "react";
+import React, { memo, useCallback, useRef, useState } from "react";
 import { Text, View, StyleSheet } from "react-native";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { PressableScale } from "react-native-pressable-scale";
@@ -9,6 +9,7 @@ import { Image } from "expo-image";
 import Animated, { createAnimatedComponent } from "react-native-reanimated";
 import AnimatedFastText from "@/components/ui/animated-fast-text";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { BlurTargetView, BlurView } from "expo-blur";
 
 function MovieOfTheDay() {
   const navigator = useNavigation();
@@ -28,8 +29,11 @@ function MovieOfTheDay() {
 
   const AnimatedFastImage = createAnimatedComponent(Image);
 
+  const ref = useRef<View | null>(null);
+
   return (
     <>
+    <BlurTargetView ref={ref}>
       <AnimatedFastImage 
         sharedTransitionTag={`movie-${movie?.movie_id}-backdrop`}
         source={{
@@ -39,6 +43,14 @@ function MovieOfTheDay() {
         style={styles.backdrop}
         cachePolicy="memory-disk"
       />
+    </BlurTargetView>
+    <BlurView style={[styles.backdrop, {position: "absolute", top:0,left:0, right:0}]}
+      blurTarget={ref}
+      tint="dark"
+      intensity={20}
+      blurReductionFactor={60}
+      blurMethod="dimezisBlurView"
+    />
       <View style={[styles.background, {paddingTop: insets.top }]}>
         <Image
           style={styles.logo}

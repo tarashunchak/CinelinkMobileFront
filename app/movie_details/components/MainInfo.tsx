@@ -1,4 +1,4 @@
-import React, { memo, useState } from "react";
+import React, { memo, useRef, useState } from "react";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { StyleSheet, Text, View } from "react-native";
 import ReturnArrowButton from "@/components/ui/returnArrowButton";
@@ -11,9 +11,11 @@ import { MONTH } from "@/utils/month";
 import AnimatedFastImage from "@/components/ui/animated-fast-image";
 import AnimatedFastText from "@/components/ui/animated-fast-text";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import HeaderContainer from "@/components/ui/header-container";
+import { BlurTargetView, BlurView } from "expo-blur";
 
 function MainInfo(
-  { movie, inCinemas = false, maximum, posterPath, backdropPath, title, cast, ref}
+  { movie, inCinemas = false, maximum, posterPath, backdropPath, title, cast, ref }
     : {
       movie?: Movie,
       inCinemas: boolean,
@@ -36,7 +38,7 @@ function MainInfo(
     <>
       <AnimatedFastImage
         sharedTransitionTag={`movie-${movie?.id}-poster`}
-        source={{ uri: `https://image.tmdb.org/t/p/w300${posterPath ?? movie?.poster_path}`}}
+        source={{ uri: `https://image.tmdb.org/t/p/w300${posterPath ?? movie?.poster_path}` }}
         style={styles.posterImage}
         cachePolicy="memory-disk"
       />
@@ -52,19 +54,31 @@ function MainInfo(
     </>
   );
 
+  const backdropRef = useRef<View | null>(null);
+
   return (
-    <View>
+    <HeaderContainer>
       <ReturnArrowButton />
-      <AnimatedFastImage
-        sharedTransitionTag={`movie-${movie?.id}-backdrop`}
-        source={{ uri: `https://image.tmdb.org/t/p/w500${backdropPath}` }}
-        style={styles.backdrop}
-        cachePolicy="disk"
+      <BlurTargetView style={styles.backdrop} ref={backdropRef}>
+        <AnimatedFastImage
+          sharedTransitionTag={`movie-${movie?.id}-backdrop`}
+          source={{ uri: `https://image.tmdb.org/t/p/w300${backdropPath}` }}
+          style={{ height: "100%", width: "100%" }}
+          cachePolicy="disk"
+        />
+      </BlurTargetView>
+      <BlurView
+        tint="systemUltraThinMaterial"
+        intensity={60}
+        blurReductionFactor={30}
+        blurMethod="dimezisBlurView"
+        style={[{ height: hp(40), width: wp("100%"), position: "absolute", top: 0, left: 0, right: 0, marginLeft: "-3%" }]}
+        blurTarget={backdropRef}
       />
-      <View style={[styles.darkRect, {paddingTop:insets.top/2}]}>
+      <View style={[styles.darkRect, { paddingTop: insets.top / 2 }]}>
         <View style={{ flexDirection: "column", marginLeft: "3%", marginTop: "20%", justifyContent: "space-between" }}>
 
-          <AnimatedFastText style={[textStyle.white24]}
+          <AnimatedFastText style={[textStyle.white24, { maxWidth: "96%" }]}
             sharedTransitionTag={`movie-${movie?.id}-title`}
             numberOfLines={1}
             ellipsizeMode="tail"
@@ -88,20 +102,18 @@ function MainInfo(
             >
               {poster}
             </PressableScale>
-            <InfoBlock movieInfo={movie} cast={cast}/>
+            <InfoBlock movieInfo={movie} cast={cast} />
           </View>
         </View>
       </View>
-      {
-        <PosterModal
-          isOpen={isOpen}
-          posterPath={posterPath}
-          onClose={() => { setIsOpen(false) }}
-          movieID={movie?.id}
-          ref={ref}
-        />
-      }
-    </View>
+      <PosterModal
+        isOpen={isOpen}
+        posterPath={posterPath}
+        onClose={() => { setIsOpen(false) }}
+        movieID={movie?.id}
+        ref={ref}
+      />
+    </HeaderContainer>
   )
 };
 

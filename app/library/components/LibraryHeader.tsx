@@ -14,7 +14,7 @@ export default function LibraryHeader() {
   const insets = useSafeAreaInsets();
   return (
     <HeaderContainer>
-      <View style={[stylesR.view, { paddingTop: insets.top }]}>
+      <View style={stylesR.view}>
         <View style={styles.left.view}>
           <PressableScale
             activeScale={0.9}

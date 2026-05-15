@@ -1,11 +1,11 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { View, StyleSheet } from "react-native";
 import BottomBar from "../bars/bottomBar";
 import { useFocusEffect, useNavigation } from "expo-router";
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { getCurrentUserID, isCurrentUser } from "@/utils/utils";
 import { useUserProfile } from "./hooks/useUserProfile";
-import { ProfileHeader } from "./components/ProfileHeader";
+import ProfileHeader from "./components/ProfileHeader";
 import ProfileMain from "./components/ProfileMain";
 import { FollowUser, UnfollowUser } from "@/api/followers/followers";
 import FollowingsList from "./components/FollowingsList";
@@ -16,6 +16,7 @@ import { GetDirectChatID } from "../../api/chats";
 import { GestureHandlerRootView, ScrollView } from "react-native-gesture-handler";
 import ScreenBackground from "@/components/ui/screen-background";
 import UserStats from "./components/Stats";
+import { BlurTargetView } from "expo-blur";
 
 export default function UserProfileScreen({ route }: any) {
   const navigator = useNavigation();
@@ -66,8 +67,11 @@ export default function UserProfileScreen({ route }: any) {
     }
   }, []);
 
+  const ref = useRef<View | null>(null);
+
   return (
     <GestureHandlerRootView>
+    <BlurTargetView ref={ref} style={{flex:1}}>
       <ScreenBackground>
         <ScrollView
           nestedScrollEnabled
@@ -94,6 +98,7 @@ export default function UserProfileScreen({ route }: any) {
               console.warn("On chat");
               navigator.navigate("DirectChatScreen", { chatID: chatID });
             }}
+            ref={ref}
           />
           <UserStats
             followersCnt={followers?.length}
@@ -113,6 +118,7 @@ export default function UserProfileScreen({ route }: any) {
         </ScrollView>
         <BottomBar />
       </ScreenBackground >
+        </BlurTargetView>
     </GestureHandlerRootView >
   );
 };

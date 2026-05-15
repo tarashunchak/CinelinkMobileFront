@@ -17,6 +17,7 @@ import ScreenBackground from "./../../components/ui/screen-background";
 import { FlatList } from "react-native-gesture-handler";
 import Animated from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { BlurTargetView } from "expo-blur";
 
 function MovieDetailScreen({ route }: any) {
   const navigation = useNavigation();
@@ -32,7 +33,7 @@ function MovieDetailScreen({ route }: any) {
     async function load() {
       const data = await LoadMovieDetails(movieID);
       if (data) {
-        setMovie({...data, ...{credits: {}}});
+        setMovie({ ...data, ...{ credits: {} } });
         setCredits(data?.credits);
       };
     }
@@ -57,8 +58,8 @@ function MovieDetailScreen({ route }: any) {
       case "actions":
         return <ActionButtonsBlock
           movieID={movie?.id}
-          onAddToWatchlist={()=>{}}
-          onRecommend={()=>{}}
+          onAddToWatchlist={() => { }}
+          onRecommend={() => { }}
         />
       case "genres":
         return <GenresBlock genres={movie?.genres} />
@@ -94,30 +95,32 @@ function MovieDetailScreen({ route }: any) {
     };
   }, [movieID, credits]);
 
-  const ref = useRef<View | null>();
+  const ref = useRef<View | null>(null);
 
   return (
+    <BlurTargetView ref={ref} style={{flex:1}}>
     <ScreenBackground>
-      <FlatList
-        contentContainerStyle={{ padding: "1%" }}
-        data={sections}
-        renderItem={renderItem}
-        showsVerticalScrollIndicator={false}
-        initialNumToRender={2}
-        ListHeaderComponent={
-        <MainInfo 
-          movie={movie} 
-          inCinemas={inCinemas} 
-          maximum={maximum} 
-          posterPath={posterPath}
-          backdropPath={backdropPath}
-          title={title}
-          cast={credits?.cast}
-          ref={ref}
-        />}
-      />
-      {(isActive || isActiveUsers) && <BottomBar />}
+        <FlatList
+          contentContainerStyle={{ padding: "1%" }}
+          data={sections}
+          renderItem={renderItem}
+          showsVerticalScrollIndicator={false}
+          initialNumToRender={2}
+          ListHeaderComponent={
+            <MainInfo
+              movie={movie}
+              inCinemas={inCinemas}
+              maximum={maximum}
+              posterPath={posterPath}
+              backdropPath={backdropPath}
+              title={title}
+              cast={credits?.cast}
+              ref={ref}
+            />}
+        />
+        {(isActive || isActiveUsers) && <BottomBar />}
     </ScreenBackground>
+    </BlurTargetView>
   );
 };
 

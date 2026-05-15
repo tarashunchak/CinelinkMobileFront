@@ -12,7 +12,7 @@ export default function ScreenBackground({ children }: any) {
             require("../../assets/images/background.png")
             : require("../../assets/images/authBackground.png")
         }
-        style={{ ...StyleSheet.absoluteFillObject }}
+        style={StyleSheet.absoluteFillObject}
         contentFit="cover"
         cachePolicy="memory-disk"
       />

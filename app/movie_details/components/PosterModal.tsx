@@ -26,10 +26,10 @@ function PosterModal({ isOpen, posterPath, onClose, movieID, ref }: Props) {
       style={StyleSheet.absoluteFill} 
       onPress={onClose} 
     />
-
     <BlurView 
-      tint="dark"
-      intensity={100}
+      tint="systemChromeMaterialDark"
+      intensity={90}
+      blurReductionFactor={20}
       blurMethod="dimezisBlurView"
       blurTarget={ref}
       style={StyleSheet.absoluteFill}
@@ -40,7 +40,7 @@ function PosterModal({ isOpen, posterPath, onClose, movieID, ref }: Props) {
           onPress={onClose}
         >
           <Image
-            style={{ height: "100%", width: "100%" }}
+            style={{ height: 26, width: 26, alignSelf:"center" }}
             source={require("@/app/profile/assets/Icon.png")}
           />
         </PressableScale>
@@ -49,22 +49,23 @@ function PosterModal({ isOpen, posterPath, onClose, movieID, ref }: Props) {
           <AnimatedFastImage
             sharedTransitionTag={`movie-${movieID}-poster`}
             style={styles.posterImage}
-            source={{ uri: "https://image.tmdb.org/t/p/w500" + posterPath}}
+            source={{ uri: `https://image.tmdb.org/t/p/w500${posterPath}`}}
             cachePolicy="disk"
           />
         </View>
       </View>
     </Modal>
   );
-}
+};
 
 export default memo(PosterModal);
 
 const styles = StyleSheet.create({
   background: {
-    flex: 1,
+    flexDirection:"column",
     alignItems: "center",
     justifyContent: "center",
+    width:"80%",
   },
   posterView: {
     //padding: wp(2),
@@ -95,9 +96,14 @@ const styles = StyleSheet.create({
   },
   closeBtn:{
     alignSelf: "flex-end",
-    height: 34,
-    width: 34,
+    height: 44,
+    width: 44,
     marginLeft: 17,
     marginBottom: hp(2),
+    borderColor:"rgba(255, 255, 255, 0.2)",
+    backgroundColor:"rgba(255, 255, 255, 0.05)",
+    borderWidth: 1,
+    borderRadius: 999,
+    justifyContent: "center",
   },
 });

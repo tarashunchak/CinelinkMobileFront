@@ -17,6 +17,7 @@ type Props = {
   onEdit: () => void,
   onToggleFollow: () => void,
   onChat: () => void;
+  ref: any;
 };
 
 function ProfileMain({
@@ -27,6 +28,7 @@ function ProfileMain({
   onEdit,
   onToggleFollow,
   onChat,
+  ref,
 }: Props) {
 
   const isOnline = useUserStatus(user?.user_id);
@@ -107,6 +109,7 @@ function ProfileMain({
         isOpen={isOpen}
         avatarUrl={user?.avatar_url}
         onClose={() => setIsOpen(false)}
+        ref={ref}
       />
     </View>
   );

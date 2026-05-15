@@ -16,7 +16,7 @@ interface Props {
   isCurrentUser: boolean;
 };
 
-export default function ProfilePhotoModal({ isOpen, avatarUrl, onClose, isCurrentUser }: Props) {
+export default function ProfilePhotoModal({ isOpen, avatarUrl, onClose, isCurrentUser, ref }: Props) {
   const [avatarUri, setAvatarUri] = useState<string>(avatarUrl)
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
@@ -43,9 +43,12 @@ export default function ProfilePhotoModal({ isOpen, avatarUrl, onClose, isCurren
       animationType="slide"
     >
       <BlurView
-        intensity={30}
-        tint="dark"
+        intensity={80}
+        tint="systemChromeMaterialDark"
         style={styles.background}
+        blurTarget={ref}
+        blurMethod="dimezisBlurView"
+        blurReductionFactor={10}
       >
         <View style={{}}>
           <PressableScale

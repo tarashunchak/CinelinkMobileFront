@@ -6,24 +6,25 @@ import { useNavigation } from "expo-router";
 import { Image } from "expo-image";
 import { Skeleton } from "react-native-skeletons";
 import Animated from "react-native-reanimated";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function HeaderBlock({ watchlist }: { watchlist: any }) {
   const navigator = useNavigation();
   if (!watchlist) return <Skeleton style={styles.container} />;
   const AnimatedFastImage = Animated.createAnimatedComponent(Image);
+  const insets = useSafeAreaInsets();
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, {height: hp(45) - insets.top }]}>
       <View style={styles.mainView}>
-        <View style={[styles.infoView]}>
+        <View style={styles.infoView}>
           <AnimatedFastImage
             sharedTransitionTag={`watchlist-fg-${watchlist?.id}`}
             source={
-             { uri: watchlist?.fg_img_url }
+            { uri: watchlist?.fg_img_url }
             }
             style={styles.image}
-            cachePolicy="memory-disk"
+            cachePolicy="disk"
           />
-
           <View style={styles.textView}>
             <Text style={[styles.nameText, textStyle.yellow22]}>
               {watchlist?.name}
@@ -57,11 +58,11 @@ export default function HeaderBlock({ watchlist }: { watchlist: any }) {
 const styles = StyleSheet.create({
   container: {
     justifyContent: "flex-end",
-    height: hp("41%") - 50
   },
   mainView: {
     flexDirection: "row",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
+    maxHeight: 140,
   },
   creatorTileView: {
     flexDirection: "row",
@@ -104,6 +105,7 @@ const styles = StyleSheet.create({
   },
   textView: {
     flexDirection: "column",
-    justifyContent: "space-between",
+    justifyContent: "space-evenly",
+    height: "100%",
   }
 }); 

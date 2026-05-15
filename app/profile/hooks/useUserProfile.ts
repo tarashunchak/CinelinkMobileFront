@@ -14,6 +14,7 @@ export function useUserProfile(userID: number) {
       setUser(data);
     } finally {
       setLoading(false);
+      console.warn("USER PROFILE: ", user);
     }
   }, [userID])
 

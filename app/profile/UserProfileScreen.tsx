@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { memo, useCallback, useRef, useState } from "react";
 import { View, StyleSheet } from "react-native";
 import BottomBar from "../bars/bottomBar";
 import { useFocusEffect, useNavigation } from "expo-router";
@@ -17,8 +17,9 @@ import { GestureHandlerRootView, ScrollView } from "react-native-gesture-handler
 import ScreenBackground from "@/components/ui/screen-background";
 import UserStats from "./components/Stats";
 import { BlurTargetView } from "expo-blur";
+import { useUser } from "../rt_client/managers/users_manager";
 
-export default function UserProfileScreen({ route }: any) {
+function UserProfileScreen({ route }: any) {
   const navigator = useNavigation();
   const userID = route?.params?.userID ?? getCurrentUserID();
   const { user, loadUser, userLoading } = useUserProfile(userID);
@@ -27,6 +28,7 @@ export default function UserProfileScreen({ route }: any) {
   const [isCurrUser, setIsCurrUser] = useState<boolean>(false);
   const [list, setList] = useState<string>("Followers");
   const [chatID, setChatID] = useState<number>(0);
+  const cachedUser = useUser(userID);
 
   useFocusEffect(
     useCallback(() => {
@@ -67,61 +69,64 @@ export default function UserProfileScreen({ route }: any) {
     }
   }, []);
 
+
   const ref = useRef<View | null>(null);
 
   return (
     <GestureHandlerRootView>
-    <BlurTargetView ref={ref} style={{flex:1}}>
-      <ScreenBackground>
-        <ScrollView
-          nestedScrollEnabled
-          showsVerticalScrollIndicator={false}
-        >
-          <ProfileHeader
-            bgUrl={user?.bg_img_url}
-            onBack={navigator.goBack}
-            isCurrentUser={isCurrUser}
-          />
-          <ProfileMain
-            isLoading={(userLoading ?? false) && true}
-            user={{ ...user, user_id: userID }}
-            isCurrentUser={isCurrUser}
-            isFollowed={user?.is_following}
-            onEdit={() => { }}
-            onToggleFollow={async () => {
-              if (user?.is_following)
-                await UnfollowUser(userID) && loadUser();
-              else
-                await FollowUser(userID) && loadUser();
-            }}
-            onChat={() => {
-              console.warn("On chat");
-              navigator.navigate("DirectChatScreen", { chatID: chatID });
-            }}
-            ref={ref}
-          />
-          <UserStats
-            followersCnt={followers?.length}
-            followingsCnt={followings?.length}
-            postsCnt={user?.posts?.length}
-            onPress={setList}
-          />
-          <View style={styles.line} />
-          {
-            list === "Followings"
-            && <FollowingsList userID={userID} />
-          }
-          {
-            list === "Followers"
-            && <FollowersList userID={userID} />
-          }
-        </ScrollView>
-        <BottomBar />
-      </ScreenBackground >
-        </BlurTargetView>
+      <BlurTargetView ref={ref} style={{ flex: 1 }}>
+        <ScreenBackground>
+          <ScrollView
+            nestedScrollEnabled
+            showsVerticalScrollIndicator={false}
+          >
+            <ProfileHeader
+              bgUrl={user?.bg_img_url}
+              onBack={navigator.goBack}
+              isCurrentUser={isCurrUser}
+            />
+            <ProfileMain
+              isLoading={(userLoading ?? false) && true}
+              user={{ ...user, ...{ user_id: userID }, ...cachedUser }}
+              isCurrentUser={isCurrUser}
+              isFollowed={user?.is_following}
+              onEdit={() => { }}
+              onToggleFollow={async () => {
+                if (user?.is_following)
+                  await UnfollowUser(userID) && loadUser();
+                else
+                  await FollowUser(userID) && loadUser();
+              }}
+              onChat={() => {
+                console.warn("On chat");
+                navigator.navigate("DirectChatScreen", { chatID: chatID });
+              }}
+              ref={ref}
+            />
+            <UserStats
+              followersCnt={followers?.length}
+              followingsCnt={followings?.length}
+              postsCnt={user?.posts?.length}
+              onPress={setList}
+            />
+            <View style={styles.line} />
+            {
+              list === "Followings"
+              && <FollowingsList userID={userID} />
+            }
+            {
+              list === "Followers"
+              && <FollowersList userID={userID} />
+            }
+          </ScrollView>
+          <BottomBar />
+        </ScreenBackground >
+      </BlurTargetView>
     </GestureHandlerRootView >
   );
 };
+
+export default memo(UserProfileScreen);
 
 const styles = StyleSheet.create({
   line: {

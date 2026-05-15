@@ -4,8 +4,7 @@ import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { View, Text, StyleSheet } from "react-native";
 import { useNavigation } from "expo-router";
 import { PressableScale } from "react-native-pressable-scale";
-import { useUserStatus } from "@/app/rt_client/rt_client";
-import { UserCard_T } from "@/app/types/user";
+import { useUserStatus } from "@/app/rt_client/managers/users_manager";
 import { Image } from "expo-image";
 import { Skeleton } from "react-native-skeletons";
 import AnimatedFastImage from "@/components/ui/animated-fast-image";
@@ -35,7 +34,7 @@ function UserCard({ user }: { user: Props }) {
             sharedTransitionTag={`user-${user?.user_id}-avatar`}
             style={styles.image}
             source={{ uri: user?.avatar_url }}
-            cachePolicy="memory"
+            cachePolicy="disk"
           />
           {isOnline && <View style={styles.isOnlineDot}></View>}
         </View>

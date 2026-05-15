@@ -14,7 +14,14 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import AnimatedFastText from "@/components/ui/animated-fast-text";
 import HeaderContainer from "@/components/ui/header-container";
 
-function Header({ chatID, peer }: { chatID: number, peer: ChatMember }) {
+interface Props {
+  chatID: number;
+  peer: any;
+  imgUrl: string;
+  name: string;
+};
+
+function Header({ chatID, peer, imgUrl, name }: Props) {
   const navigator = useNavigation();
   const [lastSeen, setLastSeen] = useState<string>();
   const chat = useChat(chatID);
@@ -27,14 +34,13 @@ function Header({ chatID, peer }: { chatID: number, peer: ChatMember }) {
   useEffect(() => {
     async function loadContent() {
       const data = await GetUserLastSeenTimestamp(peer?.user_id);
-      if (data) setLastSeen(data);
+      //if (data) setLastSeen(data);
     };
     loadContent();
   }, [chatID, isOnline]);
 
   return (
-    <HeaderContainer>
-      <View style={[styles.view]}>
+    <HeaderContainer style={styles.view}>
         <View style={{ flexDirection: "row", gap: wp(5) }}>
           <ReturnArrowButton />
 
@@ -50,7 +56,7 @@ function Header({ chatID, peer }: { chatID: number, peer: ChatMember }) {
               <AnimatedFastImage
                 sharedTransitionTag={`chat-${chat?.chat_id}-image`}
                 style={stylesR.avatarImg}
-                source={{ uri: chat?.img_url }}
+                source={{ uri: imgUrl}}
                 cachePolicy="disk"
               />
               {isOnline && <View style={styles.isOnline.dot}></View>}
@@ -61,7 +67,7 @@ function Header({ chatID, peer }: { chatID: number, peer: ChatMember }) {
                 style={textStyle.white18}
                 sharedTransitionTag={`chat-${chat?.chat_id}-name`}
               >
-                {chat?.name}
+                {name}
               </AnimatedFastText>
               {!isOnline ? (
                 <Text style={textStyle.gray14}>
@@ -84,7 +90,6 @@ function Header({ chatID, peer }: { chatID: number, peer: ChatMember }) {
         <TouchableOpacity style={stylesR.dots}>
           <Image source={require("@/app/direct_chat/assets/dots-vertical.png")} style={{ height: "70%", width: "70%" }} />
         </TouchableOpacity>
-      </View>
     </HeaderContainer>
   );
 };

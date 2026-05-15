@@ -1,10 +1,8 @@
 import React, { memo } from "react";
-import * as Haptics from "expo-haptics";
 import { Image, View, StyleSheet, Text } from "react-native";
 import { isCurrentUser } from "@/utils/utils";
 import { timestamp } from "../utils/utils";
 import { textStyle } from "@/styles/textStyles";
-import { PressableScale } from "react-native-pressable-scale";
 import MessageContainer from "./MessageContainer";
 
 interface TextMessage_I {
@@ -15,7 +13,7 @@ interface TextMessage_I {
   timestamp: string;
 };
 
-function TextMessage({ message, chatID }: { message: TextMessage_I, chatID: number }) {
+function TextMessage({ message }: { message: TextMessage_I  }) {
   return (
     <MessageContainer
       style={[

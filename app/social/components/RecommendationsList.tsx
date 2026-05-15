@@ -78,15 +78,18 @@ const RecommendationItem = memo(({ item }: { item: RecommendedCard_T }) => {
   );
 });
 
-function RecommendationsList({ items }: { items: RecommendedCard_T[] | any[] }) {
+function RecommendationsList({ items }: { items: RecommendedCard_T[]}) {
   const renderItem = useCallback(({ item }: any) => (
     <RecommendationItem item={item} />
   ), [items]);
 
+  console.warn("Recommendations: ", items);
+
   return (
     <FlatList
       data={items}
-      keyExtractor={(item: any, index: number) => String(item?.movie_id ?? index)}
+      initialNumToRender={3}
+      keyExtractor={(item: RecommendedCard_T, index) => item?.imdb_id ?? String(index)}
       renderItem={renderItem}
       contentContainerStyle={styles.contentContainer}
     />

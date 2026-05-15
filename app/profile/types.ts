@@ -2,7 +2,7 @@ export type UserProfile_T = {
   first_name: string;
   last_name: string;
   username: string;
-  joined_at: string;
+  created_at: string;
   bio: string;
   avatar_url: string;
   bg_img_url: string;

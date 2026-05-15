@@ -36,6 +36,7 @@ function PosterModal({ isOpen, posterPath, onClose, movieID, ref }: Props) {
     />
       <View style={styles.background} pointerEvents="box-none">
         <PressableScale
+          activeScale={0.95}
           style={styles.closeBtn}
           onPress={onClose}
         >
@@ -63,9 +64,11 @@ export default memo(PosterModal);
 const styles = StyleSheet.create({
   background: {
     flexDirection:"column",
+    alignSelf: "center",
     alignItems: "center",
     justifyContent: "center",
-    width:"80%",
+    width: "80%",
+    height: "100%",
   },
   posterView: {
     //padding: wp(2),

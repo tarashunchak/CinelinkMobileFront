@@ -21,13 +21,14 @@ import { useChatMessages } from "../rt_client/managers/messages_manager";
 
 export default function DirectChatScreen({ route }: any) {
   const { height } = useAnimatedKeyboard();
-  const { chatID } = route?.params;
+  const { chatID, imgUrl, name } = route?.params;
   const [chat, setChat] = useState();
   const [isFloatButtonVisible, setFloatButtonVisible] = useState<boolean>(false);
   const { isEditMode, enable, disable, toggle } = useEditMode(3);
   const [selected, setSelected] = useState<Set<number>>(new Set());
 
   const messages = useChatMessages(chatID);
+
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ translateY: -height.value }]
   }));
@@ -53,7 +54,7 @@ export default function DirectChatScreen({ route }: any) {
 
   const renderItem = useCallback(({ item }: any) => {
     if (item?.message_type === "text")
-      return <TextMessage chatID={chatID} message={item} />
+      return <TextMessage message={item} />
   }, [chatID]);
 
   return (
@@ -66,7 +67,13 @@ export default function DirectChatScreen({ route }: any) {
       >
         {isEditMode
           ? <EditHeader />
-          : <Header chatID={chat?.info?.chat_id} peer={chat?.peer} />
+          : 
+          <Header 
+            chatID={chat?.info?.chat_id} 
+            peer={chat?.peer} 
+            imgUrl={imgUrl}  
+            name={name}
+          />
         }
         <FlatList
           data={messages}
@@ -83,8 +90,6 @@ export default function DirectChatScreen({ route }: any) {
         />
 
         <FloatingButton isVisible={isFloatButtonVisible} />
-
-        {/* Input ТУТ, всередині KeyboardAvoidingView */}
 
       </KeyboardAvoidingView>
       <Animated.View style={[animatedStyle]}>

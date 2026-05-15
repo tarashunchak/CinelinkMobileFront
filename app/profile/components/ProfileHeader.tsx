@@ -35,10 +35,10 @@ export default function ProfileHeader({ bgUrl, onBack, isCurrentUser }: Props) {
         <LogOutButton isVisible={isCurrentUser} />
       </View>
       <BlurView
-        tint="systemChromeMaterialDark"
-        intensity={60}
-        style={[styles.bgImage]}
-        blurReductionFactor={30}
+        tint="dark"
+        intensity={80}
+        style={styles.bgImage}
+        blurReductionFactor={40}
         blurMethod="dimezisBlurView"
         blurTarget={ref}
       />

@@ -13,6 +13,7 @@ import MovieCard from "./components/MovieCard";
 import { textStyle } from "@/styles/textStyles";
 import Spacer from "@/components/ui/spacer";
 import { FlatList } from "react-native-gesture-handler";
+import HeaderContainer from "@/components/ui/header-container";
 
 export default function WatchlistDetailsScreen({ route }: any) {
   const watchlist = route?.params?.watchlist;
@@ -34,11 +35,11 @@ export default function WatchlistDetailsScreen({ route }: any) {
         keyExtractor={(item, index) => String(item?.imdb_id ?? index)}
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={() => (
-          <View>
+          <HeaderContainer>
             <Image
               source={require("@/app/library/assets/NoBgWatchlist.jpeg")}
               style={[StyleSheet.absoluteFillObject , styles.bgImage]}
-              cachePolicy="memory-disk"
+              cachePolicy="disk"
             />
             <View style={styles.buttonsRow}>
               <ReturnArrowButton onPress={navigator.goBack} />
@@ -52,7 +53,7 @@ export default function WatchlistDetailsScreen({ route }: any) {
             </View>
 
             <HeaderBlock watchlist={watchlist} />
-          </View>
+          </HeaderContainer>
         )}
         renderItem={({ item }) => (
           <MovieCard movie={item} />
@@ -78,12 +79,11 @@ const styles = StyleSheet.create({
   bgImage: {
     height: hp("45%"),
     width: "100%",
-    marginBottom: hp("1%")
   },
   buttonsRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignContent: "center",
+    alignItems: "center",
     padding: hp(1),
   },
   infoBtnView: {

@@ -128,8 +128,8 @@ export class UsersManager extends EntinyManager<User_T> {
     useUserStore.getState()._update(userID, data);
   };
 
-  public get(userID: UserID = 0): any{
-    const users = useUserStore(s => s.users[1]);
+  public get(userID: UserID = 0): User_T {
+    const users = useUserStore.getState().users[userID];
     return users;
   };
 };
@@ -138,7 +138,7 @@ async function load(userID: UserID = 0){
   await UsersManager.getInstance().load(userID);
 };
 
-export function useUsers():any[] {
+export function useUsers(): User_T[] {
   const users = useUserStore(useShallow((s) => Object.values(s.users)));
   useEffect(()=>{
     console.warn("useUsers");

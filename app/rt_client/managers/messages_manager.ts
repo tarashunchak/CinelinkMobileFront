@@ -3,6 +3,8 @@ import { EntinyManager } from "./base_class";
 import { ChatID } from "../models/models";
 import { useEffect } from "react";
 import { API_URL } from "@/api/API_CONFIG";
+import { UsersManager } from "./users_manager";
+import { timestamp } from "@/app/direct_chat/utils/utils";
 
 type Message_T = {
   user_id: number;
@@ -106,10 +108,21 @@ export function useChatMessages(chatID: ChatID): Message_T [] {
 
 
 
-export function useLastChatMessage(chatID: ChatID): Message_T {
+export function useLastChatMessage(chatID: ChatID): any {
   const message: Message_T = useMessageStore(s => s.messages[chatID]?.[0]);
   useEffect(()=>{
-    if (!message) load(chatID);
-  }, [chatID]);
-  return message ?? {};
+    if (!message) 
+      load(chatID);
+  }, [chatID, message]);
+
+  if(!message) 
+    return "";
+
+  const user = UsersManager.getInstance().get(message?.user_id);
+  const username = user?.username ?? "Unknown";
+
+  return {
+    text: `${username}: ${message?.message}`,
+    time: timestamp(new Date(message?.timestamp)),
+  }
 };

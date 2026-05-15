@@ -1,7 +1,8 @@
-import { TouchableOpacity, Image, Alert, StyleSheet } from "react-native";
-import React, { use } from "react";
+import { TouchableOpacity, Image, Alert, StyleSheet, Pressable } from "react-native";
+import React from "react";
 import { useAuthStore } from "@/local_storage/user/asyncStorage/store";
 import { RTClient } from "@/app/rt_client/rt_client";
+import { PressableScale } from "react-native-pressable-scale";
 
 type Props = {
   isVisible: boolean;
@@ -28,18 +29,18 @@ function showLogOutDialog() {
 
 export function LogOutButton({ isVisible }: Props) {
   return (
-    isVisible ?
-      <TouchableOpacity
+    isVisible &&
+      <PressableScale
+        style={{zIndex: 2}}
         onPress={showLogOutDialog}
       >
         <Image
           style={styles.img}
           source={require("@/app/profile/assets/logOut.png")}
         />
-      </TouchableOpacity>
-      : <></>
-  )
-}
+      </PressableScale>
+  );
+};
 
 const styles = StyleSheet.create({
   img: {

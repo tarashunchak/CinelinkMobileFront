@@ -43,7 +43,7 @@ function ProfileMain({
   const username: string = isLoading ? "********" : user?.username;
 
   const fetchJoinedAt = useMemo(() => {
-    const date = new Date(user?.joined_at ?? null);
+    const date = new Date(user?.created_at ?? null);
     return new Intl.DateTimeFormat('en-US').format(date ?? new Date())
   }, [isLoading]);
 
@@ -120,7 +120,7 @@ export default memo(ProfileMain);
 const styles = StyleSheet.create({
   view: {
     width: "100%",
-    marginTop: "45%",
+    marginTop: "40%",
     height: 100,
     flexDirection: "row",
     justifyContent: "space-between",
@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
     width: 100,
     borderRadius: 999,
     backgroundColor: "rgba(255, 255, 255, 0.03)",
-    borderColor: "rgba(255, 255, 255, 0.2)",
+    borderColor: "rgba(255, 255, 255, 0.5)",
     borderWidth: 0.5,
   },
   joinedAt: {
@@ -147,14 +147,14 @@ const styles = StyleSheet.create({
     borderColor: "rgba(255, 255, 255, 0.2)"
   },
   isOnlineDot: {
-    height: 12,
-    width: 12,
+    height: 18,
+    width: 18,
     backgroundColor: "#329E4F",
-    borderRadius: 10,
+    borderRadius: 999,
     position: "absolute",
-    right: 3,
-    bottom: 3,
+    right: 2,
+    bottom: 5,
     borderColor: "white",
-    borderWidth: 0.5,
+    borderWidth: 1,
   }
 });

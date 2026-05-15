@@ -14,7 +14,7 @@ function SocialPageTopBar({ onTabChange }: { onTabChange: (tab: string) => void 
   const insets = useSafeAreaInsets();
 
   return (
-    <HeaderContainer style={styles.mainContainer}>
+    <View style={styles.mainContainer}>
       {
         tabs.map(tab => (
           <PressableScale
@@ -34,7 +34,7 @@ function SocialPageTopBar({ onTabChange }: { onTabChange: (tab: string) => void 
           </PressableScale>
         ))
       }
-    </HeaderContainer>
+    </View>
   );
 };
 
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     padding: "0.5%",
-    backgroundColor:"rgba(20, 20, 20, 0.3)",
+    backgroundColor: "rgba(20, 20, 20, 0.3)",
   },
   buttonView: {
     paddingLeft: "2%",

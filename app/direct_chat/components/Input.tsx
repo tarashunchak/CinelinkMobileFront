@@ -1,13 +1,17 @@
 import { textStyle } from "@/styles/textStyles";
 import React, { useState } from "react";
-import { View, Image, TouchableOpacity, TextInput } from "react-native";
+import { View, Image, TouchableOpacity, TextInput, TextInputContentSizeChangeEvent } from "react-native";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { RTClient } from "../../rt_client/rt_client";
 import { getCurrentUserID } from "@/utils/utils";
+import Animated from "react-native-reanimated";
+import { StyleSheet } from "react-native";
+import { PressableScale } from "react-native-pressable-scale";
 
 export default function Input({ chatID }: { chatID: number }) {
     const [isFocused, setIsFocused] = useState(false);
     const [text, setText] = useState<string>("");
+    const [height, setHeight] = useState<number>(40);
 
     async function handleFocus() {
         await RTClient.setTypingStatus(chatID, getCurrentUserID(), true);
@@ -19,12 +23,16 @@ export default function Input({ chatID }: { chatID: number }) {
         setIsFocused(false);
     };
 
+    function onContextSizeChange(e: TextInputContentSizeChangeEvent){
+        setHeight(e.nativeEvent.contentSize.height)
+    };
+
     return (
-        <View style={styles.view}>
+        <View style={[styles.view,  ((height < 50) ? openedStyles.closed : openedStyles.opened)]}>
             <TextInput
                 value={text}
                 onChangeText={setText}
-                style={styles.input}
+                style={[styles.input]}
                 placeholder="Message..."
                 placeholderTextColor={"rgba(255, 255, 255, 0.3)"}
                 onFocus={handleFocus}
@@ -32,10 +40,11 @@ export default function Input({ chatID }: { chatID: number }) {
                 multiline={true}
                 numberOfLines={10}
                 editable={true}
+                onContentSizeChange={onContextSizeChange}
             />
             {isFocused && (
-                <TouchableOpacity
-                    style={styles.sendBtn.view}
+                <PressableScale
+                    style={[styles.sendBtn.view, height < 50  ? openedStyles.closed : openedStyles.opened]}
                     onPress={() => {
                         RTClient.sendMessage(chatID, {
                             chat_id: chatID,
@@ -50,11 +59,20 @@ export default function Input({ chatID }: { chatID: number }) {
                         style={styles.sendBtn.img}
                         source={require("@/app/direct_chat/assets/send-03.png")} 
                     />
-                </TouchableOpacity>
+                </PressableScale>
             )}
         </View>
     );
 };
+
+const openedStyles = StyleSheet.create({
+    opened: {
+        borderRadius: 14,
+    },
+    closed: {
+        borderRadius: 999,
+    },
+});
 
 const styles = {
     view: {
@@ -66,13 +84,15 @@ const styles = {
         backgroundColor: "rgba(20, 20, 20, 1)",
         borderColor: "rgba(255, 255, 255, 0.5)",
         borderWidth: 0.5,
-        borderRadius: 999,
-        paddingRight: 2,
-        paddingBottom: 2,
+        //paddingRight: 2,
+        //paddingBottom: 2,
+        padding:2,
         paddingLeft: "5%",
         alignSelf: "center",
         flexDirection: "row",
-        justifyContent: "left",
+        justifyContent: "space-between",
+        alignContent:"center",
+        alignItems:"center",
     },
     input: [textStyle.white18, {
         width: "88%",
@@ -81,7 +101,7 @@ const styles = {
     sendBtn: {
         view: {
             backgroundColor: "#DEB522",
-            width: "12%",
+            width: 42,
             aspectRatio: 1,
             borderRadius: 999,
             justifyContent: "center",

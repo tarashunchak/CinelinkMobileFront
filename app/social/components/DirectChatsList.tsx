@@ -27,7 +27,7 @@ const DirectChatCard = memo(({ item }: { item: any }) => {
       activeScale={0.98}
       style={styles.mainView}
       onPress={() => {
-        navigator?.navigate("DirectChatScreen", { chatID: chatID });
+        navigator?.navigate("DirectChatScreen", { chatID: chatID, imgUrl: item?.img_url, name: item?.name });
       }}
     >
       <View style={styles.infoView}>
@@ -35,7 +35,7 @@ const DirectChatCard = memo(({ item }: { item: any }) => {
           <AnimatedFastImage
             sharedTransitionTag={`chat-${item?.chat_id}-image`}
             style={styles.image}
-            source={{ uri: item?.img_url }}
+            source={{ uri: item?.img_url}}
             cachePolicy="disk"
           />
           {isOnline && <View style={styles.onlineDot}></View>}
@@ -51,19 +51,28 @@ const DirectChatCard = memo(({ item }: { item: any }) => {
             numberOfLines={1}
             ellipsizeMode="tail"
             style={[textStyle.gray16, { maxWidth: "100%" }]}
-          >{isTyping ? "typing..." : lastMessage?.message}</Text>
+          >{isTyping ? "typing..." : lastMessage.text}</Text>
         </View>
       </View>
       <View style={{
-        backgroundColor: "white",
-        borderRadius: 999,
-        height: 20,
-        width: 20,
-        alignSelf: "flex-start",
-        margin: "2%",
-        alignItems: "center",
+        flexDirection:"column",
+        justifyContent: "space-between",
+        margin: 5,
       }}>
-        <Text style={textStyle.black14, { fontWeight: "bold", textAlign: "center" }}>{unSeenMessageCnt}</Text>
+        {
+          unSeenMessageCnt && <View style={{
+          backgroundColor: "white",
+          borderRadius: 999,
+          height: 20,
+          width: 20,
+          alignSelf: "flex-end",
+          margin: "2%",
+          alignItems: "center",
+        }}>
+          <Text style={textStyle.black14, { fontWeight: "bold", textAlign: "center" }}>{unSeenMessageCnt}</Text>
+        </View>
+        }
+        <Text style={textStyle.white14}>{lastMessage.time}</Text>
       </View>
     </PressableScale>
   );
@@ -124,13 +133,13 @@ const styles = StyleSheet.create({
     margin: 5,
   },
   onlineDot: {
-    height: 12,
-    width: 12,
+    height: 13,
+    width: 13,
     backgroundColor: "#329E4F",
     borderRadius: 10,
     position: "absolute",
-    right: 3,
-    bottom: 3,
+    right: 1,
+    bottom: 8,
     borderColor: "white",
     borderWidth: 1,
   },

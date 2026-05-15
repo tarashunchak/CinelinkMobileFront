@@ -5,6 +5,8 @@ import { textStyle } from "./../../../styles/textStyles";
 import { PressableScale } from "react-native-pressable-scale";
 import { Image } from "expo-image";
 import { Skeleton } from "react-native-skeletons";
+import AnimatedFastImage from "@/components/ui/animated-fast-image";
+import AnimatedFastText from "@/components/ui/animated-fast-text";
 
 function CreditCard({ credit }: { credit: any}) {
   const navigator = useNavigation();
@@ -13,19 +15,24 @@ function CreditCard({ credit }: { credit: any}) {
   return (
     <PressableScale
       style={styles.view}
-      onPress={() => navigator?.push("CreditDetailScreen", { creditID: credit.id })}>
-      <Image
-        source={{ uri: `https://image.tmdb.org/t/p/w200${credit?.profile_path}` }}
+      onPress={() => navigator?.navigate(
+        "CreditDetailScreen", 
+        { creditID: credit.id, creditName: credit.name, profilePath: credit.profile_path }
+        )}>
+      <AnimatedFastImage
+        sharedTransitionTag={`credit-${credit.id}-profile`}
+        source={{ uri: `https://image.tmdb.org/t/p/w300${credit?.profile_path}` }}
         style={styles.img}
-        cachePolicy="memory-disk"
+        cachePolicy="disk"
       />
-      <Text
+      <AnimatedFastText
+        sharedTransitionTag={`credit-${credit.id}-name`}
         numberOfLines={1}
         ellipsizeMode="tail"
         style={textStyle.white12}
       >
         {credit?.name}
-      </Text>
+      </AnimatedFastText>
       <Text style={textStyle.gray12} numberOfLines={1}
         ellipsizeMode="tail">{credit?.character ?? "N/A"}</Text>
       <Text style={textStyle.yellow12} >{credit?.known_for_department}</Text>

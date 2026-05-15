@@ -5,6 +5,8 @@ import LeafyReturnArrowButton from "@/components/ui/returnArrowButton";
 import { textStyle } from "@/styles/textStyles";
 import { useNavigation } from "expo-router";
 import InfoBlock from "./InfoBlock";
+import AnimatedFastImage from "@/components/ui/animated-fast-image";
+import AnimatedFastText from "@/components/ui/animated-fast-text";
 //import InfoBlock from "./InfoBlock";
 
 export interface CreditMainInfo_I {
@@ -16,10 +18,13 @@ export interface CreditMainInfo_I {
 };
 
 export default function MainInfo(
-  { credit, backdrop }
+  { creditID, creditName, credit, backdrop, profilePath }
     : {
-      credit: CreditMainInfo_I,
+      creditID: number,
+      creditName: string,
+      credit?: CreditMainInfo_I,
       backdrop: string[],
+      profilePath?: string,
     }
 ) {
   const navigation = useNavigation();
@@ -31,17 +36,22 @@ export default function MainInfo(
         style={styles.backdrop}>
         <View style={styles.darkRect}>
           <View style={{ flexDirection: "column", marginLeft: "3%", marginTop: "20%", justifyContent: "space-between" }}>
-            <Text style={[textStyle.white26, { marginTop: "5%" }]}
+            <AnimatedFastText
+              sharedTransitionTag={`credit-${creditID}-name`}
+              style={[textStyle.white26, { marginTop: "5%" }]}
               numberOfLines={1}
               ellipsizeMode="tail"
             >
-              {credit?.name}
-            </Text>
+              {creditName}
+            </AnimatedFastText>
             <View style={styles.mainView}>
               <View style={styles.poster}>
-                <Image
-                  source={{ uri: "https://image.tmdb.org/t/p/w300" + credit?.profile_path }}
-                  style={{ height: "100%", width: "100%", backgroundColor: "rgba(255, 255, 255, 0.05)" }} />
+                <AnimatedFastImage
+                  sharedTransitionTag={`credit-${creditID}-profile`}
+                  source={{ uri: `https://image.tmdb.org/t/p/w300${profilePath}` }}
+                  style={{ height: "100%", width: "100%", backgroundColor: "rgba(255, 255, 255, 0.05)" }} 
+                  cachePolicy="disk"
+                />
               </View>
               <InfoBlock creditInfo={credit} />
             </View>
@@ -67,7 +77,7 @@ const styles = StyleSheet.create({
     height: hp("40%"),
   },
   poster: {
-    width: "42%",
+    width: "40%",
     height: "100%",
     backgroundColor: "rgba(255, 255, 255, 0.05)",
     position: "relative",
@@ -77,8 +87,8 @@ const styles = StyleSheet.create({
   mainView: {
     flexDirection: "row",
     marginTop: "3%",
-    width: "90%",
+    width: wp(95),
     height: 220,
-    justifyContent: "space-between"
+    justifyContent: "space-between",
   }
 });

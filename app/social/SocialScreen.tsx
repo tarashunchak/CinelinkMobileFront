@@ -12,6 +12,7 @@ import SocialPageTopBar from "./components/topBar";
 import Spacer from "@/components/ui/spacer";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import RecommendationsList from "./components/RecommendationsList";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function SocialScreen() {
   const tabs = ["Chats", "Recommendations", "Activity", "Friends"];
@@ -51,7 +52,6 @@ export default function SocialScreen() {
   return (
     <View style={{ flex: 1 }}>
       <ScreenBackground>
-        <Spacer orientation="v" spacing={hp(5)} />
         <SocialPageTopBar onTabChange={(tab: string) => setActiveTab(tab)} />
         {renderList()}
       </ScreenBackground>

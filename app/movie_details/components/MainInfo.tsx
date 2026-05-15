@@ -9,11 +9,11 @@ import { PressableScale } from "react-native-pressable-scale";
 import PosterModal from "./PosterModal";
 import { MONTH } from "@/utils/month";
 import AnimatedFastImage from "@/components/ui/animated-fast-image";
-import Animated, { AnimatedStyle } from "react-native-reanimated";
 import AnimatedFastText from "@/components/ui/animated-fast-text";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 function MainInfo(
-  { movie, inCinemas = false, maximum, posterPath, backdropPath, title}
+  { movie, inCinemas = false, maximum, posterPath, backdropPath, title, cast, ref}
     : {
       movie?: Movie,
       inCinemas: boolean,
@@ -21,6 +21,8 @@ function MainInfo(
       posterPath?: string,
       backdropPath?: string,
       title?: string,
+      cast?: any[],
+      ref: any,
     }
 ) {
 
@@ -28,6 +30,7 @@ function MainInfo(
     backdropPath = movie?.images?.backdrops[movie?.images?.backdrops?.length - 1]?.file_path;
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const insets = useSafeAreaInsets();
 
   const poster = (
     <>
@@ -51,14 +54,14 @@ function MainInfo(
 
   return (
     <View>
-      <ReturnArrowButton style={{ marginTop: "5%", zIndex: 2 }} />
+      <ReturnArrowButton />
       <AnimatedFastImage
         sharedTransitionTag={`movie-${movie?.id}-backdrop`}
         source={{ uri: `https://image.tmdb.org/t/p/w500${backdropPath}` }}
         style={styles.backdrop}
         cachePolicy="disk"
       />
-      <View style={styles.darkRect}>
+      <View style={[styles.darkRect, {paddingTop:insets.top/2}]}>
         <View style={{ flexDirection: "column", marginLeft: "3%", marginTop: "20%", justifyContent: "space-between" }}>
 
           <AnimatedFastText style={[textStyle.white24]}
@@ -73,9 +76,9 @@ function MainInfo(
             {
               flexDirection: "row",
               marginTop: "3%",
-              width: "90%",
+              width: wp(95),
               height: 220,
-              justifyContent: "space-between"
+              justifyContent: "space-between",
             }
           }>
 
@@ -85,16 +88,17 @@ function MainInfo(
             >
               {poster}
             </PressableScale>
-            <InfoBlock movieInfo={movie} />
+            <InfoBlock movieInfo={movie} cast={cast}/>
           </View>
         </View>
       </View>
       {
-        movie && <PosterModal
+        <PosterModal
           isOpen={isOpen}
-          posterUrl={movie?.poster_path}
+          posterPath={posterPath}
           onClose={() => { setIsOpen(false) }}
           movieID={movie?.id}
+          ref={ref}
         />
       }
     </View>
@@ -120,7 +124,7 @@ const styles = StyleSheet.create({
     width: "104%",
   },
   posterView: {
-    width: "42%",
+    width: "40%",
     height: "100%",
     backgroundColor: "rgba(255, 255, 255, 0.05)",
     position: "relative",

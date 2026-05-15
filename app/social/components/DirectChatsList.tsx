@@ -8,6 +8,7 @@ import {useUnseenMessagesCount, useTypingStatus, useUserChats } from "@/app/rt_c
 import AnimatedFastImage from "@/components/ui/animated-fast-image";
 import { useLastChatMessage } from "@/app/rt_client/managers/messages_manager";
 import { useUserStatus } from "@/app/rt_client/managers/users_manager";
+import AnimatedFastText from "@/components/ui/animated-fast-text";
 
 const DirectChatCard = memo(({ item }: { item: any }) => {
   const chatID = item?.chat_id;
@@ -35,12 +36,17 @@ const DirectChatCard = memo(({ item }: { item: any }) => {
             sharedTransitionTag={`chat-${item?.chat_id}-image`}
             style={styles.image}
             source={{ uri: item?.img_url }}
-            cachePolicy="memory-disk"
+            cachePolicy="disk"
           />
           {isOnline && <View style={styles.onlineDot}></View>}
         </View>
         <View style={styles.textView}>
-          <Text style={textStyle.yellow18}>{item.name}</Text>
+          <AnimatedFastText 
+            style={textStyle.yellow18}
+            sharedTransitionTag={`chat-${item?.chat_id}-name`}
+          >
+              {item.name}
+          </AnimatedFastText>
           <Text
             numberOfLines={1}
             ellipsizeMode="tail"
@@ -78,7 +84,7 @@ function ChatsList() {
       contentContainerStyle={styles.contentContainer}
     />
   );
-}
+};
 
 export default memo(ChatsList)
 
@@ -130,5 +136,6 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     paddingHorizontal: "1%",
+    paddingTop: "3%",
   },
 });

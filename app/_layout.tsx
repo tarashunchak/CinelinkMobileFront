@@ -5,17 +5,17 @@ import { ActionSheetProvider } from "@expo/react-native-action-sheet";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 
 export default function RootLayout() {
-    return (
-        <ActionSheetProvider>
-            <GestureHandlerRootView style={{
-                flex: 1,
-                backgroundColor: "#000000"
-            }}>
-                <BottomSheetModalProvider>
-                    <StatusBar translucent backgroundColor="transparent" style="auto" />
-                    <Slot screenOptions={{ animation: "default" }} />
-                </BottomSheetModalProvider>
-            </GestureHandlerRootView>
-        </ActionSheetProvider>
-    );
+  return (
+    <ActionSheetProvider>
+      <GestureHandlerRootView style={{
+        flex: 1,
+        backgroundColor: "#000000"
+      }}>
+        <BottomSheetModalProvider>
+          <StatusBar translucent backgroundColor="transparent" style="auto" />
+          <Slot screenOptions={{}} />
+        </BottomSheetModalProvider>
+      </GestureHandlerRootView>
+    </ActionSheetProvider>
+  );
 };

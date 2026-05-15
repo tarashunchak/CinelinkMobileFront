@@ -1,10 +1,12 @@
 import { useNavigation } from "expo-router";
+import { memo } from "react";
 import { TouchableOpacity, Dimensions, Image, StyleSheet } from "react-native";
 import { PressableScale } from "react-native-pressable-scale";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const { width: screenW, height: screenH } = Dimensions.get("window");
 
-export default function ReturnArrowButton(
+function ReturnArrowButton(
   {
     onPress = () => { },
     rect = undefined,
@@ -13,6 +15,7 @@ export default function ReturnArrowButton(
 ) {
 
   const navigator = useNavigation();
+  const insets = useSafeAreaInsets();
 
   let buttonStyle = styles.leafyButton;
 
@@ -48,7 +51,7 @@ export default function ReturnArrowButton(
       width: 48,
       height: 48,
       transform
-    }] : [buttonStyle, style];
+    }] : [buttonStyle, style, {marginTop: insets.top, zIndex: 2}];
 
   const images = {
     returnLeft: require('@/assets/images/ReturnArrow.png'),
@@ -59,6 +62,8 @@ export default function ReturnArrowButton(
     </PressableScale>
   );
 };
+
+export default memo(ReturnArrowButton);
 
 const styles = StyleSheet.create({
   leafyButton: {

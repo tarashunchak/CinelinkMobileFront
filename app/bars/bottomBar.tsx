@@ -145,10 +145,11 @@ const bottomBar = StyleSheet.create({
     position: "absolute",
     bottom: 0,
     alignSelf: "center",
-    borderWidth: 1,
+    borderWidth: 0.5,
     borderColor: "rgba(180, 200, 210, 0.5)",
     borderRadius: 999,
-    backgroundColor: "rgba(23, 23, 23, 1)",
+    //backgroundColor: "rgba(23, 23, 23, 1)",
+    backgroundColor: "#101010",
     justifyContent: "center",
   },
   view: {

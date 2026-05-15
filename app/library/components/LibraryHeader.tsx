@@ -6,11 +6,13 @@ import React from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
 import { heightPercentageToDP as hp, widthPercentageToDP } from "react-native-responsive-screen";
 import { PressableScale } from "react-native-pressable-scale";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function LibraryHeader() {
   const navigator = useNavigation();
+  const insets = useSafeAreaInsets();
   return (
-    <View style={stylesR.view}>
+    <View style={[stylesR.view, {paddingTop: insets.top}]}>
       <View style={styles.left.view}>
         <PressableScale
           activeScale={0.9}
@@ -44,7 +46,6 @@ export default function LibraryHeader() {
 const stylesR = StyleSheet.create({
   view: {
     backgroundColor: "rgba(90, 90, 90, 1)",
-    height: hp("12%"),
     width: widthPercentageToDP("100%"),
     flexDirection: "row",
     justifyContent: "space-between",

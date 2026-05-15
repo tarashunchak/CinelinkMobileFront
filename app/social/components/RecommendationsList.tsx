@@ -32,7 +32,11 @@ const RecommendationItem = memo(({ item }: { item: RecommendedCard_T }) => {
     <PressableScale
       activeScale={0.98}
       style={styles.cardContainer}
-      onPress={() => navigator?.navigate("MovieDetailScreen", { movieID: item?.movie_id, posterPath: item?.poster_path })}
+      onPress={() => navigator?.navigate("MovieDetailScreen", { 
+        movieID: item.movie_id, 
+        posterPath: item.poster_path,
+        title: item.title,
+      })}
     >
       <AnimatedFastImage 
         sharedTransitionTag={`movie-${item?.movie_id}-poster`}
@@ -82,7 +86,7 @@ function RecommendationsList({ items }: { items: RecommendedCard_T[] | any[] }) 
   return (
     <FlatList
       data={items}
-      keyExtractor={(item: any, index: number) => String(item?.user_id ?? index)}
+      keyExtractor={(item: any, index: number) => String(item?.movie_id ?? index)}
       renderItem={renderItem}
       contentContainerStyle={styles.contentContainer}
     />
@@ -157,5 +161,6 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     paddingHorizontal: "1%",
+    paddingTop: "3%",
   },
 });

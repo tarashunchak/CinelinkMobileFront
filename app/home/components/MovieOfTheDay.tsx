@@ -8,10 +8,12 @@ import { PressableScale } from "react-native-pressable-scale";
 import { Image } from "expo-image";
 import Animated, { createAnimatedComponent } from "react-native-reanimated";
 import AnimatedFastText from "@/components/ui/animated-fast-text";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 function MovieOfTheDay() {
   const navigator = useNavigation();
   const [movie, setMovie] = useState();
+  const insets = useSafeAreaInsets();
 
   useFocusEffect(
     useCallback(() => {
@@ -37,7 +39,7 @@ function MovieOfTheDay() {
         style={styles.backdrop}
         cachePolicy="memory-disk"
       />
-      <View style={styles.background}>
+      <View style={[styles.background, {paddingTop: insets.top }]}>
         <Image
           style={styles.logo}
           source={require("@/app/home/assets/logo.png")}

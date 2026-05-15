@@ -1,8 +1,10 @@
-import React from "react";
+import React, { memo } from "react";
 import { Linking, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { textStyle } from "@/styles/textStyles";
 import InfoRow from "./InfoRow";
 import { PressableScale } from "react-native-pressable-scale";
+import { Skeleton } from "react-native-skeletons";
+import { widthPercentageToDP as wp } from "react-native-responsive-screen";
 
 interface Credits {
   cast: any[];
@@ -22,8 +24,8 @@ const GENDER = {
   2: "Male",
 };
 
-export default function InfoBlock({ creditInfo }: { creditInfo: CreditInfo_I }) {
-  if (!creditInfo) return null
+function InfoBlock({ creditInfo }: { creditInfo: CreditInfo_I }) {
+  if (!creditInfo) return <Skeleton style={styles.mainView}/>
   return (
     <View style={styles.mainView}>
       <View>
@@ -48,18 +50,19 @@ export default function InfoBlock({ creditInfo }: { creditInfo: CreditInfo_I }) 
   )
 };
 
+export default memo(InfoBlock);
+
 const styles = StyleSheet.create({
   mainView: {
     flexDirection: "column",
-    marginLeft: "3%",
-    width: "62%",
+    width: wp(52),
     height: "100%",
     backgroundColor: "rgba(255, 255, 255, 0.05)",
     borderWidth: 1,
     borderColor: "rgba(255, 255, 255, 0.10)",
     borderRadius: 5,
-    padding: "1.5%",
-    justifyContent: "space-between",
+    padding: "1.3%",
+    justifyContent: "space-evenly",
   },
   imdbBtnView: {
     backgroundColor: "#deb522",

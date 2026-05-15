@@ -1,7 +1,7 @@
 import ReturnArrowButton from "@/components/ui/returnArrowButton";
 import { textStyle } from "@/styles/textStyles";
 import { useNavigation } from "expo-router";
-import React, { useEffect, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { View, Text, Image, TouchableOpacity, Platform, StyleSheet } from "react-native";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { ChatMember } from "@/app/rt_client/models/models";
@@ -10,11 +10,15 @@ import { GetUserLastSeenTimestamp } from "@/api/users";
 import { useChat, useTypingStatus } from "@/app/rt_client/managers/chats_manager";
 import { useUserStatus } from "@/app/rt_client/managers/users_manager";
 import AnimatedFastImage from "@/components/ui/animated-fast-image";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import AnimatedFastText from "@/components/ui/animated-fast-text";
 
-export default function Header({ chatID, peer }: { chatID: number, peer: ChatMember }) {
+function Header({ chatID, peer }: { chatID: number, peer: ChatMember }) {
   const navigator = useNavigation();
   const [lastSeen, setLastSeen] = useState<string>();
   const chat = useChat(chatID);
+
+  const insets = useSafeAreaInsets();
 
   const isOnline = useUserStatus(peer?.user_id);
   const isTyping = useTypingStatus(chatID, peer?.user_id);
@@ -28,12 +32,12 @@ export default function Header({ chatID, peer }: { chatID: number, peer: ChatMem
   }, [chatID, isOnline]);
 
   return (
-    <View style={styles.view}>
+    <View style={[styles.view]}>
       <View style={{ flexDirection: "row", gap: wp(5) }}>
         <ReturnArrowButton
           onPress={navigator.goBack} />
 
-        <View style={styles.chatpeer.view}>
+        <View style={[styles.chatpeer.view, { paddingTop: insets.top}]}>
           <TouchableOpacity
             style={styles.chatpeer.img}
             onPress={() => {
@@ -46,15 +50,18 @@ export default function Header({ chatID, peer }: { chatID: number, peer: ChatMem
               sharedTransitionTag={`chat-${chat?.chat_id}-image`}
               style={stylesR.avatarImg}
               source={{ uri: chat?.img_url}}
-              cachePolicy="memory-disk"
+              cachePolicy="disk"
             />
             {isOnline && <View style={styles.isOnline.dot}></View>}
           </TouchableOpacity>
 
           <View style={styles.chatpeer.text.view}>
-            <Text style={textStyle.white18}>
+            <AnimatedFastText 
+              style={textStyle.white18}
+              sharedTransitionTag={`chat-${chat?.chat_id}-name`}
+            >
               {chat?.name}
-            </Text>
+            </AnimatedFastText>
             {!isOnline ? (
               <Text style={textStyle.gray14}>
                 {`last seen ${calcLastSeen(lastSeen)}`}
@@ -81,9 +88,10 @@ export default function Header({ chatID, peer }: { chatID: number, peer: ChatMem
   );
 };
 
+export default memo(Header);
+
 const stylesR = StyleSheet.create({
   view: {
-
   },
   avatarImg: {
     width: 53,
@@ -120,14 +128,12 @@ const styles = {
     }],
   },
   view: {
-    height: Platform.OS === "ios" ? hp(10) : hp(12),
     backgroundColor: "rgba(20, 20, 20, 1)",
     flexDirection: "row",
     alignItems: "flex-end",
     justifyContent: "space-between",
+    padding: "3%",
     paddingLeft: "2%",
-    paddingRight: "3%",
-    paddingBottom: "3%",
     zIndex: 2,
   },
   chatpeer: {

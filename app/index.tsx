@@ -6,9 +6,6 @@ import * as Notifications from "@/utils/notifications";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { KeyboardProvider } from "react-native-keyboard-controller";
-import { ChatsManager } from "./rt_client/managers/chats_manager";
-import { UsersManager } from "./rt_client/managers/users_manager";
-import { WatchlistsManager } from "./rt_client/managers/watchlists_manager";
 
 //Notifications.configure();
 

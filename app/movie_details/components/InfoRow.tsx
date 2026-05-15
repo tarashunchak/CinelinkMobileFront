@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import { textStyle } from "@/styles/textStyles";
 
 export default function InfoRow({ left, right }: { left: string, right: string | string[] }) {
@@ -7,7 +7,12 @@ export default function InfoRow({ left, right }: { left: string, right: string |
     return (
       <View style={styles.view}>
         <Text style={textStyle.yellow16}>{left}: </Text>
-        <Text style={textStyle.white16}>{`${right}`}</Text>
+        <Text style={[textStyle.white16, {maxWidth: "80%"}]}
+          ellipsizeMode="tail"
+          numberOfLines={1}
+        >
+          {`${right}`}
+        </Text>
       </View>
     )
   }
@@ -25,11 +30,10 @@ export default function InfoRow({ left, right }: { left: string, right: string |
   )
 }
 
-const styles = {
+const styles = StyleSheet.create({
   view: {
     flexDirection: "row",
     maxWidth: "90%",
-    marginTop: "1%",
+    minWidth: "80%",
   },
-
-};
+});

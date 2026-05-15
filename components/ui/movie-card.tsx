@@ -37,14 +37,18 @@ function MovieCard({ movie }: { movie: MovieCard_I | null }) {
 
   return (
     <PressableScale style={styles.mainView} onPress={() => {
-      navigation?.push("MovieDetailScreen", { movieID: movie?.id });
+      navigation?.push("MovieDetailScreen", { 
+        movieID: movie?.id,
+        posterPath: movie?.poster_path,
+        title: movie?.title,
+      });
     }}>
       <AnimatedFastImage
         sharedTransitionTag={`movie-${movie?.id}-poster`}
         source={{ uri: `https://image.tmdb.org/t/p/w300${movie?.poster_path}`}}
         style={styles.poster}
         pointerEvents="none"
-        cachePolicy="memory"
+        cachePolicy="disk"
       />
       <View style={styles.mainInfoView}>
         <View style={styles.columnTextInfo}>
@@ -68,7 +72,6 @@ function MovieCard({ movie }: { movie: MovieCard_I | null }) {
         </View>
         <View style={{ flexDirection: "row", gap: "2%", height: 20 }}>
         </View>
-
         <TouchableOpacity style={styles.imdbView}
           onPress={openIMDb}
         >

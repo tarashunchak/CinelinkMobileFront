@@ -1,17 +1,19 @@
-import React, { useState } from "react";
+import React, { memo, useState } from "react";
 import { View, Text } from "react-native";
 import { textStyle } from "@/styles/textStyles";
 import { StyleSheet } from "react-native";
 import { PressableScale } from "react-native-pressable-scale";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export let getActiveTab = () => { };
 
-export default function SocialPageTopBar({ onTabChange }: { onTabChange: (tab: string) => void }) {
+function SocialPageTopBar({ onTabChange }: { onTabChange: (tab: string) => void }) {
   const tabs = ["Chats", "Recommendations", "Activity", "Friends"];
   const [activeTab, setActiveTab] = useState("Chats");
+  const insets = useSafeAreaInsets();
 
   return (
-    <View style={styles.mainContainer}>
+    <View style={[styles.mainContainer, { marginTop: insets.top }]}>
       {
         tabs.map(tab => (
           <PressableScale
@@ -35,10 +37,11 @@ export default function SocialPageTopBar({ onTabChange }: { onTabChange: (tab: s
   );
 };
 
+export default memo(SocialPageTopBar);
+
 const styles = StyleSheet.create({
   mainContainer: {
     height: 52,
-    marginBottom: "5%",
     width: "100%",
     alignSelf: "center",
     borderWidth: 0.5,
@@ -48,6 +51,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     padding: "0.5%",
+    backgroundColor:"rgba(20, 20, 20, 0.3)",
   },
   buttonView: {
     paddingLeft: "2%",

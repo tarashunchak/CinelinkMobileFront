@@ -68,7 +68,7 @@ function FriendsList() {
       removeClippedSubviews
       initialNumToRender={10}
       contentContainerStyle={styles.contentContainer}
-      ListFooterComponent={<Spacer spacing={hp(10)}/>}
+      ListFooterComponent={<Spacer orientation="v" spacing={hp(10)}/>}
     />
   );
 };
@@ -148,5 +148,6 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     paddingHorizontal: "1%",
+    paddingTop: "3%",
   },
 });

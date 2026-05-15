@@ -1,8 +1,9 @@
-import React from "react";
-import { Image, Modal, StyleSheet, View } from "react-native";
-import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
+import React, { memo } from "react";
+import { Image, Modal, Pressable, StyleSheet, View } from "react-native";
+import { heightPercentageToDP, heightPercentageToDP as hp, widthPercentageToDP, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { PressableScale } from "react-native-pressable-scale";
 import AnimatedFastImage from "@/components/ui/animated-fast-image";
+import {Canvas, Fill, BackdropBlur } from "@shopify/react-native-skia";
 import { BlurView } from "expo-blur";
 
 interface Props {
@@ -10,61 +11,61 @@ interface Props {
   posterUrl: string;
   onClose: () => void;
   movieID?: number;
+  ref: any
 };
 
-export default function PosterModal(
-  { isOpen, posterUrl, onClose, movieID }: Props
-) {
+function PosterModal({ isOpen, posterPath, onClose, movieID, ref }: Props) {
   return (
     <Modal
-      statusBarTranslucent={true}
+      statusBarTranslucent
       visible={isOpen}
-      transparent={true}
+      transparent
       animationType="slide"
-      style={{ flex: 1 }}
+      onRequestClose={onClose}
     >
-      <BlurView 
-        tint="dark"
-        style={styles.background}
-      >
-        <View style={{}}>
-          <PressableScale
-            style={{
-              alignSelf: "flex-end",
-              height: 34,
-              width: 34,
-              marginLeft: 17,
-              marginBottom: hp(2),
-            }}
-            onPress={() => {
-              onClose();
-            }}
-          >
-            <Image
-              style={{ height: "100%", width: "100%" }}
-              source={require("@/app/profile/assets/Icon.png")}
-            />
-          </PressableScale>
-          <View style={styles.posterView}>
-            <AnimatedFastImage
-              sharedTransitionTag={`movie-${movieID}-poster`}
-              style={styles.posterImage}
-              source={{ uri: "https://image.tmdb.org/t/p/w300" + posterUrl }}
-              cachePolicy="memory"
-            />
-          </View>
+    <Pressable
+      style={StyleSheet.absoluteFill} 
+      onPress={onClose} 
+    />
+
+    <BlurView 
+      tint="dark"
+      intensity={100}
+      blurMethod="dimezisBlurView"
+      blurTarget={ref}
+      style={StyleSheet.absoluteFill}
+    />
+      <View style={styles.background} pointerEvents="box-none">
+        <PressableScale
+          style={styles.closeBtn}
+          onPress={onClose}
+        >
+          <Image
+            style={{ height: "100%", width: "100%" }}
+            source={require("@/app/profile/assets/Icon.png")}
+          />
+        </PressableScale>
+
+        <View style={styles.posterView}>
+          <AnimatedFastImage
+            sharedTransitionTag={`movie-${movieID}-poster`}
+            style={styles.posterImage}
+            source={{ uri: "https://image.tmdb.org/t/p/w500" + posterPath}}
+            cachePolicy="disk"
+          />
         </View>
-      </BlurView>
+      </View>
     </Modal>
-  )
+  );
 }
+
+export default memo(PosterModal);
 
 const styles = StyleSheet.create({
   background: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.6)",
   },
   posterView: {
     //padding: wp(2),
@@ -92,5 +93,12 @@ const styles = StyleSheet.create({
   editBtnImage: {
     height: 30,
     width: 30,
+  },
+  closeBtn:{
+    alignSelf: "flex-end",
+    height: 34,
+    width: 34,
+    marginLeft: 17,
+    marginBottom: hp(2),
   },
 });

@@ -51,7 +51,7 @@ function ReturnArrowButton(
       width: 48,
       height: 48,
       transform
-    }] : [buttonStyle, style, {marginTop: insets.top, zIndex: 2}];
+    }] : [buttonStyle, style, {zIndex: 2}];
 
   const images = {
     returnLeft: require('@/assets/images/ReturnArrow.png'),

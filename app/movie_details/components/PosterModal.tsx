@@ -1,9 +1,8 @@
 import React, { memo } from "react";
 import { Image, Modal, Pressable, StyleSheet, View } from "react-native";
-import { heightPercentageToDP, heightPercentageToDP as hp, widthPercentageToDP, widthPercentageToDP as wp } from "react-native-responsive-screen";
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { PressableScale } from "react-native-pressable-scale";
 import AnimatedFastImage from "@/components/ui/animated-fast-image";
-import {Canvas, Fill, BackdropBlur } from "@shopify/react-native-skia";
 import { BlurView } from "expo-blur";
 
 interface Props {

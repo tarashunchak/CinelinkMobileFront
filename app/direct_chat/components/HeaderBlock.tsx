@@ -12,6 +12,7 @@ import { useUserStatus } from "@/app/rt_client/managers/users_manager";
 import AnimatedFastImage from "@/components/ui/animated-fast-image";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import AnimatedFastText from "@/components/ui/animated-fast-text";
+import HeaderContainer from "@/components/ui/header-container";
 
 function Header({ chatID, peer }: { chatID: number, peer: ChatMember }) {
   const navigator = useNavigation();
@@ -32,59 +33,59 @@ function Header({ chatID, peer }: { chatID: number, peer: ChatMember }) {
   }, [chatID, isOnline]);
 
   return (
-    <View style={[styles.view]}>
-      <View style={{ flexDirection: "row", gap: wp(5) }}>
-        <ReturnArrowButton
-          onPress={navigator.goBack} />
+    <HeaderContainer>
+      <View style={[styles.view]}>
+        <View style={{ flexDirection: "row", gap: wp(5) }}>
+          <ReturnArrowButton />
 
-        <View style={[styles.chatpeer.view, { paddingTop: insets.top}]}>
-          <TouchableOpacity
-            style={styles.chatpeer.img}
-            onPress={() => {
-              navigator.push("UserProfileScreen", {
-                userID: peer?.user_id,
-              });
-            }}
-          >
-            <AnimatedFastImage
-              sharedTransitionTag={`chat-${chat?.chat_id}-image`}
-              style={stylesR.avatarImg}
-              source={{ uri: chat?.img_url}}
-              cachePolicy="disk"
-            />
-            {isOnline && <View style={styles.isOnline.dot}></View>}
-          </TouchableOpacity>
-
-          <View style={styles.chatpeer.text.view}>
-            <AnimatedFastText 
-              style={textStyle.white18}
-              sharedTransitionTag={`chat-${chat?.chat_id}-name`}
+          <View style={[styles.chatpeer.view]}>
+            <TouchableOpacity
+              style={styles.chatpeer.img}
+              onPress={() => {
+                navigator.push("UserProfileScreen", {
+                  userID: peer?.user_id,
+                });
+              }}
             >
-              {chat?.name}
-            </AnimatedFastText>
-            {!isOnline ? (
-              <Text style={textStyle.gray14}>
-                {`last seen ${calcLastSeen(lastSeen)}`}
-              </Text>
-            ) :
-              (
-                <View style={styles.isOnline.view}>
-                  <Text style={styles.isOnline.text}>
-                    {isTyping ? `is typing ...` : `online`}
-                  </Text>
-                </View>
-              )
-            }
+              <AnimatedFastImage
+                sharedTransitionTag={`chat-${chat?.chat_id}-image`}
+                style={stylesR.avatarImg}
+                source={{ uri: chat?.img_url }}
+                cachePolicy="disk"
+              />
+              {isOnline && <View style={styles.isOnline.dot}></View>}
+            </TouchableOpacity>
+
+            <View style={styles.chatpeer.text.view}>
+              <AnimatedFastText
+                style={textStyle.white18}
+                sharedTransitionTag={`chat-${chat?.chat_id}-name`}
+              >
+                {chat?.name}
+              </AnimatedFastText>
+              {!isOnline ? (
+                <Text style={textStyle.gray14}>
+                  {`last seen ${calcLastSeen(lastSeen)}`}
+                </Text>
+              ) :
+                (
+                  <View style={styles.isOnline.view}>
+                    <Text style={styles.isOnline.text}>
+                      {isTyping ? `is typing ...` : `online`}
+                    </Text>
+                  </View>
+                )
+              }
+            </View>
           </View>
+
         </View>
 
+        <TouchableOpacity style={stylesR.dots}>
+          <Image source={require("@/app/direct_chat/assets/dots-vertical.png")} style={{ height: "70%", width: "70%" }} />
+        </TouchableOpacity>
       </View>
-
-      <TouchableOpacity style={stylesR.dots}>
-        <Image source={require("@/app/direct_chat/assets/dots-vertical.png")} style={{ height: "70%", width: "70%" }} />
-      </TouchableOpacity>
-
-    </View>
+    </HeaderContainer>
   );
 };
 

@@ -37,7 +37,7 @@ export default function WatchlistDetailsScreen({ route }: any) {
           <View>
             <Image
               source={require("@/app/library/assets/NoBgWatchlist.jpeg")}
-              style={[{ ...StyleSheet.absoluteFillObject }, styles.bgImage]}
+              style={[StyleSheet.absoluteFillObject , styles.bgImage]}
               cachePolicy="memory-disk"
             />
             <View style={styles.buttonsRow}>
@@ -85,7 +85,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignContent: "center",
     padding: hp(1),
-    marginTop: "5%",
   },
   infoBtnView: {
     height: 26,

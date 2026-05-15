@@ -4,6 +4,7 @@ import { textStyle } from "@/styles/textStyles";
 import { StyleSheet } from "react-native";
 import { PressableScale } from "react-native-pressable-scale";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import HeaderContainer from "@/components/ui/header-container";
 
 export let getActiveTab = () => { };
 
@@ -13,7 +14,7 @@ function SocialPageTopBar({ onTabChange }: { onTabChange: (tab: string) => void 
   const insets = useSafeAreaInsets();
 
   return (
-    <View style={[styles.mainContainer, { marginTop: insets.top }]}>
+    <HeaderContainer style={styles.mainContainer}>
       {
         tabs.map(tab => (
           <PressableScale
@@ -33,7 +34,7 @@ function SocialPageTopBar({ onTabChange }: { onTabChange: (tab: string) => void 
           </PressableScale>
         ))
       }
-    </View>
+    </HeaderContainer>
   );
 };
 

@@ -90,6 +90,8 @@ export class UsersManager extends EntinyManager<User_T> {
       const statuses = new Map();
 
       data?.results?.forEach((user: User_T)=>{
+        if(!user.avatar_url || user.avatar_url.length === 0)
+          user.avatar_url = "https://i.pinimg.com/736x/56/65/e3/5665e34f05ce5e1270b81ee0f64922f3.jpg";
         map.set(user.user_id, user);
         statuses.set(user.user_id, user.is_online);
         console.log("user ", user?.user_id, " is online: ", user.is_online);

@@ -1,14 +1,10 @@
 import { textStyle } from "@/styles/textStyles";
 import React, { memo, useCallback } from "react";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
-import { FlatList, View, Text, StyleSheet } from "react-native";
-import { useNavigation } from "expo-router";
-import { PressableScale } from "react-native-pressable-scale";
-import { Skeleton } from "react-native-skeletons";
-import { Image } from "expo-image";
-import { useUsers, useUserStatus } from "@/app/rt_client/managers/users_manager";
-import AnimatedFastImage from "@/components/ui/animated-fast-image";
+import { FlatList, StyleSheet } from "react-native";
+import { useUsers } from "@/app/rt_client/managers/users_manager";
 import Spacer from "@/components/ui/spacer";
+import  UserCard from "@/components/userCard";
 
 interface Props {
   user_id: number;
@@ -19,45 +15,10 @@ interface Props {
   is_online: boolean;
 }
 
-const FriendCard = memo(({ friend }: { friend: Props }) => {
-  const navigator = useNavigation();
-  const isOnline = useUserStatus(friend?.user_id);
-  if (!friend?.user_id) return <Skeleton style={styles.cardContainer} />
-  return (
-    <PressableScale
-      activeScale={0.98}
-      style={styles.cardContainer}
-      onPress={() => {
-        navigator?.push("UserProfileScreen", { userID: friend?.user_id })
-      }}>
-      <View style={styles.mainView}>
-        <View style={styles.infoView}>
-          <AnimatedFastImage
-            sharedTransitionTag={`user-${friend?.user_id}-avatar`}
-            style={styles.image}
-            source={{ uri: friend?.avatar_url }}
-            cachePolicy="memory"
-          />
-          {isOnline && <View style={styles.isOnlineDot}></View>}
-        </View>
-        <View style={styles.textView}>
-          <Text style={textStyle.white18}>
-            {friend?.username}
-          </Text>
-        </View>
-      </View>
-      <Image
-        style={styles.chatIcon}
-        source={require("@/app/social/assets/chatIcon.png")}
-      />
-    </PressableScale>
-  );
-});
-
 function FriendsList() {
   const users = useUsers();
   const renderItem = useCallback(({ item }: any) => (
-    <FriendCard friend={item} />
+    <UserCard user={item} />
   ), []);
 
   return (

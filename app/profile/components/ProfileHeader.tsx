@@ -5,6 +5,7 @@ import { UserProfile_T } from "../types";
 import { LogOutButton } from "./LogOutButton";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { Image } from "expo-image";
+import HeaderContainer from "@/components/ui/header-container";
 
 type Props = {
   bgUrl?: string;
@@ -14,7 +15,7 @@ type Props = {
 
 export function ProfileHeader({ bgUrl, onBack, isCurrentUser }: Props) {
   return (
-    <View>
+    <HeaderContainer>
       <Image
         source={bgUrl
           ? { uri: bgUrl }
@@ -26,7 +27,7 @@ export function ProfileHeader({ bgUrl, onBack, isCurrentUser }: Props) {
         <ReturnArrowButton onPress={onBack} />
         <LogOutButton isVisible={isCurrentUser} />
       </View>
-    </View>
+    </HeaderContainer>
   );
 };
 

@@ -8,6 +8,7 @@ import { useUserStatus } from "@/app/rt_client/rt_client";
 import { UserCard_T } from "@/app/types/user";
 import { Image } from "expo-image";
 import { Skeleton } from "react-native-skeletons";
+import AnimatedFastImage from "@/components/ui/animated-fast-image";
 
 interface Props {
   user_id?: number;
@@ -20,7 +21,7 @@ interface Props {
 function UserCard({ user }: { user: Props }) {
   const navigator = useNavigation();
   const isOnline = useUserStatus(user?.user_id);
-  if (!user) return <Skeleton style={styles.cardContainer} />;
+  if (!user?.user_id) return <Skeleton style={styles.cardContainer} />
   return (
     <PressableScale
       activeScale={0.98}
@@ -28,12 +29,13 @@ function UserCard({ user }: { user: Props }) {
       onPress={() => {
         navigator?.push("UserProfileScreen", { userID: user?.user_id })
       }}>
-      <View style={styles.cardView}>
+      <View style={styles.mainView}>
         <View style={styles.infoView}>
-          <Image
+          <AnimatedFastImage
+            sharedTransitionTag={`user-${user?.user_id}-avatar`}
             style={styles.image}
             source={{ uri: user?.avatar_url }}
-            cachePolicy="memory-disk"
+            cachePolicy="memory"
           />
           {isOnline && <View style={styles.isOnlineDot}></View>}
         </View>
@@ -54,7 +56,7 @@ function UserCard({ user }: { user: Props }) {
 export default memo(UserCard);
 
 const styles = StyleSheet.create({
-  cardView: {
+  mainView: {
     flexDirection: "row",
     height: "100%",
     gap: "6%",
@@ -106,7 +108,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(255, 255, 255, 0.03)",
     borderColor: "rgba(255, 255, 255, 0.2)",
     borderWidth: 0.5,
-    borderRadius: 4,
+    borderRadius: 15,
     justifyContent: "space-between",
     paddingLeft: "3%",
     marginBottom: 5,
@@ -123,5 +125,9 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     margin: 5,
-  }
+  },
+  contentContainer: {
+    paddingHorizontal: "1%",
+    paddingTop: "3%",
+  },
 });

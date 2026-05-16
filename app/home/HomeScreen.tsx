@@ -38,19 +38,19 @@ export default function HomePageScreen() {
       >
         <MovieOfTheDay />
 
-        <Text style={[textStyle.white20, stylesR.titleText]}>Now in Cinemas</Text>
+        <Text style={[textStyle.white22, stylesR.titleText]}>Now in Cinemas</Text>
         <HorizontalMoviesList
           moviesList={movies.now_playing}
           inCinemas={true}
         />
 
-        <Text style={[textStyle.white20, stylesR.titleText]}>Trending</Text>
+        <Text style={[textStyle.white22, stylesR.titleText]}>Trending</Text>
         <HorizontalMoviesList
           moviesList={movies.popular}
           inCinemas={false}
         />
 
-        <Text style={[textStyle.white20, stylesR.titleText]}>Genres</Text>
+        <Text style={[textStyle.white22, stylesR.titleText]}>Genres</Text>
         <GenresList setSelectedGenre={setSelectedGenre} />
 
       </ScrollView>
@@ -66,9 +66,9 @@ const stylesR = StyleSheet.create({
   },
   scrollView: {
     backgroundColor: "transparent",
-    padding: "1%"
+    paddingHorizontal: "1%"
   },
   titleText: {
-    marginTop: "5%",
+    marginTop: "10%",
   }
 });

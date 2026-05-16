@@ -6,7 +6,7 @@ function HeaderContainer({children, style}: {children: any, style?: StyleProp<Vi
   const insets = useSafeAreaInsets();
 
   return (
-    <View style={[style, {paddingTop: insets.top}]}>
+    <View style={{...style, paddingTop: insets.top}}>
       {children}
     </View>
   )

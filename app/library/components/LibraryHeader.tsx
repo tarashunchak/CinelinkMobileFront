@@ -6,41 +6,36 @@ import React from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
 import { heightPercentageToDP as hp, widthPercentageToDP } from "react-native-responsive-screen";
 import { PressableScale } from "react-native-pressable-scale";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import HeaderContainer from "@/components/ui/header-container";
 
 export default function LibraryHeader() {
   const navigator = useNavigation();
-  const insets = useSafeAreaInsets();
   return (
-    <HeaderContainer>
-      <View style={stylesR.view}>
-        <View style={styles.left.view}>
-          <PressableScale
-            activeScale={0.9}
-            onPress={() => navigator?.navigate(
-              "UserProfileScreen",
-              {
-                userID: getCurrentUserID()
-              })}
-          >
-            <Image
-              style={styles.left.avatar}
-              source={{ uri: useAuthStore.getState().user?.avatar_url }}
-            />
-          </PressableScale>
-          <Text style={styles.left.text}>
-            Your watchlists
-          </Text>
-        </View>
-        <View style={styles.right.view}>
-          <PressableScale>
-            <Image style={styles.right.img} source={require("@/app/library/assets/icon.png")} />
-          </PressableScale>
-          <PressableScale onPress={() => navigator.navigate("AddWatchlist")}>
-            <Image style={styles.right.img} source={require("@/app/library/assets/plus.png")} />
-          </PressableScale>
-        </View>
+    <HeaderContainer style={stylesR.view}>
+      <View style={styles.left.view}>
+        <PressableScale
+          activeScale={0.9}
+          onPress={() => navigator?.navigate(
+            "UserProfileScreen", {
+              userID: getCurrentUserID()
+            })}
+        >
+          <Image
+            style={styles.left.avatar}
+            source={{ uri: useAuthStore.getState().user?.avatar_url }}
+          />
+        </PressableScale>
+        <Text style={styles.left.text}>
+          Your watchlists
+        </Text>
+      </View>
+      <View style={styles.right.view}>
+        <PressableScale>
+          <Image style={styles.right.img} source={require("@/app/library/assets/icon.png")} />
+        </PressableScale>
+        <PressableScale onPress={() => navigator.navigate("AddWatchlist")}>
+          <Image style={styles.right.img} source={require("@/app/library/assets/plus.png")} />
+        </PressableScale>
       </View>
     </HeaderContainer>
   );

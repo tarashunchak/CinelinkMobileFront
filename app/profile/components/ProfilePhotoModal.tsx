@@ -1,88 +1,91 @@
-import React, { useMemo } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import { textStyle } from "@/styles/textStyles";
-import { Text, View, Modal, StyleSheet } from "react-native";
+import { Text, View, Modal, StyleSheet, ToastAndroid } from "react-native";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import * as ImagePicker from "expo-image-picker";
 import { useState } from "react";
 import { PressableScale } from "react-native-pressable-scale";
 import { Image } from "expo-image";
 import { Skeleton } from "react-native-skeletons";
-import {BlurView} from "expo-blur";
+import { BlurView } from "expo-blur";
+import { useEditMode } from "@/app/direct_chat/hooks";
 
 interface Props {
   isOpen: boolean;
   avatarUrl: string;
   onClose: () => void;
   isCurrentUser: boolean;
+  ref: any;
 };
 
 export default function ProfilePhotoModal({ isOpen, avatarUrl, onClose, isCurrentUser, ref }: Props) {
   const [avatarUri, setAvatarUri] = useState<string>(avatarUrl)
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
-
-  const avatar = useMemo(() => {
-    if (isLoaded)
-      return (
-        <View style={styles.avatarView}>
-          <Image
-            source={{ uri: avatarUri }}
-            style={styles.avatarImage}
-            cachePolicy="memory-disk"
-            onLoadEnd={() => setIsLoaded(true)} />
-        </View>
-      );
-
-    return <Skeleton style={styles.avatarView} />;
-  }, [isLoaded])
+  const [picked, setPicked] = useState<boolean>(false);
 
   return (
-    <Modal 
+    <Modal
       statusBarTranslucent={true}
       visible={isOpen}
       transparent={true}
       animationType="slide"
     >
       <BlurView
-        intensity={80}
+        intensity={70}
         tint="systemChromeMaterialDark"
-        style={styles.background}
+        style={StyleSheet.absoluteFill}
         blurTarget={ref}
         blurMethod="dimezisBlurView"
         blurReductionFactor={10}
       >
-        <View style={{}}>
+        <View style={styles.background}>
           <PressableScale
-            style={{
-              alignSelf: "flex-end",
-              height: 40,
-              width: 40,
-              marginBottom: hp(2)
-            }}
-            onPress={() => {
-              setAvatarUri(avatarUrl);
-              onClose();
-            }}
+            activeScale={0.95}
+            style={styles.closeBtn}
+            onPress={onClose}
           >
-            <Image style={{ height: "100%", width: "100%" }} source={require("@/app/profile/assets/Icon.png")} />
+            <Image
+              style={{ height: 26, width: 26, alignSelf: "center" }}
+              source={require("@/app/profile/assets/Icon.png")}
+            />
           </PressableScale>
-          {avatar}
+          {!isLoaded && <Skeleton style={styles.avatarView} />}
+          <View style={[styles.avatarView, { opacity: isLoaded ? 1 : 0 }]}>
+            <Image
+              source={{ uri: avatarUri }}
+              style={styles.avatarImage}
+              cachePolicy="disk"
+              onLoadEnd={() => setIsLoaded(true)} />
+          </View>
           {
-            isCurrentUser &&
+            isCurrentUser && 
             <PressableScale
               style={styles.editBtnView}
               onPress={async () => {
-                const results = await ImagePicker.launchImageLibraryAsync({
-                  mediaTypes: ImagePicker.MediaTypeOptions.Images,
-                  quality: 1,
-                });
-                setAvatarUri(results?.assets[0].uri)
+                try {
+                  const results = await ImagePicker.launchImageLibraryAsync({
+                    mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                    quality: 1,
+                  });
+                  if(results?.assets?.[0]?.uri)
+                    setAvatarUri(results?.assets?.[0]?.uri ?? "")
+                } catch (e) {
+                }
+
+                  ToastAndroid.showWithGravity("Cannot get image", 1000, 10);
               }}
             >
               <Image
                 style={styles.editBtnImage}
                 source={require("@/app/profile/assets/EditIcon.png")}
               />
-              <Text style={textStyle.white20}>Edit</Text>
+              <Text style={[textStyle.white20, {fontWeight: "bold"}]}>Edit</Text>
+            </PressableScale>
+          }
+          {
+            isCurrentUser && picked &&
+            <PressableScale style={{}}>
+
             </PressableScale>
           }
         </View>
@@ -93,15 +96,17 @@ export default function ProfilePhotoModal({ isOpen, avatarUrl, onClose, isCurren
 
 const styles = StyleSheet.create({
   background: {
-    flex: 1,
+    flexDirection: "column",
+    alignSelf: "center",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.9)",
+    width: "80%",
+    height: "100%",
   },
   avatarView: {
     padding: wp(2),
-    width: wp(54),
-    height: wp(54),
+    width: wp(58),
+    aspectRatio: 1,
     borderRadius: 999,
     borderColor: "rgba(255, 255, 255, 0.5)",
     borderWidth: 0.5,
@@ -114,18 +119,31 @@ const styles = StyleSheet.create({
   },
   editBtnView: {
     flexDirection: "row",
+    gap: 10,
     marginTop: 15,
-    width: "60%",
+    width: 120,
     height: 44,
-    backgroundColor: "blue",
+    paddingHorizontal: 15,
+    backgroundColor: "#DEB522",
     borderRadius: 999,
     alignSelf: "center",
     alignItems: "center",
-    justifyContent: "center",
-    alignContent: "center",
   },
   editBtnImage: {
     height: 30,
     width: 30,
+    alignSelf: "center"
+  },
+  closeBtn: {
+    alignSelf: "flex-end",
+    height: 44,
+    width: 44,
+    marginLeft: 17,
+    marginBottom: hp(2),
+    borderColor: "rgba(255, 255, 255, 0.2)",
+    backgroundColor: "rgba(255, 255, 255, 0.05)",
+    borderWidth: 1,
+    borderRadius: 999,
+    justifyContent: "center",
   },
 });

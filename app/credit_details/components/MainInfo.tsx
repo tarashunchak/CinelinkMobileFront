@@ -1,12 +1,13 @@
 import React from "react";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
-import { Image, ImageBackground, StyleSheet, Text, View } from "react-native";
-import LeafyReturnArrowButton from "@/components/ui/returnArrowButton";
+import { StyleSheet, View } from "react-native";
+import ReturnArrowButton from "@/components/ui/returnArrowButton";
 import { textStyle } from "@/styles/textStyles";
 import { useNavigation } from "expo-router";
 import InfoBlock from "./InfoBlock";
 import AnimatedFastImage from "@/components/ui/animated-fast-image";
 import AnimatedFastText from "@/components/ui/animated-fast-text";
+import HeaderContainer from "@/components/ui/header-container";
 //import InfoBlock from "./InfoBlock";
 
 export interface CreditMainInfo_I {
@@ -27,14 +28,14 @@ export default function MainInfo(
       profilePath?: string,
     }
 ) {
-  const navigation = useNavigation();
   return (
     <View>
-      <LeafyReturnArrowButton style={{ marginTop: "5%", zIndex: 2 }} onPress={() => navigation.goBack()} />
-      <ImageBackground
-        source={{ uri: `https://image.tmdb.org/t/p/w500${backdrop?.[backdrop?.length - 1] ?? ""}` }}
-        style={styles.backdrop}>
-        <View style={styles.darkRect}>
+        <AnimatedFastImage
+          source={{ uri: `https://image.tmdb.org/t/p/w500${backdrop?.[backdrop?.length - 1] ?? ""}` }}
+          style={styles.backdrop}
+        />
+        <HeaderContainer style={styles.darkRect}>
+        <ReturnArrowButton />
           <View style={{ flexDirection: "column", marginLeft: "3%", marginTop: "20%", justifyContent: "space-between" }}>
             <AnimatedFastText
               sharedTransitionTag={`credit-${creditID}-name`}
@@ -49,16 +50,15 @@ export default function MainInfo(
                 <AnimatedFastImage
                   sharedTransitionTag={`credit-${creditID}-profile`}
                   source={{ uri: `https://image.tmdb.org/t/p/w300${profilePath}` }}
-                  style={{ height: "100%", width: "100%", backgroundColor: "rgba(255, 255, 255, 0.05)" }} 
+                  style={styles.image} 
                   cachePolicy="disk"
                 />
               </View>
               <InfoBlock creditInfo={credit} />
             </View>
           </View>
+    </HeaderContainer>
         </View>
-      </ImageBackground >
-    </View >
   )
 }
 
@@ -66,9 +66,6 @@ const styles = StyleSheet.create({
   backdrop: {
     height: hp("40%"),
     width: "104%",
-    marginLeft: "-3%",
-    marginRight: "-3%",
-    marginTop: "-25%",
   },
   darkRect: {
     backgroundColor: "rgba(0, 0, 0, 0.75)",
@@ -83,6 +80,10 @@ const styles = StyleSheet.create({
     position: "relative",
     borderColor: "rgba(255, 255, 255, 0.2)",
     borderWidth: 0.5,
+  },
+  image: { 
+    flex: 1,
+    backgroundColor: "rgba(255, 255, 255, 0.05)" 
   },
   mainView: {
     flexDirection: "row",

@@ -41,55 +41,54 @@ function Header({ chatID, peer, imgUrl, name }: Props) {
 
   return (
     <HeaderContainer style={styles.view}>
-        <View style={{ flexDirection: "row", gap: wp(5) }}>
-          <ReturnArrowButton />
+      <View style={{ flexDirection: "row", gap: wp(5) }}>
+        <ReturnArrowButton />
+        <View style={[styles.chatpeer.view]}>
+          <TouchableOpacity
+            style={styles.chatpeer.img}
+            onPress={() => {
+              navigator.push("UserProfileScreen", {
+                userID: peer?.user_id,
+              });
+            }}
+          >
+            <AnimatedFastImage
+              sharedTransitionTag={`chat-${chat?.chat_id}-image`}
+              style={stylesR.avatarImg}
+              source={{ uri: imgUrl }}
+              cachePolicy="disk"
+            />
+            {isOnline && <View style={styles.isOnline.dot}></View>}
+          </TouchableOpacity>
 
-          <View style={[styles.chatpeer.view]}>
-            <TouchableOpacity
-              style={styles.chatpeer.img}
-              onPress={() => {
-                navigator.push("UserProfileScreen", {
-                  userID: peer?.user_id,
-                });
-              }}
+          <View style={styles.chatpeer.text.view}>
+            <AnimatedFastText
+              style={textStyle.white18}
+              sharedTransitionTag={`chat-${chat?.chat_id}-name`}
             >
-              <AnimatedFastImage
-                sharedTransitionTag={`chat-${chat?.chat_id}-image`}
-                style={stylesR.avatarImg}
-                source={{ uri: imgUrl}}
-                cachePolicy="disk"
-              />
-              {isOnline && <View style={styles.isOnline.dot}></View>}
-            </TouchableOpacity>
-
-            <View style={styles.chatpeer.text.view}>
-              <AnimatedFastText
-                style={textStyle.white18}
-                sharedTransitionTag={`chat-${chat?.chat_id}-name`}
-              >
-                {name}
-              </AnimatedFastText>
-              {!isOnline ? (
-                <Text style={textStyle.gray14}>
-                  {`last seen ${calcLastSeen(lastSeen)}`}
-                </Text>
-              ) :
-                (
-                  <View style={styles.isOnline.view}>
-                    <Text style={styles.isOnline.text}>
-                      {isTyping ? `is typing ...` : `online`}
-                    </Text>
-                  </View>
-                )
-              }
-            </View>
+              {name}
+            </AnimatedFastText>
+            {!isOnline ? (
+              <Text style={textStyle.gray14}>
+                {`last seen ${calcLastSeen(lastSeen)}`}
+              </Text>
+            ) :
+              (
+                <View style={styles.isOnline.view}>
+                  <Text style={styles.isOnline.text}>
+                    {isTyping ? `is typing ...` : `online`}
+                  </Text>
+                </View>
+              )
+            }
           </View>
-
         </View>
 
-        <TouchableOpacity style={stylesR.dots}>
-          <Image source={require("@/app/direct_chat/assets/dots-vertical.png")} style={{ height: "70%", width: "70%" }} />
-        </TouchableOpacity>
+      </View>
+
+      <TouchableOpacity style={stylesR.dots}>
+        <Image source={require("@/app/direct_chat/assets/dots-vertical.png")} style={{ height: "70%", width: "70%" }} />
+      </TouchableOpacity>
     </HeaderContainer>
   );
 };

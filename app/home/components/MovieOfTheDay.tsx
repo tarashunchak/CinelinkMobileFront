@@ -6,10 +6,11 @@ import { Text, View, StyleSheet } from "react-native";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { PressableScale } from "react-native-pressable-scale";
 import { Image } from "expo-image";
-import Animated, { createAnimatedComponent } from "react-native-reanimated";
 import AnimatedFastText from "@/components/ui/animated-fast-text";
+import AnimatedFastImage from "@/components/ui/animated-fast-image";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { BlurTargetView, BlurView } from "expo-blur";
+import HeaderContainer from "@/components/ui/header-container";
 
 function MovieOfTheDay() {
   const navigator = useNavigation();
@@ -27,37 +28,25 @@ function MovieOfTheDay() {
     }, [])
   );
 
-  const AnimatedFastImage = createAnimatedComponent(Image);
-
   const ref = useRef<View | null>(null);
 
   return (
     <>
-    <BlurTargetView ref={ref}>
       <AnimatedFastImage 
         sharedTransitionTag={`movie-${movie?.movie_id}-backdrop`}
         source={{
-          uri: `https://image.tmdb.org/t/p/w300${movie?.backdrop_path
+          uri: `https://image.tmdb.org/t/p/w500${movie?.backdrop_path
             || movie?.poster_path}`
         }}
         style={styles.backdrop}
-        cachePolicy="memory-disk"
+        cachePolicy="disk"
       />
-    </BlurTargetView>
-    <BlurView style={[styles.backdrop, {position: "absolute", top:0,left:0, right:0}]}
-      blurTarget={ref}
-      tint="dark"
-      intensity={20}
-      blurReductionFactor={60}
-      blurMethod="dimezisBlurView"
-    />
-      <View style={[styles.background, {paddingTop: insets.top }]}>
+      <View style={[styles.background]}>
         <Image
           style={styles.logo}
           source={require("@/app/home/assets/logo.png")}
           cachePolicy="disk"
         />
-
         <Text
           style={
             [textStyle.white38,
@@ -72,7 +61,6 @@ function MovieOfTheDay() {
             )
           }>
           <View style={styles.view}>
-
             <AnimatedFastText
               style={[
                 textStyle.white24,
@@ -104,31 +92,29 @@ export default memo(MovieOfTheDay);
 
 const styles = StyleSheet.create({
   logo: {
-    height: "10%",
-    width: "20%",
-    marginLeft: "3%",
-    marginTop: "3%"
+    height: 40,
+    aspectRatio: 2,
   },
   backdrop: {
     height: hp("45%"),
-    margin: "-2%",
-    marginBottom: hp(5)
-  },
-  background: {
+    width:"104%",
+    alignSelf:"center",
     position: "absolute",
     top: 0,
-    left: 0,
-    right: 0,
-    height: hp("47%"),
+  },
+  background: {
+    alignSelf: "center",
+    height: hp("45%"),
     width: "104%",
-    margin: "-2%",
-    paddingTop: "5%",
     backgroundColor: "rgba(0, 0, 0, 0.8)",
+    paddingHorizontal: "2%",
   },
   view: {
     flexDirection: "row",
     alignSelf: "center",
     gap: 5,
+    maxWidth: wp(76),
+    justifyContent: "center",
   },
   text: {
     textAlign: "center",

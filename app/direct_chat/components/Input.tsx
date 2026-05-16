@@ -1,12 +1,13 @@
 import { textStyle } from "@/styles/textStyles";
 import React, { useState } from "react";
-import { View, Image, TouchableOpacity, TextInput, TextInputContentSizeChangeEvent } from "react-native";
+import { View, Image, TouchableOpacity, TextInput, TextInputContentSizeChangeEvent, Platform } from "react-native";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { RTClient } from "../../rt_client/rt_client";
 import { getCurrentUserID } from "@/utils/utils";
 import Animated from "react-native-reanimated";
 import { StyleSheet } from "react-native";
 import { PressableScale } from "react-native-pressable-scale";
+import { useSafeAreaFrame, useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function Input({ chatID }: { chatID: number }) {
     const [isFocused, setIsFocused] = useState(false);
@@ -27,8 +28,10 @@ export default function Input({ chatID }: { chatID: number }) {
         setHeight(e.nativeEvent.contentSize.height)
     };
 
+    const insets = useSafeAreaInsets();
+
     return (
-        <View style={[styles.view,  ((height < 50) ? openedStyles.closed : openedStyles.opened)]}>
+        <View style={[styles.view,  ((height < 50) ? openedStyles.closed : openedStyles.opened), {marginBottom: insets.bottom}]}>
             <TextInput
                 value={text}
                 onChangeText={setText}
@@ -78,9 +81,9 @@ const styles = {
     view: {
         width: "94%",
         position: "absolute",
-        bottom: hp("2%"),
+        bottom: hp("1%"),
         zIndex: 2,
-        minHeight: hp(5.1),
+        minHeight: Platform.OS === "android" ? hp(5.1) : hp(5.3),
         backgroundColor: "rgba(20, 20, 20, 1)",
         borderColor: "rgba(255, 255, 255, 0.5)",
         borderWidth: 0.5,
@@ -97,6 +100,7 @@ const styles = {
     input: [textStyle.white18, {
         width: "88%",
         alignSelf: "center",
+        alignContent:"center",
     }],
     sendBtn: {
         view: {

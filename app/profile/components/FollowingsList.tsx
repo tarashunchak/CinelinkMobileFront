@@ -34,7 +34,7 @@ export default function FollowingsList({ userID }: { userID: number }) {
       keyExtractor={(item: any, index: number) => String(item?.user_id ?? index)}
       showsVerticalScrollIndicator={false}
       renderItem={renderItem}
-      ListFooterComponent={<Spacer spacing={hp(8)} />}
+      ListFooterComponent={<Spacer orientation="v" spacing={hp(8)} />}
       contentContainerStyle={styles.contentContainer}
     />
   )

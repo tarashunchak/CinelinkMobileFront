@@ -1,22 +1,22 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useEffect, memo } from "react";
 import { FlatList, View } from "react-native";
 import BottomBar from "../bars/bottomBar";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen"
 import { textStyle } from "@/styles/textStyles";
-import { GetUserWatchlists } from "@/api/watchlist/watchlist";
 import WatchlistCard from "./components/WatchlistCard";
 import LibraryHeader from "./components/LibraryHeader";
-import { useFocusEffect, useNavigation } from "expo-router";
+import { useNavigation } from "expo-router";
 import ScreenBackground from "@/components/ui/screen-background";
 import { useUserWatchlists, WatchlistsManager } from "../rt_client/managers/watchlists_manager";
+import Spacer from "@/components/ui/spacer";
 
-export default function WatchlistsScreen() {
+function WatchlistsScreen() {
   const navigator = useNavigation();
   //const [watchlists, setWatchlists] = useState<any>(null);
   const watchlists = useUserWatchlists();
 
   useEffect(() => {
-    const unsubscribe = navigator.addListener("focus", ()=>{
+    const unsubscribe = navigator.addListener("focus", () => {
       WatchlistsManager.getInstance().load();
       console.warn("Load watchlists")
     });
@@ -31,17 +31,15 @@ export default function WatchlistsScreen() {
         renderItem={({ item }) =>
           <WatchlistCard watchlist={item} />
         }
-        ListHeaderComponent={
-          <LibraryHeader />
-        }
-        ListFooterComponent={
-          <View style={{ height: hp(14) }}></View>
-        }
+        ListHeaderComponent={<LibraryHeader />}
+        ListFooterComponent={<Spacer orientation="h" spacing={hp(14)}/>}
       />
       <BottomBar />
     </ScreenBackground>
   );
-}
+};
+
+export default memo(WatchlistsScreen);
 
 const styles = {
   card: {

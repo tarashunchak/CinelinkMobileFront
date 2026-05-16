@@ -14,7 +14,7 @@ export default function HeaderBlock({ watchlist }: { watchlist: any }) {
   const AnimatedFastImage = Animated.createAnimatedComponent(Image);
   const insets = useSafeAreaInsets();
   return (
-    <View style={[styles.container, {height: hp(45) - insets.top }]}>
+    <View style={[styles.container, {height: hp(37.5) - insets.top }]}>
       <View style={styles.mainView}>
         <View style={styles.infoView}>
           <AnimatedFastImage

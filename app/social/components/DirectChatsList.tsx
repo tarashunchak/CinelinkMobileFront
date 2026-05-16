@@ -13,8 +13,6 @@ import AnimatedFastText from "@/components/ui/animated-fast-text";
 const DirectChatCard = memo(({ item }: { item: any }) => {
   const chatID = item?.chat_id;
   const navigator = useNavigation();
-  //RTClient.createMessageStorage(chatID);
-  //RTClient.getChatMessages(chatID);
   const peerID = item?.peer_id?.["Int32"];
   const isTyping = useTypingStatus(chatID, peerID);
   const lastMessage = useLastChatMessage(chatID);
@@ -78,7 +76,7 @@ const DirectChatCard = memo(({ item }: { item: any }) => {
   );
 });
 
-function ChatsList() {
+export default function ChatsList() {
   const chats = useUserChats();
 
   const renderItem = useCallback(({ item }: any) => (
@@ -94,8 +92,6 @@ function ChatsList() {
     />
   );
 };
-
-export default memo(ChatsList)
 
 const styles = StyleSheet.create({
   mainView: {

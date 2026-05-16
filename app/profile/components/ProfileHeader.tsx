@@ -18,7 +18,6 @@ export default function ProfileHeader({ bgUrl, onBack, isCurrentUser }: Props) {
   const ref = useRef<View | null>(null);
   return (
     <HeaderContainer>
-
       <BlurTargetView
         style={styles.bgImage}
         ref={ref}>
@@ -30,13 +29,13 @@ export default function ProfileHeader({ bgUrl, onBack, isCurrentUser }: Props) {
           cachePolicy="disk"
         />
       </BlurTargetView>
-      <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: "5%", paddingHorizontal: "1%" }}>
+      <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: "2%", paddingHorizontal: "1%" }}>
         <ReturnArrowButton onPress={onBack} />
         <LogOutButton isVisible={isCurrentUser} />
       </View>
       <BlurView
-        tint="dark"
-        intensity={80}
+        tint="systemChromeMaterialDark"
+        intensity={30}
         style={styles.bgImage}
         blurReductionFactor={40}
         blurMethod="dimezisBlurView"

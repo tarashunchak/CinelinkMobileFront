@@ -15,19 +15,15 @@ import CreditCardsList from "./components/CreditCardsList";
 import { GetMovieYouTubeTrailerKey, LoadMovieDetails } from "./services/services";
 import ScreenBackground from "./../../components/ui/screen-background";
 import { FlatList } from "react-native-gesture-handler";
-import Animated from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { BlurTargetView } from "expo-blur";
 
-function MovieDetailScreen({ route }: any) {
-  const navigation = useNavigation();
+export default function MovieDetailScreen({ route }: any) {
   const { movieID, inCinemas, maximum, backdropPath, posterPath, title } = route?.params;
   const [movie, setMovie] = useState<Movie>();
   const [isActive, setIsActive] = useState<boolean>(true);
   const [isActiveUsers, setIsActiveUsers] = useState<boolean>(true);
   const [credits, setCredits] = useState<any[]>([]);
-
-  const insets = useSafeAreaInsets();
 
   useEffect(() => {
     async function load() {
@@ -101,7 +97,7 @@ function MovieDetailScreen({ route }: any) {
     <BlurTargetView ref={ref} style={{flex:1}}>
     <ScreenBackground>
         <FlatList
-          contentContainerStyle={{ padding: "1%" }}
+          contentContainerStyle={{ paddingHorizontal: "1%" }}
           data={sections}
           renderItem={renderItem}
           showsVerticalScrollIndicator={false}
@@ -124,7 +120,6 @@ function MovieDetailScreen({ route }: any) {
   );
 };
 
-export default memo(MovieDetailScreen);
 
 const styles = {
   title: [

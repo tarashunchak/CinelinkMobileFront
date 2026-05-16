@@ -54,31 +54,19 @@ function MainInfo(
     </>
   );
 
-  const backdropRef = useRef<View | null>(null);
-
   return (
-    <HeaderContainer>
-      <ReturnArrowButton />
-      <BlurTargetView style={styles.backdrop} ref={backdropRef}>
+    <View>
         <AnimatedFastImage
           sharedTransitionTag={`movie-${movie?.id}-backdrop`}
-          source={{ uri: `https://image.tmdb.org/t/p/w300${backdropPath}` }}
-          style={{ height: "100%", width: "100%" }}
+          source={{ uri: `https://image.tmdb.org/t/p/w500${backdropPath}` }}
+          style={styles.backdrop}
           cachePolicy="disk"
         />
-      </BlurTargetView>
-      <BlurView
-        tint="systemUltraThinMaterial"
-        intensity={60}
-        blurReductionFactor={30}
-        blurMethod="dimezisBlurView"
-        style={[{ height: hp(40), width: wp("100%"), position: "absolute", top: 0, left: 0, right: 0, marginLeft: "-3%" }]}
-        blurTarget={backdropRef}
-      />
-      <View style={[styles.darkRect, { paddingTop: insets.top / 2 }]}>
-        <View style={{ flexDirection: "column", marginLeft: "3%", marginTop: "20%", justifyContent: "space-between" }}>
-
-          <AnimatedFastText style={[textStyle.white24, { maxWidth: "96%" }]}
+      <View style={[styles.darkRect]}>
+        <HeaderContainer style={{ flexDirection: "column", alignSelf: "center", justifyContent: "space-between"}}>
+          <ReturnArrowButton style={{marginTop: "2%"}}/>
+          <AnimatedFastText 
+            style={[textStyle.white24, { maxWidth: "96%", marginTop: "5%"}]}
             sharedTransitionTag={`movie-${movie?.id}-title`}
             numberOfLines={1}
             ellipsizeMode="tail"
@@ -104,7 +92,7 @@ function MainInfo(
             </PressableScale>
             <InfoBlock movieInfo={movie} cast={cast} />
           </View>
-        </View>
+        </HeaderContainer>
       </View>
       <PosterModal
         isOpen={isOpen}
@@ -113,7 +101,7 @@ function MainInfo(
         movieID={movie?.id}
         ref={ref}
       />
-    </HeaderContainer>
+    </View>
   )
 };
 
@@ -121,18 +109,17 @@ export default memo(MainInfo);
 
 const styles = StyleSheet.create({
   backdrop: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
     height: hp("40%"),
-    marginLeft: "-3%",
-    marginTop: "-25%",
-    marginBottom: "5%",
+    marginHorizontal: "-2%",
   },
   darkRect: {
     backgroundColor: "rgba(0, 0, 0, 0.75)",
-    marginRight: "-2%",
-    marginTop: "-2%",
     height: hp("40%"),
-    position: "absolute",
-    margin: "-2%",
+    marginHorizontal: "-2%",
     width: "104%",
   },
   posterView: {

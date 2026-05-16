@@ -50,7 +50,7 @@ function ProfileMain({
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   return (
-    <View style={{ padding: "1%" }}>
+    <View style={{ paddingHorizontal: "1%" }}>
       <View style={styles.view}>
         <PressableScale
           style={styles.avatar}

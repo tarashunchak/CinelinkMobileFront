@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { StyleSheet, View } from "react-native";
 import ReturnArrowButton from "@/components/ui/returnArrowButton";
@@ -8,7 +8,8 @@ import InfoBlock from "./InfoBlock";
 import AnimatedFastImage from "@/components/ui/animated-fast-image";
 import AnimatedFastText from "@/components/ui/animated-fast-text";
 import HeaderContainer from "@/components/ui/header-container";
-//import InfoBlock from "./InfoBlock";
+import { PressableScale } from "react-native-pressable-scale";
+import PosterModal from "@/app/movie_details/components/PosterModal";
 
 export interface CreditMainInfo_I {
   id: number;
@@ -19,59 +20,87 @@ export interface CreditMainInfo_I {
 };
 
 export default function MainInfo(
-  { creditID, creditName, credit, backdrop, profilePath }
+  { creditID, creditName, credit, backdrop, profilePath, ref }
     : {
       creditID: number,
       creditName: string,
       credit?: CreditMainInfo_I,
       backdrop: string[],
       profilePath?: string,
+      ref: any,
     }
 ) {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   return (
     <View>
-        <AnimatedFastImage
-          source={{ uri: `https://image.tmdb.org/t/p/w500${backdrop?.[backdrop?.length - 1] ?? ""}` }}
-          style={styles.backdrop}
-        />
-        <HeaderContainer style={styles.darkRect}>
-        <ReturnArrowButton />
-          <View style={{ flexDirection: "column", marginLeft: "3%", marginTop: "20%", justifyContent: "space-between" }}>
-            <AnimatedFastText
-              sharedTransitionTag={`credit-${creditID}-name`}
-              style={[textStyle.white26, { marginTop: "5%" }]}
-              numberOfLines={1}
-              ellipsizeMode="tail"
-            >
-              {creditName}
-            </AnimatedFastText>
-            <View style={styles.mainView}>
-              <View style={styles.poster}>
+      <AnimatedFastImage
+        source={{ uri: `https://image.tmdb.org/t/p/w500${backdrop?.[backdrop?.length - 1] ?? ""}` }}
+        style={styles.backdrop}
+      />
+      <View style={styles.darkRect}>
+        <HeaderContainer style={{ flexDirection: "column", alignSelf: "center", justifyContent: "space-between", width: wp(98) }}>
+          <ReturnArrowButton />
+          <AnimatedFastText
+            sharedTransitionTag={`credit-${creditID}-name`}
+            style={[textStyle.white24, { width: "98%", marginTop: "5%" }]}
+            numberOfLines={1}
+            ellipsizeMode="tail"
+          >
+            {creditName}
+          </AnimatedFastText>
+          <View style={styles.mainView}>
+            <View style={
+              {
+                flexDirection: "row",
+                marginTop: "3%",
+                width: wp(96),
+                height: 220,
+                justifyContent: "space-between",
+                alignSelf: "center",
+              }
+            }>
+
+              <PressableScale
+                onPress={() => {setIsOpen(true)}}
+                style={styles.poster}
+              >
                 <AnimatedFastImage
-                  sharedTransitionTag={`credit-${creditID}-profile`}
+                  sharedTransitionTag={`credit-${credit?.id}-profile`}
                   source={{ uri: `https://image.tmdb.org/t/p/w300${profilePath}` }}
-                  style={styles.image} 
+                  style={styles.image}
                   cachePolicy="disk"
                 />
-              </View>
+              </PressableScale>
               <InfoBlock creditInfo={credit} />
             </View>
           </View>
-    </HeaderContainer>
-        </View>
+        </HeaderContainer>
+      </View>
+      <PosterModal
+        isOpen={isOpen}
+        onClose={()=>{setIsOpen(false)}}
+        profilePath={profilePath}
+        ref={ref}
+        creditID={credit?.id}
+      />
+    </View>
   )
 }
 
 const styles = StyleSheet.create({
   backdrop: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
     height: hp("40%"),
-    width: "104%",
+    marginHorizontal: "-2%",
   },
   darkRect: {
     backgroundColor: "rgba(0, 0, 0, 0.75)",
-    marginRight: "-2%",
-    marginTop: "1%",
     height: hp("40%"),
+    marginHorizontal: "-2%",
+    width: "104%",
   },
   poster: {
     width: "40%",
@@ -81,14 +110,14 @@ const styles = StyleSheet.create({
     borderColor: "rgba(255, 255, 255, 0.2)",
     borderWidth: 0.5,
   },
-  image: { 
-    flex: 1,
-    backgroundColor: "rgba(255, 255, 255, 0.05)" 
+  image: {
+    width: "100%",
+    height: "100%",
+    backgroundColor: "rgba(255, 255, 255, 0.05)"
   },
   mainView: {
     flexDirection: "row",
-    marginTop: "3%",
-    width: wp(95),
+    width: wp(100),
     height: 220,
     justifyContent: "space-between",
   }

@@ -63,10 +63,10 @@ function MainInfo(
           cachePolicy="disk"
         />
       <View style={[styles.darkRect]}>
-        <HeaderContainer style={{ flexDirection: "column", alignSelf: "center", justifyContent: "space-between"}}>
+        <HeaderContainer style={{ flexDirection: "column", alignSelf: "center", justifyContent: "space-between", width: wp(98)}}>
           <ReturnArrowButton style={{marginTop: "2%"}}/>
           <AnimatedFastText 
-            style={[textStyle.white24, { maxWidth: "96%", marginTop: "5%"}]}
+            style={[textStyle.white24, { width: "98%", marginTop: "5%"}]}
             sharedTransitionTag={`movie-${movie?.id}-title`}
             numberOfLines={1}
             ellipsizeMode="tail"
@@ -78,9 +78,10 @@ function MainInfo(
             {
               flexDirection: "row",
               marginTop: "3%",
-              width: wp(95),
+              width: wp(96),
               height: 220,
               justifyContent: "space-between",
+              alignSelf:"center",
             }
           }>
 
@@ -110,9 +111,6 @@ export default memo(MainInfo);
 const styles = StyleSheet.create({
   backdrop: {
     position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
     height: hp("40%"),
     marginHorizontal: "-2%",
   },

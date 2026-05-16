@@ -60,7 +60,7 @@ const styles = {
     borderWidth: 0.5,
     borderColor: "rgba(255, 255, 255, 0.2)",
     borderRadius: 12,
-    marginTop: "3%",
+    marginTop: "5%",
   },
   genreCellView: {
     height: 30,

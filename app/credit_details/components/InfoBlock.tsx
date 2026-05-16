@@ -1,15 +1,9 @@
 import React, { memo } from "react";
-import { Linking, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { textStyle } from "@/styles/textStyles";
+import { Linking, StyleSheet, Text, View } from "react-native";
 import InfoRow from "./InfoRow";
 import { PressableScale } from "react-native-pressable-scale";
 import { Skeleton } from "react-native-skeletons";
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
-
-interface Credits {
-  cast: any[];
-  crew: any[];
-};
 
 interface CreditInfo_I {
   id: number;

@@ -21,7 +21,11 @@ function CreditCard({ credit }: { credit: any}) {
         )}>
       <AnimatedFastImage
         sharedTransitionTag={`credit-${credit.id}-profile`}
-        source={{ uri: `https://image.tmdb.org/t/p/w300${credit?.profile_path}` }}
+        source={
+credit?.profile_path ?
+          { uri: `https://image.tmdb.org/t/p/w300${credit?.profile_path}` }
+          : require("@/assets/images/empty_male_card.jpg")
+        }
         style={styles.img}
         cachePolicy="disk"
       />

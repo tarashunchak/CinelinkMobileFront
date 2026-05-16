@@ -69,6 +69,6 @@ const stylesR = StyleSheet.create({
     paddingHorizontal: "1%"
   },
   titleText: {
-    marginTop: "10%",
+    marginTop: "5%",
   }
 });

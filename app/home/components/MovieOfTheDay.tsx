@@ -41,7 +41,8 @@ function MovieOfTheDay() {
         style={styles.backdrop}
         cachePolicy="disk"
       />
-      <View style={[styles.background]}>
+      <View style={[styles.background]}/>
+        <HeaderContainer>
         <Image
           style={styles.logo}
           source={require("@/app/home/assets/logo.png")}
@@ -83,7 +84,7 @@ function MovieOfTheDay() {
             cachePolicy="memory-disk"
           />
         </PressableScale>
-      </View>
+</HeaderContainer>
     </>
   )
 };
@@ -103,6 +104,7 @@ const styles = StyleSheet.create({
     top: 0,
   },
   background: {
+    position:"absolute",
     alignSelf: "center",
     height: hp("45%"),
     width: "104%",
@@ -123,8 +125,8 @@ const styles = StyleSheet.create({
   },
   poster: {
     marginTop: "2%",
-    height: "80%",
-    width: "45%",
+    height: 260,
+    aspectRatio: 0.68,
     alignSelf: "center",
     borderColor: "rgba(255, 255, 255, 0.2)",
     borderWidth: 0.5

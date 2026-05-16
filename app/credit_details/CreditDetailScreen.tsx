@@ -1,13 +1,15 @@
 import { getFilmographyByPerson } from "@/api/tmdbApi";
 import BottomBar from "@/app/bars/bottomBar";
 import { useNavigation } from "expo-router";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import BiographyModal from "./components/BiographyModal";
 import PhotosModal from "./components/PhotosModal";
 import MainInfo from "./components/MainInfo";
 import ActionButtonsBlock from "./components/ActionButtonsBlock";
 import ScreenBackground from "@/components/ui/screen-background";
 import { FlatList } from "react-native-gesture-handler";
+import { BlurTargetView } from "expo-blur";
+import {View} from "react-native";
 
 export default function CreditDetailScreen({ route }: any) {
   const { creditID, profilePath, creditName } = route?.params;
@@ -17,6 +19,8 @@ export default function CreditDetailScreen({ route }: any) {
   const [movies, setMovies] = useState<any>(null);
   const [images, setImages] = useState<any>(null);
   const [backdrop, setBackdrop] = useState<any>(null);
+
+  const ref = useRef<View | null>(null);
 
   useEffect(() => {
     async function loadCreditDetails() {
@@ -53,6 +57,7 @@ export default function CreditDetailScreen({ route }: any) {
   };
 
   return (
+    <BlurTargetView ref={ref} style={{flex:1}}>
     <ScreenBackground>
       <FlatList
         data={sections}
@@ -66,10 +71,12 @@ export default function CreditDetailScreen({ route }: any) {
             creditName={creditName}
             backdrop={backdrop} 
             profilePath={profilePath}
+            ref={ref}
           />
         }
       />
       <BottomBar />
     </ScreenBackground>
+    </BlurTargetView>
   );
 }

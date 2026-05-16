@@ -112,7 +112,8 @@ export default function MovieDetailScreen({ route }: any) {
               title={title}
               cast={credits?.cast}
               ref={ref}
-            />}
+            />
+          }
         />
         {(isActive || isActiveUsers) && <BottomBar />}
     </ScreenBackground>

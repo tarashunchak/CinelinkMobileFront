@@ -3,12 +3,13 @@ import { Text, View } from "react-native";
 import { textStyle } from "@/styles/textStyles";
 import { PressableScale } from "react-native-pressable-scale";
 
-export default function ActionButtonsBlock({ movieID, onAddToWatchlist, onRecommend }
-  : {
-    movieID: number | undefined,
-    onAddToWatchlist: () => void | undefined,
-    onRecommend: () => void | undefined,
-  }) {
+interface Props {
+  movieID?: number;
+  onAddToWatchlist?: () => void;
+  onRecommend?: () => void;
+};
+
+export default function ActionButtonsBlock({ movieID, onAddToWatchlist, onRecommend }: Props) {
   return (
     <View style={styles.view}>
       <PressableScale style={[styles.buttonView, styles.markAsWatchedBtn]}
@@ -28,7 +29,7 @@ export default function ActionButtonsBlock({ movieID, onAddToWatchlist, onRecomm
 const styles = {
   view: {
     marginBottom: "5%",
-    marginTop: "15%",
+    marginTop: "10%",
     flexDirection: "row",
     paddingLeft: 2,
     paddingRight: 2,

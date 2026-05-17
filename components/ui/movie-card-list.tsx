@@ -81,6 +81,5 @@ const styles = StyleSheet.create({
     position: "relative",
     backgroundColor: "transparent",
     marginTop: "2%",
-    marginBottom: hp(Platform.OS === "ios" ? "10%" : "7.8%")
   }
 });

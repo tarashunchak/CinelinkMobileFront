@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { FlatList, StyleSheet } from "react-native";
 import MovieCard from "./MovieCard";
 import { Movie_I } from "../models/movie";
@@ -21,24 +21,24 @@ export default function HorizontalMoviesList(
     loadContent();
   }, [moviesList]);
 
+  const renderItem = useCallback(({ item }: any) => 
+    <MovieCard
+      data={{
+        movie_id: item?.id,
+        poster_path: item?.poster_path,
+        inCinemas,
+        maximum: item?.maximum,
+        title: item?.title,
+      }}
+    />, [])
+
   return (
     <FlatList
       style={styles.flatList}
       horizontal
       data={movies}
       keyExtractor={(item, _) => String(item?.id)}
-      renderItem={({ item }) => (
-        <MovieCard
-          data={{
-            movie_id: item?.id,
-            poster_path: item?.poster_path,
-            inCinemas,
-            maximum: item?.maximum,
-            title: item?.title,
-          }}
-        />
-      )
-      }
+      renderItem={renderItem}
       ListFooterComponent={<EmptyMovieCard onPress={() => { }} />}
     />
   )
@@ -46,7 +46,8 @@ export default function HorizontalMoviesList(
 
 const styles = StyleSheet.create({
   flatList: {
-    height: 160,
+    minHeight: 155,
+    maxHeight: 165,
     backgroundColor: "rgba(255, 255, 255, 0.05)",
     padding: 4,
     borderWidth: 0.5,

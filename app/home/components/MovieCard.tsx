@@ -8,6 +8,7 @@ import { Image } from "expo-image";
 import { Skeleton } from "react-native-skeletons";
 import Animated, { createAnimatedComponent, useAnimatedProps } from "react-native-reanimated";
 import AnimatedFastText from "@/components/ui/animated-fast-text";
+import AnimatedFastImage from "@/components/ui/animated-fast-image";
 
 export interface MovieCard_I {
   movie_id: number;
@@ -20,8 +21,6 @@ export interface MovieCard_I {
 function MovieCard({ data }: { data: MovieCard_I }) {
   const navigator = useNavigation();
   if (!data) return <Skeleton style={styles.view} />
-
-  const AnimatedFastImage = createAnimatedComponent(Image);
 
   return (
     <PressableScale style={styles.view}

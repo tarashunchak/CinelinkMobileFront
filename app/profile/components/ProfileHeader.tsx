@@ -24,7 +24,7 @@ export default function ProfileHeader({ bgUrl, onBack, isCurrentUser }: Props) {
         <Image
           source={bgUrl
             ? { uri: bgUrl }
-            : require("../assets/profileBackground.png")}
+            : require("../assets/gradientBackground.jpg")}
           style={styles.bgImage}
           cachePolicy="disk"
         />
@@ -47,10 +47,11 @@ export default function ProfileHeader({ bgUrl, onBack, isCurrentUser }: Props) {
 
 const styles = StyleSheet.create({
   bgImage: {
-    height: hp("36%"),
+    height: hp("35%"),
     width: wp(100),
     position: "absolute",
     top: 0,
     left: 0,
+    right: 0,
   }
 });

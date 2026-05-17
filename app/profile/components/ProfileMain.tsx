@@ -1,4 +1,4 @@
-import React, { memo, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { ActionButton } from "./ActionButton";
 import { UserProfile_T } from "../types";
@@ -20,7 +20,7 @@ type Props = {
   ref: any;
 };
 
-function ProfileMain({
+export default function ProfileMain({
   isLoading,
   user,
   isCurrentUser,
@@ -60,7 +60,7 @@ function ProfileMain({
             sharedTransitionTag={`user-${user?.user_id}-avatar`}
             source={user?.avatar_url}
             style={{ width: "100%", height: "100%", borderRadius: 999 }}
-            cachePolicy="memory"
+            cachePolicy="disk"
           />
           {isOnline && <View style={styles.isOnlineDot}></View>}
         </PressableScale>
@@ -78,13 +78,13 @@ function ProfileMain({
 
       {
         fullName && <Text
-          style={textStyle.white20}
+          style={textStyle.white22}
         >
           {fullName}
         </Text>
       }
       <Text
-        style={textStyle.gray14}
+        style={textStyle.gray16}
       >
         {`@${username}`}
       </Text>
@@ -115,8 +115,6 @@ function ProfileMain({
   );
 };
 
-export default memo(ProfileMain);
-
 const styles = StyleSheet.create({
   view: {
     width: "100%",
@@ -135,8 +133,6 @@ const styles = StyleSheet.create({
   },
   joinedAt: {
     marginTop: 10,
-    flexDirection: "row",
-    gap: 5,
   },
   bio: {
     padding: 5,

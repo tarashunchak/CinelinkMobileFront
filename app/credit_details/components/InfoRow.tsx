@@ -7,7 +7,13 @@ export default function InfoRow({ left, right }: { left: string, right: string |
     return (
       <View style={styles.view}>
         <Text style={textStyle.yellow16}>{left}: </Text>
-        <Text style={textStyle.white16}>{`${right}`}</Text>
+        <Text 
+          style={[textStyle.white16, {maxWidth: "65%"}]}
+          numberOfLines={1}
+          ellipsizeMode="tail"
+        >
+          {`${right}`}
+        </Text>
       </View>
     )
   }

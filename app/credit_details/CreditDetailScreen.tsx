@@ -9,7 +9,7 @@ import ActionButtonsBlock from "./components/ActionButtonsBlock";
 import ScreenBackground from "@/components/ui/screen-background";
 import { FlatList } from "react-native-gesture-handler";
 import { BlurTargetView } from "expo-blur";
-import {View} from "react-native";
+import { View } from "react-native";
 
 export default function CreditDetailScreen({ route }: any) {
   const { creditID, profilePath, creditName } = route?.params;
@@ -57,26 +57,26 @@ export default function CreditDetailScreen({ route }: any) {
   };
 
   return (
-    <BlurTargetView ref={ref} style={{flex:1}}>
-    <ScreenBackground>
-      <FlatList
-        data={sections}
-        renderItem={renderItem}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ padding: "1%", }}
-        ListHeaderComponent={
-          <MainInfo 
-            creditID={creditID}
-            credit={credit} 
-            creditName={creditName}
-            backdrop={backdrop} 
-            profilePath={profilePath}
-            ref={ref}
-          />
-        }
-      />
-      <BottomBar />
-    </ScreenBackground>
+    <BlurTargetView ref={ref} style={{ flex: 1 }}>
+      <ScreenBackground>
+        <FlatList
+          data={sections}
+          renderItem={renderItem}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingHorizontal: "1%", }}
+          ListHeaderComponent={
+            <MainInfo
+              creditID={creditID}
+              credit={credit}
+              creditName={creditName}
+              backdrop={backdrop}
+              profilePath={profilePath}
+              ref={ref}
+            />
+          }
+        />
+        <BottomBar />
+      </ScreenBackground>
     </BlurTargetView>
   );
 }

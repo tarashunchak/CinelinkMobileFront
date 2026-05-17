@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React from "react";
 import { Image, Modal, Pressable, StyleSheet, View } from "react-native";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { PressableScale } from "react-native-pressable-scale";
@@ -13,7 +13,7 @@ interface Props {
   ref: any
 };
 
-function ProfileModal( props : Props) {
+export default function ProfileModal( props : Props) {
   const { isOpen, profilePath, onClose, creditID , ref } = props;
   console.warn("Props: ", props);
   return (
@@ -60,8 +60,6 @@ function ProfileModal( props : Props) {
     </Modal>
   );
 };
-
-export default memo(ProfileModal);
 
 const styles = StyleSheet.create({
   background: {

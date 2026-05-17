@@ -13,7 +13,7 @@ interface Props {
   ref: any
 };
 
-function PosterModal({ isOpen, posterPath, onClose, movieID, ref }: Props) {
+export default function PosterModal({ isOpen, posterPath, onClose, movieID, ref }: Props) {
   return (
     <Modal
       statusBarTranslucent
@@ -58,8 +58,6 @@ function PosterModal({ isOpen, posterPath, onClose, movieID, ref }: Props) {
     </Modal>
   );
 };
-
-export default memo(PosterModal);
 
 const styles = StyleSheet.create({
   background: {

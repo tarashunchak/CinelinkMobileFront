@@ -10,4 +10,4 @@ export function EmailVerificationRequest(email: any) {
       console.log("Status:", res.status);
       //return res.json();
     })
-}
+};

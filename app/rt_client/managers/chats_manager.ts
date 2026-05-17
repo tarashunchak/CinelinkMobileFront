@@ -5,6 +5,9 @@ import { EntinyManager } from "./base_class";
 import { useEffect } from "react";
 import { useShallow } from "zustand/react/shallow";
 import { ChatManager } from "../chat_manager/chat_manager";
+import { timestamp } from "@/app/direct_chat/utils/utils";
+import { UsersManager } from "./users_manager";
+import { useChatLastMessage } from "../rt_client";
 
 type Chat_T = {
   chat_id: number;
@@ -30,7 +33,7 @@ interface ChatState {
   lastMessages: Record<number, LastMessage_T>;
   lastSeenMessagesIDs: Record<number, number>;
   _setLastMessage: (chatID: ChatID, msg: LastMessage_T) => void;
-  _setTypingStatus: (chatID: ChatID, userID: UserID, status: boolean ) =>  void;
+  _setTypingStatus: (chatID: ChatID, userID: UserID, status: boolean) => void;
   _setLastSeenMessagesIDs: (chatID: ChatID, messageID: number) => void;
   _setManyLastSeenMessagesIDs: (items: Map<ChatID, number>) => void;
   _add: (chatID: ChatID, chat: Chat_T) => void;
@@ -45,33 +48,33 @@ const useChatStore = create<ChatState>((set) => ({
   lastMessages: {},
   lastSeenMessagesIDs: {},
   _setLastMessage: (chatID, msg) => set((s) => ({
-    lastMessages: {...s.lastMessages, [chatID]: msg}
+    lastMessages: { ...s.lastMessages, [chatID]: msg }
   })),
-  _setLastSeenMessagesIDs: (chatID, messageID) => set((s)=>({
-    lastSeenMessagesIDs: {...s.lastSeenMessagesIDs, [chatID]: messageID}
+  _setLastSeenMessagesIDs: (chatID, messageID) => set((s) => ({
+    lastSeenMessagesIDs: { ...s.lastSeenMessagesIDs, [chatID]: messageID }
   })),
-  _setManyLastSeenMessagesIDs: (items) => set((s)=>({
+  _setManyLastSeenMessagesIDs: (items) => set((s) => ({
 
   })),
   _setTypingStatus: (chatID, userID, status) => set((s) => ({
     typingStatus: {
-      ...s.typingStatus, [chatID]: { 
-        ...s.typingStatus[chatID], 
+      ...s.typingStatus, [chatID]: {
+        ...s.typingStatus[chatID],
         [userID]: status
       }
     }
   })),
   _add: (chatID, chat) => set((s) => ({
-    chats: {...s.chats, [chatID]: chat}
+    chats: { ...s.chats, [chatID]: chat }
   })),
   _addMany: (newChats) => set((s) => ({
-    chats: {...s.chats, ...Object.fromEntries(newChats)}
+    chats: { ...s.chats, ...Object.fromEntries(newChats) }
   })),
-  _remove: (chatID) => set((s)=>{
-    const {[chatID]: _, ...remainingChats } = s.chats;
-    return {chats: remainingChats}
+  _remove: (chatID) => set((s) => {
+    const { [chatID]: _, ...remainingChats } = s.chats;
+    return { chats: remainingChats }
   }),
-  _update: (chatID, data) => set((s)=>({
+  _update: (chatID, data) => set((s) => ({
 
   })),
 }));
@@ -79,41 +82,60 @@ const useChatStore = create<ChatState>((set) => ({
 export class ChatsManager extends EntinyManager<Chat_T> {
   private static instance: ChatsManager;
   private currUserID: number = 0;
-  constructor(){
+  private isLoading: boolean = false;
+
+  constructor() {
     super();
   };
 
   public static getInstance(): ChatsManager {
-    if(!ChatsManager.instance)
+    if (!ChatsManager.instance)
       ChatsManager.instance = new ChatsManager();
     return ChatsManager.instance;
   };
 
-  public init(userID: UserID){
+  public init(userID: UserID) {
     this.currUserID = userID;
     this.load(userID);
   };
 
-  public async load(userID: UserID = 0) {
-    const resp = await fetch(`${API_URL}/users/${this.currUserID}/chats`);
-    const data = await resp.json();
-    if(!resp.ok || data?.status !== 200)
-      return;
+  public async load(chatID: ChatID= 0) {
+    if (this.isLoading) return;
 
-    const map = new Map<number, Chat_T>(data?.results?.map((chat: Chat_T)=> [chat.chat_id, chat]));
-    useChatStore.getState()._addMany(map);
+    try {
+      if (chatID) {
+        const resp = await fetch(`${API_URL}/chats/${chatID}`);
+        const data = await resp.json();
+        if (!resp.ok || data?.status !== 200)
+          return;
+        useChatStore.getState()._add(data.chat_id, data);
+      }else {
+        const resp = await fetch(`${API_URL}/users/${this.currUserID}/chats`);
+        const data = await resp.json();
+        if (!resp.ok || data?.status !== 200)
+          return;
+        const map = new Map<number, Chat_T>(data?.results?.map((chat: Chat_T) => [chat.chat_id, chat]));
+        useChatStore.getState()._addMany(map);
+      }
+    } finally {
+      this.isLoading = false;
+    }
   };
 
-  public setTypingStatus(chatID: ChatID, userID: UserID, status: boolean){
+  public setTypingStatus(chatID: ChatID, userID: UserID, status: boolean) {
     console.warn("SET TYPING STATUS: ", chatID, " ", userID, " ", status);
     useChatStore.getState()._setTypingStatus(chatID, userID, status);
   };
 
-  public add(chatID: ChatID, chat: any){
+  public setLastMessage(chatID: ChatID, msg: any) {
+    useChatStore.getState()._setLastMessage(chatID, msg);
+  };
+
+  public add(chatID: ChatID, chat: any) {
     useChatStore.getState()._add(chatID, chat);
   };
 
-  public addMany(chats: Map<number, Chat_T>){
+  public addMany(chats: Map<number, Chat_T>) {
     useChatStore.getState()._addMany(chats);
   };
 
@@ -134,36 +156,59 @@ export class ChatsManager extends EntinyManager<Chat_T> {
   };
 };
 
-async function load(chatID: ChatID = 0){
+async function load(chatID: ChatID = 0) {
   await ChatsManager.getInstance().load(chatID);
 };
 
-export function useUserChats(): Chat_T[]{
-  const chats = useChatStore(useShallow((s) => Object.values(s.chats)))
-  useEffect(()=>{
-    if(chats.length === 0) load();
-    console.warn("useUserChats");
+export function useUserChats(): Chat_T[] {
+  const chats = useChatStore(useShallow((s) => Object.values(s.chats)));
+  const lastMessages = useChatStore(s => s.lastMessages);
+
+  useEffect(() => {
+    if (chats.length === 0) load();
   }, [chats.length]);
+
   return chats;
 };
 
 export function useChat(chatID: ChatID): any {
   const chat = useChatStore(s => s.chats[chatID] || EMPTY_OBJECT);
-  useEffect(()=>{
-    if(chat === EMPTY_OBJECT) load(chatID);
+  useEffect(() => {
+    if (chat === EMPTY_OBJECT)
+      load(chatID);
     console.warn("useChat");
   }, [chatID, chat]);
   return chat;
 };
 
-export function useTypingStatus(chatID: ChatID, userID: UserID): boolean{
+export function useTypingStatus(chatID: ChatID, userID: UserID): boolean {
   const status = useChatStore(s => s.typingStatus[chatID]?.[userID] || false)
-  useEffect(()=>{
+  useEffect(() => {
     console.warn("STATUS: ", status);
   }, [chatID, userID, status]);
   return status;
 };
 
-export function useUnseenMessagesCount(chatID: ChatID = 0): number{
+export function useLastChatMessage(chatID: ChatID): any {
+  /*const message: Message_T = useMessageStore(s => s.messages[chatID]?.[0]);*/
+  const message = useChatStore(s => s.lastMessages[chatID]);
+  useEffect(() => {
+    if (!message)
+      load(chatID);
+  }, [chatID, message]);
+
+  if (!message)
+    return "";
+
+  const user = UsersManager.getInstance().get(message?.user_id);
+  const username = user?.username ?? "Unknown";
+
+  return {
+    text: `${username}: ${message?.message}`,
+    time: timestamp(new Date(message?.timestamp)),
+  }
+};
+
+export function useUnseenMessagesCount(chatID: ChatID = 0): number {
   return 0;
 };

@@ -1,29 +1,32 @@
 import { textStyle } from "@/styles/textStyles";
-import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import React, { memo } from "react";
+import { View, Text, StyleSheet } from "react-native";
+import { PressableScale } from "react-native-pressable-scale";
 
-export default function ActionButtonsBlock() {
+function ActionButtonsBlock() {
   return (
     <View style={styles.mainView}>
-      <TouchableOpacity style={styles.subscribeBtn}>
+      <PressableScale style={styles.subscribeBtn}>
         <Text style={textStyle.white18}>Subscribe</Text>
-      </TouchableOpacity>
+      </PressableScale>
 
-      <TouchableOpacity style={styles.favouriteBtn}>
+      <PressableScale style={styles.favouriteBtn}>
         <Text style={textStyle.white18}>Mark as Favourite</Text>
-      </TouchableOpacity>
+      </PressableScale>
 
-      <TouchableOpacity style={styles.shareBtn}>
+      <PressableScale style={styles.shareBtn}>
         <Text style={textStyle.white18}>Share</Text>
-      </TouchableOpacity>
+      </PressableScale>
     </View>
   );
 };
 
+export default memo(ActionButtonsBlock);
+
 const styles = StyleSheet.create({
   mainView: {
     marginBottom: "5%",
-    marginTop: "15%",
+    marginTop: "5%",
     flexDirection: "row",
     paddingLeft: 2,
     paddingRight: 2,

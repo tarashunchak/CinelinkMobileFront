@@ -18,11 +18,12 @@ import EditHeader from "./components/EditHeader";
 import { heightPercentageToDP } from "react-native-responsive-screen";
 import Animated, { useAnimatedKeyboard, useAnimatedStyle } from "react-native-reanimated";
 import { useChatMessages } from "../rt_client/managers/messages_manager";
+import { useChat } from "../rt_client/managers/chats_manager";
 
 export default function DirectChatScreen({ route }: any) {
   const { height } = useAnimatedKeyboard();
   const { chatID, imgUrl, name } = route?.params;
-  const [chat, setChat] = useState();
+  const chat = useChat(chatID);
   const [isFloatButtonVisible, setFloatButtonVisible] = useState<boolean>(false);
   const { isEditMode, enable, disable, toggle } = useEditMode(3);
   const [selected, setSelected] = useState<Set<number>>(new Set());
@@ -38,11 +39,12 @@ export default function DirectChatScreen({ route }: any) {
       let isActive = true;
 
       async function loadContent() {
-        const chatData = await RTClient.getChat(chatID);
-        if (isActive) setChat(chatData);
+        //const chatData = useChat(chatID);
+        if (isActive) false;
         await RTClient.setChatEntering(chatID, getCurrentUserID());
       };
       loadContent();
+      console.warn("Chat: ", chat);
 
       return () => {
         isActive = false;
@@ -61,7 +63,7 @@ export default function DirectChatScreen({ route }: any) {
     <ScreenBackground>
       <KeyboardAvoidingView
         style={{ flex: 1 }}
-        behavior={Platform.OS === "ios" ? "padding" : undefined}
+        behavior={Platform.OS === "ios" ? "padding" : "padding"}
         keyboardVerticalOffset={Platform.OS === "ios" ? 90 : 0}
         enabled={true}
       >
@@ -70,8 +72,8 @@ export default function DirectChatScreen({ route }: any) {
           : 
           <Header 
             chatID={chat?.info?.chat_id} 
-            peer={chat?.peer} 
-            imgUrl={imgUrl}  
+            peerID={chat?.peer_id["Int32"]} 
+            imgUrl={imgUrl ?? chat?.info?.image}  
             name={name}
           />
         }
@@ -81,7 +83,7 @@ export default function DirectChatScreen({ route }: any) {
           keyExtractor={(item) => String(item.message_id)}
           renderItem={renderItem}
           contentContainerStyle={{
-            paddingTop: heightPercentageToDP(10),
+            paddingTop: heightPercentageToDP(8),
             paddingBottom: 10,
           }}
           keyboardShouldPersistTaps="always"

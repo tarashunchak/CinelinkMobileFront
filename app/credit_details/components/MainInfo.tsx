@@ -1,15 +1,14 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { StyleSheet, View } from "react-native";
 import ReturnArrowButton from "@/components/ui/returnArrowButton";
 import { textStyle } from "@/styles/textStyles";
-import { useNavigation } from "expo-router";
 import InfoBlock from "./InfoBlock";
 import AnimatedFastImage from "@/components/ui/animated-fast-image";
 import AnimatedFastText from "@/components/ui/animated-fast-text";
 import HeaderContainer from "@/components/ui/header-container";
 import { PressableScale } from "react-native-pressable-scale";
-import PosterModal from "@/app/movie_details/components/PosterModal";
+import ProfileModal from "./ProfileModal";
 
 export interface CreditMainInfo_I {
   id: number;
@@ -34,58 +33,47 @@ export default function MainInfo(
   return (
     <View>
       <AnimatedFastImage
-        source={{ uri: `https://image.tmdb.org/t/p/w300${backdrop?.[backdrop?.length - 1] ?? ""}` }}
+        source={{ uri: `https://image.tmdb.org/t/p/w500${backdrop?.[backdrop?.length - 1] ?? ""}` }}
         style={styles.backdrop}
+        cachePolicy="disk"
       />
       <View style={styles.darkRect}>
         <HeaderContainer style={{ flexDirection: "column", alignSelf: "center", justifyContent: "space-between", width: wp(98) }}>
-          <ReturnArrowButton />
+          <ReturnArrowButton style={{ marginTop: "2%" }} />
           <AnimatedFastText
             sharedTransitionTag={`credit-${creditID}-name`}
-            style={[textStyle.white24, { width: "98%", marginTop: "5%" }]}
+            style={[textStyle.white26, { width: "98%", marginTop: "10%" }]}
             numberOfLines={1}
             ellipsizeMode="tail"
           >
             {creditName}
           </AnimatedFastText>
           <View style={styles.mainView}>
-            <View style={
-              {
-                flexDirection: "row",
-                marginTop: "3%",
-                width: wp(96),
-                height: 220,
-                justifyContent: "space-between",
-                alignSelf: "center",
-              }
-            }>
-
-              <PressableScale
-                onPress={() => {setIsOpen(true)}}
-                style={styles.poster}
-              >
-                <AnimatedFastImage
-                  sharedTransitionTag={`credit-${credit?.id}-profile`}
-                  source={{ uri: `https://image.tmdb.org/t/p/w300${profilePath}` }}
-                  style={styles.image}
-                  cachePolicy="disk"
-                />
-              </PressableScale>
-              <InfoBlock creditInfo={credit} />
-            </View>
+            <PressableScale
+              onPress={() => { setIsOpen(true) }}
+              style={styles.profile}
+            >
+              <AnimatedFastImage
+                sharedTransitionTag={`credit-${credit?.id}-profile`}
+                source={{ uri: `https://image.tmdb.org/t/p/w300${profilePath}` }}
+                style={styles.image}
+                cachePolicy="disk"
+              />
+            </PressableScale>
+            <InfoBlock creditInfo={credit} />
           </View>
         </HeaderContainer>
       </View>
-      <PosterModal
+      <ProfileModal
         isOpen={isOpen}
-        onClose={()=>{setIsOpen(false)}}
+        onClose={() => { setIsOpen(false) }}
         profilePath={profilePath}
         ref={ref}
         creditID={credit?.id}
       />
     </View>
   )
-}
+};
 
 const styles = StyleSheet.create({
   backdrop: {
@@ -93,16 +81,16 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    height: hp("40%"),
+    height: hp("42%"),
     marginHorizontal: "-2%",
   },
   darkRect: {
-    backgroundColor: "rgba(0, 0, 0, 0.75)",
-    height: hp("40%"),
+    backgroundColor: "rgba(0, 0, 0, 0.7)",
+    height: hp("42%"),
     marginHorizontal: "-2%",
     width: "104%",
   },
-  poster: {
+  profile: {
     width: "40%",
     height: "100%",
     backgroundColor: "rgba(255, 255, 255, 0.05)",
@@ -117,7 +105,7 @@ const styles = StyleSheet.create({
   },
   mainView: {
     flexDirection: "row",
-    width: wp(100),
+    width: wp(98),
     height: 220,
     justifyContent: "space-between",
   }

@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { textStyle } from "@/styles/textStyles";
 import { PressableScale } from "react-native-pressable-scale";
 
@@ -12,24 +12,31 @@ interface Props {
 export default function ActionButtonsBlock({ movieID, onAddToWatchlist, onRecommend }: Props) {
   return (
     <View style={styles.view}>
-      <PressableScale style={[styles.buttonView, styles.markAsWatchedBtn]}
-        onPress={onAddToWatchlist}>
-        <Text style={styles.buttonText}>Add to Watchlist</Text>
+      <PressableScale 
+        onPress={onAddToWatchlist}
+        style={[styles.buttonView, styles.markAsWatchedBtn]}
+      >
+        <Text style={[textStyle.white18, styles.buttonText]}>
+          Add to Watchlist
+        </Text>
       </PressableScale>
 
-      <PressableScale style={[styles.buttonView, styles.shareBtn]}
+      <PressableScale 
         onPress={onRecommend}
+        style={[styles.buttonView, styles.shareBtn]}
       >
-        <Text style={styles.buttonText}>Recommend</Text>
+        <Text style={[textStyle.white18, styles.buttonText]}>
+          Recommend
+        </Text>
       </PressableScale>
     </View >
   );
 };
 
-const styles = {
+const styles = StyleSheet.create({
   view: {
     marginBottom: "5%",
-    marginTop: "10%",
+    marginTop: "5%",
     flexDirection: "row",
     paddingLeft: 2,
     paddingRight: 2,
@@ -58,11 +65,8 @@ const styles = {
     borderColor: "rgba(48, 130, 254, 0.3)",
     backgroundColor: "rgba(48, 130, 254, 1)",
   },
-  buttonText: [
-    textStyle.white18,
-    {
-      width: "100%",
-      textAlign: "center"
-    }
-  ]
-};
+  buttonText: {
+    width: "100%",
+    textAlign: "center"
+  },
+});

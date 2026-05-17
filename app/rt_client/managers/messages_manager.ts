@@ -5,6 +5,8 @@ import { useEffect } from "react";
 import { API_URL } from "@/api/API_CONFIG";
 import { UsersManager } from "./users_manager";
 import { timestamp } from "@/app/direct_chat/utils/utils";
+import { ChatManager } from "../chat_manager/chat_manager";
+import { ChatsManager } from "./chats_manager";
 
 type Message_T = {
   user_id: number;
@@ -60,7 +62,7 @@ export class MessagesManager extends EntinyManager<Message_T> {
         const current = useMessageStore.getState().messages;
         if (JSON.stringify(current) !== JSON.stringify(reversed)) {
           this.addArray(chatID, reversed);
-          //useChatStore.getState()._setLastMessage(this.chatID, reversed[0])
+          //ChatsManager.getInstance().setLastMessage(chatID, reversed[0])
         }
         //this.lastSeenMessageId = reversed[0]?.message_id;
       }
@@ -71,6 +73,7 @@ export class MessagesManager extends EntinyManager<Message_T> {
 
   public add(id: number, item: Message_T): void {
     useMessageStore.getState()._add(id, item)
+    ChatsManager.getInstance().setLastMessage(id, item)
   };
 
   public addMany(msgs: Map<number, Message_T>): void {

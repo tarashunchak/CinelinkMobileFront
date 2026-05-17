@@ -1,7 +1,7 @@
 import ReturnArrowButton from "@/components/ui/returnArrowButton";
 import { textStyle } from "@/styles/textStyles";
 import { useNavigation } from "expo-router";
-import React, { memo, useEffect, useState } from "react";
+import React, { memo, useCallback, useEffect, useState } from "react";
 import { View, Text, Image, TouchableOpacity, Platform, StyleSheet } from "react-native";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { ChatMember } from "@/app/rt_client/models/models";
@@ -16,44 +16,44 @@ import HeaderContainer from "@/components/ui/header-container";
 
 interface Props {
   chatID: number;
-  peer: any;
+  peerID: number;
   imgUrl: string;
   name: string;
 };
 
-function Header({ chatID, peer, imgUrl, name }: Props) {
+function Header({ chatID, peerID, imgUrl, name }: Props) {
   const navigator = useNavigation();
   const [lastSeen, setLastSeen] = useState<string>();
-  const chat = useChat(chatID);
 
-  const insets = useSafeAreaInsets();
-
-  const isOnline = useUserStatus(peer?.user_id);
-  const isTyping = useTypingStatus(chatID, peer?.user_id);
+  const isOnline = useUserStatus(peerID);
+  const isTyping = useTypingStatus(chatID, peerID);
 
   useEffect(() => {
     async function loadContent() {
-      const data = await GetUserLastSeenTimestamp(peer?.user_id);
-      //if (data) setLastSeen(data);
+      const data = await GetUserLastSeenTimestamp(peerID);
+      if (data) setLastSeen(data);
     };
     loadContent();
   }, [chatID, isOnline]);
 
+  const openProfile = useCallback(()=>{
+    navigator.push("UserProfileScreen", {
+      userID: peerID,
+      avatarUrl: imgUrl,
+    });
+  }, [chatID]);
+
   return (
     <HeaderContainer style={styles.view}>
-      <View style={{ flexDirection: "row", gap: wp(5) }}>
+      <View style={{ flexDirection: "row", gap: wp(5), alignItems:"center" }}>
         <ReturnArrowButton />
         <View style={[styles.chatpeer.view]}>
           <TouchableOpacity
             style={styles.chatpeer.img}
-            onPress={() => {
-              navigator.push("UserProfileScreen", {
-                userID: peer?.user_id,
-              });
-            }}
+            onPress={openProfile}
           >
             <AnimatedFastImage
-              sharedTransitionTag={`chat-${chat?.chat_id}-image`}
+              sharedTransitionTag={`chat-${chatID}-image`}
               style={stylesR.avatarImg}
               source={{ uri: imgUrl }}
               cachePolicy="disk"
@@ -64,7 +64,7 @@ function Header({ chatID, peer, imgUrl, name }: Props) {
           <View style={styles.chatpeer.text.view}>
             <AnimatedFastText
               style={textStyle.white18}
-              sharedTransitionTag={`chat-${chat?.chat_id}-name`}
+              sharedTransitionTag={`chat-${chatID}-name`}
             >
               {name}
             </AnimatedFastText>
@@ -85,10 +85,10 @@ function Header({ chatID, peer, imgUrl, name }: Props) {
         </View>
 
       </View>
-
       <TouchableOpacity style={stylesR.dots}>
         <Image source={require("@/app/direct_chat/assets/dots-vertical.png")} style={{ height: "70%", width: "70%" }} />
       </TouchableOpacity>
+      
     </HeaderContainer>
   );
 };
@@ -135,7 +135,7 @@ const styles = {
   view: {
     backgroundColor: "rgba(20, 20, 20, 1)",
     flexDirection: "row",
-    alignItems: "flex-end",
+    alignItems:"center",
     justifyContent: "space-between",
     padding: "3%",
     paddingLeft: "2%",

@@ -4,9 +4,8 @@ import { FlatList, View, Text, StyleSheet } from "react-native";
 import { PressableScale } from "react-native-pressable-scale";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { useNavigation } from "expo-router";
-import {useUnseenMessagesCount, useTypingStatus, useUserChats } from "@/app/rt_client/managers/chats_manager";
+import { useLastChatMessage, useUnseenMessagesCount, useTypingStatus, useUserChats } from "@/app/rt_client/managers/chats_manager";
 import AnimatedFastImage from "@/components/ui/animated-fast-image";
-import { useLastChatMessage } from "@/app/rt_client/managers/messages_manager";
 import { useUserStatus } from "@/app/rt_client/managers/users_manager";
 import AnimatedFastText from "@/components/ui/animated-fast-text";
 

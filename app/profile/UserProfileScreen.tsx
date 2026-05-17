@@ -99,7 +99,7 @@ function UserProfileScreen({ route }: any) {
               }}
               onChat={() => {
                 console.warn("On chat");
-                navigator.navigate("DirectChatScreen", { chatID: chatID });
+                navigator.navigate("DirectChatScreen", { chatID: chatID, imgUrl: user?.avatar_url, name: `${user?.first_name} ${user?.last_name}` });
               }}
               ref={ref}
             />

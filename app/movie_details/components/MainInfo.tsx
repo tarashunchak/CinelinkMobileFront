@@ -1,4 +1,4 @@
-import React, { memo, useRef, useState } from "react";
+import React, { useState } from "react";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { StyleSheet, Text, View } from "react-native";
 import ReturnArrowButton from "@/components/ui/returnArrowButton";
@@ -12,9 +12,8 @@ import AnimatedFastImage from "@/components/ui/animated-fast-image";
 import AnimatedFastText from "@/components/ui/animated-fast-text";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import HeaderContainer from "@/components/ui/header-container";
-import { BlurTargetView, BlurView } from "expo-blur";
 
-function MainInfo(
+export default function MainInfo(
   { movie, inCinemas = false, maximum, posterPath, backdropPath, title, cast, ref }
     : {
       movie?: Movie,
@@ -55,18 +54,18 @@ function MainInfo(
   );
 
   return (
-    <View>
+    <>
       <AnimatedFastImage
         sharedTransitionTag={`movie-${movie?.id}-backdrop`}
         source={{ uri: `https://image.tmdb.org/t/p/w500${backdropPath}` }}
         style={styles.backdrop}
-        cachePolicy="memory-disk"
+        cachePolicy="disk"
       />
       <View style={[styles.darkRect]}>
         <HeaderContainer style={{ flexDirection: "column", alignSelf: "center", justifyContent: "space-between", width: wp(98) }}>
           <ReturnArrowButton style={{ marginTop: "2%" }} />
           <AnimatedFastText
-            style={[textStyle.white24, { width: "98%", marginTop: "5%" }]}
+            style={[textStyle.white26, { maxWidth: "98%", marginTop: "10%" }]}
             sharedTransitionTag={`movie-${movie?.id}-title`}
             numberOfLines={1}
             ellipsizeMode="tail"
@@ -74,17 +73,7 @@ function MainInfo(
             {title ?? movie?.title}
           </AnimatedFastText>
 
-          <View style={
-            {
-              flexDirection: "row",
-              marginTop: "3%",
-              width: wp(96),
-              height: 220,
-              justifyContent: "space-between",
-              alignSelf: "center",
-            }
-          }>
-
+          <View style={styles.mainView}>
             <PressableScale
               onPress={() => { setIsOpen(true); }}
               style={styles.posterView}
@@ -102,11 +91,9 @@ function MainInfo(
         movieID={movie?.id}
         ref={ref}
       />
-    </View>
+    </>
   )
 };
-
-export default memo(MainInfo);
 
 const styles = StyleSheet.create({
   backdrop: {
@@ -114,12 +101,12 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    height: hp("40%"),
+    height: hp("42%"),
     marginHorizontal: "-2%",
   },
   darkRect: {
-    backgroundColor: "rgba(0, 0, 0, 0.75)",
-    height: hp("40%"),
+    backgroundColor: "rgba(0, 0, 0, 0.7)",
+    height: hp("42%"),
     marginHorizontal: "-2%",
     width: "104%",
   },
@@ -147,4 +134,10 @@ const styles = StyleSheet.create({
     textAlign: "center",
     alignSelf: "center"
   },
+  mainView: {
+    flexDirection: "row",
+    width: wp(98),
+    height: 220,
+    justifyContent: "space-between",
+  }
 });

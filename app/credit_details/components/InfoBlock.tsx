@@ -22,14 +22,12 @@ function InfoBlock({ creditInfo }: { creditInfo: CreditInfo_I }) {
   if (!creditInfo) return <Skeleton style={styles.mainView}/>
   return (
     <View style={styles.mainView}>
-      <View>
         <InfoRow left="Birthday" right={creditInfo?.birthday} />
         <InfoRow left="Deathday" right={creditInfo?.deathday} />
         <InfoRow left="Gender" right={GENDER[creditInfo?.gender]} />
         <InfoRow left="Place of birth" right={creditInfo?.place_of_birth} />
         <InfoRow left="Department" right={creditInfo?.known_for_department} />
         <InfoRow left="Popularity" right={String(creditInfo?.popularity?.toFixed(4))} />
-      </View>
 
       <PressableScale style={styles.imdbBtnView}
         onPress={async () => {

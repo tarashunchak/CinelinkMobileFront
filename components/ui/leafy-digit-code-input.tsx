@@ -1,4 +1,4 @@
-import LeafyTextInput from "@/components/ui/leafy-text-input";
+import LeafyTextInput from "@/components/ui/text-input";
 import React from "react";
 import { Dimensions, View } from "react-native";
 

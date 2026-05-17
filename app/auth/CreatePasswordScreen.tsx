@@ -2,7 +2,7 @@ import { LoginRequest } from "@/api/auth/loginPageApi";
 import LeafyContinueButton from "@/components/ui/leafy-continue-button";
 import LeafyReturnArrowButton from "@/components/ui/returnArrowButton";
 import LeafyText from "@/components/ui/leafy-text";
-import LeafyInput from "@/components/ui/leafy-text-input";
+import LeafyInput from "@/components/ui/text-input";
 import React, { useState } from "react";
 import { StyleSheet, View } from "react-native";
 

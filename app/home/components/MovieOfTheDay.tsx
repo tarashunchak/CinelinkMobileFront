@@ -36,7 +36,7 @@ function MovieOfTheDay() {
         sharedTransitionTag={`movie-${movie?.movie_id}-backdrop`}
         source={{
           uri: `https://image.tmdb.org/t/p/w500${movie?.backdrop_path
-            || movie?.poster_path}`
+            ?? movie?.poster_path}`
         }}
         style={styles.backdrop}
         cachePolicy="disk"

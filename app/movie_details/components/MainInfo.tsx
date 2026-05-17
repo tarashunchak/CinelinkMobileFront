@@ -28,7 +28,7 @@ function MainInfo(
     }
 ) {
 
-  if (!backdropPath)
+  if (!backdropPath || backdropPath.length === 0)
     backdropPath = movie?.images?.backdrops[movie?.images?.backdrops?.length - 1]?.file_path;
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -56,17 +56,17 @@ function MainInfo(
 
   return (
     <View>
-        <AnimatedFastImage
-          sharedTransitionTag={`movie-${movie?.id}-backdrop`}
-          source={{ uri: `https://image.tmdb.org/t/p/w500${backdropPath}` }}
-          style={styles.backdrop}
-          cachePolicy="disk"
-        />
+      <AnimatedFastImage
+        sharedTransitionTag={`movie-${movie?.id}-backdrop`}
+        source={{ uri: `https://image.tmdb.org/t/p/w500${backdropPath}` }}
+        style={styles.backdrop}
+        cachePolicy="memory-disk"
+      />
       <View style={[styles.darkRect]}>
-        <HeaderContainer style={{ flexDirection: "column", alignSelf: "center", justifyContent: "space-between", width: wp(98)}}>
-          <ReturnArrowButton style={{marginTop: "2%"}}/>
-          <AnimatedFastText 
-            style={[textStyle.white24, { width: "98%", marginTop: "5%"}]}
+        <HeaderContainer style={{ flexDirection: "column", alignSelf: "center", justifyContent: "space-between", width: wp(98) }}>
+          <ReturnArrowButton style={{ marginTop: "2%" }} />
+          <AnimatedFastText
+            style={[textStyle.white24, { width: "98%", marginTop: "5%" }]}
             sharedTransitionTag={`movie-${movie?.id}-title`}
             numberOfLines={1}
             ellipsizeMode="tail"
@@ -81,7 +81,7 @@ function MainInfo(
               width: wp(96),
               height: 220,
               justifyContent: "space-between",
-              alignSelf:"center",
+              alignSelf: "center",
             }
           }>
 
@@ -111,6 +111,9 @@ export default memo(MainInfo);
 const styles = StyleSheet.create({
   backdrop: {
     position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
     height: hp("40%"),
     marginHorizontal: "-2%",
   },

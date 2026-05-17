@@ -2,13 +2,12 @@ import ReturnArrowButton from "@/components/ui/returnArrowButton";
 import { textStyle } from "@/styles/textStyles";
 import { buttonStyle } from "@/styles/buttonStyle";
 import React, { useState } from "react";
-import { TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, StyleSheet, Text, View } from "react-native";
+import { TouchableWithoutFeedback, Keyboard, StyleSheet, Text, View, Pressable } from "react-native";
 import Input from "./components/Input";
 import ScreenBackground from "@/components/ui/screen-background";
 import { useNavigation } from "expo-router";
 import { PressableScale } from "react-native-pressable-scale";
-import { RegistrationRequest } from "@/api/auth";
-import { LoginRequest } from "@/api/auth/loginPageApi";
+import { LoginRequest, RegistrationRequest } from "@/api/auth";
 
 export default function RegistrationScreen() {
   const [username, setUsername] = useState("");
@@ -18,37 +17,43 @@ export default function RegistrationScreen() {
 
   return (
     <ScreenBackground>
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <KeyboardAvoidingView style={{ padding: "2%" }}>
-          <ReturnArrowButton style={{ marginTop: "8%" }}
-            onPress={navigator.goBack}
-          />
+      <TouchableWithoutFeedback
+        onPress={Keyboard.dismiss}
+      >
+        <View
+          style={{ flex: 1, paddingHorizontal: "2%" }}
+        >
+          <ReturnArrowButton />
 
-          <Text style={[textStyle.white36, { marginTop: "16%", alignSelf: "center", textAlign: "center" }]}>Create Your Cinelink Account</Text>
-          <Text style={[textStyle.gray18, { alignSelf: "center" }]}>All your entertainment in one place</Text>
+          <Text style={[textStyle.white36, { marginTop: "10%", alignSelf: "center", textAlign: "center" }]}>
+            Create Your Cinelink Account
+          </Text>
+          <Text style={[textStyle.gray18, { alignSelf: "center" }]}>
+            All your entertainment in one place
+          </Text>
 
           <View style={{ flexDirection: "column", marginTop: "5%" }}>
             <Input
               placeholder="Enter username"
               text="Username"
               type="text"
-              onChangeText={(text) => setUsername(text)}
+              onChangeText={setUsername}
             />
             <Input
               placeholder="Enter email"
               text="Email address"
               type="text"
-              onChangeText={(text) => setEmail(text)}
+              onChangeText={setEmail}
             />
             <Input
               placeholder="Enter password"
               text="Password"
               type="text"
-              onChangeText={(text) => setPassword(text)}
+              onChangeText={setPassword}
             />
           </View>
 
-          <PressableScale style={[buttonStyle.continueButton, { width: "100%", borderRadius: 8, marginTop: "5%", backgroundColor: "#DEB522" }]}
+          <PressableScale style={[buttonStyle.continueButton, { width: "100%", borderRadius: 8, marginTop: "15%", backgroundColor: "#DEB522" }]}
             onPress={async () => {
               const result = await RegistrationRequest({
                 username,
@@ -56,6 +61,10 @@ export default function RegistrationScreen() {
                 email,
               })
               if (result !== 0) {
+                await LoginRequest({
+                  username,
+                  password,
+                });
                 navigator.navigate("LoginScreen")
               }
             }}>
@@ -63,7 +72,7 @@ export default function RegistrationScreen() {
               Sign Up
             </Text>
           </PressableScale>
-        </KeyboardAvoidingView>
+        </View >
       </TouchableWithoutFeedback>
     </ScreenBackground>
   );

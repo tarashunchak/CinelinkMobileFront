@@ -3,85 +3,67 @@ import { backgroundStyle } from "@/styles/backgroundStyle";
 import { buttonStyle } from "@/styles/buttonStyle";
 import { textStyle } from "@/styles/textStyles";
 import React, { useState } from "react";
-import { Keyboard, Image, Text, TouchableWithoutFeedback, View } from "react-native";
+import { Keyboard, Image, Text, TouchableWithoutFeedback, View, StyleSheet } from "react-native";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { PressableScale } from "react-native-pressable-scale";
 import Input from "./components/Input";
 import ScreenBackground from "@/components/ui/screen-background";
 import { useNavigation } from "expo-router";
+import AnimatedFastImage from "@/components/ui/animated-fast-image";
 
 export default function LoginScreen() {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const navigator = useNavigation();
 
-  const onSignIn = () => {
+  const onSignIn = (text: string) => {
 
   };
 
   return (
     <ScreenBackground>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={{ paddingHorizontal: "2%", alignItems: "center", marginTop: "20%" }}>
-          <Image source={require("@/assets/images/logo.png")}
-            style={[
-              {
-                height: "24%",
-                width: "65%",
-              }
-            ]} />
+        <View style={styles_.view}>
+          <AnimatedFastImage
+            source={require("@/assets/images/logo.png")}
+            style={styles_.logo}
+          />
           <Input
             placeholder="Username"
             text="Enter username"
             type="text"
-            onChangeText={(text) => setUsername(text)}
+            onChangeText={setUsername}
           />
 
           <Input
             placeholder="Password"
             text="Enter password"
             type="password"
-            onChangeText={(text) => setPassword(text)}
+            onChangeText={setPassword}
           />
 
-          <PressableScale style={[buttonStyle.continueButton, { width: "100%", borderRadius: 8, marginTop: "10%", backgroundColor: "#DEB522" }]}
-            onPress={() => { LoginRequest({ username, password }) }}>
-            <Text style={[textStyle.white20]}>
+          <PressableScale style={[buttonStyle.continueButton, styles_.signInBtn]}
+            onPress={async () => { await LoginRequest({ username, password }) }}>
+            <Text style={textStyle.white20}>
               Sign In
             </Text>
           </PressableScale>
 
           <View style={{ width: "100%", flexDirection: "row", justifyContent: "space-evenly", alignContent: "center", margin: "6%" }}>
-            <View style={[
-              {
-                backgroundColor: "white",
-                height: 0.5,
-                width: "20%",
-                alignSelf: "center"
-              }
-            ]} />
+            <View style={styles_.halfLine} />
             <PressableScale>
-              <Text style={textStyle.gray16}>Forgot password?</Text>
+              <Text style={textStyle.gray16}>
+                Forgot password?
+              </Text>
             </PressableScale>
-            <View style={[
-              {
-                backgroundColor: "white",
-                height: 0.5,
-                width: "20%",
-                alignSelf: "center"
-              }
-            ]} />
+            <View style={styles_.halfLine} />
           </View>
 
-          <PressableScale style={[styles.googleButton.touchable]}
+          <PressableScale style={styles_.googleBtn}
             onPress={() => onSignIn("google")}>
-            <View style={[styles.googleButton.view]}>
+            <View style={styles_.googleBtnLayout}>
               <Image source={require("@/assets/images/google_icon.png")}
-                style={{
-                  alignSelf: "center",
-                  width: 36,
-                  height: 36
-                }} />
+                style={styles_.googleIcon} />
               <Text style={[
                 textStyle.black20,
                 {
@@ -96,13 +78,58 @@ export default function LoginScreen() {
               navigator.navigate("RegistrationScreen")
             }}
           >
-            <Text style={textStyle.white18}>Create account?</Text>
+            <Text style={textStyle.white18}>
+              Create account?
+            </Text>
           </PressableScale>
         </View>
       </TouchableWithoutFeedback>
     </ScreenBackground>
   );
 }
+
+const styles_ = StyleSheet.create({
+  view: {
+    paddingHorizontal: "2%",
+    alignItems: "center",
+    marginTop: "20%",
+  },
+  logo: {
+    height: "24%",
+    width: "65%",
+  },
+  signInBtn: {
+    width: "100%",
+    borderRadius: 8,
+    marginTop: "10%",
+    backgroundColor: "#DEB522",
+  },
+  halfLine: {
+    backgroundColor: "white",
+    height: 0.5,
+    width: "20%",
+    alignSelf: "center",
+  },
+  googleBtn: {
+    width: "100%",
+    height: 48,
+    backgroundColor: "white",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 8,
+  },
+  googleBtnLayout: {
+    flexDirection: "row",
+    gap: "1%",
+    justifyContent: "center",
+    alignContent: "center",
+  },
+  googleIcon: {
+    alignSelf: "center",
+    width: 36,
+    height: 36,
+  },
+});
 
 const styles = {
   container: {

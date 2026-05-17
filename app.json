@@ -4,7 +4,7 @@
     "slug": "cinelink",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/cinelinkIcon.png",
+    "icon": "./assets/images/splash-icon.png",
     "scheme": "leafyapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,

@@ -14,6 +14,8 @@ interface LoginProps {
 };
 
 export async function RegistrationRequest(props: RegistrationProps): Promise<number> {
+  if(!props || props?.username?.length === 0 || props?.email?.length === 0 || props?.password?.length === 0)
+    return 0;
   const response = await fetch(`${API_URL}/registration`,
     {
       method: "POST",

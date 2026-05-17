@@ -1,7 +1,6 @@
-import { Dimensions, Text, TextInput, View } from "react-native";
-
-//styles import
-import { inputStyle } from "@/styles/inputStyle";
+import React from "react";
+import { Dimensions, StyleSheet, Text, TextInput, View } from "react-native";
+import { textStyle } from "@/styles/textStyles";
 
 const { width: screenW, height: screenH } = Dimensions.get("window");
 
@@ -51,10 +50,31 @@ export default function LeafyInput(
 
   return (
     <View style={finalStyle}>
-      <Text style={inputStyle.inputWhiteText}>{text}</Text>
-      <TextInput style={[inputStyle.defaultInput, style, { height: rect.h }]} value={value}
-        onChangeText={onChangeText} placeholder={placeholder} maxLength={maxLenght}
+      <Text style={[textStyle.white14, styles.headerText]}>{text}</Text>
+      <TextInput style={styles.view} value={value}
+        onChangeText={onChangeText} 
+        placeholder={placeholder} 
+        maxLength={maxLenght}
         placeholderTextColor="rgba(255, 255, 255, 0.4)" />
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  view: {
+    width: "100%",
+    color: "white",
+    fontSize: 16,
+    height: 48,
+    paddingLeft: 20,
+    backgroundColor: "rgba(255, 255,255, 0.08)",
+    borderRadius: 8,
+    padding: 0.5,
+    borderWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.2)",
+  },
+  headerText: {
+    marginBottom: 3,
+    marginLeft: 3,
+  },
+});

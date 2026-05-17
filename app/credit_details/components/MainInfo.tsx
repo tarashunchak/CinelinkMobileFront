@@ -34,7 +34,7 @@ export default function MainInfo(
   return (
     <View>
       <AnimatedFastImage
-        source={{ uri: `https://image.tmdb.org/t/p/w500${backdrop?.[backdrop?.length - 1] ?? ""}` }}
+        source={{ uri: `https://image.tmdb.org/t/p/w300${backdrop?.[backdrop?.length - 1] ?? ""}` }}
         style={styles.backdrop}
       />
       <View style={styles.darkRect}>

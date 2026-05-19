@@ -1,11 +1,10 @@
 import { create } from "zustand";
-import { EntinyManager } from "./base_class";
+import { EntityManager } from "./base_class";
 import { ChatID } from "../models/models";
 import { useEffect } from "react";
 import { API_URL } from "@/api/API_CONFIG";
 import { UsersManager } from "./users_manager";
 import { timestamp } from "@/app/direct_chat/utils/utils";
-import { ChatManager } from "../chat_manager/chat_manager";
 import { ChatsManager } from "./chats_manager";
 
 type Message_T = {
@@ -32,11 +31,13 @@ const useMessageStore = create<MessagesState>((set) => ({
   _addMany: (chatID, msgs) => set((s) => ({
     messages: { ...s.messages, [chatID]: msgs }
   })),
-  _remove: (chatID, msgs) => set((s) => ({
-  })),
+  _remove: (chatID, msgs) => set((s) => {
+    const {[chatID]: _, ...remainingMessages} = s.messages;
+    return {messages: remainingMessages};
+  }),
 }));
 
-export class MessagesManager extends EntinyManager<Message_T> {
+export class MessagesManager extends EntityManager<Message_T> {
   private static instance: MessagesManager;
   private isLoading: boolean =  false;
 
@@ -62,7 +63,7 @@ export class MessagesManager extends EntinyManager<Message_T> {
         const current = useMessageStore.getState().messages;
         if (JSON.stringify(current) !== JSON.stringify(reversed)) {
           this.addArray(chatID, reversed);
-          //ChatsManager.getInstance().setLastMessage(chatID, reversed[0])
+          ChatsManager.getInstance().setLastMessage(chatID, reversed[0])
         }
         //this.lastSeenMessageId = reversed[0]?.message_id;
       }

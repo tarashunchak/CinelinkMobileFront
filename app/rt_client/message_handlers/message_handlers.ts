@@ -1,5 +1,5 @@
 import { ChatManager } from "../chat_manager/chat_manager";
-import { Content, WSMessage } from "../ws_connector/ws_connector";
+import { WSMessage } from "../ws_connector/ws_connector";
 import { useChatStore } from "../app_state";
 import { ChatsManager } from "../managers/chats_manager";
 import { MessagesManager } from "../managers/messages_manager";
@@ -7,14 +7,10 @@ import { UsersManager } from "../managers/users_manager";
 
 type WSHandler = (msg: WSMessage, manager: ChatManager) => void;
 
-function handleTyping(msg: WSMessage, manager: ChatManager) {
+async function handleTyping(msg: WSMessage, manager: ChatManager) {
   const { chat_id, user_id, is_typing } = msg.content;
   console.warn("Handle typing: ", msg.content);
   manager.callbacks?.onTyping?.get(chat_id)?.(msg);
-  /*useChatStore.getState()._setTyping(msg.content?.chat_id, {
-    user_id: msg.content?.user_id,
-    status: msg.content?.is_typing ?? false
-  });*/
   ChatsManager.getInstance().setTypingStatus(chat_id, user_id, is_typing)
 };
 

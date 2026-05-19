@@ -1,9 +1,10 @@
 import React, { useEffect } from "react";
 import * as Haptics from "expo-haptics";
-import { Pressable, StyleSheet } from "react-native";
+import { View, Pressable, StyleSheet } from "react-native";
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { PressableScale } from "react-native-pressable-scale";
 import { useEditMode } from "../hooks";
+import AnimatedFastImage from "@/components/ui/animated-fast-image";
 
 export default function MessageContainer({
   style,
@@ -44,6 +45,23 @@ export default function MessageContainer({
       >
         {children}
       </PressableScale>
+      {
+        <View 
+          style={isSelected ? 
+            picked.pickedToggle : 
+            notPicked.pickedToggle
+          }
+        >
+          {
+            isSelected && 
+            <AnimatedFastImage 
+              sharedTransitionTag="message-picked"
+              source={require("")}
+              style={picked.pickedImage}
+            />
+          }
+        </View>
+      }
     </Pressable >
   );
 };
@@ -53,9 +71,23 @@ const picked = StyleSheet.create({
     width: wp(100),
     backgroundColor: "rgba(255, 255, 255, 0.1)",
     flexDirection: "column",
+    justifyContent:"space-between",
     paddingVertical: "1%",
     marginVertical: "1%",
-  }
+  },
+  pickedToggle: {
+    width: 20,
+    height: 20,
+    borderRadius: 999,
+    borderWidth: 0.5,
+    borderColor: "white",
+    marginLeft: 20,
+    marginBottom :"2%",
+    backgroundColor: "green"
+  },
+  pickedImage: {
+
+  },
 });
 
 const notPicked = StyleSheet.create({
@@ -65,5 +97,14 @@ const notPicked = StyleSheet.create({
     flexDirection: "column",
     paddingVertical: "1%",
     marginVertical: "1%",
+  },
+pickedToggle: {
+    width: 20,
+    height: 20,
+    borderRadius: 999,
+    borderWidth: 0.5,
+    borderColor: "white",
+    marginLeft: 20,
+    marginBottom :"2%",
   },
 });

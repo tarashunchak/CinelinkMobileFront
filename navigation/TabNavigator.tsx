@@ -5,7 +5,7 @@ import SocialNavigatorStack from "./stacks/socialNavigator";
 import ProfileNavigatorStack from "./stacks/profileNavigation";
 import HomeNavigatorStack from "./stacks/homeNavigation";
 import SearchNavigatorStack from "./stacks/searchNavigation";
-//import * as Notifications from "@/utils/notifications";
+import * as Notifications from "@/utils/notifications";
 import { ChatsManager } from "../app/rt_client/managers/chats_manager";
 import { UsersManager } from "../app/rt_client/managers/users_manager";
 import { WatchlistsManager } from "../app/rt_client/managers/watchlists_manager";

@@ -1,7 +1,7 @@
 import { API_URL } from "@/api/API_CONFIG";
 import { UserID, MovieID } from "../models/models";
 import { create } from "zustand";
-import { EntinyManager } from "./base_class";
+import { EntityManager } from "./base_class";
 import { useEffect } from "react";
 import { useShallow } from "zustand/react/shallow";
 
@@ -42,7 +42,7 @@ const useMovieStore = create<MovieState>((set) => ({
   })),
 }));
 
-export class MoviesManager extends EntinyManager<Movie_T> {
+export class MoviesManager extends EntityManager<Movie_T> {
   public static instance: MoviesManager;
   private currUserID: number = 0;
 

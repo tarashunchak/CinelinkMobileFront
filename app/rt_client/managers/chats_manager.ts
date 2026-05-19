@@ -1,13 +1,12 @@
 import { API_URL } from "@/api/API_CONFIG";
-import { ChatID, EMPTY_ARRAY, EMPTY_OBJECT, UserID } from "../models/models";
+import { ChatID, EMPTY_OBJECT, UserID } from "../models/models";
 import { create } from "zustand";
-import { EntinyManager } from "./base_class";
+import { EntityManager } from "./base_class";
 import { useEffect } from "react";
 import { useShallow } from "zustand/react/shallow";
-import { ChatManager } from "../chat_manager/chat_manager";
 import { timestamp } from "@/app/direct_chat/utils/utils";
 import { UsersManager } from "./users_manager";
-import { useChatLastMessage } from "../rt_client";
+import { useAuthStore } from "@/local_storage/user/asyncStorage/store";
 
 type Chat_T = {
   chat_id: number;
@@ -79,7 +78,7 @@ const useChatStore = create<ChatState>((set) => ({
   })),
 }));
 
-export class ChatsManager extends EntinyManager<Chat_T> {
+export class ChatsManager extends EntityManager<Chat_T> {
   private static instance: ChatsManager;
   private currUserID: number = 0;
   private isLoading: boolean = false;
@@ -168,7 +167,11 @@ export function useUserChats(): Chat_T[] {
     if (chats.length === 0) load();
   }, [chats.length]);
 
-  return chats;
+  return [...chats]?.sort((a: Chat_T, b: Chat_T)=>{
+    const aTime = new Date(lastMessages[a.chat_id]?.timestamp || 0).getTime();
+    const bTime = new Date(lastMessages[b.chat_id]?.timestamp || 0).getTime();
+    return bTime - aTime;
+  });
 };
 
 export function useChat(chatID: ChatID): any {
@@ -193,16 +196,16 @@ export function useLastChatMessage(chatID: ChatID): any {
   /*const message: Message_T = useMessageStore(s => s.messages[chatID]?.[0]);*/
   const message = useChatStore(s => s.lastMessages[chatID]);
   useEffect(() => {
-    if (!message)
-      load(chatID);
   }, [chatID, message]);
 
   if (!message)
     return "";
+  console.warn("Message: ", message);
 
   const user = UsersManager.getInstance().get(message?.user_id);
-  const username = user?.username ?? "Unknown";
-
+  let username;
+  if(!user) username = useAuthStore.getState().user?.username;
+  else username = user?.username ?? "Unknown";
   return {
     text: `${username}: ${message?.message}`,
     time: timestamp(new Date(message?.timestamp)),

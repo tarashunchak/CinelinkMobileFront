@@ -1,14 +1,13 @@
 import React, { useRef } from "react";
 import ReturnArrowButton from "@/components/ui/returnArrowButton";
 import { StyleSheet, View } from "react-native";
-import { UserProfile_T } from "../types";
 import { LogOutButton } from "./LogOutButton";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
-import { Image } from "expo-image";
 import HeaderContainer from "@/components/ui/header-container";
 import { BlurTargetView, BlurView } from "expo-blur";
+import { Canvas, Image, useImage, LinearGradient, Mask, Rect, vec } from "@shopify/react-native-skia";
 
-type Props = {
+interface Props {
   bgUrl?: string;
   onBack: () => void;
   isCurrentUser: boolean;
@@ -16,28 +15,47 @@ type Props = {
 
 export default function ProfileHeader({ bgUrl, onBack, isCurrentUser }: Props) {
   const ref = useRef<View | null>(null);
+  const image = useImage(bgUrl);
+
   return (
-    <HeaderContainer>
+    <HeaderContainer style={{ backgroundColor: "transparent" }}>
       <BlurTargetView
         style={styles.bgImage}
         ref={ref}>
-        <Image
-          source={bgUrl
-            ? { uri: bgUrl }
-            : require("../assets/gradientBackground.jpg")}
-          style={styles.bgImage}
-          cachePolicy="disk"
-        />
+        <Canvas style={{ width: wp(100), height: hp(42), backgroundColor: "transparent" }}>
+          <Mask
+            mode="alpha"
+            mask={
+              <Rect x={0} y={0} width={wp(100)} height={hp(42)}>
+                <LinearGradient
+                  start={vec(0, 0)}
+                  end={vec(0, hp(42))}
+                  colors={["white", "#808080", "#333333", "transparent"]}
+                  positions={[0.2, 0.3, 0.50, 0.80]}
+                />
+              </Rect>
+            }
+          >
+            <Image
+              image={image}
+              x={0}
+              y={0}
+              width={wp(100)}
+              height={hp(42)}
+              fit="cover"
+            />
+          </Mask>
+        </Canvas>
       </BlurTargetView>
       <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: "2%", paddingHorizontal: "1%" }}>
-        <ReturnArrowButton onPress={onBack} />
+        <ReturnArrowButton />
         <LogOutButton isVisible={isCurrentUser} />
       </View>
       <BlurView
-        tint="systemChromeMaterialDark"
-        intensity={30}
+        tint="dark"
+        intensity={0}
         style={styles.bgImage}
-        blurReductionFactor={40}
+        blurReductionFactor={30}
         blurMethod="dimezisBlurView"
         blurTarget={ref}
       />
@@ -47,6 +65,7 @@ export default function ProfileHeader({ bgUrl, onBack, isCurrentUser }: Props) {
 
 const styles = StyleSheet.create({
   bgImage: {
+    backgroundColor: "transparent",
     height: hp("35%"),
     width: wp(100),
     position: "absolute",

@@ -1,4 +1,5 @@
 import AnimatedFastImage from "@/components/ui/animated-fast-image";
+import AnimatedFastText from "@/components/ui/animated-fast-text";
 import { textStyle } from "@/styles/textStyles";
 import { useNavigation } from "expo-router";
 import React, { memo } from "react";
@@ -13,7 +14,11 @@ function MovieCard({ movie }: { movie: any }) {
       onPress={() => {
         navigator.navigate(
           "MovieDetailScreen",
-          { movieID: movie?.movie_id }
+          { 
+            movieID: movie?.movie_id,
+            posterPath: movie?.poster_path,
+            title: movie?.title,
+          }
         )
       }}
     >
@@ -22,14 +27,17 @@ function MovieCard({ movie }: { movie: any }) {
           sharedTransitionTag={`movie-${movie?.id}-poster`}
           style={styles.poster}
           source={{ uri: `https://image.tmdb.org/t/p/w300/${movie?.poster_path}` }}
-          cachePolicy="memory"
+          cachePolicy="disk"
         />
         <View style={styles.infoView}>
-          <Text
+          <AnimatedFastText
+            sharedTransitionTag={`movie-${movie?.id}-title`}
             style={[textStyle.yellow18, styles.title]}
             numberOfLines={1}
             ellipsizeMode="tail"
-          >{movie?.title}</Text>
+          >
+            {movie?.title}
+          </AnimatedFastText>
           <View style={styles.imdbView}>
             <Text style={[textStyle?.black12, styles.imdbText]}>
               {`IMDb: ${movie?.imdb_rating?.toFixed(2)}`}

@@ -8,9 +8,10 @@ import HeaderContainer from "@/components/ui/header-container";
 import AnimatedFastImage from "@/components/ui/animated-fast-image";
 import { textStyle } from "@/styles/textStyles";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen"
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useNavigation } from "expo-router";
 
-function Header({ watchlist }: { watchlist: any }) {
+export default function Header({ watchlist }: { watchlist: any }) {
+  const navigator = useNavigation();
   return (
     <HeaderContainer style={{height: hp(45), flexDirection: "column", justifyContent: "space-between"}}>
       <Image
@@ -24,7 +25,7 @@ function Header({ watchlist }: { watchlist: any }) {
           <Image
             source={require("@/app/watchlist/assets/InfoIcon.png")}
             style={styles.infoBtnImage}
-            cachePolicy="memory"
+            cachePolicy="disk"
           />
         </PressableScale>
       </View>
@@ -70,8 +71,6 @@ function Header({ watchlist }: { watchlist: any }) {
     </HeaderContainer>
   );
 };
-
-export default memo(Header);
 
 const styles = StyleSheet.create({
   bgImage: {

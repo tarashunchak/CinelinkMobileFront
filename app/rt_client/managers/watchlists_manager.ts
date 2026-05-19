@@ -1,7 +1,7 @@
 import { API_URL } from "@/api/API_CONFIG";
 import { UserID, WatchlistID } from "../models/models";
 import { create } from "zustand";
-import { EntinyManager } from "./base_class";
+import { EntityManager } from "./base_class";
 import { useEffect } from "react";
 import { useShallow } from "zustand/react/shallow";
 
@@ -42,7 +42,7 @@ const useWatchlistStore = create<WatchlistState>((set) => ({
   })),
 }));
 
-export class WatchlistsManager extends EntinyManager<Watchlist_T> {
+export class WatchlistsManager extends EntityManager<Watchlist_T> {
   public static instance: WatchlistsManager;
   private currUserID: number = 0;
 

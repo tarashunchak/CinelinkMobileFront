@@ -6,10 +6,8 @@ import { useNavigation } from "expo-router";
 import GenresLayout from "./GenresLayout";
 import { PressableScale } from "react-native-pressable-scale";
 import { Skeleton } from "react-native-skeletons";
-import { createAnimatedComponent } from "react-native-reanimated";
-import { Image } from "expo-image";
-
-const AnimatedFastImage = createAnimatedComponent(Image);
+import AnimatedFastText from "@/components/ui/animated-fast-text";
+import AnimatedFastImage from "@/components/ui/animated-fast-image";
 
 function MovieCard({ movie }: { movie: Movie | null }) {
   const navigator = useNavigation();
@@ -20,6 +18,7 @@ function MovieCard({ movie }: { movie: Movie | null }) {
     navigator?.push("MovieDetailScreen", { 
       movieID: movie?.movie_id, 
       posterPath: movie?.poster_path,
+      title: movie?.title,
     });
   }, [movie?.movie_id, movie?.poster_path]);
 
@@ -49,13 +48,15 @@ function MovieCard({ movie }: { movie: Movie | null }) {
       />
       <View style={{ flexDirection: "column", height: "100%", marginLeft: "4%", justifyContent: "space-evenly" }}>
         <View style={{ flexDirection: "row", justifyContent: "flex-start" }}>
-          <Text style={[textStyle.white16, styles.titleText]}
+          <AnimatedFastText 
+            sharedTransitionTag={`movie-${movie?.movie_id}-title`}
+            style={[textStyle.white16, styles.titleText]}
             pointerEvents="none"
             numberOfLines={1}
             ellipsizeMode="tail"
           >
             {movie?.title}
-          </Text>
+          </AnimatedFastText>
           <Text
             style={[
               styles.yearText,

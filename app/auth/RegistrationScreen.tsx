@@ -8,6 +8,7 @@ import ScreenBackground from "@/components/ui/screen-background";
 import { useNavigation } from "expo-router";
 import { PressableScale } from "react-native-pressable-scale";
 import { LoginRequest, RegistrationRequest } from "@/api/auth";
+import HeaderContainer from "@/components/ui/header-container";
 
 export default function RegistrationScreen() {
   const [username, setUsername] = useState("");
@@ -20,7 +21,7 @@ export default function RegistrationScreen() {
       <TouchableWithoutFeedback
         onPress={Keyboard.dismiss}
       >
-        <View
+        <HeaderContainer
           style={{ flex: 1, paddingHorizontal: "2%" }}
         >
           <ReturnArrowButton />
@@ -72,7 +73,7 @@ export default function RegistrationScreen() {
               Sign Up
             </Text>
           </PressableScale>
-        </View >
+        </HeaderContainer>
       </TouchableWithoutFeedback>
     </ScreenBackground>
   );

@@ -10,7 +10,6 @@ import PosterModal from "./PosterModal";
 import { MONTH } from "@/utils/month";
 import AnimatedFastImage from "@/components/ui/animated-fast-image";
 import AnimatedFastText from "@/components/ui/animated-fast-text";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import HeaderContainer from "@/components/ui/header-container";
 
 export default function MainInfo(
@@ -31,7 +30,6 @@ export default function MainInfo(
     backdropPath = movie?.images?.backdrops[movie?.images?.backdrops?.length - 1]?.file_path;
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const insets = useSafeAreaInsets();
 
   const poster = (
     <>
@@ -62,25 +60,27 @@ export default function MainInfo(
         cachePolicy="disk"
       />
       <View style={[styles.darkRect]}>
-        <HeaderContainer style={{ flexDirection: "column", alignSelf: "center", justifyContent: "space-between", width: wp(98) }}>
+        <HeaderContainer style={styles.headerContainer}>
           <ReturnArrowButton style={{ marginTop: "2%" }} />
-          <AnimatedFastText
-            style={[textStyle.white26, { maxWidth: "98%", marginTop: "10%" }]}
-            sharedTransitionTag={`movie-${movie?.id}-title`}
-            numberOfLines={1}
-            ellipsizeMode="tail"
-          >
-            {title ?? movie?.title}
-          </AnimatedFastText>
-
-          <View style={styles.mainView}>
-            <PressableScale
-              onPress={() => { setIsOpen(true); }}
-              style={styles.posterView}
+          <View style={{ gap: 5 }}>
+            <AnimatedFastText
+              style={[textStyle.white26, { maxWidth: "98%" }]}
+              sharedTransitionTag={`movie-${movie?.id}-title`}
+              numberOfLines={1}
+              ellipsizeMode="tail"
             >
-              {poster}
-            </PressableScale>
-            <InfoBlock movieInfo={movie} cast={cast} />
+              {title ?? movie?.title}
+            </AnimatedFastText>
+
+            <View style={styles.mainView}>
+              <PressableScale
+                onPress={() => { setIsOpen(true); }}
+                style={styles.posterView}
+              >
+                {poster}
+              </PressableScale>
+              <InfoBlock movieInfo={movie} cast={cast} />
+            </View>
           </View>
         </HeaderContainer>
       </View>
@@ -101,14 +101,21 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    height: hp("42%"),
+    height: hp("45%"),
     marginHorizontal: "-2%",
   },
   darkRect: {
     backgroundColor: "rgba(0, 0, 0, 0.7)",
-    height: hp("42%"),
+    height: hp("45%"),
     marginHorizontal: "-2%",
     width: "104%",
+  },
+  headerContainer: {
+    flexDirection: "column",
+    alignSelf: "center",
+    justifyContent: "space-between",
+    width: wp(98),
+    height: "100%"
   },
   posterView: {
     width: "40%",

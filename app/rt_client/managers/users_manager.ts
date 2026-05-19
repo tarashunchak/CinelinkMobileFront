@@ -1,7 +1,7 @@
 import { API_URL } from "@/api/API_CONFIG";
 import { EMPTY_OBJECT, UserID } from "../models/models";
 import { create } from "zustand";
-import { EntinyManager } from "./base_class";
+import { EntityManager } from "./base_class";
 import { useEffect } from "react";
 import {useShallow} from "zustand/react/shallow";
 
@@ -54,7 +54,7 @@ const useUserStore = create<UserState>((set) => ({
   })),
 }));
 
-export class UsersManager extends EntinyManager<User_T> {
+export class UsersManager extends EntityManager<User_T> {
   private currUserID: number = 0;
   private static instance: UsersManager;
   private isLoading: boolean = false;

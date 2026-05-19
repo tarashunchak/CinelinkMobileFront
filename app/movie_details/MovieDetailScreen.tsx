@@ -17,6 +17,8 @@ import ScreenBackground from "./../../components/ui/screen-background";
 import { FlatList } from "react-native-gesture-handler";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { BlurTargetView } from "expo-blur";
+import Spacer from "@/components/ui/spacer";
+import { heightPercentageToDP } from "react-native-responsive-screen";
 
 export default function MovieDetailScreen({ route }: any) {
   const { movieID, inCinemas, maximum, backdropPath, posterPath, title } = route?.params;
@@ -114,6 +116,7 @@ export default function MovieDetailScreen({ route }: any) {
               ref={ref}
             />
           }
+          ListFooterComponent={<Spacer orientation="v" spacing={heightPercentageToDP(10) }/>}
         />
         {(isActive || isActiveUsers) && <BottomBar />}
     </ScreenBackground>

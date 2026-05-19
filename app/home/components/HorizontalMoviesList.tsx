@@ -35,6 +35,7 @@ export default function HorizontalMoviesList(
   return (
     <FlatList
       style={styles.flatList}
+      contentContainerStyle={{paddingHorizontal: 4}}
       horizontal
       data={movies}
       keyExtractor={(item, _) => String(item?.id)}
@@ -49,7 +50,7 @@ const styles = StyleSheet.create({
     minHeight: 155,
     maxHeight: 165,
     backgroundColor: "rgba(255, 255, 255, 0.05)",
-    padding: 4,
+    paddingVertical: 4,
     borderWidth: 0.5,
     borderColor: "rgba(255, 255, 255, 0.2)",
     borderRadius: 12,

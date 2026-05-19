@@ -1,9 +1,11 @@
 import { textStyle } from "@/styles/textStyles";
 import { useNavigation } from "expo-router";
-import React from "react";
+import React, { useCallback } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { PressableScale } from "react-native-pressable-scale";
 import { Image } from "expo-image";
+import AnimatedFastImage from "@/components/ui/animated-fast-image";
+import AnimatedFastText from "@/components/ui/animated-fast-text";
 
 interface CreditCard_I {
   credit_id: number;
@@ -18,25 +20,33 @@ export default function CreditCard({ credit }: { credit: CreditCard_I }) {
 
   const creditProfile = { uri: `https://image.tmdb.org/t/p/w300/${credit?.profile_path}` };
 
-
-  return (
-    < PressableScale style={styles.view}
-      onPress={() => {
+  const openCreditDetails = useCallback(() => {
         navigator.navigate(
           "CreditDetailScreen",
-          { creditID: credit?.credit_id }
+          { 
+            creditID: credit?.credit_id,
+            profilePath: credit?.profile_path,
+            creditName: credit?.name,
+          }
         )
       }
-      }
+, [credit?.credit_id]);
+
+  return (
+    <PressableScale 
+      style={styles.view}
+      onPress={openCreditDetails}
     >
       <View style={{ flexDirection: "row", gap: 10 }}>
-        <Image
+        <AnimatedFastImage
+          sharedTransitionTag={`credit-${credit?.credit_id}-profile`}
           style={styles.profile}
           source={creditProfile}
-          cachePolicy="memory-disk"
+          cachePolicy="disk"
         />
         <View style={{ flexDirection: "column" }}>
-          <Text
+          <AnimatedFastText
+            sharedTransitionTag={`credit-${credit?.credit_id}-name`}
             style={[
               textStyle.yellow18,
               styles.name
@@ -45,7 +55,7 @@ export default function CreditCard({ credit }: { credit: CreditCard_I }) {
             ellipsizeMode="tail"
           >
             {credit?.name}
-          </Text>
+          </AnimatedFastText>
           <Text style={textStyle.gray16}>
             {`Department: ${credit?.known_for_department}`}
           </Text>

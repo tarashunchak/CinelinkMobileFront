@@ -2,7 +2,7 @@ import React, { memo } from "react";
 import TabNavigator from "@/navigation/TabNavigator";
 import AuthNavigator from "@/navigation/AuthNavigator";
 import { useAuthStore } from "@/local_storage/user/asyncStorage/store"
-import * as Notifications from "@/utils/notifications";
+//import * as Notifications from "@/utils/notifications";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { KeyboardProvider } from "react-native-keyboard-controller";

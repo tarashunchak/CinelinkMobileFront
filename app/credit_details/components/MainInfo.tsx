@@ -38,29 +38,31 @@ export default function MainInfo(
         cachePolicy="disk"
       />
       <View style={styles.darkRect}>
-        <HeaderContainer style={{ flexDirection: "column", alignSelf: "center", justifyContent: "space-between", width: wp(98) }}>
+        <HeaderContainer style={styles.headerContainer}>
           <ReturnArrowButton style={{ marginTop: "2%" }} />
-          <AnimatedFastText
-            sharedTransitionTag={`credit-${creditID}-name`}
-            style={[textStyle.white26, { width: "98%", marginTop: "10%" }]}
-            numberOfLines={1}
-            ellipsizeMode="tail"
-          >
-            {creditName}
-          </AnimatedFastText>
-          <View style={styles.mainView}>
-            <PressableScale
-              onPress={() => { setIsOpen(true) }}
-              style={styles.profile}
+          <View style={{ gap: 5 }}>
+            <AnimatedFastText
+              sharedTransitionTag={`credit-${creditID}-name`}
+              style={[textStyle.white26, { width: "98%" }]}
+              numberOfLines={1}
+              ellipsizeMode="tail"
             >
-              <AnimatedFastImage
-                sharedTransitionTag={`credit-${credit?.id}-profile`}
-                source={{ uri: `https://image.tmdb.org/t/p/w300${profilePath}` }}
-                style={styles.image}
-                cachePolicy="disk"
-              />
-            </PressableScale>
-            <InfoBlock creditInfo={credit} />
+              {creditName}
+            </AnimatedFastText>
+            <View style={styles.mainView}>
+              <PressableScale
+                onPress={() => { setIsOpen(true) }}
+                style={styles.profile}
+              >
+                <AnimatedFastImage
+                  sharedTransitionTag={`credit-${credit?.id}-profile`}
+                  source={{ uri: `https://image.tmdb.org/t/p/w300${profilePath}` }}
+                  style={styles.image}
+                  cachePolicy="disk"
+                />
+              </PressableScale>
+              <InfoBlock creditInfo={credit} />
+            </View>
           </View>
         </HeaderContainer>
       </View>
@@ -81,14 +83,21 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    height: hp("42%"),
+    height: hp("45%"),
     marginHorizontal: "-2%",
   },
   darkRect: {
     backgroundColor: "rgba(0, 0, 0, 0.7)",
-    height: hp("42%"),
+    height: hp("45%"),
     marginHorizontal: "-2%",
     width: "104%",
+  },
+  headerContainer:{ 
+    flexDirection: "column", 
+    alignSelf: "center", 
+    justifyContent: "space-between", 
+    width: wp(98), 
+    height: "100%",
   },
   profile: {
     width: "40%",

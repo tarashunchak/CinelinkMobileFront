@@ -10,6 +10,7 @@ import Input from "./components/Input";
 import ScreenBackground from "@/components/ui/screen-background";
 import { useNavigation } from "expo-router";
 import AnimatedFastImage from "@/components/ui/animated-fast-image";
+import HeaderContainer from "@/components/ui/header-container";
 
 export default function LoginScreen() {
   const [username, setUsername] = useState<string>("");
@@ -23,7 +24,7 @@ export default function LoginScreen() {
   return (
     <ScreenBackground>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={styles_.view}>
+        <HeaderContainer style={styles_.view}>
           <AnimatedFastImage
             source={require("@/assets/images/logo.png")}
             style={styles_.logo}
@@ -82,7 +83,7 @@ export default function LoginScreen() {
               Create account?
             </Text>
           </PressableScale>
-        </View>
+        </HeaderContainer>
       </TouchableWithoutFeedback>
     </ScreenBackground>
   );

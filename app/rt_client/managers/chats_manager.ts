@@ -23,9 +23,6 @@ type LastMessage_T = {
   timestamp: string;
 };
 
-type TypingStatus_T = {
-};
-
 interface ChatState {
   chats: Record<ChatID, Chat_T>;
   typingStatus: Record<ChatID, Record<number, boolean>>;
@@ -113,7 +110,10 @@ export class ChatsManager extends EntityManager<Chat_T> {
         const data = await resp.json();
         if (!resp.ok || data?.status !== 200)
           return;
-        const map = new Map<number, Chat_T>(data?.results?.map((chat: Chat_T) => [chat.chat_id, chat]));
+        const map = new Map<number, Chat_T>(data?.results?.map((chat: Chat_T) => {
+          useChatStore.getState()._setLastMessage(chat.chat_id, chat.last_message);
+          return [chat.chat_id, chat];
+        }));
         useChatStore.getState()._addMany(map);
       }
     } finally {
@@ -185,7 +185,7 @@ export function useChat(chatID: ChatID): any {
 };
 
 export function useTypingStatus(chatID: ChatID, userID: UserID): boolean {
-  const status = useChatStore(s => s.typingStatus[chatID]?.[userID] || false)
+  const status = useChatStore(s => s.typingStatus[chatID]?.[userID] ?? false)
   useEffect(() => {
     console.warn("STATUS: ", status);
   }, [chatID, userID, status]);
@@ -193,19 +193,15 @@ export function useTypingStatus(chatID: ChatID, userID: UserID): boolean {
 };
 
 export function useLastChatMessage(chatID: ChatID): any {
-  /*const message: Message_T = useMessageStore(s => s.messages[chatID]?.[0]);*/
   const message = useChatStore(s => s.lastMessages[chatID]);
   useEffect(() => {
-  }, [chatID, message]);
+  }, [chatID, message?.message_id]);
 
-  if (!message)
+  if (!message || !message.message)
     return "";
-  console.warn("Message: ", message);
 
   const user = UsersManager.getInstance().get(message?.user_id);
-  let username;
-  if(!user) username = useAuthStore.getState().user?.username;
-  else username = user?.username ?? "Unknown";
+  const username = user?.username ?? "You";
   return {
     text: `${username}: ${message?.message}`,
     time: timestamp(new Date(message?.timestamp)),

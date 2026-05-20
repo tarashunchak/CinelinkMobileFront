@@ -72,7 +72,7 @@ export default function DirectChatScreen({ route }: any) {
           : 
           <Header 
             chatID={chat?.info?.chat_id} 
-            peerID={chat?.peer_id["Int32"]} 
+            peerID={chat?.peer_id?.["Int32"]} 
             imgUrl={imgUrl ?? chat?.info?.image}  
             name={name}
           />
@@ -87,7 +87,6 @@ export default function DirectChatScreen({ route }: any) {
             paddingBottom: 10,
           }}
           keyboardShouldPersistTaps="always"
-          onScrollBeginDrag={Keyboard.dismiss}
           inverted
         />
 

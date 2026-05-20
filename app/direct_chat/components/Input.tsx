@@ -31,7 +31,7 @@ export default function Input({ chatID }: { chatID: number }) {
     const insets = useSafeAreaInsets();
 
     return (
-        <View style={[styles.view,  ((height < 50) ? openedStyles.closed : openedStyles.opened), {marginBottom: insets.bottom}]}>
+        <View style={[styles.view, {marginBottom: insets.bottom}]}>
             <TextInput
                 value={text}
                 onChangeText={setText}
@@ -43,7 +43,7 @@ export default function Input({ chatID }: { chatID: number }) {
                 multiline={true}
                 numberOfLines={10}
                 editable={true}
-                onContentSizeChange={onContextSizeChange}
+                scrollEnabled={true}
             />
             {isFocused && (
                 <PressableScale
@@ -70,10 +70,10 @@ export default function Input({ chatID }: { chatID: number }) {
 
 const openedStyles = StyleSheet.create({
     opened: {
-        borderRadius: 14,
+        borderRadius: 21,
     },
     closed: {
-        borderRadius: 999,
+        borderRadius: 21,
     },
 });
 
@@ -83,19 +83,18 @@ const styles = {
         position: "absolute",
         bottom: hp("1%"),
         zIndex: 2,
-        minHeight: Platform.OS === "android" ? hp(5.1) : hp(5.3),
+        minHeight: 42,
         backgroundColor: "rgba(20, 20, 20, 1)",
         borderColor: "rgba(255, 255, 255, 0.5)",
-        borderWidth: 0.5,
-        //paddingRight: 2,
-        //paddingBottom: 2,
-        padding:2,
+        borderWidth: 0.4,
+        borderRadius: 21,
+        padding:1,
         paddingLeft: "5%",
         alignSelf: "center",
         flexDirection: "row",
         justifyContent: "space-between",
         alignContent:"center",
-        alignItems:"center",
+        alignItems:"flex-end",
     },
     input: [textStyle.white18, {
         width: "88%",

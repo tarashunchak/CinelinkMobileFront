@@ -2,15 +2,13 @@ import ReturnArrowButton from "@/components/ui/returnArrowButton";
 import { textStyle } from "@/styles/textStyles";
 import { useNavigation } from "expo-router";
 import React, { memo, useCallback, useEffect, useState } from "react";
-import { View, Text, Image, TouchableOpacity, Platform, StyleSheet } from "react-native";
+import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
-import { ChatMember } from "@/app/rt_client/models/models";
 import { calcLastSeen } from "../utils/utils";
 import { GetUserLastSeenTimestamp } from "@/api/users";
-import { useChat, useTypingStatus } from "@/app/rt_client/managers/chats_manager";
+import { useTypingStatus } from "@/app/rt_client/managers/chats_manager";
 import { useUserStatus } from "@/app/rt_client/managers/users_manager";
 import AnimatedFastImage from "@/components/ui/animated-fast-image";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import AnimatedFastText from "@/components/ui/animated-fast-text";
 import HeaderContainer from "@/components/ui/header-container";
 
@@ -34,7 +32,7 @@ function Header({ chatID, peerID, imgUrl, name }: Props) {
       if (data) setLastSeen(data);
     };
     loadContent();
-  }, [chatID, isOnline]);
+  }, [chatID, peerID, isOnline]);
 
   const openProfile = useCallback(()=>{
     navigator.push("UserProfileScreen", {
@@ -139,7 +137,7 @@ const styles = {
     justifyContent: "space-between",
     padding: "3%",
     paddingLeft: "2%",
-    zIndex: 2,
+    elevation: 15,
   },
   chatpeer: {
     view: {

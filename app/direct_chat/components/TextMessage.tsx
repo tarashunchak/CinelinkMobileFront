@@ -22,8 +22,8 @@ function TextMessage({ message }: { message: TextMessage_I  }) {
           ? styles.isCurrentUser
           : styles.notCurrentUser
       ]}
-      isEditMode
-      isSelected
+      isEditMode={false}
+      isSelected={false}
     >
       <Text style={[textStyle.white16]}>
         {message?.message}

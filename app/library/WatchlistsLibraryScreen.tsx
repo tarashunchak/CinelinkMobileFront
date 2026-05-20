@@ -25,14 +25,14 @@ function WatchlistsScreen() {
 
   return (
     <ScreenBackground>
+      <LibraryHeader />
       <FlatList
         data={watchlists}
         keyExtractor={(item: any, index: number) => String(item?.id ?? index)}
         renderItem={({ item }) =>
           <WatchlistCard watchlist={item} />
         }
-        ListHeaderComponent={<LibraryHeader />}
-        ListFooterComponent={<Spacer orientation="h" spacing={hp(14)}/>}
+        ListFooterComponent={<Spacer orientation="v" spacing={hp(9)}/>}
       />
       <BottomBar />
     </ScreenBackground>

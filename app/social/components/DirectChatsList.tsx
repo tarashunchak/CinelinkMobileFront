@@ -44,11 +44,13 @@ const DirectChatCard = memo(({ item }: { item: any }) => {
           >
               {item.name}
           </AnimatedFastText>
-          <Text
+          <AnimatedFastText
             numberOfLines={1}
             ellipsizeMode="tail"
             style={[textStyle.gray16, { maxWidth: "100%" }]}
-          >{isTyping ? "typing..." : lastMessage.text}</Text>
+          >
+            {isTyping ? "typing..." : lastMessage.text}
+          </AnimatedFastText>
         </View>
       </View>
       <View style={{
@@ -57,7 +59,7 @@ const DirectChatCard = memo(({ item }: { item: any }) => {
         margin: 5,
       }}>
         {
-          unSeenMessageCnt && <View style={{
+          unSeenMessageCnt && (<View style={{
           backgroundColor: "white",
           borderRadius: 999,
           height: 20,
@@ -68,7 +70,7 @@ const DirectChatCard = memo(({ item }: { item: any }) => {
         }}>
           <Text style={textStyle.black14, { fontWeight: "bold", textAlign: "center" }}>{unSeenMessageCnt}</Text>
         </View>
-        }
+)}
         <Text style={textStyle.white14}>{lastMessage.time}</Text>
       </View>
     </PressableScale>

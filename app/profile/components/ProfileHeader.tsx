@@ -5,7 +5,7 @@ import { LogOutButton } from "./LogOutButton";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import HeaderContainer from "@/components/ui/header-container";
 import { BlurTargetView, BlurView } from "expo-blur";
-import { Canvas, Image, useImage, LinearGradient, Mask, Rect, vec } from "@shopify/react-native-skia";
+import AnimatedFastImage from "@/components/ui/animated-fast-image";
 
 interface Props {
   bgUrl?: string;
@@ -15,14 +15,50 @@ interface Props {
 
 export default function ProfileHeader({ bgUrl, onBack, isCurrentUser }: Props) {
   const ref = useRef<View | null>(null);
-  const image = useImage(bgUrl);
+  //const image = useImage(bgUrl);
 
   return (
     <HeaderContainer style={{ backgroundColor: "transparent" }}>
       <BlurTargetView
         style={styles.bgImage}
-        ref={ref}>
-        <Canvas style={{ width: wp(100), height: hp(42), backgroundColor: "transparent" }}>
+        ref={ref}
+      >
+        <AnimatedFastImage
+          source={{ uri: bgUrl }}
+          cachePolicy="disk"
+          style={styles.bgImage}
+        />  
+      </BlurTargetView>
+      <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: "2%", paddingHorizontal: "1%" }}>
+        <ReturnArrowButton />
+        <LogOutButton isVisible={isCurrentUser} />
+      </View>
+      <BlurView
+        tint="dark"
+        intensity={10}
+        style={styles.bgImage}
+        blurReductionFactor={30}
+        blurMethod="dimezisBlurView"
+        blurTarget={ref}
+      />
+    </HeaderContainer>
+  );
+};
+
+const styles = StyleSheet.create({
+  bgImage: {
+    backgroundColor: "transparent",
+    height: hp("35%"),
+    width: wp(100),
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+  }
+});
+
+/*
+  <Canvas style={{ width: wp(100), height: hp(42), backgroundColor: "transparent" }}>
           <Mask
             mode="alpha"
             mask={
@@ -46,31 +82,4 @@ export default function ProfileHeader({ bgUrl, onBack, isCurrentUser }: Props) {
             />
           </Mask>
         </Canvas>
-      </BlurTargetView>
-      <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: "2%", paddingHorizontal: "1%" }}>
-        <ReturnArrowButton />
-        <LogOutButton isVisible={isCurrentUser} />
-      </View>
-      <BlurView
-        tint="dark"
-        intensity={0}
-        style={styles.bgImage}
-        blurReductionFactor={30}
-        blurMethod="dimezisBlurView"
-        blurTarget={ref}
-      />
-    </HeaderContainer>
-  );
-};
-
-const styles = StyleSheet.create({
-  bgImage: {
-    backgroundColor: "transparent",
-    height: hp("35%"),
-    width: wp(100),
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-  }
-});
+ */

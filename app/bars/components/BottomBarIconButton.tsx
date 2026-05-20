@@ -26,13 +26,13 @@ function BottomBarIconButton({ source, navigateTo, onPress }: { source: string, 
       activeScale={0.9}
       onPress={() => {
         onPress?.();
-        /*navigator.dispatch(
+        navigator.dispatch(
           CommonActions.reset({
             index: 0,
             routes: [{ name: navigateTo }]
           })
-        );*/
-        navigator?.navigate(navigateTo);
+        );
+        //navigator?.navigate(navigateTo);
       }} style={styles.main}>
       {
         isSocial && 

@@ -46,17 +46,17 @@ export default function MessageContainer({
         {children}
       </PressableScale>
       {
-        <View 
-          style={isSelected ? 
-            picked.pickedToggle : 
+        <View
+          style={isSelected ?
+            picked.pickedToggle :
             notPicked.pickedToggle
           }
         >
           {
-            isSelected && 
-            <AnimatedFastImage 
+            isSelected &&
+            <AnimatedFastImage
               sharedTransitionTag="message-picked"
-              source={require("")}
+              source={{}}
               style={picked.pickedImage}
             />
           }
@@ -71,9 +71,9 @@ const picked = StyleSheet.create({
     width: wp(100),
     backgroundColor: "rgba(255, 255, 255, 0.1)",
     flexDirection: "column",
-    justifyContent:"space-between",
-    paddingVertical: "1%",
-    marginVertical: "1%",
+    justifyContent: "space-between",
+    paddingVertical: 3,
+    marginVertical: 2,
   },
   pickedToggle: {
     width: 20,
@@ -82,7 +82,7 @@ const picked = StyleSheet.create({
     borderWidth: 0.5,
     borderColor: "white",
     marginLeft: 20,
-    marginBottom :"2%",
+    marginBottom: "1%",
     backgroundColor: "green"
   },
   pickedImage: {
@@ -98,13 +98,13 @@ const notPicked = StyleSheet.create({
     paddingVertical: "1%",
     marginVertical: "1%",
   },
-pickedToggle: {
+  pickedToggle: {
     width: 20,
     height: 20,
     borderRadius: 999,
     borderWidth: 0.5,
     borderColor: "white",
     marginLeft: 20,
-    marginBottom :"2%",
+    marginBottom: "1%",
   },
 });

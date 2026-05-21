@@ -1,14 +1,15 @@
 import SVGBottomBar from "@/app/bars/bottomBar";
 import GenresList from "@/components/ui/leafy-genres-list";
 import { textStyle } from "@/styles/textStyles";
-import React, { useEffect, useState } from "react";
-import { ScrollView, StyleSheet, Text } from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import HorizontalMoviesList from "./components/HorizontalMoviesList";
 import MovieOfTheDay from "./components/MovieOfTheDay";
 import { GetHomeMovies } from "@/api/home/home";
 import { Movie_I } from "./models/movie";
 import ScreenBackground from "@/components/ui/screen-background";
 import BottomBar from "@/app/bars/bottomBar";
+import { BlurTargetView } from "expo-blur";
 
 interface Movies_I {
   popular: Movie_I[],
@@ -30,32 +31,41 @@ export default function HomePageScreen() {
     load();
   }, [])
 
+  const ref = useRef<View | null>(null);
+
   return (
-    <ScreenBackground>
-      <ScrollView
-        style={stylesR.scrollView}
-        showsVerticalScrollIndicator={false}
-      >
-        <MovieOfTheDay />
+<>
+<BlurTargetView
+      style={{flex:1}}
+      ref={ref}
+    >
+          <ScreenBackground>
+        <ScrollView
+          style={stylesR.scrollView}
+          showsVerticalScrollIndicator={false}
+        >
+          <MovieOfTheDay />
 
-        <Text style={[textStyle.white22, stylesR.titleText]}>Now in Cinemas</Text>
-        <HorizontalMoviesList
-          moviesList={movies.now_playing}
-          inCinemas={true}
-        />
+          <Text style={[textStyle.white22, stylesR.titleText]}>Now in Cinemas</Text>
+          <HorizontalMoviesList
+            moviesList={movies.now_playing}
+            inCinemas={true}
+          />
 
-        <Text style={[textStyle.white22, stylesR.titleText]}>Trending</Text>
-        <HorizontalMoviesList
-          moviesList={movies.popular}
-          inCinemas={false}
-        />
+          <Text style={[textStyle.white22, stylesR.titleText]}>Trending</Text>
+          <HorizontalMoviesList
+            moviesList={movies.popular}
+            inCinemas={false}
+          />
 
-        <Text style={[textStyle.white22, stylesR.titleText]}>Genres</Text>
-        <GenresList setSelectedGenre={setSelectedGenre} />
+          <Text style={[textStyle.white22, stylesR.titleText]}>Genres</Text>
+          <GenresList setSelectedGenre={setSelectedGenre} />
 
-      </ScrollView>
-      <BottomBar/>
-    </ScreenBackground>
+        </ScrollView>
+      </ScreenBackground>
+    </BlurTargetView>
+        <BottomBar blurTarget={ref} />
+        </>
   );
 }
 

@@ -25,7 +25,6 @@ export async function GetMovieDetailsCached(movieID: number){
         backdropPath,
       };
 
-
   if(formattedData) {
     console.warn("Get movie details from api: ", movieID);
     movieCache.set(movieID, {

@@ -11,6 +11,8 @@ import { MONTH } from "@/utils/month";
 import AnimatedFastImage from "@/components/ui/animated-fast-image";
 import AnimatedFastText from "@/components/ui/animated-fast-text";
 import HeaderContainer from "@/components/ui/header-container";
+import animatedFastImage from "@/components/ui/animated-fast-image";
+import { Image } from "expo-image";
 
 export default function MainInfo(
   { movie, inCinemas = false, maximum, posterPath, backdropPath, title, cast, ref }
@@ -26,8 +28,7 @@ export default function MainInfo(
     }
 ) {
 
-  if (!backdropPath || backdropPath.length === 0)
-    backdropPath = movie?.images?.backdrops[movie?.images?.backdrops?.length - 1]?.file_path;
+
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
@@ -51,11 +52,16 @@ export default function MainInfo(
     </>
   );
 
+  Image.prefetch([
+      backdropPath ?? `https://image.tmdb.org/t/p/w300${posterPath}`,
+      `https://image.tmdb.org/t/p/w300${posterPath}`,
+  ]);
+
   return (
     <>
       <AnimatedFastImage
         sharedTransitionTag={`movie-${movie?.id}-backdrop`}
-        source={{ uri: `https://image.tmdb.org/t/p/w500${backdropPath}` }}
+        source={{uri: backdropPath}}
         style={styles.backdrop}
         cachePolicy="disk"
       />

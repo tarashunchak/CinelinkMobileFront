@@ -6,7 +6,6 @@ import { useEffect } from "react";
 import { useShallow } from "zustand/react/shallow";
 import { timestamp } from "@/app/direct_chat/utils/utils";
 import { UsersManager } from "./users_manager";
-import { useAuthStore } from "@/local_storage/user/asyncStorage/store";
 
 type Chat_T = {
   chat_id: number;
@@ -116,7 +115,8 @@ export class ChatsManager extends EntityManager<Chat_T> {
         }));
         useChatStore.getState()._addMany(map);
       }
-    } finally {
+    } catch(e){
+    }finally {
       this.isLoading = false;
     }
   };
@@ -185,7 +185,7 @@ export function useChat(chatID: ChatID): any {
 };
 
 export function useTypingStatus(chatID: ChatID, userID: UserID): boolean {
-  const status = useChatStore(s => s.typingStatus[chatID]?.[userID] ?? false)
+  const status = useChatStore(s => s.typingStatus[chatID]?.[userID])
   useEffect(() => {
     console.warn("STATUS: ", status);
   }, [chatID, userID, status]);

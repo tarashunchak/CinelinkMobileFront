@@ -115,7 +115,7 @@ function MovieOfTheDay() {
             sharedTransitionTag={`movie-${movie?.movie_id}-poster`}
             source={{ uri: `https://image.tmdb.org/t/p/w300${movie?.poster_path}` }}
             style={styles.poster}
-            cachePolicy="memory-disk"
+            cachePolicy="disk"
           />
         </PressableScale>
       </HeaderContainer>

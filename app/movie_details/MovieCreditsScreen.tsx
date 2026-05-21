@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { ImageBackground, StyleSheet } from "react-native";
 import BottomBar from "../bars/bottomBar";
 import CreditCard from "./components/CreditCard";
 import { GetMovieCredits } from "./services/services";
 import { FlatList } from "react-native-gesture-handler";
 import ReturnArrowButton from "@/components/ui/returnArrowButton";
-import { heightPercentageToDP as hp } from "react-native-responsive-screen";
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
+import HeaderContainer from "@/components/ui/header-container";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 type Credit = {
   id: number;
@@ -35,6 +37,12 @@ export default function MovieCreditsScreen({ route }: any) {
     load();
   }, [movieID])
 
+  const insets = useSafeAreaInsets();
+
+  const renderItem = useCallback(({ item }: any) => 
+    <CreditCard credit={item} />
+  , [movieID])
+
   return (
     <ImageBackground
       source={{ uri: "https://image.tmdb.org/t/p/w500" + poster_path }}
@@ -44,7 +52,7 @@ export default function MovieCreditsScreen({ route }: any) {
         style={styles.listView}
         ListHeaderComponent={ReturnArrowButton}
         ListHeaderComponentStyle={styles.listHeader}
-        contentContainerStyle={styles.contentContainer}
+        contentContainerStyle={[styles.contentContainer, {paddingTop: insets.top}]}
         showsVerticalScrollIndicator={false}
         data={[
           ...(credits?.cast || []),
@@ -53,9 +61,8 @@ export default function MovieCreditsScreen({ route }: any) {
         numColumns={3}
         maximumZoomScale={2}
         keyExtractor={(item: any, index: any) => String(item.id)}
-        renderItem={({ item }: any) => (<CreditCard credit={item} />)}
+        renderItem={renderItem}
       />
-
       <BottomBar />
     </ImageBackground>
   )
@@ -73,7 +80,6 @@ const styles = StyleSheet.create({
     marginBottom: "5%"
   },
   contentContainer: {
-    padding: "5%",
     paddingHorizontal: "2%",
     paddingBottom: hp("10%"),
   },

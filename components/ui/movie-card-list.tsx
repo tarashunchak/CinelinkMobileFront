@@ -3,8 +3,7 @@ import { getCurrentGenre, setCurrentGenre } from "@/utils/homePage";
 import { nowPlayingMoviesId } from "@/utils/nowPlaying";
 import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
-import { Platform, StyleSheet, View } from "react-native";
-import { heightPercentageToDP as hp } from "react-native-responsive-screen";
+import { StyleSheet, View } from "react-native";
 import { Float } from "react-native/Libraries/Types/CodegenTypes";
 import MovieCard from "./movie-card";
 
@@ -32,26 +31,20 @@ interface MovieCardListParams {
 
 export default function MovieCardList({ selectedGenre, movieID, movieGenre }: MovieCardListParams) {
   const [movies, setMovies] = useState<Movie[]>([]);
-  const navigation = useNavigation();
 
   useEffect(() => {
     async function loadmovies() {
       console.warn("prevGenre: ", getCurrentGenre(), "\n");
       console.warn("current: ", selectedGenre, "\n");
-
       if (movieID) {
         const data = await getSimilarMovies(movieID) || await getMoviesByGenre(movieGenre);
-
         setMovies(data);
         return;
       } else {
         if (getCurrentGenre() !== selectedGenre || !selectedGenre) {
-
           setCurrentGenre(selectedGenre);
-
           const data = getCurrentGenre() ? await getMoviesByGenre(getCurrentGenre()) : await getPopularMovies();
           if (data) setMovies(data);
-
           return;
         }
       }

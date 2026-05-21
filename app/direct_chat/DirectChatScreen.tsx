@@ -17,12 +17,12 @@ import { useEditMode } from "./hooks";
 import EditHeader from "./components/EditHeader";
 import { heightPercentageToDP } from "react-native-responsive-screen";
 import Animated, { useAnimatedKeyboard, useAnimatedStyle } from "react-native-reanimated";
-import { useChatMessages } from "../rt_client/managers/messages_manager";
+import { MessagesManager, useChatMessages } from "../rt_client/managers/messages_manager";
 import { useChat } from "../rt_client/managers/chats_manager";
 
 export default function DirectChatScreen({ route }: any) {
   const { height } = useAnimatedKeyboard();
-  const { chatID, imgUrl, name } = route?.params;
+  const { chatID, imgUrl, name, peerID } = route?.params;
   const chat = useChat(chatID);
   const [isFloatButtonVisible, setFloatButtonVisible] = useState<boolean>(false);
   const { isEditMode, enable, disable, toggle } = useEditMode(3);
@@ -71,8 +71,8 @@ export default function DirectChatScreen({ route }: any) {
           ? <EditHeader />
           : 
           <Header 
-            chatID={chat?.info?.chat_id} 
-            peerID={chat?.peer_id?.["Int32"]} 
+            chatID={chatID} 
+            peerID={peerID} 
             imgUrl={imgUrl ?? chat?.info?.image}  
             name={name}
           />
@@ -80,6 +80,7 @@ export default function DirectChatScreen({ route }: any) {
         <FlatList
           data={messages}
           scrollEventThrottle={16}
+          initialNumToRender={20}
           keyExtractor={(item) => String(item.message_id)}
           renderItem={renderItem}
           contentContainerStyle={{
@@ -88,6 +89,7 @@ export default function DirectChatScreen({ route }: any) {
           }}
           keyboardShouldPersistTaps="always"
           inverted
+          onEndReached={() => {MessagesManager.getInstance().load(chatID)}}
         />
 
         <FloatingButton isVisible={isFloatButtonVisible} />

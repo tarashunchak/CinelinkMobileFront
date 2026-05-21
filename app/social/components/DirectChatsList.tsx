@@ -24,7 +24,7 @@ const DirectChatCard = memo(({ item }: { item: any }) => {
       activeScale={0.98}
       style={styles.mainView}
       onPress={() => {
-        navigator?.navigate("DirectChatScreen", { chatID: chatID, imgUrl: item?.img_url, name: item?.name });
+        navigator?.navigate("DirectChatScreen", { chatID, imgUrl: item?.img_url, name: item?.name, peerID });
       }}
     >
       <View style={styles.infoView}>
@@ -32,17 +32,17 @@ const DirectChatCard = memo(({ item }: { item: any }) => {
           <AnimatedFastImage
             sharedTransitionTag={`chat-${item?.chat_id}-image`}
             style={styles.image}
-            source={{ uri: item?.img_url}}
+            source={{ uri: item?.img_url }}
             cachePolicy="disk"
           />
           {isOnline && <View style={styles.onlineDot}></View>}
         </View>
         <View style={styles.textView}>
-          <AnimatedFastText 
+          <AnimatedFastText
             style={textStyle.yellow18}
             sharedTransitionTag={`chat-${item?.chat_id}-name`}
           >
-              {item.name}
+            {item.name}
           </AnimatedFastText>
           <AnimatedFastText
             numberOfLines={1}
@@ -54,23 +54,23 @@ const DirectChatCard = memo(({ item }: { item: any }) => {
         </View>
       </View>
       <View style={{
-        flexDirection:"column",
+        flexDirection: "column",
         justifyContent: "space-between",
         margin: 5,
       }}>
         {
           unSeenMessageCnt && (<View style={{
-          backgroundColor: "white",
-          borderRadius: 999,
-          height: 20,
-          width: 20,
-          alignSelf: "flex-end",
-          margin: "2%",
-          alignItems: "center",
-        }}>
-          <Text style={textStyle.black14, { fontWeight: "bold", textAlign: "center" }}>{unSeenMessageCnt}</Text>
-        </View>
-)}
+            backgroundColor: "white",
+            borderRadius: 999,
+            height: 20,
+            width: 20,
+            alignSelf: "flex-end",
+            margin: "2%",
+            alignItems: "center",
+          }}>
+            <Text style={textStyle.black14, { fontWeight: "bold", textAlign: "center" }}>{unSeenMessageCnt}</Text>
+          </View>
+          )}
         <Text style={textStyle.white14}>{lastMessage.time}</Text>
       </View>
     </PressableScale>

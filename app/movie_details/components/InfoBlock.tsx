@@ -37,9 +37,7 @@ function InfoBlock({ movieInfo, cast }: { movieInfo: Movie | undefined, cast: an
       <View style={styles.starsView}>
         <Text style={textStyle.yellow16}>{"Stars: "}</Text>
         {
-          cast?.slice(
-            0, Math.min(4, cast?.length)
-          ).map((star, _) =>
+          cast?.map((star, _) =>
             <Text 
               key={star.id} 
               style={[textStyle.white16, {marginLeft: 10, maxWidth:"90%", minWidth:"80%" }]}

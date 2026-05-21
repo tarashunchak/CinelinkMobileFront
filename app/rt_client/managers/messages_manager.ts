@@ -16,8 +16,15 @@ type Message_T = {
   timestamp: string;
 };
 
+type PageInfo = {
+  next_cursor: number;
+  has_next_page: boolean;
+};
+
 interface MessagesState {
   messages: Record<number, Message_T[]>;
+  page_info: Record<number, PageInfo>;
+  _setPageInfo: (chatID: number, info: PageInfo) => void;
   _add: (chatID: number, msg: Message_T) => void;
   _addMany: (chatID: number, msgs: Message_T[]) => void;
   _remove: (chatID: number, msgID: number) => void;
@@ -25,11 +32,21 @@ interface MessagesState {
 
 const useMessageStore = create<MessagesState>((set) => ({
   messages: {},
+  page_info: {},
+  _setPageInfo: (chatID, info) => set((s) => ({
+    page_info: {...s.page_info, [chatID]: info}
+  })),
   _add: (chatID, msg) => set((s) => ({
     messages: { ...s.messages, [chatID]: [msg, ...(s.messages[chatID] || [])] }
   })),
   _addMany: (chatID, msgs) => set((s) => ({
-    messages: { ...s.messages, [chatID]: msgs }
+    messages: { 
+      ...s.messages, 
+      [chatID]: [
+        ...(s.messages[chatID] ||[]),
+        ...msgs,
+      ]
+    }
   })),
   _remove: (chatID, msgs) => set((s) => {
     const {[chatID]: _, ...remainingMessages} = s.messages;
@@ -55,15 +72,19 @@ export class MessagesManager extends EntityManager<Message_T> {
     if(this.isLoading) return;
 
     this.isLoading = true;
+    const pageInfo = useMessageStore.getState().page_info[chatID]; 
+    if(pageInfo && !pageInfo?.has_next_page) return;
     try {
-      const response = await fetch(`${API_URL}/chats/${chatID}/messages`)
+      const response = await fetch(`${API_URL}/chats/${chatID}/messages?cursor=${pageInfo?.next_cursor ?? 1}`)
       const data = await response?.json();
       if (data?.results) {
-        const reversed = [...data.results].reverse();
+        const reversed = [...data?.results?.data];
         const current = useMessageStore.getState().messages;
         if (JSON.stringify(current) !== JSON.stringify(reversed)) {
           this.addArray(chatID, reversed);
           ChatsManager.getInstance().setLastMessage(chatID, reversed[0])
+          console.warn("\n\n\nPAGE INFO: ", data.results.page_info)
+          useMessageStore.getState()._setPageInfo(chatID, data.results.page_info)
         }
         //this.lastSeenMessageId = reversed[0]?.message_id;
       }

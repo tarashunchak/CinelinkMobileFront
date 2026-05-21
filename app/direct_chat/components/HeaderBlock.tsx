@@ -6,8 +6,8 @@ import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { calcLastSeen } from "../utils/utils";
 import { GetUserLastSeenTimestamp } from "@/api/users";
-import { useTypingStatus } from "@/app/rt_client/managers/chats_manager";
 import { useUserStatus } from "@/app/rt_client/managers/users_manager";
+import { useTypingStatus } from "@/app/rt_client/managers/chats_manager";
 import AnimatedFastImage from "@/components/ui/animated-fast-image";
 import AnimatedFastText from "@/components/ui/animated-fast-text";
 import HeaderContainer from "@/components/ui/header-container";
@@ -19,20 +19,20 @@ interface Props {
   name: string;
 };
 
-function Header({ chatID, peerID, imgUrl, name }: Props) {
-  const navigator = useNavigation();
-  const [lastSeen, setLastSeen] = useState<string>();
-
+export default function Header({ chatID, peerID, imgUrl, name }: Props) {
   const isOnline = useUserStatus(peerID);
   const isTyping = useTypingStatus(chatID, peerID);
+  const navigator = useNavigation();
+  const [lastSeen, setLastSeen] = useState<string>();
 
   useEffect(() => {
     async function loadContent() {
       const data = await GetUserLastSeenTimestamp(peerID);
       if (data) setLastSeen(data);
     };
-    loadContent();
-  }, [chatID, peerID, isOnline]);
+    peerID && loadContent();
+    console.warn("Typing: ", isTyping)
+  }, [chatID, peerID, isTyping, isOnline]);
 
   const openProfile = useCallback(()=>{
     navigator.push("UserProfileScreen", {
@@ -90,8 +90,6 @@ function Header({ chatID, peerID, imgUrl, name }: Props) {
     </HeaderContainer>
   );
 };
-
-export default memo(Header);
 
 const stylesR = StyleSheet.create({
   view: {

@@ -1,13 +1,13 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
-import ActorProfileScreen from "@/app/credit_details/CreditDetailScreen";
-import MovieCreditsScreen from "@/app/movie_details/MovieCreditsScreen";
-import MovieDetailScreen from "@/app/movie_details/MovieDetailScreen";
-import UserProfileScreen from "@/app/profile/UserProfileScreen";
+import CreditDetailsScreen from "@/app/(app)/credit_details";
+import MovieCreditsScreen from "@/app/(app)/movie_details/MovieCreditsScreen";
+import MovieDetailScreen from "@/app/(app)/movie_details";
+import UserProfileScreen from "@/app/(app)/profile";
 
-import WatchlistsLibraryScreen from "@/app/library/WatchlistsLibraryScreen";
-import WatchlistDetailsScreen from "@/app/watchlist/WatchlistDetailsScreen";
-import DirectChatScreen from "@/app/direct_chat/DirectChatScreen";
+import WatchlistsLibraryScreen from "@/app/(app)/library";
+import WatchlistDetailsScreen from "@/app/(app)/watchlist";
+import DirectChatScreen from "@/app/(app)/direct_chat";
 
 const Stack = createNativeStackNavigator();
 
@@ -20,7 +20,7 @@ export default function ProfileNavigatorStack() {
       <Stack.Screen name="UserProfileScreen" component={UserProfileScreen} />
       <Stack.Screen name="MovieDetailScreen" component={MovieDetailScreen} />
       <Stack.Screen name="MovieCreditsScreen" component={MovieCreditsScreen} />
-      <Stack.Screen name="ActorProfileScreen" component={ActorProfileScreen} />
+      <Stack.Screen name="CreditDetailsScreen" component={CreditDetailsScreen} />
       <Stack.Screen name="WatchlistsLibraryScreen" component={WatchlistsLibraryScreen} />
       <Stack.Screen name="WatchlistDetailsScreen" component={WatchlistDetailsScreen} />
       <Stack.Screen name="DirectChatScreen" component={DirectChatScreen} />

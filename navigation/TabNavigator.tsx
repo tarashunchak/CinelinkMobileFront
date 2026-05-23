@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import LibraryNavigatorStack from "./stacks/libraryNavigator";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import SocialNavigatorStack from "./stacks/socialNavigator";
@@ -6,29 +6,34 @@ import ProfileNavigatorStack from "./stacks/profileNavigation";
 import HomeNavigatorStack from "./stacks/homeNavigation";
 import SearchNavigatorStack from "./stacks/searchNavigation";
 import * as Notifications from "@/utils/notifications";
-import { ChatsManager } from "../app/rt_client/managers/chats_manager";
-import { UsersManager } from "../app/rt_client/managers/users_manager";
-import { WatchlistsManager } from "../app/rt_client/managers/watchlists_manager";
+import { ChatsManager } from "../app/(app)/rt_client/managers/chats_manager";
+import { UsersManager } from "../app/(app)/rt_client/managers/users_manager";
+import { WatchlistsManager } from "../app/(app)/rt_client/managers/watchlists_manager";
 import { useAuthStore } from "@/local_storage/user/asyncStorage/store"
-import { RTClient } from "../app/rt_client/rt_client";
+import { RTClient } from "../app/(app)/rt_client/rt_client";
+import BottomBar from "@/app/(app)/bars/bottomBar";
+import ScreenBackground, { useBlurStore } from "@/components/ui/screen-background";
 
 const Tab = createBottomTabNavigator();
 
 export default function TabNavigator() {
   //Notifications.requestUserPermission();
+  const currentUserID = useAuthStore(state => state.user?.user_id);
 
-  const currentUserID = useAuthStore?.getState()?.user?.user_id;
-  
-  ChatsManager.getInstance().init(currentUserID);
-  UsersManager.getInstance().init(currentUserID);
-  WatchlistsManager.getInstance().init(currentUserID);
+  useEffect(() => {
+    if (!currentUserID) return;
 
-  RTClient.connect(currentUserID);
+    ChatsManager.getInstance().init(currentUserID);
+    UsersManager.getInstance().init(currentUserID);
+    WatchlistsManager.getInstance().init(currentUserID);
+
+    RTClient.connect(currentUserID);
+  }, [currentUserID]);
 
   return (
-    <>
     <Tab.Navigator screenOptions={{
       headerShown: false,
+      tabBarShowLabel: false,
       tabBarStyle: {
         display: "none",
         position: "absolute",
@@ -42,6 +47,5 @@ export default function TabNavigator() {
       <Tab.Screen name="Social" component={SocialNavigatorStack} />
       <Tab.Screen name="Profile" component={ProfileNavigatorStack} />
     </Tab.Navigator >
-</>
   );
 };

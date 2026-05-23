@@ -1,13 +1,15 @@
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+//import { createNativeStackNavigator } from "@react-navigation/native-stack";
+
 import React from "react";
-import MovieCreditsScreen from "../../app/movie_details/MovieCreditsScreen";
-import MovieDetailScreen from "../../app/movie_details/MovieDetailScreen";
-import WatchlistsLibraryScreen from "../../app/library/WatchlistsLibraryScreen";
-import WatchlistDetailsScreen from "../../app/watchlist/WatchlistDetailsScreen";
-import HomePageScreen from "../../app/home/HomeScreen";
-import CreditDetailScreen from "../../app/credit_details/CreditDetailScreen";
-import OnboardingScreen from "@/app/OnboardingScreen";
-const Stack = createNativeStackNavigator();
+import MovieCreditsScreen from "@/app/(app)/movie_details/MovieCreditsScreen";
+import MovieDetailScreen from "@/app/(app)/movie_details";
+import WatchlistsLibraryScreen from "@/app/(app)/library";
+import WatchlistScreen from "@/app/(app)/watchlist";
+import HomePageScreen from "@/app/(app)/home";
+import CreditDetailScreen from "@/app/(app)/credit_details";
+import * as ExpoRouter from "expo-router";
+
+const Stact = ExpoRouter.
 
 export default function HomeNavigatorStack() {
   return (
@@ -23,7 +25,7 @@ export default function HomeNavigatorStack() {
       <Stack.Screen name="MovieCreditsScreen" component={MovieCreditsScreen} />
       <Stack.Screen name="CreditDetailScreen" component={CreditDetailScreen} />
       <Stack.Screen name="WatchlistsLibraryScreen" component={WatchlistsLibraryScreen} />
-      <Stack.Screen name="WatchlistDetailsScreen" component={WatchlistDetailsScreen} />
+      <Stack.Screen name="WatchlistScreen" component={WatchlistScreen} />
     </Stack.Navigator>
   )
 }

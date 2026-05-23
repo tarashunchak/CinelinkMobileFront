@@ -1,30 +1,28 @@
-import { getMovieGenres } from "@/api/tmdbApi";
+import { LoadGenresCached, useHomeStore } from "@/app/(app)/home/cache";
 import { genreStyle, genresInfo } from "@/styles/genreStyle";
-import React, { useEffect, useState } from "react";
-import { TouchableOpacity, Pressable, ScrollView, Text, View, FlatList } from "react-native";
+import React, { useEffect } from "react";
+import { Text, View, FlatList, StyleSheet } from "react-native";
 import { PressableScale } from "react-native-pressable-scale";
 import { Skeleton } from "react-native-skeletons";
 
 
 export default function GenresList({ setSelectedGenre }: { setSelectedGenre: (icon: number) => void }) {
-  let [genreItems, setGenres] = useState<any[]>(Array.from({ length: 6 }));
+  const genreItems = useHomeStore(s => s.genres);
 
-  useEffect(() => {
-    async function loadMovies() {
-      const data = await getMovieGenres();
-      if (data)
-        setGenres([{ name: "All" }, ...data]);
-    }
-    loadMovies();
-  }, []);
+  useEffect(()=>{
+    async function load(){
+      await LoadGenresCached();
+    };
+    load();
+  }, [])
 
   return (
     <View style={genreStyle.genreCellView}>
       <FlatList
         data={genreItems}
         horizontal={true}
-        style={{ width: "100%", margin: 0, borderRadius: 22, height: 44, backgroundColor: "rgba(255, 255, 255, 0.03)" }}
-        contentContainerStyle={{ paddingHorizontal: 10 }}
+        style={styles.flatList}
+        contentContainerStyle={styles.contentContainerStyle}
         showsHorizontalScrollIndicator={false}
         keyExtractor={(item: any, index: number) => String(item?.id ?? index)}
         renderItem={({ item }) => {
@@ -40,5 +38,18 @@ export default function GenresList({ setSelectedGenre }: { setSelectedGenre: (ic
         }}
       />
     </View >
-  )
-}
+  );
+};
+
+const styles = StyleSheet.create({
+  flatList: { 
+    width: "100%", 
+    margin: 0, 
+    borderRadius: 22, 
+    height: 44, 
+    backgroundColor: "rgba(255, 255, 255, 0.03)" 
+  },
+  contentContainerStyle: {
+    paddingHorizontal: 10 
+  },
+});

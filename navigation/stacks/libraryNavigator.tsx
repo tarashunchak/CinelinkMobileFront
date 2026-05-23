@@ -1,14 +1,14 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StatusBar } from "expo-status-bar";
 import React from "react";
-import ActorProfileScreen from "@/app/credit_details/CreditDetailScreen";
-import MovieCreditsScreen from "@/app/movie_details/MovieCreditsScreen";
-import MovieDetailScreen from "@/app/movie_details/MovieDetailScreen";
-import UserProfileScreen from "@/app/profile/UserProfileScreen";
+import ActorProfileScreen from "@/app/(app)/credit_details";
+import MovieCreditsScreen from "@/app/(app)/movie_details/MovieCreditsScreen";
+import MovieDetailScreen from "@/app/(app)/movie_details";
+import UserProfileScreen from "@/app/(app)/profile";
 
-import WatchlistsLibraryScreen from "@/app/library/WatchlistsLibraryScreen";
-import WatchlistDetailsScreen from "@/app/watchlist/WatchlistDetailsScreen";
-import AddWatchlist from "@/app/library/components/addWatchlist";
+import WatchlistsLibraryScreen from "@/app/(app)/library";
+import WatchlistDetailsScreen from "@/app/(app)/watchlist";
+import AddWatchlist from "@/app/(app)/library/components/addWatchlist";
 
 const Stack = createNativeStackNavigator();
 

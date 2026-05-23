@@ -4,7 +4,7 @@ import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { View, Text, StyleSheet } from "react-native";
 import { useNavigation } from "expo-router";
 import { PressableScale } from "react-native-pressable-scale";
-import { useUserStatus } from "@/app/rt_client/managers/users_manager";
+import { useUserStatus } from "@/app/(app)/rt_client/managers/users_manager";
 import { Image } from "expo-image";
 import { Skeleton } from "react-native-skeletons";
 import AnimatedFastImage from "@/components/ui/animated-fast-image";
@@ -46,7 +46,7 @@ function UserCard({ user }: { user: Props }) {
       </View>
       <Image
         style={styles.chatIcon}
-        source={require("@/app/social/assets/chatIcon.png")}
+        source={require("@/app/(app)/social/assets/chatIcon.png")}
       />
     </PressableScale>
   );

@@ -1,11 +1,11 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
-import ActorProfileScreen from "@/app/credit_details/CreditDetailScreen";
-import MovieCreditsScreen from "@/app/movie_details/MovieCreditsScreen";
-import MovieDetailScreen from "@/app/movie_details/MovieDetailScreen";
-import UserProfileScreen from "@/app/profile/UserProfileScreen";
-import SocialScreen from "@/app/social/SocialScreen";
-import DirectChatScreen from "@/app/direct_chat/DirectChatScreen";
+import ActorProfileScreen from "@/app/(app)/credit_details";
+import MovieCreditsScreen from "@/app/(app)/movie_details/MovieCreditsScreen";
+import MovieDetailScreen from "@/app/(app)/movie_details";
+import UserProfileScreen from "@/app/(app)/profile";
+import SocialScreen from "@/app/(app)/social";
+import DirectChatScreen from "@/app/(app)/direct_chat";
 
 const Stack = createNativeStackNavigator();
 

@@ -6,6 +6,7 @@ import { useAuthStore } from "@/local_storage/user/asyncStorage/store"
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { KeyboardProvider } from "react-native-keyboard-controller";
+import { useRouter } from "expo-router";
 
 //Notifications.configure();
 
@@ -22,8 +23,22 @@ function App() {
   const isAuthenticated = useAuthStore(state => state.isAuthenticated);
   const isHydrated = useAuthStore(state => state.isHydrated);
 
-  return (
-    <GestureHandlerRootView style={{
+  const router = useRouter();
+
+  if(isAuthenticated)
+    router.replace("/home");
+  else
+    router.replace("/login");
+
+
+  return (null);
+};
+
+export default memo(App);
+
+
+/**
+ *     <GestureHandlerRootView style={{
       flex: 1,
     }}>
       <KeyboardProvider>
@@ -32,7 +47,4 @@ function App() {
         </BottomSheetModalProvider>
       </KeyboardProvider>
     </GestureHandlerRootView>
-  );
-};
-
-export default memo(App);
+ */

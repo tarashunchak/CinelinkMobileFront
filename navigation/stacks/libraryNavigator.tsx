@@ -1,10 +1,10 @@
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+/*import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StatusBar } from "expo-status-bar";
 import React from "react";
 import ActorProfileScreen from "@/app/(app)/credit_details";
 import MovieCreditsScreen from "@/app/(app)/movie_details/MovieCreditsScreen";
 import MovieDetailScreen from "@/app/(app)/movie_details";
-import UserProfileScreen from "@/app/(app)/profile";
+import UserProfileScreen from "@/app/(app)/(tabs)/profile";
 
 import WatchlistsLibraryScreen from "@/app/(app)/library";
 import WatchlistDetailsScreen from "@/app/(app)/watchlist";
@@ -28,4 +28,9 @@ export default function LibraryNavigatorStack() {
       <Stack.Screen name="AddWatchlist" component={AddWatchlist} options={{ headerShown: false }} />
     </Stack.Navigator>
   )
+}*/
+
+
+export default function LibraryNavigatorStack() {
+  return (<Stack/>)
 }

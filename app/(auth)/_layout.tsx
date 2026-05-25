@@ -1,11 +1,16 @@
-import ScreenBackground from "@/components/ui/screen-background";
-import { Slot } from "expo-router";
-import { View } from "react-native";
+import React from "react";
+import { Stack } from "expo-router";
+import AuthBackground from "@/src/components/ui/authBackground";
 
 export default function AuthLayout(){
   return (
-    <ScreenBackground>
-        <Slot />
-    </ScreenBackground>
+    <AuthBackground>
+        <Stack screenOptions={{
+          headerShown: false,
+          animation: "slide_from_right",
+          contentStyle:{backgroundColor: "transparent"}
+        }}>
+        </Stack>
+    </AuthBackground>
   );
 };

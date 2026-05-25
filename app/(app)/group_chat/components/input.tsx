@@ -3,7 +3,7 @@ import { textStyle } from "@/styles/textStyles";
 import React, { useState } from "react";
 import { View, Text, Image, TouchableOpacity, TextInput } from "react-native";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
-import { RTChat } from "../../rt_client/rt_client";
+import { RTClient } from "@/src/rt_client/rt_client";
 import { getCurrentUserID } from "@/utils/utils";
 
 export default function Input({ sendMessage, chatID }: { sendMessage: any, chatID: number }) {
@@ -13,12 +13,12 @@ export default function Input({ sendMessage, chatID }: { sendMessage: any, chatI
   //const sendMessage = route?.params?.sendMessage;
 
   function handleFocus() {
-    RTChat.setTyping(chatID, getCurrentUserID(), true);
+    RTClient.setTypingStatus(chatID, getCurrentUserID(), true);
     setIsFocused(true);
   };
 
   function handleBlur() {
-    RTChat.setTyping(chatID, getCurrentUserID(), false);
+    RTClient.setTypingStatus(chatID, getCurrentUserID(), false);
     //setIsFocused(false);
   };
 

@@ -1,14 +1,15 @@
-import React, { memo, useEffect, useState } from "react";
-import { View } from "react-native";
-import BottomBarIconButton from "./components/BottomBarIconButton";
-import { Platform, StyleSheet } from "react-native";
+import React, { memo, useCallback } from "react";
+import BottomBarButtons from "./components/BottomBarIconButton";
+import { View, Platform, StyleSheet } from "react-native";
 import { Circle, Path, Svg } from "react-native-svg";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
-import Animated, { useAnimatedProps, withSpring, useSharedValue, withTiming, useDerivedValue, useAnimatedStyle } from "react-native-reanimated";
-import useValue, { BackdropBlur, Blur, Canvas, ColorMatrix, Fill, FractalNoise, Group, LinearGradient, LumaColorFilter, Mask, RadialGradient, rect, Rect, RoundedRect, rrect, Skia, vec } from "@shopify/react-native-skia";
+import Animated, { useAnimatedProps, withSpring, useSharedValue, useDerivedValue, useAnimatedStyle } from "react-native-reanimated";
+import { Canvas, ColorMatrix, FractalNoise, LinearGradient, RadialGradient, rect, RoundedRect, rrect, Skia, vec } from "@shopify/react-native-skia";
 import { BlurView } from "expo-blur";
-import { useRouter, useSegments } from "expo-router";
-import { useBlurStore } from "@/components/ui/screen-background";
+import { usePathname } from "expo-router";
+import { useBlurTargetReady, useBlurTargetRef } from "@/src/hooks/useBackgroundBlur";
+
+
 
 function SVGBottomBar() {
   const circleX = useSharedValue<number>(50);
@@ -86,61 +87,24 @@ function SVGBottomBar() {
           animatedProps={animatedCircleProps}
         />
       </Svg>
-      <View style={bottomBar.view}>
-        <BottomBarIconButton source="library" navigateTo="Library"
-          onPress={() => {
-            circleX.value = withSpring(13, {
-              stiffness: 4,
-              mass: 100,
-              damping: 4,
-            });
-          }} />
-        <BottomBarIconButton source="search" navigateTo="Search" onPress={() => {
-          circleX.value = withSpring(31.5, {
-            stiffness: 4,
-            mass: 100,
-            damping: 4,
-          });
-        }} />
-        <BottomBarIconButton source="home" navigateTo="Home" onPress={() => {
-          circleX.value = withSpring(50, {
-            stiffness: 4,
-            mass: 100,
-            damping: 4,
-          });
-        }} />
-        <BottomBarIconButton source="social" navigateTo="Social" onPress={() => {
-          circleX.value = withSpring(68.5, {
-            stiffness: 4,
-            mass: 100,
-            damping: 4,
-          });
-        }} />
-        <BottomBarIconButton source="profile" navigateTo="Profile" onPress={() => {
-          circleX.value = withSpring(87, {
-            stiffness: 4,
-            mass: 100,
-            damping: 4,
-          });
-        }} />
-      </View>
+      <BottomBarButtons />
     </View>
   );
 };
 
-function BottomBar_() {
+/*function BottomBar_() {
   return (
     <View style={bottomBar.mainView}>
       <View style={bottomBar.view}>
-        <BottomBarIconButton source="library" navigateTo="Library" />
-        <BottomBarIconButton source="search" navigateTo="Search" />
-        <BottomBarIconButton source="home" navigateTo="Home" />
-        <BottomBarIconButton source="social" navigateTo="Social" />
-        <BottomBarIconButton source="profile" navigateTo="Profile" />
+        <BottomBarButton source="library" navigateTo="Library" />
+        <BottomBarButton source="search" navigateTo="Search" />
+        <BottomBarButton source="home" navigateTo="Home" />
+        <BottomBarButton source="social" navigateTo="Social" />
+        <BottomBarButton source="profile" navigateTo="Profile" />
       </View>
     </View>
   );
-};
+};*/
 
 const height = 54;
 const width = wp(92);
@@ -148,6 +112,8 @@ const indicatorBase = rrect(rect(0, 2, 76, 49), 24, 24);
 const indicatorStroke = rrect(rect(0, 2, 76, 49), 24, 24);
 const r = rrect(rect(0, 0, width, height), 27, 27);
 const mainStroke = rrect(rect(1, 1, width - 2, height - 2), 27, 27);
+
+
 
 const Indicator = ({ x }: any) => {
   const matrix = useDerivedValue(() => {
@@ -173,17 +139,17 @@ const Indicator = ({ x }: any) => {
   )
 };
 
-const SkiaBottomBar = memo(({ children }: any) => {
+const SkiaBottomBar = memo(() => {
   return (
     <Canvas style={StyleSheet.absoluteFill}>
-      <RoundedRect rect={r} style="stroke" strokeWidth={0} >
+      <RoundedRect rect={r} style="stroke" strokeWidth={1} >
         <RadialGradient
           c={vec(width / 2, 0)}
-          r={25}
-          colors={["white", "rgba(120, 120, 120, 0.2)"]}
+          r={50}
+          colors={["rgba(255, 255, 255, 0.5)", "rgba(220, 220, 220, 0.1)"]}
         />
       </RoundedRect>
-      <RoundedRect rect={mainStroke} style="stroke" strokeWidth={0.4} >
+      <RoundedRect rect={mainStroke} style="stroke" strokeWidth={0.1} >
         <LinearGradient
           start={vec(0, 0)}
           end={vec(width, height)}
@@ -193,162 +159,107 @@ const SkiaBottomBar = memo(({ children }: any) => {
           ]}
         />
       </RoundedRect>
-      {children}
+      <RoundedRect rect={r}>
+        <ColorMatrix
+          matrix={[
+            0.09, 0.187, 0.014, 0, 0,
+            0.09, 0.187, 0.014, 0, 0,
+            0.09, 0.187, 0.014, 0, 0,
+            0, 0, 0, 0.2, 0
+          ]}
+        />
+        <FractalNoise
+          freqX={0.2}
+          freqY={0.2}
+          octaves={1}
+        />
+      </RoundedRect>
     </Canvas>
   );
 });
 
+const TAB_OFFSET_X: Record<string, number> = {
+  "/library": 2,
+  "/search": 70,
+  "/home": width / 2 - 38,
+  "/social": width / 2 + 32,
+  "/tab_profile": width - 78,
+};
+
+const SPRING_CONFIG = {
+  damping: 20,
+  stiffness: 150,
+  mass: 5,
+};
+
 function BottomBar() {
-  const router = useRouter();
-  const segments = useSegments();
-
-  const blurTarget = useBlurStore((state) => state.blurTargetRef);
-
+  //const router = useRouter();
+  const blurTarget = useBlurTargetRef();
+  const isReadyToBlur = useBlurTargetReady();
   const tabX = useSharedValue(width / 2 - 38);
+  const pathname = usePathname();
 
-  const moveToTab = (newX: number) => {
-    tabX.value = withSpring(newX)
-  };
+  //const blurTargetRef = useBlurStore(state => state.blurTargetRef);
 
-  const animatedStyles = useAnimatedStyle(() => ({
-    transform: [{ translateX: tabX.value }],
+
+  const handlePress = useCallback((route: any) => {
+    const x = TAB_OFFSET_X[route];
+    if (x)
+      tabX.value = withSpring(x, SPRING_CONFIG);
+    //router.navigate(route);
+  }, [pathname]);
+
+  const translateX = useAnimatedStyle(() => ({
+    transform: [{ translateX: tabX.value }]
   }));
-  const handlePress = (route: string) => {
-    //tabX.value = withTiming(tabOffsetX[route], { duration: 1500 })
-    router.navigate({
-      pathname: route,
-    });
-  };
-
-  const dynamicBase = useDerivedValue(() => {
-    return rrect(rect(tabX.value, 2, 76, 50), 24, 24);
-  });
-  const dynamicStroke = useDerivedValue(() => {
-    return rrect(rect(tabX.value, 2, 76, 50), 23, 24);
-  });
-
-  /*const matrix = useValue(() => {
-    const m3 = Skia.Matrix();
-    m3.translate(tabX.value, 0);
-    return m3;
-  });*/
-
-  const transform = useDerivedValue(() => [
-    { translateX: tabX.value }
-  ]);
-
-  const translateX = useAnimatedStyle(()=>{
-    return {
-      transform: [{translateX: tabX.value}],
-    }
-  });
-
-  const currentSegment = segments[segments?.length - 1];
-
-  useEffect(()=>{
-    const current = segments[segments?.length - 1];
-    const offsetX = tabOffsetX[current];
-
-    if(offsetX === undefined || tabX.value === offsetX) return
-    tabX.value = withTiming(offsetX, {duration: 500});
-    console.log("UseEffect BottomBar");
-  }, [currentSegment]);
 
   return (
-    <View style={{ width, height, position: "absolute", bottom: wp(4), alignSelf: "center", overflow: "hidden", borderRadius: 27 }}>
-      <BlurView
-        tint="systemUltraThinMaterialDark"
-        intensity={140}
-        blurReductionFactor={15}
+    <View style={styles_.view}>
+      {isReadyToBlur && <BlurView
+        intensity={100}
         style={StyleSheet.absoluteFill}
-        blurMethod="dimezisBlurView"
         blurTarget={blurTarget}
+        blurMethod="dimezisBlurView"
+        blurReductionFactor={10}
+        tint="systemThinMaterialDark"
+      />}
+      <SkiaBottomBar />
+      <Animated.View
+        style={[
+          styles_.indicator,
+          translateX
+        ]}
       />
-      <Canvas style={StyleSheet.absoluteFill}>
-        <RoundedRect rect={r} style="stroke" strokeWidth={0.3} >
-          <RadialGradient
-            c={vec(width / 2, 0)}
-            r={35}
-            colors={["white", "rgba(220, 220, 220, 0.2)"]}
-          />
-        </RoundedRect>
-        <RoundedRect rect={mainStroke} style="stroke" strokeWidth={0.1} >
-          <LinearGradient
-            start={vec(0, 0)}
-            end={vec(width, height)}
-            colors={[
-              "rgba(140, 140, 140, 0.8)",
-              "rgba(140, 140, 140, 0)",
-            ]}
-          />
-        </RoundedRect>
-      </Canvas>
-      <View style={styles.view}>
-        <BottomBarIconButton source="library" navigateTo="Library" onPress={() => handlePress("/library")} />
-        <BottomBarIconButton source="search" navigateTo="Search" onPress={() => handlePress("/search")} />
-        <BottomBarIconButton source="home" navigateTo="Home" onPress={() => {
-          handlePress("/home");
-        }} />
-        <BottomBarIconButton source="social" navigateTo="Social" onPress={() => {
-          handlePress("/social");
-        }} />
-        <BottomBarIconButton source="profile" navigateTo="Profile" onPress={() => {
-          handlePress("/profile");
-        }} />
-      </View>
-<Animated.View
-      style={[
-        {
-          position: "absolute",
-          top: 2,
-          width: 76,
-          height: 50,
-          backgroundColor: "white",
-        },
-translateX,
-      ]}
-      />
+      <BottomBarButtons onPress={handlePress} />
     </View>
   )
 };
 
 export default memo(BottomBar);
 
-//export default memo(BottomBar);
-
-/** 
- * <LinearGradient
-              start={vec(0, 0)}
-              end={vec(wp(96), height)}
-              colors={[
-                "rgba(100, 100, 255, 0.8)",
-                "rgba(0, 0, 0, 0.3)",
-              ]}
-            />
-
-
-            /////
-<RoundedRect rect={r} >
-          <ColorMatrix
-            matrix={[
-              0.09, 0.187, 0.014, 0, 0,
-              0.09, 0.187, 0.014, 0, 0,
-              0.09, 0.187, 0.014, 0, 0,
-              0, 0, 0, 0.2, 0
-            ]}
-          />
-          <FractalNoise
-            freqY={0.3}
-            freqX={0.3}
-            octaves={2}
-          />
-        </RoundedRect>
-
-
-        ////
-
-
-*/
+const styles_ = StyleSheet.create({
+  view: {
+    width, height,
+    position: "absolute",
+    bottom: wp(4),
+    alignSelf: "center",
+    overflow: "hidden",
+    borderRadius: 27,
+    borderWidth: 0,
+    paddingVertical: 2,
+  },
+  indicator: {
+    position: "absolute",
+    top: 2,
+    bottom: 2,
+    height: "100%",
+    width: 76,
+    borderRadius: 24,
+    backgroundColor: "rgba(130, 130, 130, 0.3)",
+    borderWidth: 0.5,
+    borderColor: "rgba(130, 130, 130, 0.8)",
+  },
+});
 
 const styles = StyleSheet.create({
   mainView: {
@@ -380,10 +291,77 @@ const styles = StyleSheet.create({
   },
 });
 
-const tabOffsetX = {
-  "library": 2,
-  "search": 70,
-  "home": width/2 - 38,
-  "social": width / 2 + 32,
-  "profile": width - 78,
-}
+
+//export default memo(BottomBar);
+
+/** 
+ * <LinearGradient
+              start={vec(0, 0)}
+              end={vec(wp(96), height)}
+              colors={[
+                "rgba(100, 100, 255, 0.8)",
+                "rgba(0, 0, 0, 0.3)",
+              ]}
+            />
+
+
+            /////
+<RoundedRect rect={r} >
+          <ColorMatrix
+            matrix={[
+              0.09, 0.187, 0.014, 0, 0,
+              0.09, 0.187, 0.014, 0, 0,
+              0.09, 0.187, 0.014, 0, 0,
+              0, 0, 0, 0.2, 0
+            ]}
+          />
+          <FractalNoise
+            freqY={0.3}
+            freqX={0.3}
+            octaves={2}
+          />
+        </RoundedRect>
+
+<Animated.View
+      style={[
+        {
+          position: "absolute",
+          top: 2,
+          width: 76,
+          height: 50,
+          backgroundColor: "black",
+        },
+translateX,
+      ]}
+      />
+        ////
+
+    tabX.value = withTiming(offsetX, {
+      duration: 500,
+      easing: Easing.inOut(Easing.ease),
+    });
+<Canvas style={StyleSheet.absoluteFill}>
+        <RoundedRect rect={r} style="stroke" strokeWidth={0.3} >
+          <RadialGradient
+            c={vec(width / 2, 0)}
+            r={35}
+            colors={["white", "rgba(220, 220, 220, 0.2)"]}
+          />
+        </RoundedRect>
+        <RoundedRect rect={mainStroke} style="stroke" strokeWidth={0.1} >
+          <LinearGradient
+            start={vec(0, 0)}
+            end={vec(width, height)}
+            colors={[
+              "rgba(140, 140, 140, 0.8)",
+              "rgba(140, 140, 140, 0)",
+            ]}
+          />
+        </RoundedRect>
+        <Group transform={skiaTransform}>
+      <RoundedRect rect={indicatorBase} strokeWidth={1} color="rgba(180, 190, 190, 0.2)" />
+      <RoundedRect rect={indicatorStroke} style="stroke" strokeWidth={0.1} />
+</Group>
+      </Canvas>
+*/
+

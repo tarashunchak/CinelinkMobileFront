@@ -1,15 +1,18 @@
 //import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import React from "react";
+import { Stack } from "expo-router";
+
+/*import React from "react";
 import MovieCreditsScreen from "@/app/(app)/movie_details/MovieCreditsScreen";
 import MovieDetailScreen from "@/app/(app)/movie_details";
 import WatchlistsLibraryScreen from "@/app/(app)/library";
 import WatchlistScreen from "@/app/(app)/watchlist";
 import HomePageScreen from "@/app/(app)/home";
 import CreditDetailScreen from "@/app/(app)/credit_details";
-import * as ExpoRouter from "expo-router";
+import {createNativeStackNavigator} from "@react-navigation/native-stack";
+//import * as ExpoRouter from "expo-router";
 
-const Stact = ExpoRouter.
+const Stack = createNativeStackNavigator();
 
 export default function HomeNavigatorStack() {
   return (
@@ -28,4 +31,9 @@ export default function HomeNavigatorStack() {
       <Stack.Screen name="WatchlistScreen" component={WatchlistScreen} />
     </Stack.Navigator>
   )
+}*/
+
+
+export default function HomeNavigatorStack() {
+  return (<Stack/>)
 }

@@ -1,8 +1,8 @@
 import { LoginRequest } from "@/api/auth/loginPageApi";
-import LeafyContinueButton from "@/components/ui/leafy-continue-button";
-import LeafyIconButton from "@/components/ui/leafy-icon-button";
-import LeafyReturnArrowButton from "@/components/ui/returnArrowButton";
-import LeafyText from "@/components/ui/leafy-text";
+import LeafyContinueButton from "@/src/components/ui/continue-button";
+import LeafyIconButton from "@/src/components/ui/leafy-icon-button";
+import LeafyReturnArrowButton from "@/src/components/ui/returnArrowButton";
+import LeafyText from "@/src/components/ui/leafy-text";
 import React from "react";
 import { StyleSheet, View } from "react-native";
 

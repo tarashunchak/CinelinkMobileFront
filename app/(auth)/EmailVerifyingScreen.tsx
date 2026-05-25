@@ -1,7 +1,7 @@
 import { EmailVerificationRequest } from "@/api/auth/emailVerificationApi";
-import LeafyContinueButton from "@/components/ui/leafy-continue-button";
-import LeafyCodeInput from "@/components/ui/leafy-digit-code-input";
-import LeafyReturnArrowButton from "@/components/ui/returnArrowButton";
+import LeafyContinueButton from "@/src/components/ui/continue-button";
+import LeafyCodeInput from "@/src/components/ui/leafy-digit-code-input";
+import LeafyReturnArrowButton from "@/src/components/ui/returnArrowButton";
 import React, { useState } from "react";
 import { StyleSheet, View } from "react-native";
 

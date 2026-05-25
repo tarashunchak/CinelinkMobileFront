@@ -1,4 +1,4 @@
-import LeafyCarousel from "@/components/ui/leafy-carousel";
+import LeafyCarousel from "@/src/components/ui/leafy-carousel";
 import React from "react";
 import { StyleSheet, View } from "react-native";
 

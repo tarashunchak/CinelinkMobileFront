@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React, { memo, useEffect, useRef } from "react";
 import TabNavigator from "@/navigation/TabNavigator";
 import AuthNavigator from "@/navigation/AuthNavigator";
 import { useAuthStore } from "@/local_storage/user/asyncStorage/store"
@@ -6,7 +6,11 @@ import { useAuthStore } from "@/local_storage/user/asyncStorage/store"
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { KeyboardProvider } from "react-native-keyboard-controller";
-import { useRouter } from "expo-router";
+import { Redirect, Slot, useRouter } from "expo-router";
+import { View } from "react-native-reanimated/lib/typescript/Animated";
+import { useBlurStore } from "@/src/components/ui/screen-background";
+import { enableScreens } from "react-native-screens";
+enableScreens(false);
 
 //Notifications.configure();
 
@@ -23,15 +27,10 @@ function App() {
   const isAuthenticated = useAuthStore(state => state.isAuthenticated);
   const isHydrated = useAuthStore(state => state.isHydrated);
 
-  const router = useRouter();
+  if(isAuthenticated && isHydrated)
+    return <Redirect href="/(app)/(tabs)/home" />
 
-  if(isAuthenticated)
-    router.replace("/home");
-  else
-    router.replace("/login");
-
-
-  return (null);
+  return <Redirect href="/(auth)/login" />
 };
 
 export default memo(App);

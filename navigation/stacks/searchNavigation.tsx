@@ -1,9 +1,9 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
 import MovieDetailScreen from "@/app/(app)/movie_details";
-import UserProfileScreen from "@/app/(app)/profile";
+import UserProfileScreen from "@/app/(app)/(tabs)/tab_profile";
 import WatchlistDetailsScreen from "@/app/(app)/watchlist";
-import SearchResultBlock from "@/app/(app)/search";
+import SearchResultBlock from "@/app/(app)/(tabs)/search";
 import CreditDetailScreen from "@/app/(app)/credit_details";
 
 const Stack = createNativeStackNavigator();

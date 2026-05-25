@@ -5,7 +5,7 @@ import Input from "./components/input";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { textStyle } from "@/styles/textStyles";
 import { isCurrentUser } from "@/utils/utils";
-import ScreenBackground from "@/components/ui/screen-background";
+import ScreenBackground from "@/src/components/ui/screen-background";
 
 
 

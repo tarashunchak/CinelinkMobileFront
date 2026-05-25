@@ -1,4 +1,4 @@
-import { UserProfile_T } from "@/app/(app)/profile/types";
+import { UserProfile_T } from "@/src/features/profile/types";
 import { API_URL } from "./API_CONFIG";
 import { jwtHeaders } from "@/utils/utils";
 import { useAuthStore } from "@/local_storage/user/asyncStorage/store";

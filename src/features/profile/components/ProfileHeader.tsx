@@ -5,12 +5,16 @@ import { LogOutButton } from "./LogOutButton";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import HeaderContainer from "@/src/components/ui/header-container";
 import { vec, Rect, LinearGradient, Mask, Image, Blur, Canvas, useImage } from "@shopify/react-native-skia";
+import { SkiaGlassButton } from "./GlassButton";
+import { heightPercentageToDP, widthPercentageToDP } from "react-native-responsive-screen";
 
 interface Props {
   bgUrl?: string;
   isCurrentUser: boolean;
   isFromTab: string | string[] | undefined;
 };
+
+const buttonLayout = { x: 0, y: 0, width: 100, height: 50 };
 
 const SkiaBackground = memo(({ bgUrl }: { bgUrl: string }) => {
   const image = useImage(bgUrl);
@@ -59,6 +63,7 @@ const SkiaBackground = memo(({ bgUrl }: { bgUrl: string }) => {
           color={"rgba(0, 0, 0, 0.25"}
         />
       </Mask>
+      
     </Canvas>)
 });
 

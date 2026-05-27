@@ -10,6 +10,8 @@ export default function AuthLayout(){
           animation: "slide_from_right",
           contentStyle:{backgroundColor: "transparent"}
         }}>
+          <Stack.Screen name="login"/>
+          <Stack.Screen name="registration"/>
         </Stack>
     </AuthBackground>
   );

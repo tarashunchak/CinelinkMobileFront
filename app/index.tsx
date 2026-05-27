@@ -22,7 +22,7 @@ globalThis.fetch = async (...args) => {
   return originalFetch(...args);
 };
 
-function App() {
+export default function App() {
   useAuthStore.getState().init();
   const isAuthenticated = useAuthStore(state => state.isAuthenticated);
   const isHydrated = useAuthStore(state => state.isHydrated);
@@ -32,9 +32,6 @@ function App() {
 
   return <Redirect href="/(auth)/login" />
 };
-
-export default memo(App);
-
 
 /**
  *     <GestureHandlerRootView style={{

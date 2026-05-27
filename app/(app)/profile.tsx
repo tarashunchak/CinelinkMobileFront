@@ -79,7 +79,7 @@ export default function UserProfileScreen() {
       />
       <ProfileMain
         isLoading={(userLoading ?? false) && true}
-        user={{ ...user, ...{ user_id: userID }, ...cachedUser }}
+        user={{ ...user, ...{ user_id: userID, ...cachedUser } }}
         isCurrentUser={isCurrUser}
         isFollowed={user?.is_following}
         onEdit={() => { }}

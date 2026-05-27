@@ -6,6 +6,7 @@ import AnimatedFastImage from "@/src/components/ui/animated-fast-image";
 import { BlurView } from "expo-blur";
 import { useBlurStore } from "@/src/components/ui/screen-background";
 import { X } from "lucide-react-native";
+import { useBlurTargetRef } from "@/src/hooks/useBackgroundBlur";
 
 interface Props {
   isOpen: boolean;
@@ -18,7 +19,7 @@ interface Props {
 export default function ProfileModal( props : Props) {
   const { isOpen, profilePath, onClose, creditID } = props;
   console.warn("Props: ", props);
-  const blurTargetRef = useBlurStore(state => state.blurTargetRef);
+  const blurTargetRef = useBlurTargetRef();
   return (
     <Modal
       statusBarTranslucent
@@ -45,7 +46,7 @@ export default function ProfileModal( props : Props) {
           style={styles.closeBtn}
           onPress={onClose}
         >
-          <X size={38} />
+          <X size={38} strokeWidth={1} color="white" />
         </PressableScale>
 
         <View style={styles.profileView}>
@@ -108,5 +109,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 999,
     justifyContent: "center",
+    alignItems: "center",
   },
 });

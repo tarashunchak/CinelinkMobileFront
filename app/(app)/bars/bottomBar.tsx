@@ -169,8 +169,8 @@ const SkiaBottomBar = memo(() => {
           ]}
         />
         <FractalNoise
-          freqX={0.2}
-          freqY={0.2}
+          freqX={0.15}
+          freqY={0.15}
           octaves={1}
         />
       </RoundedRect>
@@ -216,12 +216,12 @@ function BottomBar() {
   return (
     <View style={styles_.view}>
       {isReadyToBlur && <BlurView
-        intensity={100}
+        intensity={150}
         style={StyleSheet.absoluteFill}
         blurTarget={blurTarget}
         blurMethod="dimezisBlurView"
-        blurReductionFactor={10}
-        tint="systemThinMaterialDark"
+        blurReductionFactor={5}
+        tint="systemChromeMaterialDark"
       />}
       <SkiaBottomBar />
       <Animated.View

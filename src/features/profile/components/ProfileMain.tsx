@@ -45,14 +45,14 @@ export default function ProfileMain({
     return new Intl.DateTimeFormat('en-US').format(date ?? new Date())
   }, [isLoading]);
 
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  //const [isOpen, setIsOpen] = useState<boolean>(false);
 
   return (
-    <View style={{ paddingHorizontal: "1%", backgroundColor:"transparent" }}>
+    <View style={{ paddingHorizontal: "1%", backgroundColor: "transparent" }}>
       <View style={styles.view}>
         <PressableScale
           style={styles.avatar}
-          onPress={() => setIsOpen(true)}
+          onPress={() => { }}
         >
           <AnimatedFastImage
             sharedTransitionTag={`user-${user?.user_id}-avatar`}
@@ -70,23 +70,16 @@ export default function ProfileMain({
           onEdit={onEdit}
           onToggleFollow={onToggleFollow}
           onChat={onChat}
+          bgUrl={user?.bg_img_url}
         />
-
       </View>
 
-      {
-        fullName && <Text
-          style={textStyle.white22}
-        >
-          {fullName}
-        </Text>
-      }
-      <Text
-        style={textStyle.gray16}
-      >
+      <Text style={textStyle.white22} >
+        {fullName}
+      </Text>
+      <Text style={textStyle.gray16} >
         {`@${username}`}
       </Text>
-
       {
         user?.bio &&
         <View style={styles.bio}>
@@ -102,12 +95,7 @@ export default function ProfileMain({
           {`Joined ${fetchJoinedAt}`}
         </Text>
       </View>
-      <ProfilePhotoModal
-        isCurrentUser={isCurrentUser}
-        isOpen={isOpen}
-        avatarUrl={user?.avatar_url}
-        onClose={() => setIsOpen(false)}
-      />
+
     </View>
   );
 };

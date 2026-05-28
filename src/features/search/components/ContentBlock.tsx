@@ -9,6 +9,7 @@ import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import CreditCard from "./CreditCard";
 import { textStyle } from "@/styles/textStyles";
 import Spacer from "@/src/components/ui/spacer";
+import SearchInput from "@/src/features/search/components/SearchInput";
 
 interface Props {
   query: string;
@@ -49,8 +50,6 @@ export default function ContentBlock({ query, specification = undefined }: Props
     <>
       <CategoriesBlock setCurrent={setCategory} />
       <FlatList
-        showsVerticalScrollIndicator={false}
-        style={{ height: "100%" }}
         data={filteredData()}
         keyExtractor={(_, index) => String(index)}
         renderItem={({ item }) => {
@@ -77,6 +76,9 @@ export default function ContentBlock({ query, specification = undefined }: Props
           }
           ]}>No Results</Text>
           )
+        }
+        ListFooterComponent={
+          <Spacer orientation="v" spacing={hp(9)}/>
         }
       />
     </>

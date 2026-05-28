@@ -18,7 +18,7 @@ interface Props {
   bgUrl: string;
 };
 
-const buttonLayout = { x: widthPercentageToDP(98) - 100, y: heightPercentageToDP(95)-50, width: 100, height: 50 };
+const buttonLayout = { x: (widthPercentageToDP(98) * 0.1) - 100, y: -((heightPercentageToDP(95) * 0.1)+50), width: 100, height: 50 };
 
 export function ActionButton({
   isLoading,
@@ -35,7 +35,6 @@ export function ActionButton({
   else if (isCurrentUser) text = "Edit";
   else if (!isCurrentUser) text = isFollowed ? "Unfollow" : "Follow";
 
-  const bgImage = useImage(bgUrl ?? "https://i.pinimg.com/736x/e3/df/44/e3df44a42cd025d4a39d1b674f85080f.jpg");
 
   return (
     <View style={{ flexDirection: "row", gap: 10 }}>
@@ -46,7 +45,7 @@ export function ActionButton({
             onPress={onEdit}
           >
             <Text
-              style={textStyle.white18}
+              style={textStyle.white20}
             >
               {text}
             </Text>
@@ -57,7 +56,7 @@ export function ActionButton({
             onPress={async () => await onToggleFollow()}
           >
             <Text
-              style={isFollowed ? textStyle.white18 : textStyle.black18}
+              style={isFollowed ? textStyle.white20 : textStyle.black20}
             >
               {text}
             </Text>
@@ -65,17 +64,16 @@ export function ActionButton({
       }
       {
         isFollowed ?
-          (<SkiaGlassButton
-            width={buttonLayout.width}
-            height={buttonLayout.height}
-            bgOffsetX={buttonLayout.x}
-            bgOffsetY={buttonLayout.y}
-            backgroundImage={bgImage}
-            screenHeight={heightPercentageToDP(40)}
-            screenWidth={widthPercentageToDP(100)}
-            onPress={()=>{}}
-            text="Chat"
-          />
+          (<PressableScale
+            style={styles.transparent}
+            onPress={onChat}
+          >
+            <Text
+              style={textStyle.white20}
+            >
+              {"Chat"}
+            </Text>
+          </PressableScale>
           )
           : null
       }

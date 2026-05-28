@@ -4,6 +4,7 @@ import ReturnArrowButton from "@/src/components/ui/returnArrowButton";
 import { textStyle } from "@/styles/textStyles";
 import { useNavigation } from "expo-router";
 import { PressableScale } from "react-native-pressable-scale";
+import { Filter } from "lucide-react-native";
 
 interface Props {
   placeholder: string;
@@ -44,9 +45,10 @@ export default function SearchInput(
           justifyContent: "center"
         }
       }>
-        <Image
-          source={require("@/assets/images/filter.png")}
-          style={{ height: 34, width: 34 }}
+        <Filter
+          size={30}
+          strokeWidth={1}
+          color="white"
         />
       </PressableScale >
     </View>

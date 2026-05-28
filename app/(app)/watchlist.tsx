@@ -12,12 +12,13 @@ import { useLocalSearchParams } from "expo-router";
 
 export default function WatchlistScreen() {
   const { watchlist } = useLocalSearchParams();
-  const [movies, setMovies] = useState<any[]>(Array.from({ length: watchlist.movies_quantity }));
+  const watchlistObj = JSON.parse(watchlist);
+  const [movies, setMovies] = useState<any[]>(Array.from({ length: watchlistObj.movies_quantity }));
 
   useEffect(() => {
     async function loadWatchlistMovies() {
-      if(!watchlist.id) return;
-      const movies = await GetWatchlistMovies(watchlist?.id);
+      if(!watchlistObj.id) return;
+      const movies = await GetWatchlistMovies(watchlistObj?.id);
       if (movies?.length) setMovies(movies);
     }
     loadWatchlistMovies();
@@ -29,7 +30,7 @@ export default function WatchlistScreen() {
         data={movies}
         keyExtractor={(item, index) => String(item?.imdb_id ?? index)}
         showsVerticalScrollIndicator={false}
-        ListHeaderComponent={<Header watchlist={watchlist}/>}
+        ListHeaderComponent={<Header watchlist={watchlistObj}/>}
         renderItem={({ item }) => (
           <MovieCard movie={item} />
         )}

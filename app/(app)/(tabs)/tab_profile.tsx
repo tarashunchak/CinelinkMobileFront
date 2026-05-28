@@ -1,6 +1,6 @@
 import React from "react";
-import { Redirect } from "expo-router";
+import UserProfileScreen from "../profile";
 
 export default function Profile(){
-  return <Redirect href="/(app)/profile?isFromTab=1" />
+  return <UserProfileScreen isFromTab={true}/>
 };

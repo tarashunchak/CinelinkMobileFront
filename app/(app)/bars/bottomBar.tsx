@@ -6,7 +6,7 @@ import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-nat
 import Animated, { useAnimatedProps, withSpring, useSharedValue, useDerivedValue, useAnimatedStyle } from "react-native-reanimated";
 import { Canvas, ColorMatrix, FractalNoise, LinearGradient, RadialGradient, rect, RoundedRect, rrect, Skia, vec } from "@shopify/react-native-skia";
 import { BlurView } from "expo-blur";
-import { usePathname } from "expo-router";
+import { usePathname, useSegments } from "expo-router";
 import { useBlurTargetReady, useBlurTargetRef } from "@/src/hooks/useBackgroundBlur";
 
 
@@ -149,13 +149,13 @@ const SkiaBottomBar = memo(() => {
           colors={["rgba(255, 255, 255, 0.5)", "rgba(220, 220, 220, 0.1)"]}
         />
       </RoundedRect>
-      <RoundedRect rect={mainStroke} style="stroke" strokeWidth={0.1} >
+      <RoundedRect rect={mainStroke} style="stroke" strokeWidth={0.4} >
         <LinearGradient
           start={vec(0, 0)}
           end={vec(width, height)}
           colors={[
-            "rgba(140, 140, 140, 0.8)",
-            "rgba(140, 140, 140, 0)",
+            "rgba(255, 255, 255, 0.3)",
+            "rgba(140, 140, 140, 0.05)",
           ]}
         />
       </RoundedRect>
@@ -197,7 +197,8 @@ function BottomBar() {
   const blurTarget = useBlurTargetRef();
   const isReadyToBlur = useBlurTargetReady();
   const tabX = useSharedValue(width / 2 - 38);
-  const pathname = usePathname();
+  //const pathname = usePathname();
+  const segments = useSegments();
 
   //const blurTargetRef = useBlurStore(state => state.blurTargetRef);
 
@@ -207,7 +208,7 @@ function BottomBar() {
     if (x)
       tabX.value = withSpring(x, SPRING_CONFIG);
     //router.navigate(route);
-  }, [pathname]);
+  }, [segments]);
 
   const translateX = useAnimatedStyle(() => ({
     transform: [{ translateX: tabX.value }]

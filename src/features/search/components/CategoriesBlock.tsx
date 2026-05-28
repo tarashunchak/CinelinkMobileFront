@@ -30,16 +30,6 @@ export default function CategoriesBlock({ setCurrent = () => { } }: { setCurrent
       showsHorizontalScrollIndicator={false}
     >
       {
-        isBlurReady && <BlurView
-          intensity={100}
-          style={StyleSheet.absoluteFill}
-          blurTarget={blurTargetRef}
-          blurMethod="dimezisBlurView"
-          blurReductionFactor={10}
-          tint="systemThinMaterialDark"
-        />
-      }
-      {
         categories?.map((item: string, index: number) =>
         (
           <PressableScale

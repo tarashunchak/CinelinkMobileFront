@@ -1,17 +1,12 @@
-import GenresList from "@/src/components/ui/leafy-genres-list";
+import GenresList from "@/src/components/ui/genres-list";
 import { textStyle } from "@/styles/textStyles";
-import React, { memo, useEffect, useMemo, useRef, useState } from "react";
+import React, { memo, useMemo, useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import HorizontalMoviesList from "@/src/features/home/components/HorizontalMoviesList";
 import MovieOfTheDay from "@/src/features/home/components/MovieOfTheDay";
-import { GetHomeMovies } from "@/api/home/home";
 import { Movie_I } from "@/src/features/home/models/movie";
-import ScreenBackground from "@/src/components/ui/screen-background";
-import BottomBar from "@/app/(app)/bars/bottomBar";
-import { BlurTargetView } from "expo-blur";
 import { LoadHomeCached, useHomeStore } from "@/src/features/home/cache";
-import { Stack } from "expo-router";
-import { enableFreeze, freezeEnabled } from "react-native-screens";
+import { heightPercentageToDP } from "react-native-responsive-screen";
 
 interface Movies_I {
   popular: Movie_I[],
@@ -40,24 +35,24 @@ const HomeContent = memo(() => {
 
   return (
       <ScrollView
-        style={stylesR.scrollView}
+        style={styles.scrollView}
         showsVerticalScrollIndicator={false}
       >
         <MovieOfTheDay />
 
-        <Text style={[textStyle.white22, stylesR.titleText]}>Now in Cinemas</Text>
+        <Text style={[textStyle.white22, styles.titleText]}>Now in Cinemas</Text>
         <HorizontalMoviesList
           moviesList={nowPlaying}
           inCinemas={true}
         />
 
-        <Text style={[textStyle.white22, stylesR.titleText]}>Trending</Text>
+        <Text style={[textStyle.white22, styles.titleText]}>Trending</Text>
         <HorizontalMoviesList
           moviesList={popular}
           inCinemas={false}
         />
 
-        <Text style={[textStyle.white22, stylesR.titleText]}>Genres</Text>
+        <Text style={[textStyle.white22, styles.titleText]}>Genres</Text>
         <GenresList setSelectedGenre={setSelectedGenre} />
 
       </ScrollView>
@@ -66,14 +61,15 @@ const HomeContent = memo(() => {
 
 export default memo(HomePageScreen);
 
-const stylesR = StyleSheet.create({
+const styles = StyleSheet.create({
   background: {
     flex: 1,
     backgroundColor: "black",
   },
   scrollView: {
     backgroundColor: "transparent",
-    paddingHorizontal: "1%"
+    paddingHorizontal: "1%",
+    paddingBottom: heightPercentageToDP(9),
   },
   titleText: {
     marginTop: "5%",

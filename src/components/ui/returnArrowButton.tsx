@@ -1,4 +1,6 @@
+import React from "react";
 import { useNavigation, useRouter } from "expo-router";
+import { ArrowLeft } from "lucide-react-native";
 import { memo } from "react";
 import { TouchableOpacity, Dimensions, Image, StyleSheet } from "react-native";
 import { PressableScale } from "react-native-pressable-scale";
@@ -8,7 +10,6 @@ const { width: screenW, height: screenH } = Dimensions.get("window");
 
 function ReturnArrowButton(
   {
-    onPress = () => { },
     rect = undefined,
     style = {},
   }
@@ -32,7 +33,11 @@ function ReturnArrowButton(
   };
   return (
     <PressableScale style={finalStyle} onPress={router.back}>
-      <Image source={images["returnLeft"]} ></Image>
+      <ArrowLeft
+        size={26}
+        strokeWidth={2}
+        color="white"
+      />
     </PressableScale>
   );
 };

@@ -31,7 +31,7 @@ function WatchlistCard({ watchlist }: { watchlist: Watchlist | null }) {
       onPress={() => { 
         router.push({
           pathname: "/watchlist", 
-          params: { watchlist },
+          params: { watchlist: JSON.stringify(watchlist) },
         }) 
         }}>
       <View style={{ width: "80%", height: "100%", flexDirection: "row" }}>

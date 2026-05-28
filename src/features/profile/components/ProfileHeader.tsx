@@ -11,10 +11,10 @@ import { heightPercentageToDP, widthPercentageToDP } from "react-native-responsi
 interface Props {
   bgUrl?: string;
   isCurrentUser: boolean;
-  isFromTab: string | string[] | undefined;
+  isFromTab: boolean,
 };
 
-const buttonLayout = { x: 0, y: 0, width: 100, height: 50 };
+const buttonLayout = { x: (widthPercentageToDP(98)) - 100, y: -((heightPercentageToDP(95) * 0.1) + 50), width: 100, height: 50 };
 
 const SkiaBackground = memo(({ bgUrl }: { bgUrl: string }) => {
   const image = useImage(bgUrl);
@@ -63,17 +63,18 @@ const SkiaBackground = memo(({ bgUrl }: { bgUrl: string }) => {
           color={"rgba(0, 0, 0, 0.25"}
         />
       </Mask>
-      
     </Canvas>)
 });
 
 export default function ProfileHeader({ bgUrl, isCurrentUser, isFromTab }: Props) {
   return (
-    <HeaderContainer style={{ backgroundColor: "transparent" }}>
+    <>
       <SkiaBackground bgUrl={bgUrl} />
-        {(!isFromTab || !isFromTab.length) && <ReturnArrowButton />}
+      <HeaderContainer style={{ backgroundColor: "transparent", paddingHorizontal: wp(1) }}>
+        {!isFromTab && <ReturnArrowButton />}
         <LogOutButton isVisible={isCurrentUser} />
-    </HeaderContainer>
+      </HeaderContainer>
+    </>
   );
 };
 

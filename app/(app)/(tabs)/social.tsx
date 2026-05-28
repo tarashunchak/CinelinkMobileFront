@@ -9,14 +9,16 @@ import SocialPageTopBar from "@/src/features/social/components/topBar";
 import RecommendationsList from "@/src/features/social/components/RecommendationsList";
 import HeaderContainer from "@/src/components/ui/header-container";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { InteractionManager } from "react-native";
 
 export default function SocialScreen() {
   const tabs = ["Chats", "Recommendations", "Activity", "Friends"];
   const [activeTab, setActiveTab] = useState(tabs[0]);
   //const [friends, setFriends] = useState<UserCard_T[]>(Array.from({ length: 8 }));
   const [recommendations, setRecommendatoins] = useState<RecommendedCard_T[]>([]);
-  const [chats, setChats] = useState<any[]>(Array.from({ length: 8 }));
+  //const [chats, setChats] = useState<any[]>(Array.from({ length: 8 }));
   const [activity, setActivity] = useState<any[]>([]);
+  const [isReady, setIsReady] = useState<boolean>(false);
 
   useEffect(() => {
     async function loadContent() {
@@ -25,11 +27,13 @@ export default function SocialScreen() {
       if (data) {
         //setFriends(data?.friends);
         setRecommendatoins(data?.recommendations);
-        setChats(data?.chats);
+        //setChats(data?.chats);
       }
     };
-
-    loadContent();
+    InteractionManager.runAfterInteractions(()=>{
+      setIsReady(true);
+      loadContent();
+    })
   }, []);
 
   const renderList = useCallback(() => {
@@ -43,13 +47,13 @@ export default function SocialScreen() {
       case "Chats":
         return <ChatsList />;
     }
-  }, [activeTab, chats, recommendations, activity]);
+  }, [activeTab, recommendations, activity]);
 
   return (
     <GestureHandlerRootView>
       <HeaderContainer>
         <SocialPageTopBar onTabChange={(tab: string) => setActiveTab(tab)} />
-        {renderList()}
+        {isReady && renderList()}
       </HeaderContainer>
     </GestureHandlerRootView>
   );

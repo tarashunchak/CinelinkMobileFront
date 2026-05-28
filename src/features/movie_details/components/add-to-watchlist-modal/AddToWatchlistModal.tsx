@@ -20,14 +20,14 @@ type WatchlistSheetProps = {
   setIsActive: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
+const snapPoints = ["50%", "90%"];
+
 const WatchlistSheet = forwardRef<WatchlistSheetRef, WatchlistSheetProps>(({ setIsActive }, ref: any) => {
   const sheetRef = useRef<BottomSheet>(null);
   const [state, setState] = useState<boolean>(false);
   const [value, setValue] = useState<string>("");
   const [watchlists, setWatchlists] = useState<any[]>([]);
   const [picked, setPicked] = useState<Map<number, boolean>>(new Map());
-  const snapPoints = {};
-  //const blurRef = useBlurStore(store => store.blurTargetRef);
   const blurRef = useBlurTargetRef();
   const isReady = useBlurTargetReady();
   const setBottomBarVisible = useBlurStore(state => state.setBottomBarVisible);
@@ -59,24 +59,19 @@ const WatchlistSheet = forwardRef<WatchlistSheetRef, WatchlistSheetProps>(({ set
   return (
     <BottomSheet
       ref={sheetRef}
-      index={2}
-      snapPoints={["50%", "90%"]}
+      index={-1}
+      onClose={() => {
+        setIsActive(true);
+        setBottomBarVisible(true);
+      }}
+      snapPoints={snapPoints}
       enablePanDownToClose
       handleStyle={{
         backgroundColor:"grey",
         borderTopLeftRadius: 14,
         borderTopRightRadius: 14,
       }}
-      onClose={() => {
-        setIsActive(true);
-        setBottomBarVisible(true);
-      }}
       containerStyle={[styles.container, backgroundColor]}
-      animationConfigs={{
-        damping: 1000,
-        stiffness: 250,
-        mass: 0.8,
-      }}
       backdropComponent={(backdropProps) => (
         <BottomSheetBackdrop
           {...backdropProps}

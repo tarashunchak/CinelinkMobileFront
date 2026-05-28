@@ -8,6 +8,7 @@ import { PressableScale } from "react-native-pressable-scale";
 import { Image } from "expo-image";
 import AnimatedFastImage from "@/src/components/ui/animated-fast-image";
 import { useUserStatus } from "@/src/rt_client/managers/users_manager";
+import ProfileModal from "../../credit_details/components/ProfileModal";
 
 type Props = {
   isLoading: boolean;
@@ -29,6 +30,7 @@ export default function ProfileMain({
   onChat,
 }: Props) {
 
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const isOnline = useUserStatus(user?.user_id);
 
   const fullName = useMemo(() => {
@@ -45,7 +47,6 @@ export default function ProfileMain({
     return new Intl.DateTimeFormat('en-US').format(date ?? new Date())
   }, [isLoading]);
 
-  //const [isOpen, setIsOpen] = useState<boolean>(false);
 
   return (
     <View style={{ paddingHorizontal: "1%", backgroundColor: "transparent" }}>
@@ -95,7 +96,12 @@ export default function ProfileMain({
           {`Joined ${fetchJoinedAt}`}
         </Text>
       </View>
-
+      {isOpen && <ProfilePhotoModal
+        avatarUrl={user?.avatar_url}
+        isOpen={isOpen}
+        onClose={()=>setIsOpen(false)}
+        isCurrentUser={isCurrentUser}
+      />}
     </View>
   );
 };

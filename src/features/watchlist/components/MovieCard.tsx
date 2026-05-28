@@ -2,7 +2,7 @@ import { textStyle } from "@/styles/textStyles";
 import React, { memo, useCallback, useMemo } from "react";
 import { Linking, TouchableOpacity, View, Text, StyleSheet } from "react-native";
 import { Movie } from "../../movie_details/types";
-import { useNavigation } from "expo-router";
+import { useNavigation, useRouter } from "expo-router";
 import GenresLayout from "./GenresLayout";
 import { PressableScale } from "react-native-pressable-scale";
 import { Skeleton } from "react-native-skeletons";
@@ -10,15 +10,18 @@ import AnimatedFastText from "@/src/components/ui/animated-fast-text";
 import AnimatedFastImage from "@/src/components/ui/animated-fast-image";
 
 function MovieCard({ movie }: { movie: Movie | null }) {
-  const navigator = useNavigation();
+  const router = useRouter();
   if (!movie) return <Skeleton height={118} width={"100%"} style={styles.mainView} />
 
   const handlerPress = useCallback(()=>{
     if(!movie) return;
-    navigator?.push("MovieDetailScreen", { 
+    router?.push({
+      pathname: "/movie_details", 
+      params: { 
       movieID: movie?.movie_id, 
       posterPath: movie?.poster_path,
       title: movie?.title,
+      }
     });
   }, [movie?.movie_id, movie?.poster_path]);
 

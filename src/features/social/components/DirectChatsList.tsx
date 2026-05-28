@@ -8,33 +8,30 @@ import { useLastChatMessage, useUnseenMessagesCount, useTypingStatus, useUserCha
 import AnimatedFastImage from "@/src/components/ui/animated-fast-image";
 import { useUserStatus } from "@/src/rt_client/managers/users_manager";
 import AnimatedFastText from "@/src/components/ui/animated-fast-text";
+import { Space } from "lucide-react-native";
+import Spacer from "@/src/components/ui/spacer";
 
-const DirectChatCard = memo(({ item }: { item: any }) => {
+const EMPTY_CHATS_LIST = Array.from({length: 10});
+
+const DirectChatCard = memo(({ item, onPress }: { item: any, onPress: any}) => {
   const chatID = item?.chat_id;
   const peerID = item?.peer_id?.["Int32"];
   const isTyping = useTypingStatus(chatID, peerID);
   const lastMessage = useLastChatMessage(chatID);
   const isOnline = useUserStatus(peerID);
 
-  const router = useRouter();
   const unSeenMessageCnt = useUnseenMessagesCount(chatID);
-  const handlePress = useCallback(() => {
-    router.navigate({
-      pathname: "/direct_chat",
-      params: {
-        chatID,
-        imgUrl: item?.img_url,
-        name: item?.name,
-        peerID,
-      }
-    });
-  }, [chatID]);
-
+  
   return (
     <PressableScale
       activeScale={0.98}
       style={styles.mainView}
-      onPress={handlePress}
+      onPress={()=>onPress({
+        chatID,
+        imgUrl: item.img_url,
+        name: item.name,
+        peerID
+      })}
     >
       <View style={styles.infoView}>
         <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -81,17 +78,31 @@ const DirectChatCard = memo(({ item }: { item: any }) => {
 
 export default function ChatsList() {
   const chats = useUserChats();
+  const router = useRouter();
+
+  const handlePress = useCallback(({chatID, imgUrl, name, peerID}: any) => {
+    router.navigate({
+      pathname: "/direct_chat",
+      params: {
+        chatID,
+        imgUrl,
+        name,
+        peerID,
+      }
+    });
+  }, []);
 
   const renderItem = useCallback(({ item }: any) => (
-    <DirectChatCard item={item} />
+    <DirectChatCard item={item} onPress={handlePress}/>
   ), []);
 
   return (
     <FlatList
       data={chats}
-      keyExtractor={(item: any, index: number) => String(item?.user_id ?? index)}
+      keyExtractor={(item: any, index: number) => String(item?.user_id)}
       renderItem={renderItem}
       contentContainerStyle={styles.contentContainer}
+      ListFooterComponent={<Spacer orientation="v" spacing={hp(14)}/>}
     />
   );
 };

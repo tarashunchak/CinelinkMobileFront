@@ -11,9 +11,6 @@ import Spacer from "@/src/components/ui/spacer";
 function LibraryScreen() {
   const watchlists = useUserWatchlists();
 
-  useEffect(() => {
-  }, []);
-
   return (
     <>
       <LibraryHeader />
@@ -23,6 +20,7 @@ function LibraryScreen() {
         renderItem={({ item }) =>
           <WatchlistCard watchlist={item} />
         }
+        contentContainerStyle={{paddingTop: 5}}
         ListFooterComponent={<Spacer orientation="v" spacing={hp(9)}/>}
       />
     </>

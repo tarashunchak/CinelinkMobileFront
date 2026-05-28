@@ -15,16 +15,17 @@ import { GetDirectChatID } from "@/api/chats";
 import { GestureHandlerRootView, ScrollView } from "react-native-gesture-handler";
 import UserStats from "@/src/features/profile/components/Stats";
 import { useUser } from "@/src/rt_client/managers/users_manager";
+import PostsList from "@/src/features/profile/components/PostsList";
 
-export default function UserProfileScreen() {
+export default function UserProfileScreen({ isFromTab = false }: {isFromTab: boolean }) {
   const router = useRouter();
-  let { userID, avatarUrl, isFromTab } = useLocalSearchParams();
+  let { userID, avatarUrl } = useLocalSearchParams();
   if(!userID) userID = getCurrentUserID();
   const { user, loadUser, userLoading } = useUserProfile(userID);
   const { followings, loadFollowings, followingsLoading } = useFollowings(userID);
   const { followers, loadFollowers, followersLoading } = useFollowers(userID);
   const [isCurrUser, setIsCurrUser] = useState<boolean>(false);
-  const [list, setList] = useState<string>("Followers");
+  const [list, setList] = useState<string>("Posts");
   const [chatID, setChatID] = useState<number>(0);
   const cachedUser = useUser(userID);
 
@@ -115,6 +116,10 @@ export default function UserProfileScreen() {
       {
         list === "Followers"
         && <FollowersList userID={userID} />
+      }
+      {
+        list === "Posts"
+        && <PostsList userID={userID} />
       }
     </ScrollView>
   );

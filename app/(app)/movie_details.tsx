@@ -69,7 +69,10 @@ export default function MovieDetailScreen() {
       case "actions":
         return <ActionButtonsBlock
           movieID={movie?.id}
-          onAddToWatchlist={ref.current?.open}
+          onAddToWatchlist={()=>{
+            setIsActive(true);
+            ref.current?.open();
+          }}
           onRecommend={() => { }}
         />
       case "genres":

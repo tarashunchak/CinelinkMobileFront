@@ -12,7 +12,7 @@ interface Props {
 };
 
 function UserStats(props: Props) {
-  const [list, setList] = useState<string>("Followers");
+  const [list, setList] = useState<string>("Posts");
 
   const statsStyle = (statName: string) => {
     return statName === list
@@ -37,6 +37,19 @@ function UserStats(props: Props) {
 
   return (
     <View style={styles.mainView}>
+
+      <PressableScale
+        activeScale={0.9}
+        style={statsStyle("Posts")}
+        onPress={()=>{
+          onPress("Posts");
+          setList("Posts");
+        }}
+      >
+        <Text style={textStyle.white16}>{postsCnt || "*"}</Text>
+        <Text style={textStyle.white16}>Posts</Text>
+      </PressableScale>
+
       <PressableScale
         activeScale={0.9}
         style={statsStyle("Followings")}
@@ -59,13 +72,6 @@ function UserStats(props: Props) {
         <Text style={textStyle.white16}>Followers</Text>
       </PressableScale>
 
-      <PressableScale
-        activeScale={0.9}
-        style={statsStyle("Posts")}
-      >
-        <Text style={textStyle.white16}>{postsCnt || "*"}</Text>
-        <Text style={textStyle.white16}>Posts</Text>
-      </PressableScale>
     </View>
   );
 };
@@ -76,9 +82,8 @@ const styles = StyleSheet.create({
   mainView: {
     marginTop: 10,
     flexDirection: "row",
-    alignSelf: "center",
     justifyContent: "space-evenly",
-    width: "98%",
+    width: "100%",
   },
   activeStatsView: {
     flexDirection: "row",

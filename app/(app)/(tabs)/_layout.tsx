@@ -14,7 +14,7 @@ const screenOptions = {
 function TabLayout() {
   return (
     <Tabs screenOptions={screenOptions}>
-      <Tabs.Screen name="library" options={{ title: "Library" }} />
+      <Tabs.Screen name="library" options={{ title: "Library"}} />
       <Tabs.Screen name="search" options={{ title: "Search" }} />
       <Tabs.Screen name="home" options={{ title: "Home" }} />
       <Tabs.Screen name="social" options={{ title: "Social" }} />

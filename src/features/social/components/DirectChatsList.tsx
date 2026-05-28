@@ -66,7 +66,7 @@ const DirectChatCard = memo(({ item, onPress }: { item: any, onPress: any}) => {
       }}>
         {
           unSeenMessageCnt && (<View style={styles.unseenMessagesView}>
-            <Text style={textStyle.black14, { fontWeight: "bold", textAlign: "center" }}>{unSeenMessageCnt}</Text>
+            <Text style={[textStyle.black14, { fontWeight: "bold", textAlign: "center" }]}>{unSeenMessageCnt}</Text>
           </View>
           )
         }
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(255, 255, 255, 0.03)",
     borderColor: "rgba(255, 255, 255, 0.2)",
     borderWidth: 0.5,
-    borderRadius: 15,
+    borderRadius: 10,
     justifyContent: "space-between",
     paddingLeft: "3%",
     marginBottom: 5,

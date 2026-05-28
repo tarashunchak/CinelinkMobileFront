@@ -25,7 +25,7 @@ interface Props {
   children: React.ReactNode;
 };
 
-export default function ScreenBackground({ children }: Props) {
+export const ScreenBackground = memo(({ children }: Props) => {
   //const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   //const setBlurTargetRef = useBlurStore(state => state.setBlurTargetRef);
   //const ref = useRef<any>(null);
@@ -51,23 +51,15 @@ export default function ScreenBackground({ children }: Props) {
       ref={setBlurTarget}
     >
       <View style={styles.background}>
-        <Image
-          source={require("@/assets/images/background.png")}
-          style={StyleSheet.absoluteFill}
-          contentFit="fill"
-          cachePolicy="disk"
-        />
-        <View style={{ flex: 1 }}>
-          {children}
-        </View>
+        {children}
       </View>
     </BlurTargetView>
   )
-};
+});
 
 const styles = StyleSheet.create({
   background: {
     flex: 1,
-    backgroundColor: "black",
+    backgroundColor: "#232D3F",
   },
 });

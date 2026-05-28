@@ -5,13 +5,13 @@ import { StyleSheet } from "react-native";
 import { PressableScale } from "react-native-pressable-scale";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import HeaderContainer from "@/src/components/ui/header-container";
+import { useAnimatedStyle, useSharedValue } from "react-native-reanimated";
 
 export let getActiveTab = () => { };
 
 function SocialPageTopBar({ onTabChange }: { onTabChange: (tab: string) => void }) {
   const tabs = ["Chats", "Recommendations", "Activity", "Friends"];
   const [activeTab, setActiveTab] = useState("Chats");
-  const insets = useSafeAreaInsets();
 
   return (
     <View style={styles.mainContainer}>
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     padding: "0.5%",
-    backgroundColor: "rgba(20, 20, 20, 0.3)",
+    backgroundColor: "#232D3F",
   },
   buttonView: {
     paddingLeft: "2%",
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   activeButtonView: {
-    backgroundColor: "rgba(255, 255, 255, 0.1)",
+    backgroundColor: "#445069",
     borderColor: "rgba(255, 255, 255, 0.2)",
     borderRadius: 4,
     borderWidth: 0.5,

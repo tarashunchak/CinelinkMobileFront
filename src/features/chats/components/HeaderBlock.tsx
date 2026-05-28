@@ -65,7 +65,7 @@ export default function Header({ chatID, peerID, imgUrl, name }: Props) {
 
           <View style={styles.chatpeer.text.view}>
             <AnimatedFastText
-              style={textStyle.white18}
+              style={textStyle.white20}
               sharedTransitionTag={`chat-${chatID}-name`}
             >
               {name}
@@ -133,7 +133,7 @@ const styles = {
     }],
   },
   view: {
-    backgroundColor: "rgba(20, 20, 20, 1)",
+    backgroundColor: "#222831",
     flexDirection: "row",
     alignItems:"center",
     justifyContent: "space-between",

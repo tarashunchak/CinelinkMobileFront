@@ -8,7 +8,6 @@ import { PressableScale } from "react-native-pressable-scale";
 import { Image } from "expo-image";
 import AnimatedFastImage from "@/src/components/ui/animated-fast-image";
 import { useUserStatus } from "@/src/rt_client/managers/users_manager";
-import ProfileModal from "../../credit_details/components/ProfileModal";
 
 type Props = {
   isLoading: boolean;
@@ -34,18 +33,17 @@ export default function ProfileMain({
   const isOnline = useUserStatus(user?.user_id);
 
   const fullName = useMemo(() => {
-    if (isLoading)
-      return "**** ****";
-    else
-      return user?.first_name && `${user?.first_name} ${user?.last_name}`;
+    return user?.first_name ? `${user?.first_name} ${user?.last_name}` : "*******";
   }, [isLoading])
 
-  const username: string = isLoading ? "********" : user?.username;
+  const username: string = useMemo(()=>{
+    return user?.username ?? "********";
+  }, [isLoading, user?.user_id])
 
   const fetchJoinedAt = useMemo(() => {
     const date = new Date(user?.created_at ?? null);
     return new Intl.DateTimeFormat('en-US').format(date ?? new Date())
-  }, [isLoading]);
+  }, [isLoading, user?.user_id]);
 
 
   return (
@@ -53,7 +51,7 @@ export default function ProfileMain({
       <View style={styles.view}>
         <PressableScale
           style={styles.avatar}
-          onPress={() => { }}
+          onPress={() => { setIsOpen(true)}}
         >
           <AnimatedFastImage
             sharedTransitionTag={`user-${user?.user_id}-avatar`}

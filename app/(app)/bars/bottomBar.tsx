@@ -142,36 +142,38 @@ const Indicator = ({ x }: any) => {
 const SkiaBottomBar = memo(() => {
   return (
     <Canvas style={StyleSheet.absoluteFill}>
+
       <RoundedRect rect={r} style="stroke" strokeWidth={1} >
         <RadialGradient
           c={vec(width / 2, 0)}
           r={50}
-          colors={["rgba(255, 255, 255, 0.5)", "rgba(220, 220, 220, 0.1)"]}
+          colors={["rgba(255, 255, 255, 0.8)", "rgba(220, 220, 220, 0.1)"]}
         />
       </RoundedRect>
-      <RoundedRect rect={mainStroke} style="stroke" strokeWidth={0.4} >
+      <RoundedRect rect={mainStroke} style="stroke" strokeWidth={0.5} >
         <LinearGradient
           start={vec(0, 0)}
-          end={vec(width, height)}
+          end={vec(width * 0.5, 10)}
           colors={[
             "rgba(255, 255, 255, 0.3)",
-            "rgba(140, 140, 140, 0.05)",
+            "rgba(140, 140, 140, 0.1)",
           ]}
         />
       </RoundedRect>
+
       <RoundedRect rect={r}>
         <ColorMatrix
           matrix={[
-            0.09, 0.187, 0.014, 0, 0,
-            0.09, 0.187, 0.014, 0, 0,
-            0.09, 0.187, 0.014, 0, 0,
-            0, 0, 0, 0.2, 0
+            0.19, 0.587, 0.424, 0, 0,
+            0.19, 0.587, 0.424, 0, 0,
+            0., 0.587, 0.424, 0, 0,
+            0, 0, 0, 0.1, 0
           ]}
         />
         <FractalNoise
-          freqX={0.15}
-          freqY={0.15}
-          octaves={1}
+          freqX={0.5}
+          freqY={0.5}
+          octaves={7}
         />
       </RoundedRect>
     </Canvas>
@@ -189,7 +191,7 @@ const TAB_OFFSET_X: Record<string, number> = {
 const SPRING_CONFIG = {
   damping: 20,
   stiffness: 150,
-  mass: 5,
+  mass: 1,
 };
 
 function BottomBar() {
@@ -217,11 +219,11 @@ function BottomBar() {
   return (
     <View style={styles_.view}>
       {isReadyToBlur && <BlurView
-        intensity={150}
+        intensity={60}
         style={StyleSheet.absoluteFill}
         blurTarget={blurTarget}
         blurMethod="dimezisBlurView"
-        blurReductionFactor={5}
+        blurReductionFactor={10}
         tint="systemChromeMaterialDark"
       />}
       <SkiaBottomBar />
@@ -248,6 +250,7 @@ const styles_ = StyleSheet.create({
     borderRadius: 27,
     borderWidth: 0,
     paddingVertical: 2,
+    borderColor: "transparent",
   },
   indicator: {
     position: "absolute",
@@ -256,7 +259,8 @@ const styles_ = StyleSheet.create({
     height: "100%",
     width: 76,
     borderRadius: 24,
-    backgroundColor: "rgba(130, 130, 130, 0.3)",
+    backgroundColor: "#31363F",
+    opacity: 0.8,
     borderWidth: 0.5,
     borderColor: "rgba(130, 130, 130, 0.8)",
   },

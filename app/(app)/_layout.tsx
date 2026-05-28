@@ -1,4 +1,4 @@
-import ScreenBackground, { useBlurStore } from "@/src/components/ui/screen-background";
+import { ScreenBackground, useBlurStore } from "@/src/components/ui/screen-background";
 import { Slot, Stack, Tabs, usePathname } from "expo-router";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { Gesture, GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -29,16 +29,16 @@ export default function AppLayout() {
   return (
     <>
       <ScreenBackground>
-        <GestureHandlerRootView style={{ flex: 1 }}>
+        <GestureHandlerRootView>
           <BottomSheetModalProvider>
             <Stack screenOptions={{
               headerShown: false,
               animation: "ios_from_right",
-              contentStyle: { backgroundColor: "transparent" },
+              contentStyle: { backgroundColor: undefined }
             }}>
               <Stack.Screen name="(tabs)" />
               <Stack.Screen name="movie_details" />
-              <Stack.Screen name="direct_chat" />
+              <Stack.Screen name="direct_chat"/>
               <Stack.Screen name="watchlist" />
               <Stack.Screen name="credit_details" />
               <Stack.Screen name="profile" />

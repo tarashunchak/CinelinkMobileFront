@@ -36,7 +36,7 @@ const SkiaBackdrop = memo(({ backdropPath }: { backdropPath: string }) => {
       <LinearGradient
         start={vec(0, 0)}
         end={vec(0, hp(45))}
-        colors={["rgba(0, 0, 0, 0.5)", "rgba(0, 0, 0, 0.15)", "transparent"]}
+        colors={["rgba(0, 0, 0, 0.6)", "rgba(0, 0, 0, 0.25)", "transparent"]}
         positions={[0.35, 0.65, 1]}
       />
     </Rect>
@@ -187,11 +187,10 @@ const styles = StyleSheet.create({
   },
   poster: {
     marginTop: "2%",
-    height: 260,
+    minHeight: 300,
     aspectRatio: 0.68,
     alignSelf: "center",
     borderColor: "rgba(255, 255, 255, 0.2)",
     borderWidth: 0.5,
-    elevation: 100,
   },
 });

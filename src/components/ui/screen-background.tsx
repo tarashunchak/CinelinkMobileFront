@@ -43,6 +43,6 @@ const styles = StyleSheet.create({
   },
   background: {
     flex: 1,
-    backgroundColor: "#31363F",
+    backgroundColor: "#191919",
   },
 });

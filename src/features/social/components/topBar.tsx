@@ -3,9 +3,6 @@ import { View, Text } from "react-native";
 import { textStyle } from "@/styles/textStyles";
 import { StyleSheet } from "react-native";
 import { PressableScale } from "react-native-pressable-scale";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import HeaderContainer from "@/src/components/ui/header-container";
-import { useAnimatedStyle, useSharedValue } from "react-native-reanimated";
 
 export let getActiveTab = () => { };
 
@@ -52,7 +49,8 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     padding: "0.5%",
-    backgroundColor: "#232D3F",
+    backgroundColor: "#1A1A1D",
+    elevation: 10,
   },
   buttonView: {
     paddingLeft: "2%",
@@ -62,7 +60,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   activeButtonView: {
-    backgroundColor: "#445069",
+    backgroundColor: "#393E46",
     borderColor: "rgba(255, 255, 255, 0.2)",
     borderRadius: 4,
     borderWidth: 0.5,

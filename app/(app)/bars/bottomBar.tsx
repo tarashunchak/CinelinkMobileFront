@@ -150,13 +150,13 @@ const SkiaBottomBar = memo(() => {
           colors={["rgba(255, 255, 255, 0.8)", "rgba(220, 220, 220, 0.1)"]}
         />
       </RoundedRect>
-      <RoundedRect rect={mainStroke} style="stroke" strokeWidth={0.5} >
+      <RoundedRect rect={mainStroke} style="stroke" strokeWidth={0.1} >
         <LinearGradient
           start={vec(0, 0)}
           end={vec(width * 0.5, 10)}
           colors={[
-            "rgba(255, 255, 255, 0.3)",
-            "rgba(140, 140, 140, 0.1)",
+            "rgba(255, 255, 255, 0.4)",
+            "rgba(140, 140, 140, 0.01)",
           ]}
         />
       </RoundedRect>
@@ -166,14 +166,21 @@ const SkiaBottomBar = memo(() => {
           matrix={[
             0.19, 0.587, 0.424, 0, 0,
             0.19, 0.587, 0.424, 0, 0,
-            0., 0.587, 0.424, 0, 0,
+            0.19, 0.587, 0.424, 0, 0,
             0, 0, 0, 0.1, 0
           ]}
         />
         <FractalNoise
-          freqX={0.5}
-          freqY={0.5}
-          octaves={7}
+          freqX={0.8}
+          freqY={0.8}
+          octaves={1}
+        />
+      </RoundedRect>
+      <RoundedRect rect={r}>
+        <RadialGradient
+          c={vec(width / 2, height / 2)}
+          r={100}
+          colors={["rgba(0, 0, 0, 0.5)", "rgba(0, 0, 0, 0.01)"]}
         />
       </RoundedRect>
     </Canvas>

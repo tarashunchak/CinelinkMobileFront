@@ -42,7 +42,8 @@ export default function LibraryHeader() {
 
 const stylesR = StyleSheet.create({
   view: {
-    backgroundColor: "rgba(90, 90, 90, 1)",
+    backgroundColor: "#222831",
+    zIndex: 3,
     width: widthPercentageToDP("100%"),
     flexDirection: "row",
     justifyContent: "space-between",

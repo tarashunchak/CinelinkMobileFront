@@ -99,8 +99,8 @@ const stylesR = StyleSheet.create({
   view: {
   },
   avatarImg: {
-    width: 53,
-    height: 53,
+    width: "100%",
+    height: "100%",
     borderRadius: 999
   },
   dots: {
@@ -133,7 +133,7 @@ const styles = {
     }],
   },
   view: {
-    backgroundColor: "#222831",
+    backgroundColor: "#2C394B",
     flexDirection: "row",
     alignItems:"center",
     justifyContent: "space-between",
@@ -149,8 +149,8 @@ const styles = {
       alignItems: "center",
     },
     img: {
-      height: 58,
-      width: 58,
+      height: 54,
+      width: 54,
       borderRadius: 999,
       borderColor: "white",
       borderWidth: 0.5,

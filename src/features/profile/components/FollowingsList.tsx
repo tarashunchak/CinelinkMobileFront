@@ -3,7 +3,7 @@ import { useFocusEffect } from "expo-router";
 import { heightPercentageToDP as hp, } from "react-native-responsive-screen";
 import React, { useCallback, useState } from "react";
 import { StyleSheet } from "react-native";
-import UserCard from "@/src/components/userCard";
+import UserCard from "@/src/components/user-card";
 import { UserCard_T } from "@/app/(app)/types/user";
 import Spacer from "@/src/components/ui/spacer";
 import { FlatList } from "react-native-gesture-handler";

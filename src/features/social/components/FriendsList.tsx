@@ -4,7 +4,7 @@ import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { FlatList, StyleSheet } from "react-native";
 import { useUsers } from "@/src/rt_client/managers/users_manager";
 import Spacer from "@/src/components/ui/spacer";
-import  UserCard from "@/src/components/userCard";
+import  UserCard from "@/src/components/user-card";
 
 interface Props {
   user_id: number;

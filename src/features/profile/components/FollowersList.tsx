@@ -1,5 +1,5 @@
 import { GetUserFollowers } from "@/api/followers/followers";
-import UserCard from "@/src/components/userCard";
+import UserCard from "@/src/components/user-card";
 import { heightPercentageToDP as hp, } from "react-native-responsive-screen";
 import { useFocusEffect } from "expo-router";
 import React, { memo, useCallback, useEffect, useState } from "react";

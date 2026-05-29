@@ -1,4 +1,4 @@
-import React, { memo, useState } from "react";
+import React, { memo, useCallback, useState } from "react";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { StyleSheet, Text, View } from "react-native";
 import Spacer from "@/src/components/ui/spacer";
@@ -11,9 +11,39 @@ import { Bookmark, Heart, MessageCircleMore, Share } from "lucide-react-native";
 import { Image, useImage } from "expo-image";
 import * as Haptics from "expo-haptics";
 
+const BookMarkButton = memo(({ isMarked }: { isMarked: boolean }) => {
+  const [isMarkedState, setIsMarkedState] = useState<boolean>(isMarked);
+  const handlePress = useCallback(() => {
+    setIsMarkedState(!isMarkedState);
+  }, [isMarkedState]);
+  return (
+    <PressableScale onPress={handlePress}>
+      <Bookmark size={28} strokeWidth={1} color="white" fill={isMarkedState ? "yellow" : "transparent"} />
+    </PressableScale>
+  );
+});
+
+const LikeButton = memo(({ isLiked }: { isLiked: boolean }) => {
+  const [isLikedState, setIsLikedState] = useState<boolean>(isLiked);
+  const handlePress = useCallback(() => {
+    setIsLikedState(!isLikedState);
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+  }, [isLikedState]);
+  return (
+    <View style={{ flexDirection: "row", gap: 5, alignItems: "center" }}>
+      <PressableScale
+        activeScale={0.9}
+        onPress={handlePress}
+      >
+        <Heart size={28} strokeWidth={1} color="white" fill={!isLikedState ? "red" : "transparent"} />
+      </PressableScale>
+      <Text style={[textStyle.white14, { fontWeight: "bold" }]}>10</Text>
+    </View>
+  );
+});
+
 export const PostCard = memo((post) => {
-  const [isLiked, setIsLiked] = useState<boolean>(post.isLicked);
-  const image = useImage("https://i.pinimg.com/1200x/69/54/ba/6954baf5c7677eee072f361bee8caa18.jpg");
+  const image = useImage("https://i.pinimg.com/736x/8f/29/2e/8f292efe30e60b2401ad562bbe74dbf4.jpg");
   return (
     <View style={styles.postCardView}>
       <View style={styles.postHeaderView}>
@@ -39,12 +69,16 @@ export const PostCard = memo((post) => {
 
       </View>
       <View style={{
-            height: Math.min(image?.height, 600),
-            width: Math.min(image?.width || wp(100), wp(100)),
-         }}>
+        height: Math.min(image?.height, 600),
+        aspectRatio: image?.height / image?.width,
+        paddingVertical: 2,
+      }}>
         <Image
           source={image}
-          style={{flex:1}}
+          style={{
+            height: "100%",
+            width: "100%",
+          }}
           resizeMode="contain"
         />
         <ScrollView
@@ -60,36 +94,25 @@ export const PostCard = memo((post) => {
             position: "absolute",
             alignSelf: "center",
             bottom: 24,
-            backgroundColor: "rgba(255, 255, 255, 0.1)",
+            backgroundColor: "rgba(200, 200, 200, 0.7)",
             maxWidth: 100,
             height: 16,
             borderRadius: 10,
           }}>
           <View style={{ height: 8, width: 8, borderRadius: 4, backgroundColor: "white" }}></View>
-          <View style={{ height: 8, width: 8, borderRadius: 4, backgroundColor: "rgb(100, 100, 100)" }}></View>
-          <View style={{ height: 8, width: 8, borderRadius: 4, backgroundColor: "rgb(100, 100, 100)" }}></View>
-          <View style={{ height: 8, width: 8, borderRadius: 4, backgroundColor: "rgb(100, 100, 100)" }}></View>
-          <View style={{ height: 8, width: 8, borderRadius: 4, backgroundColor: "rgb(100, 100, 100)" }}></View>
-          <View style={{ height: 8, width: 8, borderRadius: 4, backgroundColor: "rgb(100, 100, 100)" }}></View>
-          <View style={{ height: 8, width: 8, borderRadius: 4, backgroundColor: "rgb(100, 100, 100)" }}></View>
-          <View style={{ height: 8, width: 8, borderRadius: 4, backgroundColor: "rgb(100, 100, 100)" }}></View>
+          <View style={{ height: 8, width: 8, borderRadius: 4, backgroundColor: "rgb(80, 80, 80)" }}></View>
+          <View style={{ height: 8, width: 8, borderRadius: 4, backgroundColor: "rgb(80, 80, 80)" }}></View>
+          <View style={{ height: 8, width: 8, borderRadius: 4, backgroundColor: "rgb(80, 80, 80)" }}></View>
+          <View style={{ height: 8, width: 8, borderRadius: 4, backgroundColor: "rgb(80, 80, 80)" }}></View>
+          <View style={{ height: 8, width: 8, borderRadius: 4, backgroundColor: "rgb(80, 80, 80)" }}></View>
+          <View style={{ height: 8, width: 8, borderRadius: 4, backgroundColor: "rgb(80, 80, 80)" }}></View>
+          <View style={{ height: 8, width: 8, borderRadius: 4, backgroundColor: "rgb(80, 80, 80)" }}></View>
         </ScrollView >
       </View>
       <View style={styles.postFooterView}>
         <View style={{ flexDirection: "row", justifyContent: "space-between", width: "100%" }}>
           <View style={{ flexDirection: "row", gap: 10 }}>
-            <View style={{ flexDirection: "row", gap: 5, alignItems: "center" }}>
-              <PressableScale
-                activeScale={0.9}
-                onPress={() => {
-                  setIsLiked(!isLiked);
-                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
-                }}
-              >
-                <Heart size={28} strokeWidth={1} color="white" fill={!isLiked ? "red" : "transparent"} />
-              </PressableScale>
-              <Text style={[textStyle.white14, { fontWeight: "bold" }]}>10</Text>
-            </View>
+            <LikeButton isLiked={false} />
             <View style={{ flexDirection: "row", gap: 5, alignItems: "center" }}>
               <Share size={28} strokeWidth={1} color="white" />
               <Text style={[textStyle.white14, { fontWeight: "bold" }]}>10</Text>
@@ -99,7 +122,7 @@ export const PostCard = memo((post) => {
               <Text style={[textStyle.white14, { fontWeight: "bold" }]}>10</Text>
             </View>
           </View>
-          <Bookmark size={28} strokeWidth={1} color="white" />
+          <BookMarkButton isMarked={false} />
         </View>
         <Text
           style={[textStyle.gray12, {
@@ -118,11 +141,12 @@ const styles = StyleSheet.create({
     minHeight: 328,
     maxHeight: 728,
     backgroundColor: "#222831",
-    borderColor: "rgba(255, 255, 255, 0.1)",
+    borderColor: "rgba(255, 255, 255, 0.2)",
     borderWidth: 0.5,
     borderRadius: 10,
-    alignSelf:"center",
-    justifyContent:"space-between",
+    alignSelf: "center",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   postHeaderView: {
     width: "100%",

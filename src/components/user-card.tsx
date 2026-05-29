@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     width: "100%",
     height: hp("8.5%"),
-    backgroundColor: "#31363F",
+    backgroundColor: "#393E46",
     borderColor: "rgba(255, 255, 255, 0.2)",
     borderWidth: 0.5,
     borderRadius: 10,

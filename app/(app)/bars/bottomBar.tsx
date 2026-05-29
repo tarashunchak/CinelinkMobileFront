@@ -190,7 +190,7 @@ const TAB_OFFSET_X: Record<string, number> = {
 
 const SPRING_CONFIG = {
   damping: 20,
-  stiffness: 150,
+  stiffness: 100,
   mass: 1,
 };
 

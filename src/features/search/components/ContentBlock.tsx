@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Text, FlatList, StyleSheet } from "react-native";
 import { GetQueryResult } from "../services/services";
 import MovieCard from "./MovieCard";
-import UserCard from "@/src/components/userCard";
+import UserCard from "@/src/components/user-card";
 import CategoriesBlock from "./CategoriesBlock";
 import WatchlistCard from "./WatchlistCard";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";

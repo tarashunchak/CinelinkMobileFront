@@ -1,11 +1,8 @@
-import { useAuthStore } from "@/local_storage/user/asyncStorage/store";
-import React, { memo, useCallback, useEffect, useMemo, useRef } from "react";
-import { ImageBackground, View, StyleSheet } from "react-native";
-import { Image } from "expo-image";
+import React, { memo } from "react";
+import { View, StyleSheet } from "react-native";
 import { BlurTargetView } from "expo-blur";
-import BottomBar from "@/app/(app)/bars/bottomBar";
 import { create } from "zustand";
-import { useBlurTargetRef, useBlurTargetSetter } from "@/src/hooks/useBackgroundBlur";
+import { useBlurTargetSetter } from "@/src/hooks/useBackgroundBlur";
 
 interface BlurState {
   blurTargetRef: React.RefObject<View | null> | undefined;
@@ -26,40 +23,26 @@ interface Props {
 };
 
 export const ScreenBackground = memo(({ children }: Props) => {
-  //const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
-  //const setBlurTargetRef = useBlurStore(state => state.setBlurTargetRef);
-  //const ref = useRef<any>(null);
-
-  /*const onRefChange = (node: View | null)=>{
-    if(node) {
-      setBlurTargetRef(node)
-      return node;
-    }else{
-      setBlurTargetRef(null)
-    };*/
-/*
-  useEffect(()=>{
-    setBlurTargetRef(ref);
-  }, [setBlurTargetRef]);
-  */
-
   const setBlurTarget = useBlurTargetSetter();
 
   return (
     <BlurTargetView
-      style={{ flex: 1 }}
+      style={styles.blur}
       ref={setBlurTarget}
     >
       <View style={styles.background}>
         {children}
       </View>
     </BlurTargetView>
-  )
+  );
 });
 
 const styles = StyleSheet.create({
+  blur: {
+    flex: 1,
+  },
   background: {
     flex: 1,
-    backgroundColor: "#232D3F",
+    backgroundColor: "#31363F",
   },
 });

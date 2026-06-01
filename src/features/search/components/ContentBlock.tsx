@@ -14,10 +14,11 @@ import SearchInput from "@/src/features/search/components/SearchInput";
 interface Props {
   query: string;
   specification: string | undefined;
+  category: string;
 }
 
-export default function ContentBlock({ query, specification = undefined }: Props) {
-  const [category, setCategory] = useState<string>("All")
+export default function ContentBlock({ query, category}: Props) {
+  const specification = false;
   const [_data, setData] = useState([]);
 
   const fetchData = useCallback(async () => {
@@ -47,8 +48,6 @@ export default function ContentBlock({ query, specification = undefined }: Props
   }, [category, _data])
 
   return (
-    <>
-      <CategoriesBlock setCurrent={setCategory} />
       <FlatList
         data={filteredData()}
         keyExtractor={(_, index) => String(index)}
@@ -81,7 +80,6 @@ export default function ContentBlock({ query, specification = undefined }: Props
           <Spacer orientation="v" spacing={hp(9)}/>
         }
       />
-    </>
   )
 }
 

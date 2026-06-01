@@ -189,7 +189,7 @@ const SkiaBottomBar = memo(() => {
 
 const TAB_OFFSET_X: Record<string, number> = {
   "/library": 2,
-  "/search": width / 2 - 76,
+  "/search": 72,
   "/home": width / 2 - 38,
   "/social": width / 2 + 32,
   "/tab_profile": width - 78,

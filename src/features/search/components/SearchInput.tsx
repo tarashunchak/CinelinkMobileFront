@@ -8,20 +8,17 @@ import { Filter } from "lucide-react-native";
 
 interface Props {
   placeholder: string;
-  value: string;
-  setValue: (_: string) => void;
+  query: string;
+  setQuery: (_: string) => void;
   onChangeText: () => void;
 }
 
 export default function SearchInput(
-  { value, setValue, placeholder, onChangeText }: Props
+  { query, setQuery, placeholder, onChangeText }: Props
 ) {
-
-  const navigator = useNavigation();
-
   return (
     <View style={styles.inputView}>
-      <ReturnArrowButton onPress={navigator.goBack} />
+      <ReturnArrowButton />
       <TextInput
         placeholderTextColor={"#A0A0A0"}
         placeholder={placeholder}
@@ -32,9 +29,9 @@ export default function SearchInput(
           width: "73%"
         }
         ]}
-        value={value}
+        value={query}
         onChangeText={text => {
-          setValue(text);
+          setQuery(text);
           onChangeText();
         }}
       />
@@ -60,7 +57,6 @@ const styles = StyleSheet.create({
     height: 50,
     width: "96%",
     marginHorizontal: "2%",
-    marginTop: "1%",
     backgroundColor: "rgba(255, 255, 255, 0.03)",
     borderRadius: 999,
     borderWidth: 0.1,

@@ -15,14 +15,12 @@ const categories = [
   "Watchlists",
 ];
 
-export let getActiveCategory = () => { return "" }
+interface Props{
+  category: string;
+  setCategory: (cat: string) => void;
+};
 
-export default function CategoriesBlock({ setCurrent = () => { } }: { setCurrent: (n: string) => void }) {
-  const [category, setCategory] = useState<string>("All")
-  getActiveCategory = () => category
-  const blurTargetRef = useBlurTargetRef();
-  const isBlurReady = useBlurTargetReady();
-
+export default function CategoriesBlock({category, setCategory}: Props) {
   return (
     <ScrollView
       style={styles.scrollView}
@@ -37,7 +35,6 @@ export default function CategoriesBlock({ setCurrent = () => { } }: { setCurrent
             style={category == item ? styles.activeView : styles.view}
             onPress={() => {
               setCategory(item);
-              setCurrent(item);
             }}
           >
             <Text
@@ -55,7 +52,6 @@ export default function CategoriesBlock({ setCurrent = () => { } }: { setCurrent
 
 const styles = StyleSheet.create({
   scrollView: {
-    marginTop: hp(1),
     minHeight: 40,
     maxHeight: 40,
     width: "100%",
@@ -65,19 +61,16 @@ const styles = StyleSheet.create({
     borderRadius: 999,
     borderWidth: 0.5,
     borderColor: "rgba(255, 255, 255, 0.2)",
-    position:"absolute",
-    top: hp(10),
-    zIndex: 2,
   },
   view: {
     minWidth: 44,
     height: "100%",
     padding: 5,
-    backgroundColor: "rgba(255, 255, 255, 0.05)",
+    backgroundColor: "rgba(255, 255, 255, 0.06)",
     marginRight: 10,
     borderRadius: 6,
     borderWidth: 0.5,
-    borderColor: "rgba(255, 255, 255, 0.2)",
+    borderColor: "rgba(255, 255, 255, 0.4)",
     alignItems: "center",
     justifyContent: "center",
   },
@@ -85,7 +78,8 @@ const styles = StyleSheet.create({
     minWidth: 44,
     height: "100%",
     padding: 5,
-    backgroundColor: "rgba(225, 180, 0, 0.6)",
+    //backgroundColor: "rgba(225, 180, 0, 0.6)",
+    backgroundColor: "#F0A500",
     marginRight: 10,
     borderRadius: 6,
     borderWidth: 0.5,
@@ -93,5 +87,6 @@ const styles = StyleSheet.create({
   },
   text: {
     alignSelf: "center",
+    fontWeight: "bold",
   }
 });

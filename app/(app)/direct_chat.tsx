@@ -12,7 +12,7 @@ import { RTClient } from "@/src/rt_client/rt_client";
 import TextMessage from "@/src/features/chats/components/TextMessage";
 import { getCurrentUserID } from "@/utils/utils";
 import FloatingButton from "@/src/features/chats/components/FloatingButton";
-import ScreenBackground, { useBlurStore } from "@/src/components/ui/screen-background";
+import { useBlurStore } from "@/src/components/ui/screen-background";
 import { useEditMode } from "@/src/features/chats/hooks";
 import EditHeader from "@/src/features/chats/components/EditHeader";
 import { heightPercentageToDP } from "react-native-responsive-screen";

@@ -21,13 +21,17 @@ export async function AddWatchlistItem(item: WatchlistItem_T) {
 };
 
 export async function GetUserWatchlists(userID: number) {
-  const response = await fetch(`${API_URL}/users/${userID}/watchlists`);
+  const response = await fetch(`${API_URL}/users/${userID}/watchlists`, {
+    headers: jwtHeaders(undefined)
+  });
   const data = await response.json();
   return data?.results;
 };
 
 export async function GetWatchlistMovies(watchlistID: number) {
-  const response = await fetch(`${API_URL}/watchlists/${watchlistID}`)
+  const response = await fetch(`${API_URL}/watchlists/${watchlistID}`, {
+    headers: jwtHeaders(undefined)
+  })
   const data = await response.json();
   return data?.results;
 };

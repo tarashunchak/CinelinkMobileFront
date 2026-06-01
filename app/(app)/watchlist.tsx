@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Text, StyleSheet } from "react-native";
 import { GetWatchlistMovies } from "@/api/watchlist/watchlist";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen"
-import ScreenBackground from "@/src/components/ui/screen-background";
 import MovieCard from "@/src/features/watchlist/components/MovieCard";
 import { textStyle } from "@/styles/textStyles";
 import Spacer from "@/src/components/ui/spacer";
@@ -17,7 +16,7 @@ export default function WatchlistScreen() {
 
   useEffect(() => {
     async function loadWatchlistMovies() {
-      if(!watchlistObj.id) return;
+      if (!watchlistObj.id) return;
       const movies = await GetWatchlistMovies(watchlistObj?.id);
       if (movies?.length) setMovies(movies);
     }
@@ -25,27 +24,25 @@ export default function WatchlistScreen() {
   }, []);
 
   return (
-    <ScreenBackground>
-      <FlatList
-        data={movies}
-        keyExtractor={(item, index) => String(item?.imdb_id ?? index)}
-        showsVerticalScrollIndicator={false}
-        ListHeaderComponent={<Header watchlist={watchlistObj}/>}
-        renderItem={({ item }) => (
-          <MovieCard movie={item} />
-        )}
-        ListEmptyComponent={
-          <Text
-            style={[
-              textStyle.gray32,
-              styles.emptyWatchlist
-            ]}>
-            Watchlist is empty
-          </Text>
-        }
-        ListFooterComponent={<Spacer orientation="v" spacing={hp(9)} />}
-      />
-    </ScreenBackground>
+    <FlatList
+      data={movies}
+      keyExtractor={(item, index) => String(item?.imdb_id ?? index)}
+      showsVerticalScrollIndicator={false}
+      ListHeaderComponent={<Header watchlist={watchlistObj} />}
+      renderItem={({ item }) => (
+        <MovieCard movie={item} />
+      )}
+      ListEmptyComponent={
+        <Text
+          style={[
+            textStyle.gray32,
+            styles.emptyWatchlist
+          ]}>
+          Watchlist is empty
+        </Text>
+      }
+      ListFooterComponent={<Spacer orientation="v" spacing={hp(9)} />}
+    />
   );
 };
 

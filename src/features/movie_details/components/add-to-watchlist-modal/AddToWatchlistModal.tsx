@@ -10,6 +10,8 @@ import Button from "./components/Button";
 import { useBlurStore } from "@/src/components/ui/screen-background";
 import { BlurView } from "expo-blur";
 import { useBlurTargetReady, useBlurTargetRef } from "@/src/hooks/useBackgroundBlur";
+import { Search } from "lucide-react-native";
+import { textStyle } from "@/styles/textStyles";
 
 export type WatchlistSheetRef = {
   open: () => void;
@@ -28,8 +30,6 @@ const WatchlistSheet = forwardRef<WatchlistSheetRef, WatchlistSheetProps>(({ set
   const [value, setValue] = useState<string>("");
   const [watchlists, setWatchlists] = useState<any[]>([]);
   const [picked, setPicked] = useState<Map<number, boolean>>(new Map());
-  const blurRef = useBlurTargetRef();
-  const isReady = useBlurTargetReady();
   const setBottomBarVisible = useBlurStore(state => state.setBottomBarVisible);
 
   useEffect(() => {
@@ -60,43 +60,47 @@ const WatchlistSheet = forwardRef<WatchlistSheetRef, WatchlistSheetProps>(({ set
     <BottomSheet
       ref={sheetRef}
       index={-1}
+      enableBlurKeyboardOnGesture
+      animateOnMount={true}
+      animationConfigs={{
+        stiffness: 100,
+        damping: 15,
+        mass: 1,
+      }}
       onClose={() => {
         setIsActive(true);
         setBottomBarVisible(true);
+        Keyboard.dismiss;
       }}
       snapPoints={snapPoints}
       enablePanDownToClose
+      handleIndicatorStyle={{
+        backgroundColor: "#fff",
+        width: 40,
+        height: 6,
+        elevation: 8,
+      }}
       handleStyle={{
-        backgroundColor:"grey",
+        backgroundColor: "#A27B5C",
         borderTopLeftRadius: 14,
         borderTopRightRadius: 14,
       }}
       containerStyle={[styles.container, backgroundColor]}
-      backdropComponent={(backdropProps) => (
-        <BottomSheetBackdrop
-          {...backdropProps}
-          appearsOnIndex={0}
-          disappearsOnIndex={-1}
-          enableTouchThrough
-        >
-          {isReady && <BlurView
-            tint="systemMaterialDark"
-            intensity={120}
-            blurMethod="dimezisBlurView"
-            style={StyleSheet.absoluteFill}
-          />}
-        </BottomSheetBackdrop>
-      )
-      }
     >
-      <BottomSheetView style={{ height: "100%", backgroundColor: "black" }}>
+      <BottomSheetView style={{
+        height: "100%",
+        backgroundColor: "#090405",
+      }}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} style={{ justifyContent: "space-between" }}>
           <View style={styles.mainView}>
-            <TextInput
-              placeholder="Search"
-              placeholderTextColor={"grey"}
-              style={styles.textInput}
-            />
+            <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-evenly", paddingRight: "5%", alignSelf: "flex-start", backgroundColor: "#222831", width: "100%", elevation: 10 }}>
+              <TextInput
+                placeholder="Search"
+                placeholderTextColor={"grey"}
+                style={[styles.textInput, textStyle.white18]}
+              />
+              <Search width={34} height={34} color="white" strokeWidth={1} />
+            </View>
             <FlatList
               style={{ height: "100%" }}
               data={watchlists}
@@ -108,12 +112,11 @@ const WatchlistSheet = forwardRef<WatchlistSheetRef, WatchlistSheetProps>(({ set
               )}
             />
           </View>
-          {<View style={{ zIndex: 10, backgroundColor: "white", height: hp(20), width: wp(100), position: "absolute", bottom: 0, left: 0 }}>
-            <Button />
-          </View>}
+
         </TouchableWithoutFeedback>
       </BottomSheetView>
     </BottomSheet >
+
   )
 });
 
@@ -129,11 +132,13 @@ const styles = StyleSheet.create({
   textInput: {
     width: "80%",
     height: 46,
-    backgroundColor: "rgba(255, 255, 255, 0.1)",
+    backgroundColor: "#0C0C0C",
     borderColor: "rgba(255,255, 255, 0.3)",
     borderWidth: 1,
     borderRadius: 8,
     margin: "2%",
     paddingLeft: "2%",
+    color: "white",
+    elevation: 10,
   },
 });

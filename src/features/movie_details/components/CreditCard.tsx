@@ -8,21 +8,13 @@ import { Skeleton } from "react-native-skeletons";
 import AnimatedFastImage from "@/src/components/ui/animated-fast-image";
 import AnimatedFastText from "@/src/components/ui/animated-fast-text";
 
-function CreditCard({ credit }: { credit: any }) {
-  const router = useRouter();
+function CreditCard({ credit, onPress }: { credit: any, onPress: ()=>void }) {
   if (!credit) return <Skeleton style={styles.view} />
 
   return (
     <PressableScale
       style={styles.view}
-      onPress={() => router.navigate({
-        pathname: "/credit_details",
-        params: { 
-          creditID: credit.id, 
-          creditName: credit.name, 
-          profilePath: credit.profile_path 
-        }
-      })}>
+      onPress={onPress}>
       <AnimatedFastImage
         sharedTransitionTag={`credit-${credit.id}-profile`}
         source={

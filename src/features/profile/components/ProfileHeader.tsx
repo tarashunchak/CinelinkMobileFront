@@ -19,23 +19,23 @@ const buttonLayout = { x: (widthPercentageToDP(98)) - 100, y: -((heightPercentag
 const SkiaBackground = memo(({ bgUrl }: { bgUrl: string }) => {
   const image = useImage(bgUrl);
   const maskElement = useMemo(() => (
-    <Rect x={0} y={0} width={wp(100)} height={hp(40)}>
+    <Rect x={0} y={0} width={wp(100)} height={hp(45)}>
       <LinearGradient
         start={vec(0, 0)}
-        end={vec(0, hp(40))}
+        end={vec(0, hp(45))}
         colors={["rgba(255, 255, 255, 1)", "rgba(255, 255, 255, 0.4)", "transparent"]}
-        positions={[0.35, 0.65, 1]}
+        positions={[0.35, 0.55, 1]}
       />
     </Rect>
   ), []);
 
   const darkLayerMask = useMemo(() => (
-    <Rect x={0} y={0} width={wp(100)} height={hp(40)}>
+    <Rect x={0} y={0} width={wp(100)} height={hp(45)}>
       <LinearGradient
         start={vec(0, 0)}
-        end={vec(0, hp(40))}
+        end={vec(0, hp(45))}
         colors={["rgba(0, 0, 0, 0.5)", "rgba(0, 0, 0, 0.15)", "transparent"]}
-        positions={[0.35, 0.65, 1]}
+        positions={[0.35, 0.55, 1]}
       />
     </Rect>
   ), []);
@@ -47,10 +47,10 @@ const SkiaBackground = memo(({ bgUrl }: { bgUrl: string }) => {
           x={0}
           y={0}
           width={wp(100)}
-          height={hp(40)}
+          height={hp(45)}
           fit="cover"
         >
-          <Blur blur={1} />
+          <Blur blur={2} />
         </Image>
         }
       </Mask>
@@ -59,7 +59,7 @@ const SkiaBackground = memo(({ bgUrl }: { bgUrl: string }) => {
           x={0}
           y={0}
           width={wp(100)}
-          height={hp(40)}
+          height={hp(45)}
           color={"rgba(0, 0, 0, 0.25"}
         />
       </Mask>
@@ -81,7 +81,7 @@ export default function ProfileHeader({ bgUrl, isCurrentUser, isFromTab }: Props
 const styles = StyleSheet.create({
   bgImage: {
     backgroundColor: "transparent",
-    height: hp(40),
+    height: hp(45),
     width: wp(100),
     position: "absolute",
     top: 0,

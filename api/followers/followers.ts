@@ -20,7 +20,10 @@ export async function FollowUser(userID: number) {
   console.log("USER ID following: ", userID)
   const response = await fetch(`${API_URL}/users/${userID}/followers`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { 
+      "Content-Type": "application/json",
+      ...jwtHeaders(undefined)
+     },
     body: JSON.stringify({ follower_id: useAuthStore.getState().user?.user_id })
   })
   const data = await response.json();

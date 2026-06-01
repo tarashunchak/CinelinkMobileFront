@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
+import { useBlurTargetRef } from "@/src/hooks/useBackgroundBlur";
 import { ImageBackground, StyleSheet } from "react-native";
 import BottomBar from "@/app/(app)/bars/bottomBar";
 import CreditCard from "@/src/features/movie_details/components/CreditCard";
@@ -7,7 +8,9 @@ import { FlatList, GestureHandlerRootView } from "react-native-gesture-handler";
 import ReturnArrowButton from "@/src/components/ui/returnArrowButton";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import AnimatedFastImage from "@/src/components/ui/animated-fast-image";
+import { BlurView } from "expo-blur";
 
 type Credit = {
   id: number;
@@ -25,9 +28,9 @@ interface Credits {
 }
 
 export default function MovieCreditsScreen() {
+  const router = useRouter();
   const [credits, setCredits] = useState<any>();
   const { movieID, poster_path } = useLocalSearchParams();
-
 
   useEffect(() => {
     async function load() {
@@ -39,44 +42,59 @@ export default function MovieCreditsScreen() {
 
   const insets = useSafeAreaInsets();
 
-  const renderItem = useCallback(({ item }: any) => 
-    <CreditCard credit={item} />
-  , [movieID])
+  const renderItem = useCallback(({ item }: any) =>
+    <CreditCard credit={item}
+      onPress={() => router.navigate({
+        pathname: "/credit_details",
+        params: {
+          creditID: item.id,
+          creditName: item.name,
+          profilePath: item.profile_path
+        }
+      })}
+    />
+    , [movieID])
 
   return (
     <GestureHandlerRootView>
-    <ImageBackground
-      source={{ uri: "https://image.tmdb.org/t/p/w500" + poster_path }}
-      style={styles.view}
-    >
+      <AnimatedFastImage
+        source={{ uri: `https://image.tmdb.org/t/p/w500${poster_path}` }}
+        style={styles.view}
+        sharedTransitionTag={`movie-${movieID}-poster`}
+      />
       <FlatList
         style={styles.listView}
         ListHeaderComponent={ReturnArrowButton}
         ListHeaderComponentStyle={styles.listHeader}
-        contentContainerStyle={[styles.contentContainer, {paddingTop: insets.top}]}
+        contentContainerStyle={[styles.contentContainer, { paddingTop: insets.top }]}
         showsVerticalScrollIndicator={false}
         data={[
-          ...(credits?.cast || []),
-          ...(credits?.crew || [])
+          ...credits?.cast ?? [],
+          ...credits?.crew ?? [],
         ]}
         numColumns={3}
         maximumZoomScale={2}
-        keyExtractor={(item: any, index: any) => String(item.id)}
+        columnWrapperStyle={{justifyContent: "space-between"}}
+        keyExtractor={(item: any, index: number) => String(item?.id ?? index)}
         renderItem={renderItem}
       />
-      <BottomBar />
-    </ImageBackground>
-</GestureHandlerRootView>
+    </GestureHandlerRootView>
   )
 };
 
 const styles = StyleSheet.create({
   view: {
-    flex: 1,
+    height: hp(100),
+    width: wp(100),
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
   },
   listView: {
-    flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.6)",
+    height: hp(100),
+    width: wp(100),
+    backgroundColor: "rgba(0, 0, 0, 0.6)"
   },
   listHeader: {
     marginBottom: "5%"

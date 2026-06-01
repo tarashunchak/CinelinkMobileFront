@@ -164,7 +164,7 @@ export const PostCard = memo((post) => {
             <AnimatedFastText
               style={textStyle.yellow18}
             >
-              {"Gigga Nigga"}
+              {"Моцний Хлоп"}
             </AnimatedFastText>
           </View>
         </View>

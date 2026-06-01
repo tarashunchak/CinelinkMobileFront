@@ -149,7 +149,7 @@ export default function MovieDetailScreen() {
         ListHeaderComponent={header}
         ListFooterComponent={<Spacer orientation="v" spacing={heightPercentageToDP(10)} />}
       />
-      {isActive && <WatchlistSheet setIsActive={(state) => setIsActive(state)} ref={ref} />}
+      <WatchlistSheet setIsActive={(state) => setIsActive(state)} ref={ref} />
     </>
   );
 };

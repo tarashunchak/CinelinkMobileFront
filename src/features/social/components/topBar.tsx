@@ -43,13 +43,13 @@ const styles = StyleSheet.create({
     width: "100%",
     alignSelf: "center",
     borderWidth: 0.5,
-    borderColor: "rgba(255, 255, 255, 0.3)",
+    borderColor: "rgba(255, 255, 255, 0.2)",
     borderRadius: 6,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     padding: "0.5%",
-    backgroundColor: "#2D3C59",
+    backgroundColor: "#222831",
     elevation: 10,
   },
   buttonView: {
@@ -60,9 +60,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   activeButtonView: {
-    backgroundColor: "#595B83",
+    backgroundColor: "#2D3C59",
     borderColor: "rgba(255, 255, 255, 0.2)",
     borderRadius: 4,
     borderWidth: 0.5,
+    elevation: 5,
   },
 });

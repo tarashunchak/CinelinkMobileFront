@@ -1,4 +1,4 @@
-import { GetUserFollowings } from "@/api/followers/followers";
+import { GetUserFollowings } from "@/api/followers";
 import { useFocusEffect } from "expo-router";
 import { heightPercentageToDP as hp, } from "react-native-responsive-screen";
 import React, { useCallback, useState } from "react";
@@ -13,13 +13,13 @@ export default function FollowingsList({ userID }: { userID: number }) {
 
   useFocusEffect(
     useCallback(() => {
-      let mounted = true;
+      let mounted = false;
       async function loadContent() {
         const data: UserCard_T[] = await GetUserFollowings(userID);
         if (mounted && data) setFollowings(data);
       }
       loadContent();
-      return () => {mounted = false}
+      return () => {mounted = true}
     }, [userID])
   );
 

@@ -41,6 +41,7 @@ export default function AppLayout() {
               <Stack.Screen name="direct_chat"/>
               <Stack.Screen name="watchlist" />
               <Stack.Screen name="credit_details" />
+              <Stack.Screen name="movie_credits" />
               <Stack.Screen name="profile" />
             </Stack>
           </BottomSheetModalProvider>

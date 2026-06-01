@@ -1,13 +1,13 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { ImageBackground, StyleSheet } from "react-native";
 import BottomBar from "@/app/(app)/bars/bottomBar";
-import CreditCard from "./components/CreditCard";
-import { GetMovieCredits } from "./services/services";
+import CreditCard from "@/src/features/movie_details/components/CreditCard";
+import { GetMovieCredits } from "@/src/features/movie_details/services/services";
 import { FlatList, GestureHandlerRootView } from "react-native-gesture-handler";
 import ReturnArrowButton from "@/src/components/ui/returnArrowButton";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
-import HeaderContainer from "@/src/components/ui/header-container";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useLocalSearchParams } from "expo-router";
 
 type Credit = {
   id: number;
@@ -24,9 +24,9 @@ interface Credits {
   crew: Credit[];
 }
 
-export default function MovieCreditsScreen({ route }: any) {
+export default function MovieCreditsScreen() {
   const [credits, setCredits] = useState<any>();
-  const { movieID, poster_path } = route.params;
+  const { movieID, poster_path } = useLocalSearchParams();
 
 
   useEffect(() => {

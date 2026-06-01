@@ -1,4 +1,6 @@
+import { useBlurTargetRef } from "@/src/hooks/useBackgroundBlur";
 import { textStyle } from "@/styles/textStyles";
+import { BlurView } from "expo-blur";
 import React, { useState } from "react";
 import { ImageBackground, Modal, StyleSheet, Text, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
@@ -7,6 +9,8 @@ import { heightPercentageToDP } from "react-native-responsive-screen";
 
 export default function BiographyModal({ bio }: { bio: string }) {
   const [open, setOpen] = useState(false);
+
+  const blurTargetRef = useBlurTargetRef();
 
   return (
     <>
@@ -26,10 +30,16 @@ export default function BiographyModal({ bio }: { bio: string }) {
         transparent={true}
         animationType="slide"
       >
-        <ImageBackground style={styles.imageBackground}>
+        <BlurView 
+          tint="systemChromeMaterialDark"
+          intensity={90}
+          blurReductionFactor={20}
+          blurMethod="dimezisBlurView"
+          blurTarget={blurTargetRef}
+          style={styles.imageBackground}
+        >
           <View style={styles.view}>
             <Text style={[textStyle.yellow22, { marginBottom: "2%" }]}>Biography</Text>
-
             <FlatList
               data={null}
               renderItem={() => ""}
@@ -42,15 +52,16 @@ export default function BiographyModal({ bio }: { bio: string }) {
                 </View>
               }
             />
-
-            <PressableScale style={styles.closeButton}
+            <PressableScale 
+            activeScale={0.98}
+            style={styles.closeButton}
               onPress={() => setOpen(false)}>
               <Text style={[textStyle.yellow22, { textAlign: "center" }]}>
                 Close
               </Text>
             </PressableScale>
           </View>
-        </ImageBackground>
+        </BlurView>
       </Modal >
     </>
   );
@@ -70,33 +81,32 @@ const styles = StyleSheet.create({
     maxHeight: "90%"
   },
   imageBackground: {
-    width: "100%",
-    height: "100%",
+    flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.8)",
   },
   view: {
     width: "96%",
-    backgroundColor: "rgba(38, 37, 44, 0.95)",
+    backgroundColor: "#2C394B",
     padding: "2%",
-    borderRadius: 12,
+    borderRadius: 10,
     maxHeight: "80%",
-    borderWidth: 0.5, borderColor: "rgba(255, 255, 255, 0.2)"
+    borderWidth: 0.5, borderColor: "rgba(255, 255, 255, 0.2)",
   },
   flatList: {
     borderRadius: 6,
     borderWidth: 0.5,
-    borderColor: "rgba(255, 255, 255, 0.2)",
+    borderColor: "rgba(0, 0, 0, 0.2)",
   },
   modalTextView: {
-    backgroundColor: "rgba(255, 255, 255, 0.05)",
+    backgroundColor: "rgba(0, 0, 0, 0.1)",
     padding: 8,
   },
   closeButton: {
     borderWidth: 0.5,
-    borderColor: "rgba(255, 255, 255, 0.5)",
-    backgroundColor: "rgba(255, 255, 255, 0.3)",
+    borderColor: "rgba(255, 255, 255, 0.2)",
+    elevation: 5,
+    backgroundColor: "#595B83",
     marginTop: 10,
     justifyContent: "center",
     width: "40%",

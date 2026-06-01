@@ -6,6 +6,7 @@ import { API_URL } from "@/api/API_CONFIG";
 import { UsersManager } from "./users_manager";
 import { timestamp } from "@/src/features/chats/utils";
 import { ChatsManager } from "./chats_manager";
+import { jwtHeaders } from "@/utils/utils";
 
 type Message_T = {
   user_id: number;
@@ -75,7 +76,9 @@ export class MessagesManager extends EntityManager<Message_T> {
     const pageInfo = useMessageStore.getState().page_info[chatID]; 
     if(pageInfo && !pageInfo?.has_next_page) return;
     try {
-      const response = await fetch(`${API_URL}/chats/${chatID}/messages?cursor=${pageInfo?.next_cursor ?? 1}`)
+      const response = await fetch(`${API_URL}/chats/${chatID}/messages?cursor=${pageInfo?.next_cursor ?? 1}`, {
+        headers: jwtHeaders(undefined),
+      })
       const data = await response?.json();
       if (data?.results) {
         const reversed = [...data?.results?.data];

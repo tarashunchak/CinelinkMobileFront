@@ -12,7 +12,6 @@ import GenresBlock from "@/src/features/movie_details/components/GenresBlock";
 import ProvidersBlock from "@/src/features/movie_details/components/ProvidersBlock";
 import CreditCardsList from "@/src/features/movie_details/components/CreditCardsList";
 import { GetMovieYouTubeTrailerKey } from "@/src/features/movie_details/services/services";
-import ScreenBackground from "@/src/components/ui/screen-background";
 import { FlatList, GestureHandlerRootView } from "react-native-gesture-handler";
 import { BlurTargetView } from "expo-blur";
 import Spacer from "@/src/components/ui/spacer";

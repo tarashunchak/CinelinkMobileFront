@@ -1,19 +1,19 @@
 import React from "react";
 import { Image, Text, TouchableOpacity } from "react-native";
-import { useNavigation } from "expo-router";
+import { useRouter } from "expo-router";
 import { textStyle } from "@/styles/textStyles";
 
 export default function EmptyCreditCard({ movieID, poster_path }: { movieID: number, poster_path: string }) {
-  const navigator = useNavigation();
+  const router = useRouter();
   return (
     <TouchableOpacity
       onPress={() =>
-        navigator?.push(
-          "MovieCreditsScreen",
-          {
+        router.navigate({
+          pathname:  "/(app)/movie_credits",
+          params: {
             movieID, poster_path
           }
-        )
+        })
       }
       style={styles.view}>
       <Image

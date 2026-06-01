@@ -1,15 +1,11 @@
 import React, { useState, forwardRef, useImperativeHandle, useMemo, useRef, useEffect } from "react";
-import BottomSheet, { BottomSheetBackdrop, BottomSheetView, TouchableWithoutFeedback } from "@gorhom/bottom-sheet";
+import BottomSheet, { BottomSheetView, TouchableWithoutFeedback } from "@gorhom/bottom-sheet";
 import { View, StyleSheet, TextInput, Keyboard } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
-import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import WatchlistCard from "./components/WatchlistCard";
 import { GetUserWatchlists } from "@/api/watchlist/watchlist";
 import { getCurrentUserID } from "@/utils/utils";
-import Button from "./components/Button";
 import { useBlurStore } from "@/src/components/ui/screen-background";
-import { BlurView } from "expo-blur";
-import { useBlurTargetReady, useBlurTargetRef } from "@/src/hooks/useBackgroundBlur";
 import { Search } from "lucide-react-native";
 import { textStyle } from "@/styles/textStyles";
 

@@ -1,7 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { useBlurTargetRef } from "@/src/hooks/useBackgroundBlur";
-import { ImageBackground, StyleSheet } from "react-native";
-import BottomBar from "@/app/(app)/bars/bottomBar";
+import { StyleSheet } from "react-native";
 import CreditCard from "@/src/features/movie_details/components/CreditCard";
 import { GetMovieCredits } from "@/src/features/movie_details/services/services";
 import { FlatList, GestureHandlerRootView } from "react-native-gesture-handler";
@@ -10,7 +8,6 @@ import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-nat
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import AnimatedFastImage from "@/src/components/ui/animated-fast-image";
-import { BlurView } from "expo-blur";
 
 type Credit = {
   id: number;

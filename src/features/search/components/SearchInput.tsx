@@ -1,8 +1,7 @@
 import React from "react";
-import { View, TextInput, Image, StyleSheet } from "react-native";
+import { View, TextInput, StyleSheet } from "react-native";
 import ReturnArrowButton from "@/src/components/ui/returnArrowButton";
 import { textStyle } from "@/styles/textStyles";
-import { useNavigation } from "expo-router";
 import { PressableScale } from "react-native-pressable-scale";
 import { Filter } from "lucide-react-native";
 

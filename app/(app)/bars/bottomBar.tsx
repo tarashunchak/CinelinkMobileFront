@@ -6,7 +6,7 @@ import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-nat
 import Animated, { useAnimatedProps, withSpring, useSharedValue, useDerivedValue, useAnimatedStyle } from "react-native-reanimated";
 import { Canvas, ColorMatrix, FractalNoise, LinearGradient, RadialGradient, rect, RoundedRect, rrect, Skia, vec } from "@shopify/react-native-skia";
 import { BlurView } from "expo-blur";
-import { usePathname, useSegments } from "expo-router";
+import { useSegments } from "expo-router";
 import { useBlurTargetReady, useBlurTargetRef } from "@/src/hooks/useBackgroundBlur";
 
 

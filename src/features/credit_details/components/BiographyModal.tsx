@@ -2,7 +2,7 @@ import { useBlurTargetRef } from "@/src/hooks/useBackgroundBlur";
 import { textStyle } from "@/styles/textStyles";
 import { BlurView } from "expo-blur";
 import React, { useState } from "react";
-import { ImageBackground, Modal, StyleSheet, Text, View } from "react-native";
+import { Modal, StyleSheet, Text, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { PressableScale } from "react-native-pressable-scale";
 import { heightPercentageToDP } from "react-native-responsive-screen";

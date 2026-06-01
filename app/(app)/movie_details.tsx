@@ -1,8 +1,7 @@
-import BottomBar from "@/app/(app)/bars/bottomBar";
 import MovieCardList from "@/src/components/ui/movie-card-list";
 import { textStyle } from "../../styles/textStyles";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Text, View } from "react-native";
+import { Text } from "react-native";
 import { Movie } from "@/src/features/movie_details/types";
 import MainInfo from "@/src/features/movie_details/components/MainInfo";
 import DetailsBlock from "@/src/features/movie_details/components/DetailsBlock";
@@ -12,8 +11,7 @@ import GenresBlock from "@/src/features/movie_details/components/GenresBlock";
 import ProvidersBlock from "@/src/features/movie_details/components/ProvidersBlock";
 import CreditCardsList from "@/src/features/movie_details/components/CreditCardsList";
 import { GetMovieYouTubeTrailerKey } from "@/src/features/movie_details/services/services";
-import { FlatList, GestureHandlerRootView } from "react-native-gesture-handler";
-import { BlurTargetView } from "expo-blur";
+import { FlatList } from "react-native-gesture-handler";
 import Spacer from "@/src/components/ui/spacer";
 import { heightPercentageToDP } from "react-native-responsive-screen";
 import { GetMovieDetailsCached } from "@/src/features/movie_details/cache";
@@ -21,7 +19,6 @@ import { useLocalSearchParams } from "expo-router";
 import { Image } from "expo-image";
 import TrailerBlock from "@/src/features/movie_details/components/TrailerBlock";
 import WatchlistSheet, { WatchlistSheetRef } from "@/src/features/movie_details/components/add-to-watchlist-modal/AddToWatchlistModal";
-import { BottomSheetView } from "@gorhom/bottom-sheet";
 
 const sections = [
   { type: "actions" },

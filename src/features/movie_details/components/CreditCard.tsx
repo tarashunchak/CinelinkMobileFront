@@ -1,9 +1,7 @@
 import React, { memo } from "react";
-import { useNavigation, useRouter } from "expo-router";
 import { StyleSheet, Text } from "react-native";
 import { textStyle } from "../../../../styles/textStyles";
 import { PressableScale } from "react-native-pressable-scale";
-import { Image } from "expo-image";
 import { Skeleton } from "react-native-skeletons";
 import AnimatedFastImage from "@/src/components/ui/animated-fast-image";
 import AnimatedFastText from "@/src/components/ui/animated-fast-text";

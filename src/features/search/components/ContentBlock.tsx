@@ -3,13 +3,11 @@ import { Text, FlatList, StyleSheet } from "react-native";
 import { GetQueryResult } from "../services/services";
 import MovieCard from "./MovieCard";
 import UserCard from "@/src/components/user-card";
-import CategoriesBlock from "./CategoriesBlock";
 import WatchlistCard from "./WatchlistCard";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import CreditCard from "./CreditCard";
 import { textStyle } from "@/styles/textStyles";
 import Spacer from "@/src/components/ui/spacer";
-import SearchInput from "@/src/features/search/components/SearchInput";
 
 interface Props {
   query: string;

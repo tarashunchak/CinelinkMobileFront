@@ -1,8 +1,5 @@
 import React, { memo, useCallback, useEffect, useState } from "react";
-import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { StyleSheet, Text, View } from "react-native";
-import Spacer from "@/src/components/ui/spacer";
-import { FlatList, ScrollView } from "react-native-gesture-handler";
 import AnimatedFastImage from "@/src/components/ui/animated-fast-image";
 import { PressableScale } from "react-native-pressable-scale";
 import AnimatedFastText from "@/src/components/ui/animated-fast-text";
@@ -10,7 +7,6 @@ import { textStyle } from "@/styles/textStyles";
 import { Bookmark, Heart, MessageCircleMore, Share } from "lucide-react-native";
 import { Image, useImage } from "expo-image";
 import * as Haptics from "expo-haptics";
-import Svg, { Circle } from "react-native-svg";
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 
 const BookMarkButton = memo(({ isMarked }: { isMarked: boolean }) => {

@@ -1,4 +1,4 @@
-import React, { memo, useEffect } from "react";
+import React from "react";
 import { StyleProp, View, ViewStyle } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 

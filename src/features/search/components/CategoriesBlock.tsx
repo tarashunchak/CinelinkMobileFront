@@ -1,10 +1,8 @@
 import { textStyle } from "@/styles/textStyles";
-import React, { useState } from "react";
+import React from "react";
 import { Text, ScrollView, StyleSheet } from "react-native";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { PressableScale } from "react-native-pressable-scale";
-import { BlurView } from "expo-blur";
-import { useBlurTargetReady, useBlurTargetRef } from "@/src/hooks/useBackgroundBlur";
 
 const categories = [
   "All",

@@ -1,11 +1,10 @@
 import React, { memo, useMemo } from "react";
 import ReturnArrowButton from "@/src/components/ui/returnArrowButton";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet } from "react-native";
 import { LogOutButton } from "./LogOutButton";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import HeaderContainer from "@/src/components/ui/header-container";
 import { vec, Rect, LinearGradient, Mask, Image, Blur, Canvas, useImage } from "@shopify/react-native-skia";
-import { SkiaGlassButton } from "./GlassButton";
 import { heightPercentageToDP, widthPercentageToDP } from "react-native-responsive-screen";
 
 interface Props {
@@ -14,7 +13,7 @@ interface Props {
   isFromTab: boolean,
 };
 
-const buttonLayout = { x: (widthPercentageToDP(98)) - 100, y: -((heightPercentageToDP(95) * 0.1) + 50), width: 100, height: 50 };
+//const buttonLayout = { x: (widthPercentageToDP(98)) - 100, y: -((heightPercentageToDP(95) * 0.1) + 50), width: 100, height: 50 };
 
 const SkiaBackground = memo(({ bgUrl }: { bgUrl: string }) => {
   const image = useImage(bgUrl);

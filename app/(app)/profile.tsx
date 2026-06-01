@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { View, StyleSheet } from "react-native";
 import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
@@ -12,7 +12,7 @@ import FollowersList from "@/src/features/profile/components/FollowersList";
 import { useFollowings } from "@/src/features/profile/hooks/useFollowings";
 import { useFollowers } from "@/src/features/profile/hooks/useFollowers";
 import { GetDirectChatID } from "@/api/chats";
-import { GestureHandlerRootView, ScrollView } from "react-native-gesture-handler";
+import { ScrollView } from "react-native-gesture-handler";
 import UserStats from "@/src/features/profile/components/Stats";
 import { useUser } from "@/src/rt_client/managers/users_manager";
 import PostsList from "@/src/features/profile/components/PostsList";

@@ -1,7 +1,10 @@
 import { API_URL } from "@/api/API_CONFIG";
+import { jwtHeaders } from "@/utils/utils";
 
 export async function GetMovieDetails(movieID: number) {
-  const response = await fetch(`${API_URL}/movies/${movieID}`);
+  const response = await fetch(`${API_URL}/movies/${movieID}`, {
+    headers: jwtHeaders(undefined)
+  });
   const data = await response.json();
   return data?.results;
 }
@@ -23,7 +26,9 @@ export function GetMovieYouTubeTrailerKey(videos: any) {
 }
 
 export async function GetMovieCredits(movieID: number) {
-  const response = await fetch(`${API_URL}/movies/${movieID}/credits`);
+  const response = await fetch(`${API_URL}/movies/${movieID}/credits`, {
+    headers: jwtHeaders(undefined)
+  });
   const data = await response.json();
   return data?.results;
 }

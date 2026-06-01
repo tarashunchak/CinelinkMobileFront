@@ -13,7 +13,8 @@ export async function getCurrentUser() {
 }
 
 export function jwtHeaders(jwt: string | undefined) {
+  const locJWT = useAuthStore.getState().user?.jwt;
   return {
-    "Authorization": `Bearer ${jwt}`
+    "Authorization": "Bearer " + (jwt ?? locJWT),
   };
 };

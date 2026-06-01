@@ -7,7 +7,10 @@ import { jwtHeaders } from "@/utils/utils";
 export async function AddWatchlistItem(item: WatchlistItem_T) {
   await fetch(`${API_URL}/user/watchlist`, {
     method: "POST",
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      ...jwtHeaders(undefined)
+    },
     body: JSON.stringify(item),
   })
     .then(res => res.json)

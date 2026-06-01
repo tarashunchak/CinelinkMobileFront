@@ -101,17 +101,17 @@ export class ChatsManager extends EntityManager<Chat_T> {
 
     try {
       if (chatID && this.currUserID) {
-        const resp = await fetch(`${API_URL}/chats/${chatID}`,
-          {
-            headers: jwtHeaders(useAuthStore.getState().user?.jwt)
-          }
-        );
+        const resp = await fetch(`${API_URL}/chats/${chatID}`, {
+          headers: jwtHeaders(undefined)
+        });
         const data = await resp.json();
         if (!resp.ok || data?.status !== 200)
           return;
         useChatStore.getState()._add(data.chat_id, data);
       }else if(this.currUserID) {
-        const resp = await fetch(`${API_URL}/users/${this.currUserID}/chats`);
+        const resp = await fetch(`${API_URL}/users/${this.currUserID}/chats`, {
+          headers: jwtHeaders(undefined),
+        });
         const data = await resp.json();
         if (!resp.ok || data?.status !== 200)
           return;

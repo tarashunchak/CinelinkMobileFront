@@ -65,7 +65,7 @@ export default function Header({ chatID, peerID, imgUrl, name }: Props) {
 
           <View style={styles.chatpeer.text.view}>
             <AnimatedFastText
-              style={textStyle.white20}
+              style={[textStyle.white20, {fontWeight: "bold"}]}
               sharedTransitionTag={`chat-${chatID}-name`}
             >
               {name}
@@ -77,7 +77,7 @@ export default function Header({ chatID, peerID, imgUrl, name }: Props) {
             ) :
               (
                 <View style={styles.isOnline.view}>
-                  <Text style={styles.isOnline.text}>
+                  <Text style={[styles.isOnline.text, {fontWeight: "bold"}]}>
                     {isTyping ? `is typing ...` : `online`}
                   </Text>
                 </View>

@@ -27,7 +27,7 @@ function SocialPageTopBar({ onTabChange }: { onTabChange: (tab: string) => void 
               activeTab === tab && styles.activeButtonView
             ]}
           >
-            <Text style={textStyle.white18}>{tab}</Text>
+            <Text style={[textStyle.white18, {fontWeight: "bold"}]}>{tab}</Text>
           </PressableScale>
         ))
       }

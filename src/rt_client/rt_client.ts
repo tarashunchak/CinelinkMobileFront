@@ -9,7 +9,8 @@ import { ChatMessage } from "./message_storage/message_storage";
 import { MessagesManager } from "./managers/messages_manager";
 
 const WS_ADDRESS = (userID: UserID): string =>
-  `${process.env.EXPO_PUBLIC_WS_URL}/ws/${userID}`;
+  `wss://cinelink.lol/ws/${userID}`;
+  //`${process.env.EXPO_PUBLIC_WS_URL}/ws/${userID}`;
 
 const HTTP_ADDRESS = (chatID: ChatID): string =>
   `${process.env.EXPO_PUBLIC_API_URL}/chats/${chatID}/messages`;

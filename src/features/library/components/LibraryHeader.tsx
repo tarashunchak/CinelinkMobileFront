@@ -32,7 +32,7 @@ export default function LibraryHeader() {
         <PressableScale>
           <Image style={styles.right.img} source={require("@/assets/images/icon.png")} />
         </PressableScale>
-        <PressableScale onPress={() => navigator.navigate("AddWatchlist")}>
+        <PressableScale onPress={() => router.push({pathname: "/add_watchlist",})}>
           <Image style={styles.right.img} source={require("@/assets/images/plus.png")} />
         </PressableScale>
       </View>

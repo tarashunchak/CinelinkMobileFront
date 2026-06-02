@@ -1,13 +1,7 @@
 import React from "react";
-import { Slot, Stack, useRouter, useSegments } from "expo-router";
-import { StatusBar } from "expo-status-bar";
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { ActionSheetProvider } from "@expo/react-native-action-sheet";
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
-import ScreenBackground, { useBlurStore } from "@/src/components/ui/screen-background";
+import { Slot, useRouter, useSegments } from "expo-router";
 import { useEffect } from "react";
-import { isAvailableAsync } from "expo-secure-store";
-import { MessagesManager } from "@/src/rt_client/managers/messages_manager";
+//import { MessagesManager } from "@/src/rt_client/managers/messages_manager";
 import { useAuthStore } from "@/local_storage/user/asyncStorage/store";
 import { ChatsManager } from "@/src/rt_client/managers/chats_manager";
 import { WatchlistsManager } from "@/src/rt_client/managers/watchlists_manager";
@@ -17,23 +11,31 @@ export default function RootLayout() {
   const router = useRouter();
   const segments = useSegments();
   const isAuthenticated = useAuthStore(state => state.isAuthenticated);
-
+  const isHydrated = useAuthStore(state => state.isHydrated);
   const currentUserID = useAuthStore(state => state.user?.user_id);
-  const isBottomBarVisible = useBlurStore(state => state.isBottomBarVisible);
+
+  useEffect(()=>{
+    useAuthStore.getState().init();
+  }, []);
+
   useEffect(() => {
-    //MessagesManager.getInstance().init();
-    ChatsManager.getInstance().init(currentUserID);
-    WatchlistsManager.getInstance().init(currentUserID);
-    UsersManager.getInstance().init(currentUserID);
+    if(currentUserID){
+      ChatsManager.getInstance().init(currentUserID);
+      WatchlistsManager.getInstance().init(currentUserID);
+      UsersManager.getInstance().init(currentUserID);
+    }
   }, [currentUserID]);
 
   useEffect(() => {
     const isAuthGroup = segments[0] === "(auth)";
     if (!isAuthenticated && !isAuthGroup)
-      router.replace("/(auth)");
+      router.replace("/(auth)/login");
     else if(isAuthenticated && isAuthGroup)
-      router.replace("(tabs)");
-  }, [isAuthenticated, segments])
+      router.replace("/(app)/(tabs)/home");
+  }, [isAuthenticated, segments, isHydrated])
+
+  if(!isHydrated) 
+    return null;
 
   return (
     <Slot/>

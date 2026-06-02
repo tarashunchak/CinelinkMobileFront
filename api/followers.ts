@@ -24,13 +24,9 @@ export async function GetUserFollowings(userID: number): Promise<any> {
 
 export async function FollowUser(userID: number): Promise<boolean> {
   console.log("USER ID following: ", userID)
-  const response = await fetch(`${API_URL}/users/followers`, {
+  const response = await fetch(`${API_URL}/users/${userID}/followers`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      ...jwtHeaders(undefined)
-    },
-    body: JSON.stringify({ follower_id: useAuthStore.getState().user?.user_id })
+    headers: jwtHeaders(undefined),
   })
   const data = await response.json();
   return data?.status === 200;
@@ -38,7 +34,7 @@ export async function FollowUser(userID: number): Promise<boolean> {
 
 export async function UnfollowUser(userID: number): Promise<any> {
   const jwt = useAuthStore.getState().user?.jwt;
-  const response = await fetch(`${API_URL}/users/followers`, {
+  const response = await fetch(`${API_URL}/users/${userID}/followers`, {
     method: "DELETE",
     headers: jwtHeaders(jwt)
   })

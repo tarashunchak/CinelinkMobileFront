@@ -1,16 +1,5 @@
-import React, { memo, useEffect, useRef } from "react";
-import TabNavigator from "@/navigation/TabNavigator";
-import AuthNavigator from "@/navigation/AuthNavigator";
-import { useAuthStore } from "@/local_storage/user/asyncStorage/store"
-//import * as Notifications from "@/utils/notifications";
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { KeyboardProvider } from "react-native-keyboard-controller";
-import { Redirect, Slot, useRouter } from "expo-router";
-import { View } from "react-native-reanimated/lib/typescript/Animated";
-import { useBlurStore } from "@/src/components/ui/screen-background";
-import { enableScreens } from "react-native-screens";
-enableScreens(false);
+/*import { enableScreens } from "react-native-screens";
+enableScreens(false);*/
 
 //Notifications.configure();
 
@@ -23,14 +12,10 @@ globalThis.fetch = async (...args) => {
 };
 
 export default function App() {
-  useAuthStore.getState().init();
-  const isAuthenticated = useAuthStore(state => state.isAuthenticated);
-  const isHydrated = useAuthStore(state => state.isHydrated);
+  /*const isAuthenticated = useAuthStore(state => state.isAuthenticated);
+  const isHydrated = useAuthStore(state => state.isHydrated);*/
 
-  if(isAuthenticated && isHydrated)
-    return <Redirect href="/(app)/(tabs)/home" />
-
-  return <Redirect href="/(auth)/login" />
+  return null;
 };
 
 /**

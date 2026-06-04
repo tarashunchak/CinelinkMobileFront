@@ -108,6 +108,7 @@ export class ChatsManager extends EntityManager<Chat_T> {
         if (!resp.ok || data?.status !== 200)
           return;
         useChatStore.getState()._add(data.chat_id, data);
+        //useChatStore.getState()._setLastMessage(chat.chat_id, chat.last_message);
       }else if(this.currUserID) {
         const resp = await fetch(`${API_URL}/users/${this.currUserID}/chats`, {
           headers: jwtHeaders(undefined),
@@ -133,7 +134,10 @@ export class ChatsManager extends EntityManager<Chat_T> {
   };
 
   public setLastMessage(chatID: ChatID, msg: any) {
-    useChatStore.getState()._setLastMessage(chatID, msg);
+    if(useChatStore.getState().chats[chatID])
+      useChatStore.getState()._setLastMessage(chatID, msg);
+    else
+      load(chatID)
   };
 
   public add(chatID: ChatID, chat: any) {

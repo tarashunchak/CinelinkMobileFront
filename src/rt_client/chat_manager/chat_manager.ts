@@ -95,7 +95,7 @@ export class ChatManager {
     const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/chats/${chatID}`,
       {
         method: "GET",
-        headers: jwtHeaders(useAuthStore?.getState()?.user?.jwt)
+        headers: jwtHeaders(undefined)
       }
     );
     const text = await response?.text();

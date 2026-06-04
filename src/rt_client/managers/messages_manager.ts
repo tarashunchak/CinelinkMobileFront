@@ -91,7 +91,8 @@ export class MessagesManager extends EntityManager<Message_T> {
         }
         //this.lastSeenMessageId = reversed[0]?.message_id;
       }
-    } finally {
+    } catch(err){
+    }finally {
       this.isLoading = false;
     }
   };

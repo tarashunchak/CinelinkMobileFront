@@ -1,4 +1,4 @@
-export interface Props {
+interface Props {
   user_id: number;
   chat_id?: number;
   message_id?: number;
@@ -44,8 +44,8 @@ export function makeMessageSendingMessage(props: Props) {
   return {
     type: "message",
     content: {
-      user_id: props.user_id,
-      chat_id: props.chat_id,
+      user_id: Number(props.user_id),
+      chat_id: Number(props.chat_id),
       message_type: props.message_type,
       message: props.message,
     }

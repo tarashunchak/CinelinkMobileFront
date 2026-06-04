@@ -1,4 +1,4 @@
-import { TouchableOpacity, Image, Alert, StyleSheet, Pressable } from "react-native";
+import { Alert, StyleSheet } from "react-native";
 import React from "react";
 import { useAuthStore } from "@/local_storage/user/asyncStorage/store";
 import { RTClient } from "@/src/rt_client/rt_client";
@@ -28,15 +28,16 @@ function showLogOutDialog() {
   ]);
 };
 
-export function LogOutButton({ isVisible }: Props) {
+export function LogOutButton({isVisible} : Props) {
+  if(!isVisible)
+    return null;
   return (
-    isVisible &&
-      <PressableScale
-        style={{zIndex: 2, alignSelf: "flex-end"}}
-        onPress={showLogOutDialog}
-      >
-        <LogOut size={34} strokeWidth={1} color="white" />
-      </PressableScale>
+    <PressableScale
+      style={{zIndex: 2, alignSelf: "flex-end"}}
+      onPress={showLogOutDialog}
+    >
+      <LogOut size={34} strokeWidth={1} color="white" />
+    </PressableScale>
   );
 };
 

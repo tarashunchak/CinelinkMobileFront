@@ -15,7 +15,7 @@ export default function SocialScreen() {
   const tabs = ["Chats", "Recommendations", "Activity", "Friends"];
   const [activeTab, setActiveTab] = useState(tabs[0]);
   //const [friends, setFriends] = useState<UserCard_T[]>(Array.from({ length: 8 }));
-  const [recommendations, setRecommendatoins] = useState<RecommendedCard_T[]>([]);
+  //const [recommendations, setRecommendatoins] = useState<RecommendedCard_T[]>([]);
   //const [chats, setChats] = useState<any[]>(Array.from({ length: 8 }));
   const [activity, setActivity] = useState<any[]>([]);
   const [isReady, setIsReady] = useState<boolean>(false);
@@ -26,7 +26,7 @@ export default function SocialScreen() {
       const data = await GetSocial();
       if (data) {
         //setFriends(data?.friends);
-        setRecommendatoins(data?.recommendations);
+        //setRecommendatoins(data?.recommendations);
         //setChats(data?.chats);
       }
     };
@@ -41,13 +41,13 @@ export default function SocialScreen() {
       case "Friends":
         return <FriendsList />
       case "Recommendations":
-        return <RecommendationsList items={recommendations} />
+        return <RecommendationsList />
       case "Activity":
         return null;
       case "Chats":
         return <ChatsList />;
     }
-  }, [activeTab, recommendations, activity]);
+  }, [activeTab, activity]);
 
   return (
     <GestureHandlerRootView>

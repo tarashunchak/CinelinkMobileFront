@@ -7,6 +7,7 @@ import { PressableScale } from "react-native-pressable-scale";
 import { createAnimatedComponent } from "react-native-reanimated";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { Image } from "expo-image";
+import { useUserRecommendations } from "@/src/rt_client/managers/recommendations_manager";
 
 type RecommendedBy_T = {
   user_id: number;
@@ -84,7 +85,8 @@ const RecommendationItem = memo(({ item }: { item: RecommendedCard_T }) => {
   );
 });
 
-function RecommendationsList({ items }: { items: RecommendedCard_T[]}) {
+function RecommendationsList() {
+  const items = useUserRecommendations();
   const renderItem = useCallback(({ item }: any) => (
     <RecommendationItem item={item} />
   ), [items]);
@@ -143,6 +145,7 @@ const styles = StyleSheet.create({
   imdbText: {
     alignSelf: "center",
     textAlign: "center",
+    fontWeight: "bold",
   },
   recommendedSection: {
     height: "40%",

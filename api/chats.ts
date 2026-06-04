@@ -43,7 +43,7 @@ export async function GetDirectChatID(userID: number): Promise<number> {
   //if (1) return 3;
   console.warn("GETDirectChatID");
   const response = await fetch(`${API_URL}/chats/get-or-create/${userID}`, {
-    headers: jwtHeaders(useAuthStore.getState().user?.jwt),
+    headers: jwtHeaders(undefined),
   });
   const text = await response.text();
   const data = JSON.parse(text);

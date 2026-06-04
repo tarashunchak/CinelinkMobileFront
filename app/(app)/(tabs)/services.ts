@@ -3,11 +3,10 @@ import { jwtHeaders } from "@/utils/utils";
 import { useAuthStore } from "@/local_storage/user/asyncStorage/store";
 
 export async function GetSocial() {
-  const jwt = useAuthStore.getState().user?.jwt;
   const response = await fetch(`${API_URL}/social`,
     {
       method: "GET",
-      headers: jwtHeaders(jwt)
+      headers: jwtHeaders(undefined)
     }
   );
   const text = await response.text();

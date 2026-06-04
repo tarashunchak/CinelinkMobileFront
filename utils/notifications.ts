@@ -4,6 +4,7 @@ import * as Notifications from "expo-notifications";
 import * as Device from "expo-device";
 import Constants from "expo-constants";
 import { useAuthStore } from "@/local_storage/user/asyncStorage/store";
+import { jwtHeaders } from "./utils";
 
 export async function requestUserPermission() {
   console.warn("Requst user permission 1");
@@ -30,9 +31,10 @@ export async function getToken(): Promise<string> {
 };
 
 export async function sendTokenToBackend(token: string) {
-  const userID = useAuthStore.getState().user?.user_id;
-  await fetch(`${API_URL}/users/${userID}/device-token`, {
+  //const userID = useAuthStore.getState().user?.user_id;
+  await fetch(`${API_URL}/users/device-token`, {
     method: "POST",
+    headers: jwtHeaders(undefined),
     body: JSON.stringify({
       token: token,
       device_name: Platform.OS + ' ' + Platform.Version,

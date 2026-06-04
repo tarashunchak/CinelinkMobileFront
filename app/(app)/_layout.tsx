@@ -1,8 +1,7 @@
 import { ScreenBackground, useBlurStore } from "@/src/components/ui/screen-background";
-import { Slot, Stack, Tabs, usePathname } from "expo-router";
+import { Stack } from "expo-router";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
-import { Gesture, GestureHandlerRootView } from 'react-native-gesture-handler';
-import { KeyboardProvider } from "react-native-keyboard-controller";
+import {  GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useEffect } from "react";
 import { MessagesManager } from "@/src/rt_client/managers/messages_manager";
 import { useAuthStore } from "@/local_storage/user/asyncStorage/store";
@@ -11,18 +10,23 @@ import { WatchlistsManager } from "@/src/rt_client/managers/watchlists_manager";
 import { UsersManager } from "@/src/rt_client/managers/users_manager";
 import BottomBar from "./bars/bottomBar";
 import React from "react";
-import { backgroundStyle } from "@/styles/backgroundStyle";
+import { RTClient } from "@/src/rt_client/rt_client";
+import { RecommendationsManager } from "@/src/rt_client/managers/recommendations_manager";
+//import * as Notifications from "@/utils/notifications";
 
+//Notifications.configure();
 
 export default function AppLayout() {
   const currentUserID = useAuthStore(state => state.user?.user_id);
   const isBottomBarVisible = useBlurStore(state => state.isBottomBarVisible);
   useEffect(() => {
     if (currentUserID) {
+      RTClient.connect(currentUserID);
       MessagesManager.getInstance().init(currentUserID);
       ChatsManager.getInstance().init(currentUserID);
       WatchlistsManager.getInstance().init(currentUserID);
       UsersManager.getInstance().init(currentUserID);
+      RecommendationsManager.getInstance().init(currentUserID);
     }
   }, [currentUserID]);
 

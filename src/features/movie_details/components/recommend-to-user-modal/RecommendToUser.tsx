@@ -7,6 +7,7 @@ import UserCard from "./components/UserCard";
 import { getCurrentUserID } from "@/utils/utils";
 import Button from "./components/Button";
 import { GetUserFollowers } from "@/api/followers";
+import { useBlurStore } from "@/src/components/ui/screen-background";
 
 export type UserSheetRef = {
   open: () => void;
@@ -17,21 +18,24 @@ type UserSheetProps = {
   setIsActive: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
+const snapPoints = ["50%", "90%"];
+
 const UserSheet = forwardRef<UserSheetRef, UserSheetProps>(({ setIsActive }, ref: any) => {
   const sheetRef = useRef<BottomSheet>(null);
   const [state, setState] = useState<boolean>(false);
   const [value, setValue] = useState<string>("");
   const [users, setUsers] = useState<any[]>([]);
   const [picked, setPicked] = useState<Map<number, boolean>>(new Map());
-  const snapPoints = {};
+  const setBottomBarVisible = useBlurStore(state => state.setBottomBarVisible);
 
   useEffect(() => {
     async function loadContent() {
-      const data = await GetUserFollowers(getCurrentUserID() ?? 0);
+      const data = await GetUserFollowers(getCurrentUserID());
       if (data) setUsers(data);
       console.warn("users: ", data);
     };
-    loadContent();
+    if(state)
+      loadContent();
   }, [state]);
 
   useImperativeHandle(ref, () => ({
@@ -42,6 +46,7 @@ const UserSheet = forwardRef<UserSheetRef, UserSheetProps>(({ setIsActive }, ref
     },
     close: () => {
       sheetRef.current?.close();
+      setState(false);
     },
   }));
 
@@ -53,20 +58,38 @@ const UserSheet = forwardRef<UserSheetRef, UserSheetProps>(({ setIsActive }, ref
     <BottomSheet
       ref={sheetRef}
       index={-1}
-      snapPoints={["50%", "90%"]}
-      enablePanDownToClose
-      onClose={() => {
-        setIsActive?.(true);
-        setState(false);
-      }}
-      containerStyle={[styles.container, backgroundColor]}
+      enableBlurKeyboardOnGesture
+      animateOnMount={true}
       animationConfigs={{
-        damping: 1000,
-        stiffness: 250,
-        mass: 0.8,
+        stiffness: 100,
+        damping: 15,
+        mass: 1,
       }}
+      onClose={() => {
+        setIsActive(true);
+        setBottomBarVisible(true);
+        setState(false);
+        Keyboard.dismiss;
+      }}
+      snapPoints={snapPoints}
+      enablePanDownToClose
+      handleIndicatorStyle={{
+        backgroundColor: "#fff",
+        width: 40,
+        height: 6,
+        elevation: 8,
+      }}
+      handleStyle={{
+        backgroundColor: "#A27B5C",
+        borderTopLeftRadius: 14,
+        borderTopRightRadius: 14,
+      }}
+      containerStyle={[styles.container]}
     >
-      <BottomSheetView style={{ height: "100%", backgroundColor: "black" }}>
+      <BottomSheetView style={{
+        height: "100%",
+        backgroundColor: "#090405",
+      }}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} style={{ justifyContent: "space-between" }}>
           <View style={styles.mainView}>
             <TextInput

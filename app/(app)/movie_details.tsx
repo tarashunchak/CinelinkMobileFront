@@ -19,6 +19,7 @@ import { useLocalSearchParams } from "expo-router";
 import { Image } from "expo-image";
 import TrailerBlock from "@/src/features/movie_details/components/TrailerBlock";
 import WatchlistSheet, { WatchlistSheetRef } from "@/src/features/movie_details/components/add-to-watchlist-modal/AddToWatchlistModal";
+import UserSheet, { UserSheetRef } from "@/src/features/movie_details/components/recommend-to-user-modal/RecommendToUser";
 
 const sections = [
   { type: "actions" },
@@ -43,6 +44,7 @@ export default function MovieDetailScreen() {
   );
 
   const ref = useRef<WatchlistSheetRef>(null);
+  const recommendationsRef = useRef<UserSheetRef>(null);
 
   useEffect(() => {
     async function load() {
@@ -69,7 +71,10 @@ export default function MovieDetailScreen() {
             setIsActive(true);
             ref.current?.open();
           }}
-          onRecommend={() => { }}
+          onRecommend={() => { 
+            setIsActiveUsers(true);
+            recommendationsRef.current?.open();
+          }}
         />
       case "genres":
         return <GenresBlock genres={movie?.genres} />
@@ -147,6 +152,7 @@ export default function MovieDetailScreen() {
         ListFooterComponent={<Spacer orientation="v" spacing={heightPercentageToDP(10)} />}
       />
       <WatchlistSheet setIsActive={(state) => setIsActive(state)} ref={ref} />
+      <UserSheet setIsActive={(state) => setIsActive(state)} ref={recommendationsRef} />
     </>
   );
 };

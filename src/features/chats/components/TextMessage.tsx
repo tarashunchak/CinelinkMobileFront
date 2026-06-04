@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React, { memo, useMemo } from "react";
 import { Image, View, StyleSheet, Text } from "react-native";
 import { isCurrentUser } from "@/utils/utils";
 import { timestamp } from "../utils";
@@ -15,18 +15,19 @@ interface TextMessage_I {
 };
 
 function TextMessage({ message }: { message: TextMessage_I  }) {
+  const isCurrUser = useMemo(()=> isCurrentUser(message?.user_id), [message?.user_id]);
   return (
     <MessageContainer
       style={[
         styles.messageView,
-        isCurrentUser(message?.user_id)
+        isCurrUser
           ? styles.isCurrentUser
           : styles.notCurrentUser
       ]}
       isEditMode={false}
       isSelected={false}
     >
-      <Text style={[textStyle.white16]}>
+      <Text style={isCurrUser ? textStyle.black16 : textStyle.white16}>
         {message?.message}
       </Text>
       <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
@@ -34,7 +35,7 @@ function TextMessage({ message }: { message: TextMessage_I  }) {
         <Text style={
           [
             textStyle.gray12,
-            isCurrentUser(message?.user_id)
+            isCurrUser
               ? styles.isCurrentUserTS
               : styles.notCurrentUserTS,
           ]}
@@ -62,7 +63,7 @@ const styles = StyleSheet.create({
     gap: 5,
   },
   isCurrentUser: {
-    backgroundColor: "rgba(255, 255, 255, 0.1)",
+    backgroundColor: "#FBDCC4",
     alignSelf: "flex-end",
   },
   notCurrentUser: {

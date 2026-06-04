@@ -3,12 +3,11 @@ import { textStyle } from "@/styles/textStyles";
 import { FlatList, View, Text, StyleSheet } from "react-native";
 import { PressableScale } from "react-native-pressable-scale";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
-import { useNavigation, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import { useLastChatMessage, useUnseenMessagesCount, useTypingStatus, useUserChats } from "@/src/rt_client/managers/chats_manager";
 import AnimatedFastImage from "@/src/components/ui/animated-fast-image";
 import { useUserStatus } from "@/src/rt_client/managers/users_manager";
 import AnimatedFastText from "@/src/components/ui/animated-fast-text";
-import { Space } from "lucide-react-native";
 import Spacer from "@/src/components/ui/spacer";
 
 const EMPTY_CHATS_LIST = Array.from({length: 10});
@@ -65,10 +64,8 @@ const DirectChatCard = memo(({ item, onPress }: { item: any, onPress: any}) => {
         margin: 5,
       }}>
         {
-          unSeenMessageCnt && (<View style={styles.unseenMessagesView}>
+          unSeenMessageCnt && 
             <Text style={[textStyle.black14, { fontWeight: "bold", textAlign: "center" }]}>{unSeenMessageCnt}</Text>
-          </View>
-          )
         }
         <Text style={textStyle.white14}>{lastMessage.time}</Text>
       </View>
@@ -99,7 +96,7 @@ export default function ChatsList() {
   return (
     <FlatList
       data={chats}
-      keyExtractor={(item: any, index: number) => String(item?.user_id)}
+      keyExtractor={(item: any, index: number) => String(item?.chat_id ?? index)}
       renderItem={renderItem}
       contentContainerStyle={styles.contentContainer}
       ListFooterComponent={<Spacer orientation="v" spacing={hp(14)}/>}

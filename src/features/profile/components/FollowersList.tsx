@@ -8,7 +8,7 @@ import Spacer from "@/src/components/ui/spacer";
 import { FlatList, StyleSheet } from "react-native";
 import { useFollowers } from "../hooks/useFollowers";
 
-export default function FollowersList({ userID }: { userID: number }) {
+function FollowersList({ userID }: { userID: number }) {
   //const {followers, loadFollowers, followersLoading} = useFollowers(userID);
   const [followers, setFollowers] = useState<UserCard_T[]>();
 
@@ -33,6 +33,7 @@ export default function FollowersList({ userID }: { userID: number }) {
       scrollEnabled={false}
       style={styles.view}
       data={followers}
+      initialNumToRender={10}
       keyExtractor={(item: any, index: number) => String(item?.user_id ?? index)}
       showsVerticalScrollIndicator={false}
       renderItem={renderItem}
@@ -41,6 +42,8 @@ export default function FollowersList({ userID }: { userID: number }) {
     />
   )
 };
+
+export default memo(FollowersList);
 
 const styles = StyleSheet.create({
   view: {

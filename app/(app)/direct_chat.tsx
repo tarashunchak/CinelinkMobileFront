@@ -4,6 +4,8 @@ import {
   KeyboardAvoidingView,
   Keyboard,
   Platform,
+  StyleSheet,
+  View,
 } from "react-native";
 import Header from "@/src/features/chats/components/HeaderBlock";
 import Input from "@/src/features/chats/components/Input";
@@ -15,13 +17,12 @@ import FloatingButton from "@/src/features/chats/components/FloatingButton";
 import { useBlurStore } from "@/src/components/ui/screen-background";
 import { useEditMode } from "@/src/features/chats/hooks";
 import EditHeader from "@/src/features/chats/components/EditHeader";
-import { heightPercentageToDP } from "react-native-responsive-screen";
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import Animated, { useAnimatedKeyboard, useAnimatedStyle } from "react-native-reanimated";
 import { MessagesManager, useChatMessages } from "@/src/rt_client/managers/messages_manager";
 import { useChat } from "@/src/rt_client/managers/chats_manager";
 
 export default function DirectChatScreen() {
-  const { height } = useAnimatedKeyboard();
   const { chatID, imgUrl, name, peerID } = useLocalSearchParams();
   const chat = useChat(chatID);
   const [isFloatButtonVisible, setFloatButtonVisible] = useState<boolean>(false);
@@ -29,12 +30,7 @@ export default function DirectChatScreen() {
   const [selected, setSelected] = useState<Set<number>>(new Set());
 
   const setBottomBarVisible = useBlurStore((state) => state.setBottomBarVisible);
-
   const messages = useChatMessages(chatID);
-
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ translateY: -height.value }]
-  }));
 
   useFocusEffect(
     useCallback(() => {
@@ -63,11 +59,11 @@ export default function DirectChatScreen() {
   }, [chatID]);
 
   return (
-    <>
+    <View style={{ height: hp(100), width: wp(100) }}>
       <KeyboardAvoidingView
-        style={{ flex: 1 }}
-        behavior={Platform.OS === "ios" ? "padding" : "padding"}
-        keyboardVerticalOffset={Platform.OS === "ios" ? 90 : 0}
+        style={StyleSheet.absoluteFill}
+        behavior={"padding"}
+        keyboardVerticalOffset={Platform.OS === "ios" ? 60 : 0}
         enabled={true}
       >
         {isEditMode
@@ -83,24 +79,19 @@ export default function DirectChatScreen() {
         <FlatList
           data={messages}
           scrollEventThrottle={16}
-          initialNumToRender={20}
+          onScrollBeginDrag={Keyboard.dismiss}
+          style={{ height: hp(100) }}
           keyExtractor={(item) => String(item.message_id)}
           renderItem={renderItem}
           contentContainerStyle={{
-            paddingTop: heightPercentageToDP(8),
-            paddingBottom: 10,
+            paddingTop: hp(8),
           }}
           keyboardShouldPersistTaps="always"
           inverted
           onEndReached={() => { MessagesManager.getInstance().load(chatID) }}
         />
-
-        <FloatingButton isVisible={isFloatButtonVisible} />
-
       </KeyboardAvoidingView>
-      <Animated.View style={[animatedStyle]}>
-        <Input chatID={chatID} />
-      </Animated.View>
-    </>
+      <Input chatID={chatID} />
+    </View>
   );
 };

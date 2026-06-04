@@ -171,8 +171,8 @@ const SkiaBottomBar = memo(() => {
           ]}
         />
         <FractalNoise
-          freqX={0.8}
-          freqY={0.8}
+          freqX={0.5}
+          freqY={0.5}
           octaves={1}
         />
       </RoundedRect>
@@ -266,7 +266,7 @@ const styles_ = StyleSheet.create({
     height: "100%",
     width: 76,
     borderRadius: 24,
-    backgroundColor: "#31363F",
+    backgroundColor: "#606a85",
     opacity: 0.8,
     borderWidth: 0.5,
     borderColor: "rgba(130, 130, 130, 0.8)",

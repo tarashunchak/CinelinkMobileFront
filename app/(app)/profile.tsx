@@ -21,21 +21,21 @@ export default function UserProfileScreen({ isFromTab = false }: {isFromTab: boo
   const router = useRouter();
   let { userID, avatarUrl } = useLocalSearchParams();
   if(!userID) userID = getCurrentUserID();
-  const { user, loadUser, userLoading } = useUserProfile(userID);
-  const { followings, loadFollowings, followingsLoading } = useFollowings(userID);
-  const { followers, loadFollowers, followersLoading } = useFollowers(userID);
+  //const { user, loadUser, userLoading } = useUserProfile(userID);
+  //const { followings, loadFollowings, followingsLoading } = useFollowings(userID);
+  //const { followers, loadFollowers, followersLoading } = useFollowers(userID);
   const [isCurrUser, setIsCurrUser] = useState<boolean>(false);
   const [list, setList] = useState<string>("Posts");
   const [chatID, setChatID] = useState<number>(0);
-  const cachedUser = useUser(userID);
+  const user = useUser(userID);
 
   useFocusEffect(
     useCallback(() => {
-      loadUser();
+      /*loadUser();
       loadFollowings();
-      loadFollowers();
+      loadFollowers();*/
       setIsCurrUser(isCurrentUser(userID))
-      console.warn(`User info: ${user?.followings}`);
+      //console.warn(`User info: ${user?.followings}`);
       async function load() {
         console.warn("LOAD DIRECT CHATID");
         const chatID = await GetDirectChatID(userID);
@@ -79,8 +79,8 @@ export default function UserProfileScreen({ isFromTab = false }: {isFromTab: boo
         isFromTab={isFromTab}
       />
       <ProfileMain
-        isLoading={(userLoading ?? false) && true}
-        user={{ ...user, ...{ user_id: userID, ...cachedUser } }}
+        isLoading={/*(userLoading ?? false) && true*/ false}
+        user={user}
         isCurrentUser={isCurrUser}
         isFollowed={user?.is_following}
         onEdit={() => { }}
@@ -103,8 +103,8 @@ export default function UserProfileScreen({ isFromTab = false }: {isFromTab: boo
         }}
       />
       <UserStats
-        followersCnt={followers?.length}
-        followingsCnt={followings?.length}
+        followersCnt={user?.followers_ids?.length}
+        followingsCnt={user?.followings_ids?.length}
         postsCnt={user?.posts?.length}
         onPress={setList}
       />

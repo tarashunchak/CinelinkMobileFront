@@ -23,7 +23,7 @@ export default function MessageContainer({
 
   return (
     <Pressable
-      style={isSelected ? picked.mainView : notPicked.mainView}
+      style={isSelected ? picked.view : notPicked.mainView}
       onPress={() => {
         if (isEditMode) {
           Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
@@ -40,8 +40,8 @@ export default function MessageContainer({
     >
       <PressableScale
         style={style}
-
         delayLongPress={350}
+        activeScale={0.99}
       >
         {children}
       </PressableScale>
@@ -67,7 +67,7 @@ export default function MessageContainer({
 };
 
 const picked = StyleSheet.create({
-  mainView: {
+  view: {
     width: wp(100),
     backgroundColor: "rgba(255, 255, 255, 0.1)",
     flexDirection: "column",
@@ -91,7 +91,7 @@ const picked = StyleSheet.create({
 });
 
 const notPicked = StyleSheet.create({
-  mainView: {
+  view: {
     width: wp(100),
     backgroundColor: "transparent",
     flexDirection: "column",

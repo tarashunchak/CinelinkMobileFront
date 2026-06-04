@@ -61,7 +61,7 @@ export class WatchlistsManager extends EntityManager<Watchlist_T> {
   public async load(watchlistID: WatchlistID = 0) {
     let resp: any;
     if (!watchlistID)
-      resp = await fetch(`${API_URL}/users/${this.currUserID}/watchlists`, {
+      resp = await fetch(`${API_URL}/users/watchlists`, {
         headers: jwtHeaders(undefined)
       });
     const data = await resp.json();

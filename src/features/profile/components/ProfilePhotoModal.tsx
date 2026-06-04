@@ -76,7 +76,7 @@ export default function ProfilePhotoModal({ isOpen, avatarUrl, onClose, isCurren
               ToastAndroid.showWithGravity("Cannot get image", 1000, 10);
             }}
           >
-            <Pencil size={26} strokeWidth={1} color="white" />
+            <Pencil size={24} strokeWidth={2} color="white" fill="#995F2F" />
             <Text style={[textStyle.white22, { fontWeight: "bold" }]}>Edit</Text>
           </PressableScale>
         }
@@ -121,10 +121,12 @@ const styles = StyleSheet.create({
     width: 120,
     height: 44,
     paddingHorizontal: 15,
-    backgroundColor: "#DEB522",
-    borderRadius: 999,
+    //backgroundColor: "#DEB522",
+    backgroundColor: "#F0A500",
+    borderRadius: 14,
     alignSelf: "center",
     alignItems: "center",
+    elevation: 5,
   },
   editBtnImage: {
     height: 30,

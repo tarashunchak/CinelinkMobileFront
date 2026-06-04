@@ -8,6 +8,7 @@ import { getCurrentUserID } from "@/utils/utils";
 import { useBlurStore } from "@/src/components/ui/screen-background";
 import { Search } from "lucide-react-native";
 import { textStyle } from "@/styles/textStyles";
+import { useUserWatchlists } from "@/src/rt_client/managers/watchlists_manager";
 
 export type WatchlistSheetRef = {
   open: () => void;
@@ -24,14 +25,14 @@ const WatchlistSheet = forwardRef<WatchlistSheetRef, WatchlistSheetProps>(({ set
   const sheetRef = useRef<BottomSheet>(null);
   const [state, setState] = useState<boolean>(false);
   const [value, setValue] = useState<string>("");
-  const [watchlists, setWatchlists] = useState<any[]>([]);
+  const watchlists = useUserWatchlists();
   const [picked, setPicked] = useState<Map<number, boolean>>(new Map());
   const setBottomBarVisible = useBlurStore(state => state.setBottomBarVisible);
 
   useEffect(() => {
     async function loadContent() {
-      const data = await GetUserWatchlists(getCurrentUserID());
-      if (data) setWatchlists(data);
+      /*const data = await GetUserWatchlists(getCurrentUserID());
+      if (data) setWatchlists(data);*/
     };
     loadContent();
   }, [state]);

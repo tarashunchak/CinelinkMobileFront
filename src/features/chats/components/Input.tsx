@@ -1,19 +1,17 @@
 import { textStyle } from "@/styles/textStyles";
-import React, { useState } from "react";
-import { View, Image, TouchableOpacity, TextInput, TextInputContentSizeChangeEvent, Platform } from "react-native";
-import { heightPercentageToDP as hp } from "react-native-responsive-screen";
+import React, { memo, useState } from "react";
+import { TextInput } from "react-native";
 import { RTClient } from "@/src/rt_client/rt_client";
 import { getCurrentUserID } from "@/utils/utils";
-import Animated from "react-native-reanimated";
 import { StyleSheet } from "react-native";
 import { PressableScale } from "react-native-pressable-scale";
-import { useSafeAreaFrame, useSafeAreaInsets } from "react-native-safe-area-context";
 import { Send } from "lucide-react-native";
+import Animated, { useAnimatedKeyboard, useAnimatedStyle } from "react-native-reanimated";
 
-export default function Input({ chatID }: { chatID: number }) {
+function Input({ chatID }: { chatID: number }) {
+  const { height } = useAnimatedKeyboard();
   const [isFocused, setIsFocused] = useState(false);
   const [text, setText] = useState<string>("");
-  const [height, setHeight] = useState<number>(40);
 
   async function handleFocus() {
     await RTClient.setTypingStatus(chatID, getCurrentUserID(), true);
@@ -25,82 +23,72 @@ export default function Input({ chatID }: { chatID: number }) {
     setIsFocused(false);
   };
 
-  function onContextSizeChange(e: TextInputContentSizeChangeEvent) {
-    setHeight(e.nativeEvent.contentSize.height)
-  };
-
-  const insets = useSafeAreaInsets();
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: -height.value }],
+  }));
 
   return (
-    <View style={[styles.view, { marginBottom: insets.bottom }]}>
-      <TextInput
-        value={text}
-        onChangeText={setText}
-        style={[styles.input]}
-        placeholder="Message..."
-        placeholderTextColor={"rgba(255, 255, 255, 0.3)"}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
-        multiline={true}
-        numberOfLines={10}
-        editable={true}
-        scrollEnabled={true}
-      />
-      {isFocused && (
-        <PressableScale
-          style={styles.sendBtn}
-          onPress={async () => {
-            await RTClient.sendMessage(chatID, {
-              chat_id: chatID,
-              user_id: getCurrentUserID() ?? 0,
-              message_type: "text",
-              message: text,
-            });
-            setText("");
-          }}
-        >
-          <Send size={26} strokeWidth={0.5} color="gray" fill="white" />
-        </PressableScale>
-      )}
-    </View>
+      <Animated.View style={[styles.view, animatedStyle]}>
+        <TextInput
+          value={text}
+          onChangeText={setText}
+          style={[styles.input, textStyle.white18]}
+          placeholder="Message..."
+          placeholderTextColor={"rgba(255, 255, 255, 0.3)"}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+          multiline={true}
+          numberOfLines={10}
+          editable={true}
+          scrollEnabled={true}
+        />
+        {isFocused && (
+          <PressableScale
+            style={styles.sendBtn}
+            onPress={async () => {
+              await RTClient.sendMessage(chatID, {
+                chat_id: chatID,
+                user_id: getCurrentUserID() ?? 0,
+                message_type: "text",
+                message: text,
+              });
+              setText("");
+            }}
+          >
+            <Send height={26} width={30} strokeWidth={0.5} color="gray" fill="white" />
+          </PressableScale>
+        )}
+      </Animated.View>
   );
 };
 
-const openedStyles = StyleSheet.create({
-  opened: {
-    borderRadius: 21,
-  },
-  closed: {
-    borderRadius: 21,
-  },
-});
+export default memo(Input);
 
-const styles = {
+const styles = StyleSheet.create({
   view: {
-    width: "94%",
     position: "absolute",
-    bottom: hp("1%"),
-    zIndex: 2,
-    minHeight: 42,
+    width: "94%",
+    bottom: 0,
+    left: "3%",
+    right: 0,
+    zIndex: 3,
+    height: 46,
     backgroundColor: "rgba(20, 20, 20, 1)",
     borderColor: "rgba(255, 255, 255, 0.5)",
     borderWidth: 0.4,
     borderRadius: 21,
-    padding: 1,
     paddingLeft: "5%",
-    alignSelf: "center",
     flexDirection: "row",
     justifyContent: "space-between",
-    alignContent: "center",
-    alignItems: "flex-end",
+    alignItems: "center",
   },
-  input: [textStyle.white18, {
+  input:  {
     width: "88%",
     alignSelf: "center",
     alignContent: "center",
-  }],
+  },
   sendBtn: {
-    backgroundColor: "#DEB522",
+    backgroundColor: "#F0A500",
     width: 42,
     aspectRatio: 1,
     borderRadius: 21,
@@ -108,4 +96,4 @@ const styles = {
     alignSelf: "flex-end",
     alignItems: "center",
   }
-};
+});

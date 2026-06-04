@@ -52,7 +52,9 @@ export default function AddWatchlist() {
         <ReturnArrowButton />
         <View style={{ height: hp(80), alignItems: "center", justifyContent: "center"}}>
           <View style={{ gap: 30 }}>
-            <Text style={[textStyle.white36, { fontWeight: "bold", textAlign: "center" }]}>Create your watchlist name</Text>
+            <Text style={[textStyle.white36, { fontWeight: "bold", textAlign: "center" }]}>
+              Create your watchlist name
+            </Text>
             <View>
               <TextInput
                 ref={inputRef}
@@ -73,7 +75,7 @@ export default function AddWatchlist() {
                   if (await CreateWatchlist(text))
                     router.back();
                 }}>
-                <Text style={textStyle.white22}>Create</Text>
+                <Text style={[textStyle.white22, {fontWeight: "bold"}]}>Create</Text>
               </PressableScale>
             </View>
           </View>

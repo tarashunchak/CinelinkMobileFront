@@ -5,4 +5,4 @@ import { Text } from "react-native";
 
 const AnimatedFastText = createAnimatedComponent(Text);
 
-export default memo(AnimatedFastText);
+export default AnimatedFastText;

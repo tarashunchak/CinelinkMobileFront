@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { User } from "./domain";
 import { UserRepository } from "./repository";
 import { TokenRepository } from "./repository";
+import * as Notifications from "@/utils/notifications";
 import { useState } from "react";
 
 type AuthState = {
@@ -39,15 +40,19 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 
   async logIn(user: User, token: string) {
-    await Promise.all([
-      UserRepository.save(user),
-      TokenRepository.save(token),
-    ]);
-    set({
-      user: user,
-      isAuthenticated: true,
-      isHydrated: true,
-    });
+    try {
+      await Promise.all([
+        UserRepository.save(user),
+        TokenRepository.save(token),
+      ]);
+      set({
+        user: user,
+        isAuthenticated: true,
+        isHydrated: true,
+      });
+    } finally {
+      //await Notifications.requestUserPermission();
+    }
   },
 
   async logOut() {

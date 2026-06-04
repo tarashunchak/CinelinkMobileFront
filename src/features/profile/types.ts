@@ -10,6 +10,8 @@ export type UserProfile_T = {
   followings: number;
   is_following: boolean;
   posts: number;
+  followers_ids: number[];
+  followings_ids: number[];
 };
 
 export interface Post {

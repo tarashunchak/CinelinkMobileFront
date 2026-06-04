@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import { useChatStore } from "./app_state";
 import { ChatMessage } from "./message_storage/message_storage";
 import { MessagesManager } from "./managers/messages_manager";
+import { jwtHeaders } from "@/utils/utils";
 
 const WS_ADDRESS = (userID: UserID): string =>
   `wss://cinelink.lol/ws/${userID}`;
@@ -117,7 +118,9 @@ class RTClient_ {
     const resp = await fetch(HTTP_ADDRESS(chatID),
       {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json",
+          ...jwtHeaders(undefined)
+        },
         body: JSON.stringify(Makers.makeMessageSendingMessage(message))
       }
     );

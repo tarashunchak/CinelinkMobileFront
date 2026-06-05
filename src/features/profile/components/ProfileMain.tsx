@@ -8,6 +8,7 @@ import { PressableScale } from "react-native-pressable-scale";
 import { Image } from "expo-image";
 import AnimatedFastImage from "@/src/components/ui/animated-fast-image";
 import { useUserStatus } from "@/src/rt_client/managers/users_manager";
+import AnimatedFastText from "@/src/components/ui/animated-fast-text";
 
 type Props = {
   isLoading: boolean;
@@ -34,11 +35,11 @@ export default function ProfileMain({
 
   const fullName = useMemo(() => {
     return user?.first_name ? `${user?.first_name} ${user?.last_name}` : "*******";
-  }, [isLoading])
+  }, [isLoading]);
 
   const username: string = useMemo(()=>{
     return user?.username ?? "********";
-  }, [isLoading, user?.user_id])
+  }, [isLoading, user?.user_id]);
 
   const fetchJoinedAt = useMemo(() => {
     const date = new Date(user?.created_at ?? null);
@@ -73,9 +74,12 @@ export default function ProfileMain({
         />
       </View>
 
-      <Text style={textStyle.white22} >
+      <AnimatedFastText 
+        style={textStyle.white22} 
+        sharedTransitionTag={`user-${user?.user_id}-full_name`}
+      >
         {fullName}
-      </Text>
+      </AnimatedFastText >
       <Text style={textStyle.gray16} >
         {`@${username}`}
       </Text>

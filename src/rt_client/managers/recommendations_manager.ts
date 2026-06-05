@@ -4,6 +4,7 @@ import { EntityManager } from "./base_class";
 import { useEffect } from "react";
 import { useShallow } from "zustand/react/shallow";
 import { jwtHeaders } from "@/utils/utils";
+import { UserID } from "../models/models";
 
 type Recommendation_T = {
   id: number;
@@ -54,13 +55,14 @@ export class RecommendationsManager extends EntityManager<Recommendation_T> {
   public init(userID: number) {
     if (userID) {
       this.currUserID = userID;
-      this.load();
+      this.load(userID);
     }
   };
 
-  public async load() {
+  public async load(userID: UserID = 0) {
     try {
-      const resp = await fetch(`${API_URL}/users/${this.currUserID}/recommendations`, {
+      if(!userID) return;
+      const resp = await fetch(`${API_URL}/users/recommendations`, {
         headers: jwtHeaders(undefined),
       });
       const data = await resp.json();

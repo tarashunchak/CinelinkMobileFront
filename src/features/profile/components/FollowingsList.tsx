@@ -7,9 +7,12 @@ import UserCard from "@/src/components/user-card";
 import { UserCard_T } from "@/app/(app)/types/user";
 import Spacer from "@/src/components/ui/spacer";
 import { FlatList } from "react-native-gesture-handler";
+import { useUser, useUsers, useUserStore } from "@/src/rt_client/managers/users_manager";
 
 export default function FollowingsList({ userID }: { userID: number }) {
-  const [followings, setFollowings] = useState<UserCard_T[]>([]);
+  const [followings, setFollowings] = useState<any[]>([]);
+  const userProfile = useUser(userID);
+  const users = useUsers();
 
   useFocusEffect(
     useCallback(() => {
@@ -17,9 +20,15 @@ export default function FollowingsList({ userID }: { userID: number }) {
       async function loadContent() {
         const data: UserCard_T[] = await GetUserFollowings(userID);
         if (mounted && data) setFollowings(data);
+        if (mounted === false) {
+          setFollowings(userProfile.followings_ids?.map((id) => {
+            return users[id] ?? undefined
+          }))
+        }
       }
       loadContent();
-      return () => {mounted = true}
+
+      return () => { mounted = true }
     }, [userID])
   );
 

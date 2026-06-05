@@ -30,20 +30,20 @@ type UserProfile_T = {
 };
 
 interface UserState {
-  users: Record<UserID, User_T>;
+  //users: Record<UserID, User_T>;
   userProfiles: Record<UserID, UserProfile_T>,
   onlineStatus: Record<UserID, boolean>;
   _setOnlineStatus: (userID: UserID, status: boolean) => void;
   _setManyOnlineStatus: (statuses: Map<UserID, boolean>) => void;
-  _add: (userID: UserID, user: User_T) => void;
+  _add: (userID: UserID, user: UserProfile_T) => void;
   _addUserProfile: (userID: UserID, user: UserProfile_T) => void;
-  _addMany: (users: Map<UserID, User_T>) => void;
+  _addMany: (users: Map<UserID, UserProfile_T>) => void;
   _remove: (userID: UserID) => void;
-  _update: (userID: UserID, data: Partial<User_T>) => void;
+  _update: (userID: UserID, data: Partial<UserProfile_T>) => void;
 };
 
-const useUserStore = create<UserState>((set) => ({
-  users: {},
+export const useUserStore = create<UserState>((set) => ({
+  //users: {},
   userProfiles: {},
   onlineStatus: {},
   _setOnlineStatus: (userID, status) => set((s) => ({
@@ -53,16 +53,17 @@ const useUserStore = create<UserState>((set) => ({
     onlineStatus: { ...s.onlineStatus, ...Object.fromEntries(statuses) }
   })),
   _add: (userID, user) => set((s) => ({
-    users: { ...s.users, [userID]: user }
+    userProfiles: { ...s.userProfiles, [userID]: user }
   })),
   _addUserProfile: (userID, user) => set((s) => ({
     userProfiles: { ...s.userProfiles, [userID]: user }
   })),
   _addMany: (newUsers) => set((s) => ({
-    users: { ...s.users, ...Object.fromEntries(newUsers) }
+    //users: { ...s.users, ...Object.fromEntries(newUsers) }
+    userProfiles: { ...s.userProfiles, ...Object.fromEntries(newUsers)}
   })),
   _remove: (userID) => set((s) => {
-    const { [userID]: _, ...remainingUsers } = s.users;
+    const { [userID]: _, ...remainingUsers } = s.userProfiles;
     return { users: remainingUsers }
   }),
   _update: (userID, data) => set((s) => ({
@@ -90,7 +91,7 @@ export class UsersManager extends EntityManager<User_T> {
     if (this.isLoading) return;
     this.isLoading = true;
     try {
-      if (!userID) {
+      if (userID === 0) {
         const resp = await fetch(`${API_URL}/users/init/${this.currUserID}`, {
           headers: jwtHeaders(undefined)
         });
@@ -112,7 +113,7 @@ export class UsersManager extends EntityManager<User_T> {
           console.log("user ", user?.user_id, " is online: ", user.is_online);
         });
 
-        useUserStore.getState()._addMany(map);
+        this.addMany(map);
         useUserStore.getState()._setManyOnlineStatus(statuses);
       } else {
         const resp = await fetch(`${API_URL}/users/${userID}`, {
@@ -124,7 +125,10 @@ export class UsersManager extends EntityManager<User_T> {
           return;
         };
 
-        useUserStore.getState()._addUserProfile(userID, data?.results);
+        const results = data.results;
+
+        this.add(userID, results);
+        this.setOnlineStatus(userID, results?.is_online)
       }
 
     } finally {
@@ -156,9 +160,9 @@ export class UsersManager extends EntityManager<User_T> {
     useUserStore.getState()._update(userID, data);
   };
 
-  public get(userID: UserID = 0): User_T {
-    const users = useUserStore.getState().users[userID];
-    return users;
+  public get(userID: UserID = 0): UserProfile_T {
+    const user = useUserStore.getState().userProfiles[userID];
+    return user;
   };
 };
 
@@ -166,8 +170,8 @@ async function load(userID: UserID = 0) {
   await UsersManager.getInstance().load(userID);
 };
 
-export function useUsers(): User_T[] {
-  const users = useUserStore(useShallow((s) => Object.values(s.users)));
+export function useUsers(): UserProfile_T[] {
+  const users = useUserStore(useShallow((s) => Object.values(s.userProfiles)));
   useEffect(() => {
     console.warn("useUsers");
     if (users.length === 0)
@@ -187,8 +191,9 @@ export function useUserStatus(userID: UserID): boolean {
 export function useUser(userID: UserID): UserProfile_T {
   const user = useUserStore(s => s.userProfiles[userID]);
   useEffect(() => {
-    if (!user) load(userID);
+    if (!user)
+      UsersManager.getInstance().load(userID);
     console.warn("useUser: ", user);
   }, [userID, user]);
-  return user;
+  return user || EMPTY_OBJECT;
 };

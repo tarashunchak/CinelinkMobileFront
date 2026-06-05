@@ -24,7 +24,7 @@ function FriendsList() {
   return (
     <FlatList
       data={users}
-      keyExtractor={(item: any, index: number) => String(item?.user_id ?? index)}
+      keyExtractor={(item: any, index: number) => String(`user-${item?.user_id}`)}
       renderItem={renderItem}
       removeClippedSubviews
       initialNumToRender={10}

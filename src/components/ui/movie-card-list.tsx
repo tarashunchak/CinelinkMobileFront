@@ -3,9 +3,11 @@ import { getCurrentGenre, setCurrentGenre } from "@/utils/homePage";
 import { nowPlayingMoviesId } from "@/utils/nowPlaying";
 import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { Float } from "react-native/Libraries/Types/CodegenTypes";
 import MovieCard from "./movie-card";
+import { textStyle } from "@/styles/textStyles";
+import { PressableScale } from "react-native-pressable-scale";
 
 interface Genre {
   id: number;
@@ -57,22 +59,43 @@ export default function MovieCardList({ selectedGenre, movieID, movieGenre }: Mo
   return (
     <View style={styles.mainView}>
       {
-        movies?.map((movie, index) =>
-        (
+        movies?.map((movie, index) =>(
           nowPlayingMoviesId.includes(movie?.id) ?
             null
             :
             <MovieCard movie={movie} key={index} />
-        )
-        )}
+        ))
+      }
+      <View style={styles.lineContainer}>
+        <View style={styles.halfLine} />
+        <PressableScale>
+          <Text style={textStyle.gray18}>
+            Show more
+          </Text>
+        </PressableScale>
+        <View style={styles.halfLine} />
+      </View>
     </View>
-  )
+  );
 };
 
 const styles = StyleSheet.create({
   mainView: {
-    position: "relative",
     backgroundColor: "transparent",
     marginTop: "2%",
-  }
+    alignItems:"center",
+  },
+  lineContainer: { 
+    width: "100%", 
+    flexDirection: "row", 
+    justifyContent: "space-evenly", 
+    alignContent: "center", 
+    margin: "3%",
+  },
+  halfLine: {
+    backgroundColor: "white",
+    height: 0.5,
+    width: "20%",
+    alignSelf: "center",
+  },
 });

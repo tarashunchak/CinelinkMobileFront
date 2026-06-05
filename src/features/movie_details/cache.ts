@@ -37,3 +37,11 @@ export async function GetMovieDetailsCached(movieID: number){
 
   return formattedData;
 };
+
+export async function GetSimilarMoviesCached(movieID: number){
+
+};
+
+async function CacheSimilarMovies(){
+
+};

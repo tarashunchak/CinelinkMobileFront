@@ -57,7 +57,7 @@ const UserSheet = forwardRef<UserSheetRef, UserSheetProps>(({ setIsActive }, ref
   return (
     <BottomSheet
       ref={sheetRef}
-      index={-1}
+      index={0}
       enableBlurKeyboardOnGesture
       animateOnMount={true}
       animationConfigs={{
@@ -69,7 +69,7 @@ const UserSheet = forwardRef<UserSheetRef, UserSheetProps>(({ setIsActive }, ref
         setIsActive(true);
         setBottomBarVisible(true);
         setState(false);
-        Keyboard.dismiss;
+        Keyboard.dismiss();
       }}
       snapPoints={snapPoints}
       enablePanDownToClose

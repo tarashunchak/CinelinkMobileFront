@@ -1,8 +1,8 @@
 import ReturnArrowButton from "@/src/components/ui/returnArrowButton";
 import { textStyle } from "@/styles/textStyles";
-import { useNavigation, useRouter } from "expo-router";
-import React, { memo, useCallback, useEffect, useState } from "react";
-import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
+import { useRouter } from "expo-router";
+import React, { useCallback, useEffect, useState } from "react";
+import { View, Text, StyleSheet } from "react-native";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { calcLastSeen } from "../utils";
 import { GetUserLastSeenTimestamp } from "@/api/users";
@@ -12,6 +12,7 @@ import AnimatedFastImage from "@/src/components/ui/animated-fast-image";
 import AnimatedFastText from "@/src/components/ui/animated-fast-text";
 import HeaderContainer from "@/src/components/ui/header-container";
 import { EllipsisVertical } from "lucide-react-native";
+import { PressableScale } from "react-native-pressable-scale";
 
 interface Props {
   chatID: number;
@@ -50,7 +51,7 @@ export default function Header({ chatID, peerID, imgUrl, name }: Props) {
       <View style={{ flexDirection: "row", gap: wp(5), alignItems:"center" }}>
         <ReturnArrowButton />
         <View style={[styles.chatpeer.view]}>
-          <TouchableOpacity
+          <PressableScale
             style={styles.chatpeer.img}
             onPress={openProfile}
           >
@@ -61,7 +62,7 @@ export default function Header({ chatID, peerID, imgUrl, name }: Props) {
               cachePolicy="disk"
             />
             {isOnline && <View style={styles.isOnline.dot}></View>}
-          </TouchableOpacity>
+          </PressableScale>
 
           <View style={styles.chatpeer.text.view}>
             <AnimatedFastText
@@ -87,9 +88,9 @@ export default function Header({ chatID, peerID, imgUrl, name }: Props) {
         </View>
 
       </View>
-      <TouchableOpacity style={stylesR.dots}>
+      <PressableScale style={stylesR.dots}>
         <EllipsisVertical size={38} strokeWidth={1} color="white" />
-      </TouchableOpacity>
+      </PressableScale>
       
     </HeaderContainer>
   );
@@ -140,6 +141,7 @@ const styles = {
     padding: "3%",
     paddingLeft: "2%",
     elevation: 15,
+    zIndex: 2,
   },
   chatpeer: {
     view: {

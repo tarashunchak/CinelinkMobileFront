@@ -1,16 +1,19 @@
 import { GetUserFollowers } from "@/api/followers";
 import UserCard from "@/src/components/user-card";
+import { textStyle } from "@/styles/textStyles";
 import { heightPercentageToDP as hp, } from "react-native-responsive-screen";
 import { useFocusEffect } from "expo-router";
 import React, { memo, useCallback, useEffect, useState } from "react";
-import { UserCard_T } from "@/app/(app)/types/user";
+import { UserCard_T } from "@/src/types/user";
 import Spacer from "@/src/components/ui/spacer";
-import { FlatList, StyleSheet } from "react-native";
-import { useFollowers } from "../hooks/useFollowers";
+import { Text, FlatList, StyleSheet } from "react-native";
+import { UsersManager, useUser, useUsers, useUserStore } from "@/src/rt_client/managers/users_manager";
 
 function FollowersList({ userID }: { userID: number }) {
   //const {followers, loadFollowers, followersLoading} = useFollowers(userID);
   const [followers, setFollowers] = useState<UserCard_T[]>();
+  const userProfile = useUser(userID);
+  const users = useUsers();
 
   useFocusEffect(
     useCallback(() => {
@@ -18,9 +21,14 @@ function FollowersList({ userID }: { userID: number }) {
       async function loadContent() {
         const data: UserCard_T[] = await GetUserFollowers(userID);
         if (mounted && data) setFollowers(data);
+        if (mounted === false) {
+          setFollowers(userProfile.followers_ids?.map((id) => {
+            return users[id];
+          }))
+        }
       }
       loadContent();
-      return () => {mounted = false}
+      return () => { mounted = false }
     }, [userID])
   );
 
@@ -39,6 +47,15 @@ function FollowersList({ userID }: { userID: number }) {
       renderItem={renderItem}
       ListFooterComponent={<Spacer orientation="v" spacing={hp(8)} />}
       contentContainerStyle={styles.contentContainer}
+      ListEmptyComponent={
+        <Text
+          style={[
+            textStyle.gray32,
+            styles.emptyList
+          ]}>
+          {"No followers... :(\n yet"}
+        </Text>
+      }
     />
   )
 };
@@ -51,5 +68,11 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     padding: hp(0.5),
+  },
+  emptyList: {
+    alignSelf: "center",
+    opacity: 0.4,
+    marginTop: "25%",
+    textAlign: "center"
   },
 });

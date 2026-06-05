@@ -7,11 +7,9 @@ import { Keyboard, Image, Text, TouchableWithoutFeedback, View, StyleSheet } fro
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { PressableScale } from "react-native-pressable-scale";
 import Input from "./components/Input";
-import ScreenBackground from "@/src/components/ui/screen-background";
-import { Link, useNavigation } from "expo-router";
+import { Link } from "expo-router";
 import AnimatedFastImage from "@/src/components/ui/animated-fast-image";
 import HeaderContainer from "@/src/components/ui/header-container";
-import AuthBackground from "@/src/components/ui/authBackground";
 
 export default function LoginScreen() {
   const [username, setUsername] = useState<string>("");

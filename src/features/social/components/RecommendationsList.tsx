@@ -42,7 +42,7 @@ const RecommendationItem = memo(({ item }: { item: RecommendedCard_T }) => {
   return (
     <PressableScale
       activeScale={0.98}
-      style={styles.cardContainer}
+      style={styles.view}
       onPress={handlePress}
     >
       <AnimatedFastImage 
@@ -89,7 +89,7 @@ function RecommendationsList() {
   const items = useUserRecommendations();
   const renderItem = useCallback(({ item }: any) => (
     <RecommendationItem item={item} />
-  ), [items]);
+  ), []);
 
   //console.warn("Recommendations: ", items);
   return (
@@ -105,7 +105,7 @@ function RecommendationsList() {
 export default memo(RecommendationsList);
 
 const styles = StyleSheet.create({
-  cardContainer: {
+  view: {
     flexDirection: "row",
     gap: 10,
     width: "100%",
@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(255, 255, 255, 0.03)",
     borderColor: "rgba(255, 255, 255, 0.2)",
     borderWidth: 0.5,
-    borderRadius: 15,
+    borderRadius: 10,
     paddingVertical: 1,
     paddingLeft: "3%",
     marginBottom: 5,

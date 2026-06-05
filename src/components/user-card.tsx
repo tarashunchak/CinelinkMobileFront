@@ -2,32 +2,34 @@ import { textStyle } from "@/styles/textStyles";
 import React, { memo } from "react";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { View, Text, StyleSheet } from "react-native";
-import { useNavigation, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import { PressableScale } from "react-native-pressable-scale";
 import { useUserStatus } from "@/src/rt_client/managers/users_manager";
-import { Image } from "expo-image";
 import { Skeleton } from "react-native-skeletons";
 import AnimatedFastImage from "@/src/components/ui/animated-fast-image";
+import AnimatedFastText from "./ui/animated-fast-text";
 
 interface Props {
   user_id?: number;
   username?: string;
-  first_name?: string | undefined;
-  last_name?: string | undefined;
-  avatar_url?: string | undefined;
+  first_name?: string;
+  last_name?: string;
+  avatar_url?: string;
 }
 
 function UserCard({ user }: { user: Props }) {
   const router = useRouter();
   const isOnline = useUserStatus(user?.user_id);
+  if (user === undefined) return null;
   if (!user?.user_id) return <Skeleton style={styles.cardContainer} />
+  console.warn("user: ", user);
   return (
     <PressableScale
       activeScale={0.98}
       style={styles.cardContainer}
       onPress={() => {
         router.push({
-          pathname: "/profile", 
+          pathname: "/profile",
           params: { userID: user?.user_id }
         })
       }}>
@@ -42,12 +44,18 @@ function UserCard({ user }: { user: Props }) {
           {isOnline && <View style={styles.isOnlineDot}></View>}
         </View>
         <View style={styles.textView}>
-          <Text style={textStyle.white18}>
+          <AnimatedFastText 
+            style={textStyle.white18}
+            sharedTransitionTag={`user-${user?.user_id}-full_name`}
+          >
+            {`${user?.first_name ?? ''} ${user?.last_name ?? ''}`}
+          </AnimatedFastText >
+          <Text style={textStyle.gray16}>
             {user?.username}
           </Text>
         </View>
       </View>
-      
+
     </PressableScale>
   );
 };
@@ -110,7 +118,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     width: "100%",
     height: hp("8.5%"),
-    backgroundColor: "#393E46",
+    //backgroundColor: "#393E46",
+    backgroundColor: "rgba(255, 255, 255, 0.03)",
     borderColor: "rgba(255, 255, 255, 0.2)",
     borderWidth: 0.5,
     borderRadius: 10,

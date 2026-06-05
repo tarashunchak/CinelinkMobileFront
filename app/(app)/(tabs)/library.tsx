@@ -1,10 +1,9 @@
-import React, { useEffect, memo } from "react";
+import React, { memo } from "react";
 import { FlatList } from "react-native";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen"
 import { textStyle } from "@/styles/textStyles";
 import WatchlistCard from "@/src/features/library/components/WatchlistCard";
 import LibraryHeader from "@/src/features/library/components/LibraryHeader";
-import ScreenBackground from "@/src/components/ui/screen-background";
 import { useUserWatchlists } from "@/src/rt_client/managers/watchlists_manager";
 import Spacer from "@/src/components/ui/spacer";
 

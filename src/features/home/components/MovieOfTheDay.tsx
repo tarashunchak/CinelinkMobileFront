@@ -116,7 +116,7 @@ function MovieOfTheDay() {
         <Text
           style={
             [textStyle.white38,
-            styles.text]
+            styles.text, {fontWeight: "bold"}]
           }>
           {"Movie of the day"}
         </Text>
@@ -124,7 +124,7 @@ function MovieOfTheDay() {
           <View style={styles.view}>
             <AnimatedFastText
               style={[
-                textStyle.white24,
+                textStyle.white24
               ]}
               sharedTransitionTag={`movie-${movie?.movie_id}-title`}
               numberOfLines={1}

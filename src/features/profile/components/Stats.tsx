@@ -57,7 +57,7 @@ function UserStats(props: Props) {
           onPress("Followings");
           setList("Followings");
         }}>
-        <Text style={textStyle.white16}>{followingsCnt || "*"}</Text>
+        <Text style={textStyle.white16}>{followingsCnt ?? "*"}</Text>
         <Text style={textStyle.white16}>Followings</Text>
       </PressableScale>
 
@@ -68,7 +68,7 @@ function UserStats(props: Props) {
           onPress("Followers");
           setList("Followers");
         }}>
-        <Text style={textStyle.white16}>{followersCnt || "*"}</Text>
+        <Text style={textStyle.white16}>{followersCnt ?? "*"}</Text>
         <Text style={textStyle.white16}>Followers</Text>
       </PressableScale>
 

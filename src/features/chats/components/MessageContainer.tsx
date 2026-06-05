@@ -6,6 +6,15 @@ import { PressableScale } from "react-native-pressable-scale";
 import { useEditMode } from "../hooks";
 import AnimatedFastImage from "@/src/components/ui/animated-fast-image";
 
+interface Props {
+  style: {};
+  children: any;
+  isEditMode: boolean;
+  enableEditMode: any;
+  isSelected: boolean;
+  toggleSelect: any;
+};
+
 export default function MessageContainer({
   style,
   children,
@@ -13,7 +22,7 @@ export default function MessageContainer({
   enableEditMode,
   isSelected,
   toggleSelect,
-}: any) {
+}: Props) {
 
   const { enable, disable, toggle } = useEditMode(3);
 

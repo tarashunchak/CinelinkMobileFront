@@ -1,7 +1,7 @@
 import MovieCardList from "@/src/components/ui/movie-card-list";
 import { textStyle } from "../../styles/textStyles";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Text } from "react-native";
+import { Text, View } from "react-native";
 import { Movie } from "@/src/features/movie_details/types";
 import MainInfo from "@/src/features/movie_details/components/MainInfo";
 import DetailsBlock from "@/src/features/movie_details/components/DetailsBlock";
@@ -20,6 +20,7 @@ import { Image } from "expo-image";
 import TrailerBlock from "@/src/features/movie_details/components/TrailerBlock";
 import WatchlistSheet, { WatchlistSheetRef } from "@/src/features/movie_details/components/add-to-watchlist-modal/AddToWatchlistModal";
 import UserSheet, { UserSheetRef } from "@/src/features/movie_details/components/recommend-to-user-modal/RecommendToUser";
+import { BlurTargetView } from "expo-blur";
 
 const sections = [
   { type: "actions" },
@@ -37,7 +38,7 @@ export default function MovieDetailScreen() {
   const { movieID, inCinemas, maximum, backdropPath, posterPath, title } = useLocalSearchParams();
   const [movie, setMovie] = useState<Movie>();
   const [isActive, setIsActive] = useState<boolean>(false);
-  const [isActiveUsers, setIsActiveUsers] = useState<boolean>(true);
+  const [isActiveUsers, setIsActiveUsers] = useState<boolean>(false);
   const [credits, setCredits] = useState<any[]>([]);
   const [backdropUrl, setBackdropPath] = useState<string>(
     `https://image.tmdb.org/t/p/w500${backdropPath}`
@@ -136,9 +137,8 @@ export default function MovieDetailScreen() {
     topCast,
   ]);
 
-
   return (
-    <>
+    <BlurTargetView >
       <FlatList
         contentContainerStyle={{
           paddingHorizontal: "1%",
@@ -151,9 +151,9 @@ export default function MovieDetailScreen() {
         ListHeaderComponent={header}
         ListFooterComponent={<Spacer orientation="v" spacing={heightPercentageToDP(10)} />}
       />
-      <WatchlistSheet setIsActive={(state) => setIsActive(state)} ref={ref} />
-      <UserSheet setIsActive={(state) => setIsActive(state)} ref={recommendationsRef} />
-    </>
+      {isActive && <WatchlistSheet setIsActive={(state) => setIsActive(state)} ref={ref} />}
+      {isActiveUsers && <UserSheet setIsActive={(state) => setIsActiveUsers(state)} ref={recommendationsRef} />}
+    </BlurTargetView>
   );
 };
 

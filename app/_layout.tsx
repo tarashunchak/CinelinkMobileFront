@@ -6,6 +6,7 @@ import { useAuthStore } from "@/local_storage/user/asyncStorage/store";
 import { ChatsManager } from "@/src/rt_client/managers/chats_manager";
 import { WatchlistsManager } from "@/src/rt_client/managers/watchlists_manager";
 import { UsersManager } from "@/src/rt_client/managers/users_manager";
+import { ScreenBackground } from "@/src/components/ui/screen-background";
 
 export default function RootLayout() {
   const router = useRouter();

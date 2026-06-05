@@ -17,9 +17,14 @@ import UserStats from "@/src/features/profile/components/Stats";
 import { useUser } from "@/src/rt_client/managers/users_manager";
 import PostsList from "@/src/features/profile/components/PostsList";
 
+interface Params {
+  userID: number;
+  avatarUrl: string;
+};
+
 export default function UserProfileScreen({ isFromTab = false }: {isFromTab: boolean }) {
   const router = useRouter();
-  let { userID, avatarUrl } = useLocalSearchParams();
+  let { userID, avatarUrl }:Params = useLocalSearchParams();
   if(!userID) userID = getCurrentUserID();
   //const { user, loadUser, userLoading } = useUserProfile(userID);
   //const { followings, loadFollowings, followingsLoading } = useFollowings(userID);
@@ -27,7 +32,7 @@ export default function UserProfileScreen({ isFromTab = false }: {isFromTab: boo
   const [isCurrUser, setIsCurrUser] = useState<boolean>(false);
   const [list, setList] = useState<string>("Posts");
   const [chatID, setChatID] = useState<number>(0);
-  const user = useUser(userID);
+  const user = useUser(Number(userID));
 
   useFocusEffect(
     useCallback(() => {
@@ -43,7 +48,7 @@ export default function UserProfileScreen({ isFromTab = false }: {isFromTab: boo
       };
       console.warn("IsFromTab: ", isFromTab, " Type: ", typeof isFromTab);
       load();
-  }, []));
+  }, [user]));
 
   const sections = [
     { type: "header" },
@@ -103,8 +108,8 @@ export default function UserProfileScreen({ isFromTab = false }: {isFromTab: boo
         }}
       />
       <UserStats
-        followersCnt={user?.followers_ids?.length}
-        followingsCnt={user?.followings_ids?.length}
+        followersCnt={user?.followers_ids?.length ?? 0}
+        followingsCnt={user?.followings_ids?.length ?? 0}
         postsCnt={user?.posts?.length}
         onPress={setList}
       />

@@ -22,8 +22,15 @@ import Animated, { useAnimatedKeyboard, useAnimatedStyle } from "react-native-re
 import { MessagesManager, useChatMessages } from "@/src/rt_client/managers/messages_manager";
 import { useChat } from "@/src/rt_client/managers/chats_manager";
 
+interface Params {
+  chatID: number;
+  imgUrl: string;
+  name: string;
+  peerID: number;
+};
+
 export default function DirectChatScreen() {
-  const { chatID, imgUrl, name, peerID } = useLocalSearchParams();
+  const { chatID, imgUrl, name, peerID }: Params  = useLocalSearchParams();
   const chat = useChat(chatID);
   const [isFloatButtonVisible, setFloatButtonVisible] = useState<boolean>(false);
   const { isEditMode, enable, disable, toggle } = useEditMode(3);

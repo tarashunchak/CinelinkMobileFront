@@ -3,7 +3,7 @@ import React, { memo } from "react";
 
 const screenOptions = {
   headerShown: false,
-  tabBarStyle: {display: "none" },
+  tabBarStyle: { display: "none" },
   sceneStyle: {
     backgroundColor: "transparent",
   },

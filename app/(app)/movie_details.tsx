@@ -68,11 +68,11 @@ export default function MovieDetailScreen() {
       case "actions":
         return <ActionButtonsBlock
           movieID={movie?.id}
-          onAddToWatchlist={()=>{
+          onAddToWatchlist={() => {
             setIsActive(true);
             ref.current?.open();
           }}
-          onRecommend={() => { 
+          onRecommend={() => {
             setIsActiveUsers(true);
             recommendationsRef.current?.open();
           }}
@@ -138,7 +138,7 @@ export default function MovieDetailScreen() {
   ]);
 
   return (
-    <BlurTargetView >
+    <>
       <FlatList
         contentContainerStyle={{
           paddingHorizontal: "1%",
@@ -153,7 +153,7 @@ export default function MovieDetailScreen() {
       />
       {isActive && <WatchlistSheet setIsActive={(state) => setIsActive(state)} ref={ref} />}
       {isActiveUsers && <UserSheet setIsActive={(state) => setIsActiveUsers(state)} ref={recommendationsRef} />}
-    </BlurTargetView>
+    </>
   );
 };
 

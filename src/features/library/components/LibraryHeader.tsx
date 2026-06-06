@@ -49,7 +49,7 @@ const stylesR = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     padding: "2%",
-    elevation: 100,
+    elevation: 10,
   },
 });
 
@@ -69,9 +69,9 @@ const styles = {
       gap: 10,
     },
     avatar: {
-      height: hp("8"),
-      width: hp("8%"),
-      borderRadius: 999,
+      height: hp(6.5),
+      width: hp(6.5),
+      borderRadius: hp(6.5)/2,
       backgroundColor: "white",
     },
     text: [textStyle.white26, {

@@ -17,12 +17,13 @@
       "UIStatusBarHidden": true,
       "UIRequiresFullScreen": true,
       "bundleIdentifier": "com.cinelink.app",
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "foregroundImage": "./assets/images/cinelinkIcon.png"
     },
     "android": {
       "package": "com.cinelink.app",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/cinelinkIcon.png"
+        "foregroundImage": "./assets/images/cinelinkIconNew.png"
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false

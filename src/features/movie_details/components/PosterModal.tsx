@@ -10,14 +10,13 @@ import { useBlurTargetReady, useBlurTargetRef } from "@/src/hooks/useBackgroundB
 
 interface Props {
   isOpen: boolean;
-  posterUrl: string;
+  posterPath: string;
   onClose: () => void;
   movieID?: number;
   ref: any
 };
 
 export default function PosterModal({ isOpen, posterPath, onClose, movieID }: Props) {
-  //const blurRef = useBlurStore(state => state.blurTargetRef);
   const blurRef = useBlurTargetRef();
   const isReady = useBlurTargetReady();
 
@@ -26,7 +25,7 @@ export default function PosterModal({ isOpen, posterPath, onClose, movieID }: Pr
       statusBarTranslucent
       visible={isOpen}
       transparent
-      animationType="slide"
+      animationType="fade"
       onRequestClose={onClose}
     >
     <Pressable

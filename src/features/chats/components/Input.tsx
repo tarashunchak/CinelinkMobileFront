@@ -7,6 +7,7 @@ import { StyleSheet } from "react-native";
 import { PressableScale } from "react-native-pressable-scale";
 import { Send } from "lucide-react-native";
 import Animated, { useAnimatedKeyboard, useAnimatedStyle } from "react-native-reanimated";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 function Input({ chatID }: { chatID: number }) {
   const { height } = useAnimatedKeyboard();
@@ -27,8 +28,10 @@ function Input({ chatID }: { chatID: number }) {
     transform: [{ translateY: -height.value }],
   }));
 
+  const insets = useSafeAreaInsets();
+
   return (
-      <Animated.View style={[styles.view, animatedStyle]}>
+      <Animated.View style={[styles.view, animatedStyle, {marginBottom: insets.bottom}]}>
         <TextInput
           value={text}
           onChangeText={setText}

@@ -3,6 +3,7 @@ import { View, Text } from "react-native";
 import { textStyle } from "@/styles/textStyles";
 import { StyleSheet } from "react-native";
 import { PressableScale } from "react-native-pressable-scale";
+import Animated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated";
 
 export let getActiveTab = () => { };
 
@@ -10,21 +11,28 @@ function SocialPageTopBar({ onTabChange }: { onTabChange: (tab: string) => void 
   const tabs = ["Chats", "Recommendations", "Activity", "Friends"];
   const [activeTab, setActiveTab] = useState("Chats");
 
+  /*const offsetX = useSharedValue<number>(0);
+
+  const animatedStyle = useAnimatedStyle(()=>({
+    transform: [{translateX: offsetX.value}]
+  }));*/
+
   return (
     <View style={styles.mainContainer}>
       {
-        tabs.map(tab => (
+        tabs.map((tab, index) => (
           <PressableScale
             key={tab}
             onPress={
               () => {
                 setActiveTab(tab);
                 onTabChange(tab);
+                offsetX.value = withSpring(index)
               }
             }
             style={[
               styles.buttonView,
-              activeTab === tab && styles.activeButtonView
+              activeTab === tab && styles.activeButtonView,
             ]}
           >
             <Text style={[textStyle.white18, {fontWeight: "bold"}]}>{tab}</Text>
@@ -34,6 +42,10 @@ function SocialPageTopBar({ onTabChange }: { onTabChange: (tab: string) => void 
     </View>
   );
 };
+
+/*<Animated.View
+        style={[styles.buttonView, styles.activeButtonView, {position: "absolute", zIndex: 1}, animatedStyle]}
+      />*/
 
 export default memo(SocialPageTopBar);
 

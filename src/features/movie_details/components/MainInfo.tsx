@@ -26,9 +26,6 @@ export default function MainInfo(
       cast?: any[],
     }
 ) {
-
-
-
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const poster = (
@@ -66,10 +63,10 @@ export default function MainInfo(
       />
       <View style={[styles.darkRect]}>
         <HeaderContainer style={styles.headerContainer}>
-          <ReturnArrowButton style={{ marginTop: "2%" }} />
+          <ReturnArrowButton />
           <View style={{ gap: 5 }}>
             <AnimatedFastText
-              style={[textStyle.white26, { maxWidth: "98%" }]}
+              style={[textStyle.white26, {fontWeight: "bold", maxWidth: "98%" }]}
               sharedTransitionTag={`movie-${movie?.id}-title`}
               numberOfLines={1}
               ellipsizeMode="tail"
@@ -122,7 +119,8 @@ const styles = StyleSheet.create({
     height: "100%"
   },
   posterView: {
-    width: "40%",
+    minWidth: "40%",
+    maxWidth: "44%",
     height: "100%",
     backgroundColor: "rgba(255, 255, 255, 0.05)",
     position: "relative",
@@ -148,7 +146,8 @@ const styles = StyleSheet.create({
   mainView: {
     flexDirection: "row",
     width: wp(98),
-    height: 220,
+    minHeight: 220,
+    maxHeight: 240,
     justifyContent: "space-between",
   }
 });

@@ -31,7 +31,7 @@ export default function ProfilePhotoModal({ isOpen, avatarUrl, onClose, isCurren
       statusBarTranslucent={true}
       visible={isOpen}
       transparent={true}
-      animationType="slide"
+      animationType="fade"
       style={StyleSheet.absoluteFill}
     >
       {isBlurTargetReady && <BlurView

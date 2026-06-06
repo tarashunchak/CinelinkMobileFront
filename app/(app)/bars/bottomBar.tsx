@@ -4,10 +4,11 @@ import { View, Platform, StyleSheet } from "react-native";
 import { Circle, Path, Svg } from "react-native-svg";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import Animated, { useAnimatedProps, withSpring, useSharedValue, useDerivedValue, useAnimatedStyle } from "react-native-reanimated";
-import { Canvas, ColorMatrix, FractalNoise, LinearGradient, RadialGradient, rect, RoundedRect, rrect, Skia, vec } from "@shopify/react-native-skia";
+import { BackdropBlur, Blur, Canvas, ColorMatrix, FractalNoise, Group, LinearGradient, RadialGradient, rect, RoundedRect, rrect, Skia, vec } from "@shopify/react-native-skia";
 import { BlurView } from "expo-blur";
 import { useSegments } from "expo-router";
 import { useBlurTargetReady, useBlurTargetRef } from "@/src/hooks/useBackgroundBlur";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 
 
@@ -106,14 +107,29 @@ function SVGBottomBar() {
   );
 };*/
 
+
+
 const height = 54;
 const width = wp(92);
-const indicatorBase = rrect(rect(0, 2, 76, 49), 24, 24);
-const indicatorStroke = rrect(rect(0, 2, 76, 49), 24, 24);
+const indicatorWidth: number = width / 5;
+const indicatorBase = rrect(rect(0, 1, indicatorWidth, 52), 24, 24);
+const indicatorStroke = rrect(rect(0, 1, indicatorWidth, 52), 24, 24);
 const r = rrect(rect(0, 0, width, height), 27, 27);
 const mainStroke = rrect(rect(1, 1, width - 2, height - 2), 27, 27);
 
+const TAB_OFFSET_X: Record<string, number> = {
+  "/library": 1,
+  "/search": indicatorWidth * 1,
+  "/home": indicatorWidth * 2,
+  "/social": indicatorWidth * 3,
+  "/tab_profile": indicatorWidth * 4,
+};
 
+const SPRING_CONFIG = {
+  damping: 20,
+  stiffness: 100,
+  mass: 1.2,
+};
 
 const Indicator = ({ x }: any) => {
   const matrix = useDerivedValue(() => {
@@ -139,10 +155,20 @@ const Indicator = ({ x }: any) => {
   )
 };
 
-const SkiaBottomBar = memo(() => {
+const SkiaBottomBar = memo(({ x }: any) => {
+  const matrix = useDerivedValue(() => {
+    const m3 = Skia.Matrix();
+    m3.translate(x.value, 0);
+    return m3;
+  });
+  const dynamicBase = useDerivedValue(() => {
+    return rrect(rect(x.value, 1, indicatorWidth, 52), 24, 24);
+  });
+  const dynamicStroke = useDerivedValue(() => {
+    return rrect(rect(x.value, 1, indicatorWidth, 52), 24, 24);
+  });
   return (
     <Canvas style={StyleSheet.absoluteFill}>
-
       <RoundedRect rect={r} style="stroke" strokeWidth={1} >
         <RadialGradient
           c={vec(width / 2, 0)}
@@ -183,29 +209,34 @@ const SkiaBottomBar = memo(() => {
           colors={["rgba(0, 0, 0, 0.5)", "rgba(0, 0, 0, 0.01)"]}
         />
       </RoundedRect>
+      <Group matrix={matrix}>
+        <RoundedRect rect={indicatorBase} >
+          <LinearGradient
+            start={vec(x.value, 0)}
+            end={vec(x.value + indicatorWidth, 40)}
+            colors={[
+              "rgba(255, 255, 255, 1)",
+              "rgba(140, 140, 140, 1)",
+            ]}
+          />
+        </RoundedRect>
+        <RoundedRect rect={indicatorStroke} style="stroke" strokeWidth={0.1} color="rgba(255, 255, 255, 0.2)"/>
+      </Group>
     </Canvas>
   );
 });
+/*<Group>
+        <Blur blur={1} />
+        <RoundedRect rect={dynamicBase} strokeWidth={1} color="rgba(180, 190, 190, 0.2)" />
+        <RoundedRect rect={dynamicStroke} style="stroke" strokeWidth={0.1} />
+      </Group>*/
 
-const TAB_OFFSET_X: Record<string, number> = {
-  "/library": 2,
-  "/search": 72,
-  "/home": width / 2 - 38,
-  "/social": width / 2 + 32,
-  "/tab_profile": width - 78,
-};
-
-const SPRING_CONFIG = {
-  damping: 20,
-  stiffness: 100,
-  mass: 1,
-};
 
 function BottomBar() {
   //const router = useRouter();
   const blurTarget = useBlurTargetRef();
   const isReadyToBlur = useBlurTargetReady();
-  const tabX = useSharedValue(width / 2 - 38);
+  const tabX = useSharedValue(TAB_OFFSET_X["/home"]);
   //const pathname = usePathname();
   const segments = useSegments();
 
@@ -223,48 +254,50 @@ function BottomBar() {
     transform: [{ translateX: tabX.value }]
   }));
 
+  const insets = useSafeAreaInsets();
+
   return (
-    <View style={styles_.view}>
+    <View style={[styles_.view, { bottom: insets.bottom | wp(4) }]}>
       {isReadyToBlur && <BlurView
-        intensity={60}
+        intensity={70}
         style={StyleSheet.absoluteFill}
         blurTarget={blurTarget}
         blurMethod="dimezisBlurView"
         blurReductionFactor={10}
-        tint="systemChromeMaterialDark"
+        tint="systemThinMaterialDark"
       />}
-      <SkiaBottomBar />
-      <Animated.View
-        style={[
-          styles_.indicator,
-          translateX
-        ]}
-      />
+      <SkiaBottomBar x={tabX} />
+
       <BottomBarButtons onPress={handlePress} />
     </View>
   )
 };
-
+/*<Animated.View
+        style={[
+          styles_.indicator,
+          translateX
+        ]}
+      />*/
 export default memo(BottomBar);
 
 const styles_ = StyleSheet.create({
   view: {
     width, height,
     position: "absolute",
-    bottom: wp(4),
     alignSelf: "center",
     overflow: "hidden",
     borderRadius: 27,
     borderWidth: 0,
     paddingVertical: 2,
+    paddingHorizontal: 2,
     borderColor: "transparent",
   },
   indicator: {
     position: "absolute",
-    top: 2,
-    bottom: 2,
-    height: "100%",
-    width: 76,
+    top: 1,
+    bottom: 1,
+    height: 52,
+    width: indicatorWidth,
     borderRadius: 24,
     backgroundColor: "#606a85",
     opacity: 0.8,

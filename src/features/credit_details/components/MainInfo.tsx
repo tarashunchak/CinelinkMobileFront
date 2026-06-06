@@ -39,7 +39,7 @@ export default function MainInfo(
       />
       <View style={styles.darkRect}>
         <HeaderContainer style={styles.headerContainer}>
-          <ReturnArrowButton style={{ marginTop: "2%" }} />
+          <ReturnArrowButton />
           <View style={{ gap: 5 }}>
             <AnimatedFastText
               sharedTransitionTag={`credit-${creditID}-name`}

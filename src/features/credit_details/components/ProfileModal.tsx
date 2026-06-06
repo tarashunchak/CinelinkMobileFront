@@ -1,10 +1,9 @@
 import React from "react";
-import { Image, Modal, Pressable, StyleSheet, View } from "react-native";
+import { Modal, Pressable, StyleSheet, View } from "react-native";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { PressableScale } from "react-native-pressable-scale";
 import AnimatedFastImage from "@/src/components/ui/animated-fast-image";
 import { BlurView } from "expo-blur";
-import { useBlurStore } from "@/src/components/ui/screen-background";
 import { X } from "lucide-react-native";
 import { useBlurTargetRef } from "@/src/hooks/useBackgroundBlur";
 
@@ -25,7 +24,7 @@ export default function ProfileModal( props : Props) {
       statusBarTranslucent
       visible={isOpen}
       transparent
-      animationType="slide"
+      animationType="none"
       onRequestClose={onClose}
     >
     <Pressable

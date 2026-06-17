@@ -1,113 +1,29 @@
-import React, { memo } from "react";
-import { FlatList } from "react-native";
+import React, { memo, useCallback } from "react";
+import { View, FlatList, StyleSheet } from "react-native";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen"
-import { textStyle } from "@/styles/textStyles";
 import WatchlistCard from "@/src/features/library/components/WatchlistCard";
 import LibraryHeader from "@/src/features/library/components/LibraryHeader";
 import { useUserWatchlists } from "@/src/rt_client/managers/watchlists_manager";
 import Spacer from "@/src/components/ui/spacer";
+import { FlashList } from "@shopify/flash-list";
 
 function LibraryScreen() {
   const watchlists = useUserWatchlists();
-
+  const renderItem = useCallback(({ item }:any) =>
+    <WatchlistCard watchlist={item} />
+, []);
   return (
-    <>
+    <View style={StyleSheet.absoluteFill}>
       <LibraryHeader />
-      <FlatList
+      <FlashList
         data={watchlists}
-        keyExtractor={(item: any, index: number) => String(item?.id ?? index)}
-        renderItem={({ item }) =>
-          <WatchlistCard watchlist={item} />
-        }
-        contentContainerStyle={{paddingTop: 5}}
-        ListFooterComponent={<Spacer orientation="v" spacing={hp(9)}/>}
+        contentContainerStyle={{paddingTop: "1%"}}
+        keyExtractor={(item: any, index: number) => item?.id ? `watchlist-${item.id}` : String(index)}
+        renderItem={renderItem}
+        ListFooterComponent={<Spacer orientation="v" spacing={hp(9)} />}
       />
-    </>
+    </View>
   );
 };
 
 export default memo(LibraryScreen);
-
-const styles = {
-  card: {
-    view: {
-      gap: 10,
-      height: hp("15%"),
-      backgroundColor: "rgba(255, 255, 255, 0.03)",
-      borderRadius: 6,
-      borderWidth: 1,
-      borderColor: "rgba(255, 255, 255, 0.05)",
-      padding: hp("0.5%"),
-      flexDirection: "row",
-    },
-    image: {
-      height: "100%",
-      width: "30%",
-      resizeMode: "cover",
-      borderRadius: 4,
-    },
-    text: {
-      view: {
-        flexDirection: "column",
-        gap: 2,
-      },
-      name: [textStyle.yellow22, {
-
-      }],
-      description: [textStyle.gray16, {
-        maxWidth: "75%",
-      }],
-      creator: {
-        view: {
-          flexDirection: "row",
-          gap: 5,
-          borderWidth: 0.5,
-          borderColor: "rgba(255, 255, 255, 0.2)",
-          borderRadius: 3,
-          backgroundColor: "rgba(255, 255, 255, 0.05)",
-          padding: 2,
-          alignSelf: "flex-start",
-        },
-        header: [textStyle.gray14, {
-
-        }],
-        name: [textStyle.yellow14, {
-
-        }],
-      }
-    }
-  }
-}
-
-/*
- <TouchableOpacity style={styles.card.view}>
-            <Image source={require("@/app/screens/WatchlistsPage/assets/NoFgWatchlist.png")} style={styles.card.image} />
-            <View style={styles.card.text.view}>
-              <Text style={styles.card.text.name}>Marked as favorite</Text>
-              <Text style={styles.card.text.description}
-                pointerEvents="none"
-                numberOfLines={3}
-                ellipsizeMode="tail">Watchlists based on movies that you mark as favorite</Text>
-              <View style={styles.card.text.creator.view}>
-                <Text style={styles.card.text.creator.header}>Creator:</Text>
-                <Text style={styles.card.text.creator.name}>Baraq Obama</Text>
-              </View>
-            </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.card.view}>
-            <Image source={require("@/app/screens/WatchlistsPage/assets/NoFgWatchlist.png")} style={styles.card.image} />
-            <View style={styles.card.text.view}>
-              <Text style={styles.card.text.name}>Marked as favorite</Text>
-              <Text style={styles.card.text.description}
-                pointerEvents="none"
-                numberOfLines={3}
-                ellipsizeMode="tail">Watchlists based on movies that you mark as favorite</Text>
-              <View style={styles.card.text.creator.view}>
-                <Text style={styles.card.text.creator.header}>Creator:</Text>
-                <Text style={styles.card.text.creator.name}>Baraq Obama</Text>
-              </View>
-            </View>
-          </TouchableOpacity>
-
-*/

@@ -12,7 +12,7 @@ interface Props {
 };
 
 function UserStats(props: Props) {
-  const [list, setList] = useState<string>("Posts");
+  const [list, setList] = useState<string>("Followers");
 
   const statsStyle = (statName: string) => {
     return statName === list

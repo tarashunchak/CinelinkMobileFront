@@ -1,10 +1,11 @@
 import { textStyle } from "@/styles/textStyles";
-import React, { memo, useCallback } from "react";
+import React, { memo, useCallback, useEffect, useMemo } from "react";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { FlatList, StyleSheet } from "react-native";
-import { useUsers } from "@/src/rt_client/managers/users_manager";
+import { UsersManager, useUser, useUsers } from "@/src/rt_client/managers/users_manager";
 import Spacer from "@/src/components/ui/spacer";
 import  UserCard from "@/src/components/user-card";
+import { getCurrentUserID } from "@/utils/utils";
 
 interface Props {
   user_id: number;
@@ -16,18 +17,33 @@ interface Props {
 }
 
 function FriendsList() {
+  const userProfile = useUser(getCurrentUserID());
   const users = useUsers();
+
+  const friendsIds = useMemo(()=>
+    Array.from(new Set([...userProfile?.followers_ids, ...userProfile?.followings_ids])?.values()),
+  [userProfile?.followers_ids, userProfile?.followings_ids]);
+
+  const friends = useMemo(()=>{
+    return friendsIds?.map((id) => users[id])
+  }, [getCurrentUserID(), users]);
+
+  useEffect(()=>{
+    friendsIds.forEach(id => {
+      if(!users[id]) UsersManager.getInstance().load(id);
+    })
+  }, [userProfile?.followers_ids, userProfile?.followings_ids]);
+
   const renderItem = useCallback(({ item }: any) => (
     <UserCard user={item} />
-  ), []);
+  ), [getCurrentUserID(), users]);
 
   return (
     <FlatList
-      data={users}
-      keyExtractor={(item: any, index: number) => String(`user-${item?.user_id}`)}
+      data={friends}
+      keyExtractor={(item: any, index: number) => item?.user_id ? `user-${item?.user_id}` : String(index)}
       renderItem={renderItem}
       removeClippedSubviews
-      initialNumToRender={10}
       contentContainerStyle={styles.contentContainer}
       ListFooterComponent={<Spacer orientation="v" spacing={hp(10)}/>}
     />
@@ -46,7 +62,7 @@ const styles = StyleSheet.create({
   image: {
     height: 58,
     width: 58,
-    borderRadius: 999,
+    borderRadius: 29,
     borderColor: "rgba(255, 255, 255, 0.3)",
     borderWidth: 0.5,
     padding: 2,

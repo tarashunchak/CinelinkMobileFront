@@ -2,12 +2,13 @@ import { getMoviesByGenre, getPopularMovies, getSimilarMovies } from "@/api/tmdb
 import { getCurrentGenre, setCurrentGenre } from "@/utils/homePage";
 import { nowPlayingMoviesId } from "@/utils/nowPlaying";
 import { useNavigation } from "@react-navigation/native";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Float } from "react-native/Libraries/Types/CodegenTypes";
 import MovieCard from "./movie-card";
 import { textStyle } from "@/styles/textStyles";
 import { PressableScale } from "react-native-pressable-scale";
+import { Link, router } from "expo-router";
 
 interface Genre {
   id: number;
@@ -29,9 +30,10 @@ interface MovieCardListParams {
   selectedGenre: number | any;
   movieID: number | any;
   movieGenre: number | any;
+  posterPath?: string,
 }
 
-export default function MovieCardList({ selectedGenre, movieID, movieGenre }: MovieCardListParams) {
+export default function MovieCardList({ selectedGenre, movieID, movieGenre, posterPath }: MovieCardListParams) {
   const [movies, setMovies] = useState<Movie[]>([]);
 
   useEffect(() => {
@@ -55,20 +57,26 @@ export default function MovieCardList({ selectedGenre, movieID, movieGenre }: Mo
     loadmovies()
   }, [selectedGenre, movieID]);
 
+  const handlePress = useCallback(()=>{
+    router.push({
+      pathname: "/(app)/similar_movies",
+      params: {
+        posterPath,
+        movieID,
+      },
+    });
+  }, [movieID])
 
   return (
     <View style={styles.mainView}>
       {
         movies?.map((movie, index) =>(
-          nowPlayingMoviesId.includes(movie?.id) ?
-            null
-            :
-            <MovieCard movie={movie} key={index} />
+            <MovieCard movie={movie} key={movie?.imdb_id} />
         ))
       }
       <View style={styles.lineContainer}>
         <View style={styles.halfLine} />
-        <PressableScale>
+        <PressableScale onPress={handlePress}>
           <Text style={textStyle.gray18}>
             Show more
           </Text>

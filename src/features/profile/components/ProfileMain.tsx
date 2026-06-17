@@ -35,7 +35,7 @@ export default function ProfileMain({
 
   const fullName = useMemo(() => {
     return user?.first_name ? `${user?.first_name} ${user?.last_name}` : "*******";
-  }, [isLoading]);
+  }, [isLoading, user]);
 
   const username: string = useMemo(()=>{
     return user?.username ?? "********";

@@ -9,13 +9,13 @@ import { UsersManager } from "./users_manager";
 import { jwtHeaders } from "@/utils/utils";
 import { useAuthStore } from "@/local_storage/user/asyncStorage/store";
 
-type Chat_T = {
+export type Chat_T = {
   chat_id: number;
   name: string;
   img_url: string;
 };
 
-type LastMessage_T = {
+export type LastMessage_T = {
   message_id: number,
   message_type: string;
   message: any,
@@ -26,6 +26,7 @@ type LastMessage_T = {
 
 interface ChatState {
   chats: Record<ChatID, Chat_T>;
+  orderedChatIDs: number[];
   typingStatus: Record<ChatID, Record<number, boolean>>;
   lastMessages: Record<number, LastMessage_T>;
   lastSeenMessagesIDs: Record<number, number>;
@@ -33,6 +34,7 @@ interface ChatState {
   _setTypingStatus: (chatID: ChatID, userID: UserID, status: boolean) => void;
   _setLastSeenMessagesIDs: (chatID: ChatID, messageID: number) => void;
   _setManyLastSeenMessagesIDs: (items: Map<ChatID, number>) => void;
+  _pushChatID: (chatID: ChatID) => void;
   _add: (chatID: ChatID, chat: Chat_T) => void;
   _addMany: (chats: Map<ChatID, Chat_T>) => void;
   _remove: (chatID: ChatID) => void;
@@ -41,6 +43,7 @@ interface ChatState {
 
 const useChatStore = create<ChatState>((set) => ({
   chats: {},
+  orderedChatIDs: [],
   typingStatus: {},
   lastMessages: {},
   lastSeenMessagesIDs: {},
@@ -50,8 +53,13 @@ const useChatStore = create<ChatState>((set) => ({
   _setLastSeenMessagesIDs: (chatID, messageID) => set((s) => ({
     lastSeenMessagesIDs: { ...s.lastSeenMessagesIDs, [chatID]: messageID }
   })),
+  _pushChatID: (chatID) => set(s => {
+    const index = s.orderedChatIDs.indexOf(chatID);
+    s.orderedChatIDs.splice(index);
+    s.orderedChatIDs.push(chatID);
+    s.orderedChatIDs;
+  }),
   _setManyLastSeenMessagesIDs: (items) => set((s) => ({
-
   })),
   _setTypingStatus: (chatID, userID, status) => set((s) => ({
     typingStatus: {
@@ -93,12 +101,25 @@ export class ChatsManager extends EntityManager<Chat_T> {
 
   public init(userID: UserID) {
     this.currUserID = userID;
-    this.load();
+    this.loadInit();
   };
 
-  public async load(chatID: ChatID = 0) {
-    if (this.isLoading) return;
+  public async loadInit() {
+    const resp = await fetch(`${API_URL}/users/chats`, {
+      headers: jwtHeaders(undefined),
+    });
+    const data = await resp.json();
+    if (!resp.ok || data?.status !== 200)
+      return;
+    const map = new Map<number, Chat_T>(data?.results?.map((chat: Chat_T) => {
+      useChatStore.getState()._setLastMessage(chat.chat_id, chat.last_message);
+      return [chat.chat_id, chat];
+    }));
+    useChatStore.getState()._addMany(map);
+  }
 
+  public async load(chatID: ChatID) {
+    if (this.isLoading) return;
     try {
       if (chatID && this.currUserID) {
         const resp = await fetch(`${API_URL}/chats/${chatID}`, {
@@ -109,21 +130,9 @@ export class ChatsManager extends EntityManager<Chat_T> {
           return;
         useChatStore.getState()._add(data.chat_id, data);
         //useChatStore.getState()._setLastMessage(chat.chat_id, chat.last_message);
-      }else if(this.currUserID) {
-        const resp = await fetch(`${API_URL}/users/${this.currUserID}/chats`, {
-          headers: jwtHeaders(undefined),
-        });
-        const data = await resp.json();
-        if (!resp.ok || data?.status !== 200)
-          return;
-        const map = new Map<number, Chat_T>(data?.results?.map((chat: Chat_T) => {
-          useChatStore.getState()._setLastMessage(chat.chat_id, chat.last_message);
-          return [chat.chat_id, chat];
-        }));
-        useChatStore.getState()._addMany(map);
       }
-    } catch(e){
-    }finally {
+    } catch (e) {
+    } finally {
       this.isLoading = false;
     }
   };
@@ -134,7 +143,7 @@ export class ChatsManager extends EntityManager<Chat_T> {
   };
 
   public setLastMessage(chatID: ChatID, msg: any) {
-    if(useChatStore.getState().chats[chatID])
+    if (useChatStore.getState().chats[chatID])
       useChatStore.getState()._setLastMessage(chatID, msg);
     else
       load(chatID)
@@ -166,7 +175,10 @@ export class ChatsManager extends EntityManager<Chat_T> {
 };
 
 async function load(chatID: ChatID = 0) {
-  await ChatsManager.getInstance().load(chatID);
+  if(chatID)
+    await ChatsManager.getInstance().load(chatID);
+  else
+    await ChatsManager.getInstance().loadInit();
 };
 
 export function useUserChats(): Chat_T[] {
@@ -174,20 +186,21 @@ export function useUserChats(): Chat_T[] {
   const lastMessages = useChatStore(s => s.lastMessages);
 
   useEffect(() => {
-    if (chats.length === 0) load();
-  }, [chats.length]);
+    if(!chats || chats.length === 0)
+      load();
+  }, [chats, lastMessages]);
 
-  return [...chats]?.sort((a: Chat_T, b: Chat_T)=>{
-    const aTime = new Date(lastMessages[a.chat_id]?.timestamp || 0).getTime();
-    const bTime = new Date(lastMessages[b.chat_id]?.timestamp || 0).getTime();
+  return [...chats]?.sort((a: Chat_T, b: Chat_T) => {
+    const aTime = new Date(lastMessages[a.chat_id]?.timestamp).getTime();
+    const bTime = new Date(lastMessages[b.chat_id]?.timestamp).getTime();
     return bTime - aTime;
   });
 };
 
 export function useChat(chatID: ChatID): any {
-  const chat = useChatStore(s => s.chats[chatID] || EMPTY_OBJECT);
+  const chat = useChatStore(s => s.chats[chatID]);
   useEffect(() => {
-    if (chat === EMPTY_OBJECT)
+    if (!chat)
       load(chatID);
     console.warn("useChat");
   }, [chatID, chat]);

@@ -75,9 +75,11 @@ export class MessagesManager extends EntityManager<Message_T> {
     this.isLoading = true;
     const pageInfo = useMessageStore.getState().page_info[chatID]; 
     if(pageInfo && !pageInfo?.has_next_page) return;
+    const jwt = jwtHeaders(undefined);
+    console.warn("JWT: ", jwt);
     try {
       const response = await fetch(`${API_URL}/chats/${chatID}/messages?cursor=${pageInfo?.next_cursor ?? 1}`, {
-        headers: jwtHeaders(undefined),
+        headers: jwt,
       })
       const data = await response?.json();
       if (data?.results) {

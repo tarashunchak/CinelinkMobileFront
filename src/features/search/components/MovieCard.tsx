@@ -8,12 +8,12 @@ import { PressableScale } from "react-native-pressable-scale";
 
 function MovieCard({ movie }: { movie: any }) {
   const router = useRouter();
-  console.warn("Movie card data: ", movie);
+  //console.warn("Movie card data: ", movie);
   return (
     <PressableScale style={styles.view}
       onPress={() => {
-        router.navigate({
-          pathname: "movie_details",
+        router.push({
+          pathname: "/(app)/movie",
           params: { 
             movieID: movie?.movie_id,
             posterPath: movie?.poster_path,
@@ -68,7 +68,7 @@ function MovieCard({ movie }: { movie: any }) {
   );
 };
 
-export default memo(MovieCard);
+export default  memo(MovieCard);
 
 const styles = StyleSheet.create({
   view: {
@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
   },
   poster: {
     height: "100%",
-    aspectRatio: 0.7,
+    aspectRatio: 0.67,
   },
   infoView: {
     flexDirection: "column",

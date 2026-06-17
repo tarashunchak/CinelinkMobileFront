@@ -16,7 +16,6 @@ function ReturnArrowButton(
 ) {
 
   const router = useRouter();
-  const insets = useSafeAreaInsets();
 
   let buttonStyle = styles.leafyButton;
   const finalStyle = rect

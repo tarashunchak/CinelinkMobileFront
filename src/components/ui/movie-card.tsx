@@ -1,7 +1,7 @@
 import React, { memo, useCallback, useMemo } from "react";
 import { PressableScale } from "react-native-pressable-scale";
 import { Linking, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { Image } from "expo-image";
+import { Image, useImage } from "expo-image";
 import { useNavigation, useRouter } from "expo-router";
 import { textStyle } from "@/styles/textStyles";
 import { Skeleton } from "react-native-skeletons";
@@ -19,7 +19,7 @@ export interface MovieCard_I {
 
 function MovieCard({ movie }: { movie: MovieCard_I | null }) {
   const router = useRouter();
-  if (!movie) return <Skeleton style={styles.mainView} />
+  if (!movie) return <Skeleton style={styles.view} />
 
   const providers = movie?.providers?.["US"]?.flatrate?.slice(0, (Math.min(8, movie?.providers?.["US"]?.flatrate?.length)))?.map((flat: any, index: number) => (
     <Image
@@ -46,7 +46,7 @@ function MovieCard({ movie }: { movie: MovieCard_I | null }) {
 
   const handlePress = useCallback(()=>{
     router.push({ 
-      pathname: "/movie_details", 
+      pathname: "/movie", 
       params: { 
         movieID: movie?.id,
         posterPath: movie?.poster_path,
@@ -54,15 +54,15 @@ function MovieCard({ movie }: { movie: MovieCard_I | null }) {
     }});
   }, [movie?.id]);
 
-  const soureUri = useMemo(()=>(
-    { uri: `https://image.tmdb.org/t/p/w300${movie?.poster_path}`}
+  const sourceUri = useMemo(()=>(
+   {uri:  `https://image.tmdb.org/t/p/w300${movie?.poster_path}`}
   ), [movie?.id]);
 
   return (
-    <PressableScale style={styles.mainView} onPress={handlePress}>
+    <PressableScale style={styles.view} onPress={handlePress}>
       <AnimatedFastImage
         sharedTransitionTag={`movie-${movie?.id}-poster`}
-        source={soureUri}
+        source={sourceUri}
         style={styles.poster}
         pointerEvents="none"
         cachePolicy="disk"
@@ -103,14 +103,14 @@ function MovieCard({ movie }: { movie: MovieCard_I | null }) {
 };
 
 const styles = StyleSheet.create({
-  mainView: {
+  view: {
     backgroundColor: "rgba(255, 255, 255, 0.03)",
     borderWidth: 0.5,
     borderColor: "rgba(255, 255, 255, 0.20)",
     height: 110,
     width: "100%",
     marginTop: "1.5%",
-    borderRadius: 15,
+    borderRadius: 10,
     padding: 1,
     paddingRight: "5%",
     paddingLeft: "5%",
@@ -143,8 +143,8 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   poster: {
-    width: 73,
     height: "100%",
+    aspectRatio: 0.67,
     borderRadius: 5,
     borderWidth: 1,
     borderColor: "rgba(255, 255, 255, 0.1)",

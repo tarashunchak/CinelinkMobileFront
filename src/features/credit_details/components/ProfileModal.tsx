@@ -24,7 +24,7 @@ export default function ProfileModal( props : Props) {
       statusBarTranslucent
       visible={isOpen}
       transparent
-      animationType="none"
+      animationType="fade"
       onRequestClose={onClose}
     >
     <Pressable
@@ -33,8 +33,7 @@ export default function ProfileModal( props : Props) {
     />
     <BlurView 
       tint="systemChromeMaterialDark"
-      intensity={90}
-      blurReductionFactor={20}
+      intensity={40}
       blurMethod="dimezisBlurView"
       blurTarget={blurTargetRef}
       style={StyleSheet.absoluteFill}

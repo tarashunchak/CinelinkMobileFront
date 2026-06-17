@@ -16,18 +16,23 @@ import { RecommendationsManager } from "@/src/rt_client/managers/recommendations
 
 //Notifications.configure();
 
+const managers: any[] = [
+  //MessagesManager,
+  ChatsManager,
+  WatchlistsManager,
+  UsersManager,
+  RecommendationsManager,
+];
+
 export default function AppLayout() {
   const currentUserID = useAuthStore(state => state.user?.user_id);
   const isBottomBarVisible = useBlurStore(state => state.isBottomBarVisible);
+
   useEffect(() => {
-    if (currentUserID) {
+    /*if (currentUserID) {
       RTClient.connect(currentUserID);
-      MessagesManager.getInstance().init(currentUserID);
-      ChatsManager.getInstance().init(currentUserID);
-      WatchlistsManager.getInstance().init(currentUserID);
-      UsersManager.getInstance().init(currentUserID);
-      RecommendationsManager.getInstance().init(currentUserID);
-    }
+      //managers.forEach(it => it.getInstance().init(currentUserID));
+    }*/
   }, [currentUserID]);
 
   return (
@@ -38,15 +43,17 @@ export default function AppLayout() {
             <Stack screenOptions={{
               headerShown: false,
               animation: "ios_from_right",
-              contentStyle: { backgroundColor: undefined }
+              contentStyle: { backgroundColor: undefined },
+              freezeOnBlur: true,
             }}>
               <Stack.Screen name="(tabs)" />
-              <Stack.Screen name="movie_details" />
-              <Stack.Screen name="direct_chat"/>
+              <Stack.Screen name="movie" />
+              <Stack.Screen name="direct-chat"/>
               <Stack.Screen name="watchlist" />
-              <Stack.Screen name="credit_details" />
-              <Stack.Screen name="movie_credits" />
+              <Stack.Screen name="credit" />
+              <Stack.Screen name="movie-credits" />
               <Stack.Screen name="profile" />
+              <Stack.Screen name="similar_movies" />
             </Stack>
           </BottomSheetModalProvider>
         </GestureHandlerRootView>

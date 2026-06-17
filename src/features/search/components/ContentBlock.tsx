@@ -15,7 +15,7 @@ interface Props {
   category: string;
 }
 
-export default function ContentBlock({ query, category}: Props) {
+export default function ContentBlock({ query, category }: Props) {
   const specification = false;
   const [_data, setData] = useState([]);
 
@@ -43,42 +43,44 @@ export default function ContentBlock({ query, category}: Props) {
     if (!Array.isArray(_data)) return [];
     if (category === "All") return _data;
     return _data?.filter((item: any) => item?.type === category.toLowerCase()) ?? [];
-  }, [category, _data])
+  }, [category, _data]);
 
-  return (
-      <FlatList
-        data={filteredData()}
-        keyExtractor={(_, index) => String(index)}
-        renderItem={({ item }) => {
-          console.warn("Item: ", item)
+  const renderItem = useCallback(({ item }: any) => {
+    console.warn("Item: ", item)
 
-          switch (item?.type) {
-            case "movies":
-              return <MovieCard movie={item} />;
-            case "credits":
-              return <CreditCard credit={item} />;
-            case "users":
-              return <UserCard user={item} />;
-            case "watchlists":
-              return <WatchlistCard watchlist={item} />;
-            default:
-              return null
-          }
-        }}
-        ListEmptyComponent={
-          (<Text style={[textStyle?.gray40,
-          {
-            alignSelf: "center",
-            marginTop: "50%"
-          }
-          ]}>No Results</Text>
-          )
-        }
-        ListFooterComponent={
-          <Spacer orientation="v" spacing={hp(9)}/>
-        }
-      />
-  )
+    switch (item?.type) {
+      case "movies":
+        return <MovieCard movie={item} />;
+      case "credits":
+        return <CreditCard credit={item} />;
+      case "users":
+        return <UserCard user={item} />;
+      case "watchlists":
+        return <WatchlistCard watchlist={item} />;
+      default:
+        return null
+    }
+  }, []);
+
+return (
+  <FlatList
+    data={filteredData()}
+    keyExtractor={(_, index) => String(index)}
+    renderItem={renderItem}
+    ListEmptyComponent={
+      (<Text style={[textStyle?.gray40,
+      {
+        alignSelf: "center",
+        marginTop: "50%"
+      }
+      ]}>No Results</Text>
+      )
+    }
+    ListFooterComponent={
+      <Spacer orientation="v" spacing={hp(9)} />
+    }
+  />
+)
 }
 
 const styles = StyleSheet.create({

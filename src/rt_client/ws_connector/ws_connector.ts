@@ -43,7 +43,7 @@ export class WSConnector {
     //console.warn("WS URL: ", this.url);
     //this.ws = new WebSocket(`ws://192.168.0.187:8080/ws/2`);
     this.ws = new WebSocket(this.url);
-    console.warn("WS URL: ", this.url);
+    //console.warn("WS URL: ", this.url);
 
     this.ws.onopen = () => {
       console.warn("WS is open!!")
@@ -66,11 +66,11 @@ export class WSConnector {
 
     this.ws.onclose = () => {
       console.warn("WS connection closed");
-      this.onClose();
       this.stopPing();
+      this.onClose();
       this.attemptReconnect();
     };
-  }
+  };
 
   private attemptReconnect() {
     if ((this.ws?.readyState != WebSocket.OPEN) && (this.reconnectAttempts < this.maxReconnectAttempts)) {
@@ -80,17 +80,17 @@ export class WSConnector {
         this.connect();
       }, 5000 * this.reconnectAttempts);
     }
-  }
+  };
 
   private startPing() {
     this.pingInterval = setInterval(() => {
       this.send({ type: "ping" })
     }, 30000)
-  }
+  };
 
   private stopPing() {
     clearInterval(this.pingInterval);
-  }
+  };
 
   public send(data: WSMessage) {
     this.messagesQueue.push(data);
@@ -99,9 +99,9 @@ export class WSConnector {
     } else {
       console.warn("WS is not open. Message not sent: ", data);
     }
-  }
+  };
 
   public disconnect() {
     this.ws?.close();
-  }
+  };
 };

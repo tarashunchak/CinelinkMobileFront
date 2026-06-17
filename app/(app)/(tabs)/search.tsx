@@ -57,6 +57,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#222831",
     justifyContent: "space-evenly",
     gap: "1%",
-    elevation: 10,
+    elevation: 5,
   },
 });

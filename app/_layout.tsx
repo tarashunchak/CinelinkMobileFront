@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { Slot, useRouter, useSegments } from "expo-router";
 import { useEffect } from "react";
 //import { MessagesManager } from "@/src/rt_client/managers/messages_manager";
@@ -7,6 +7,16 @@ import { ChatsManager } from "@/src/rt_client/managers/chats_manager";
 import { WatchlistsManager } from "@/src/rt_client/managers/watchlists_manager";
 import { UsersManager } from "@/src/rt_client/managers/users_manager";
 import { ScreenBackground } from "@/src/components/ui/screen-background";
+import { RecommendationsManager } from "@/src/rt_client/managers/recommendations_manager";
+import { RTClient } from "@/src/rt_client/rt_client";
+
+const managers: any[] = [
+  //MessagesManager,
+  ChatsManager,
+  WatchlistsManager,
+  UsersManager,
+  RecommendationsManager,
+];
 
 export default function RootLayout() {
   const router = useRouter();
@@ -15,17 +25,21 @@ export default function RootLayout() {
   const isHydrated = useAuthStore(state => state.isHydrated);
   const currentUserID = useAuthStore(state => state.user?.user_id);
 
+  const onReconnect = useCallback(()=>{
+    managers.forEach(it => it.getInstance().init(currentUserID));
+  }, [currentUserID]);
+
   useEffect(()=>{
     useAuthStore.getState().init();
   }, []);
 
   useEffect(() => {
-    if(currentUserID){
-      ChatsManager.getInstance().init(currentUserID);
-      WatchlistsManager.getInstance().init(currentUserID);
-      UsersManager.getInstance().init(currentUserID);
+    if (currentUserID) {
+      RTClient.connect(currentUserID);
+      RTClient.setOnReconnect(onReconnect);
     }
   }, [currentUserID]);
+
 
   useEffect(() => {
     const isAuthGroup = segments[0] === "(auth)";

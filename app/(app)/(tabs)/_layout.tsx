@@ -9,6 +9,7 @@ const screenOptions = {
   },
   animation: "shift",
   lazy: true,
+  freezeEnabled: true,
 };
 
 function TabLayout() {

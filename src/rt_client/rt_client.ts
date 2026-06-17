@@ -20,6 +20,7 @@ class RTClient_ {
   private wsConnections: Map<UserID, WSConnector> = new Map();
   private chatManager: ChatManager = new ChatManager();
   private currUserID: UserID = 0;
+  private onReconnect: ()=> void = ()=>{};
 
   public getCurrUserID(): number {
     return this.currUserID;
@@ -37,11 +38,15 @@ class RTClient_ {
     this.currUserID = userID;
     //const url = `${process.env.EXPO_PUBLIC_WS_URL}/` + userID;
     const url = WS_ADDRESS(userID);
+    //const url = `wss://164.90.163.24:8080/ws/${userID}`
     console.warn("url: ", url);
     this.wsConnections?.set(userID, new WSConnector(
       url,
       (data: any) => { this.onWSMessage(data); },
-      () => { this.setOnlineStatus(userID, true); },
+      () => { 
+        this.setOnlineStatus(userID, true); 
+        this.onReconnect();
+      },
       () => { },
     ));
   };
@@ -55,6 +60,10 @@ class RTClient_ {
 
   public async getChat(chatID: ChatID): Promise<Chat> {
     return this.chatManager.getChat(chatID);
+  };
+
+  public async setOnReconnect(callback: ()=>void) {
+    this.onReconnect = callback;
   };
 
   public async setOnMessageCallBack(chatID: ChatID, callback: (_: WSMessage) => void) {

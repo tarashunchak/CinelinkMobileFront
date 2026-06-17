@@ -1,4 +1,5 @@
 export abstract class EntityManager<T>{
+  
   abstract load(id: number): void;
   abstract add(id: number, item: T): void;
   abstract addMany(items: Map<number, T>): void;

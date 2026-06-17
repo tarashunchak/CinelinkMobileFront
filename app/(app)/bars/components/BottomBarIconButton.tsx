@@ -1,19 +1,10 @@
-import { CommonActions } from "@react-navigation/native";
 import React, { useCallback, useState } from "react";
 import { View, StyleSheet } from "react-native";
 import { PressableScale } from "react-native-pressable-scale";
-import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import { Home, Library, Search, Hash, User } from "lucide-react-native";
 import { widthPercentageToDP } from "react-native-responsive-screen";
-
-/*const icons = {
-  home: require('../assets/home.png'),
-  search: require('../assets/search.png'),
-  profile: require('../assets/profile.png'),
-  social: require('../assets/social.png'),
-  library: require('../assets/bookmark.png'),
-};*/
+import { useAuthStore } from "@/local_storage/user/asyncStorage/store";
 
 const TABS_CONFIG = [
   { route: "/library", Icon: Library },
@@ -31,7 +22,9 @@ export default function BottomBarButtons({ onPress }: { onPress: (route: string)
   const handleTabPress = useCallback((route: string) => {
     router.navigate({
       pathname: route,
-      params: { isFromTab: "1" }
+      params: { 
+        isFromTab: "1", 
+      }
     });
     onPress(route);
     setActiveTab(route);
@@ -52,42 +45,7 @@ export default function BottomBarButtons({ onPress }: { onPress: (route: string)
       });
     };
   });
-  /*const handleLibrary = useCallback(()=>{
-    onPress("/library");
-    setActiveTab("/library");
-    requestAnimationFrame(()=>{
-      router.navigate("/library");
-    });
-  },[]);
-  const handleSearch = useCallback(()=>{
-    onPress("/search");
-    requestAnimationFrame(()=>{
-      router.navigate("/search");
-    });
-  },[]);
-  const handleHome = useCallback(()=>{
-    onPress("/home");
-    requestAnimationFrame(()=>{
-      router.navigate("/home");
-    });
-  },[]);
-  const handleSocial = useCallback(()=>{
-    onPress("/social");
-    requestAnimationFrame(()=>{
-      router.navigate("/social");
-    });
-  },[]);
-  const handleProfile = useCallback(()=>{
-    onPress("/tab_profile");
-    requestAnimationFrame(()=>{
-      router.navigate({
-        pathname: "/(app)/(tabs)/tab_profile",
-        params: {
-          isFromTab: "1",
-        }
-      });
-    });
-  },[]);*/
+  
   return (
     <View style={styles_.view}>
       {
@@ -99,7 +57,7 @@ export default function BottomBarButtons({ onPress }: { onPress: (route: string)
           >
             <Icon
               size={30}
-              color={route === activeTab ? "gray" : "white"}
+              color={"white"}
               strokeWidth={1}
             />
           </PressableScale>

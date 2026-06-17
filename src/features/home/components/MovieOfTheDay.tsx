@@ -9,6 +9,7 @@ import AnimatedFastImage from "@/src/components/ui/animated-fast-image";
 import HeaderContainer from "@/src/components/ui/header-container";
 import { Canvas, LinearGradient, Rect, Mask, Image, vec, useImage, Blur, Skia } from "@shopify/react-native-skia";
 import { GetMovieOfTheDayCache } from "../cache";
+//import { useMovieOfTheDay } from "../cache";
 
 const SkiaBackdrop = memo(({ backdropPath }: { backdropPath: string }) => {
   const imageUri = useMemo(
@@ -77,11 +78,12 @@ const SkiaBackdrop = memo(({ backdropPath }: { backdropPath: string }) => {
 function MovieOfTheDay() {
   const router = useRouter();
   const [movie, setMovie] = useState<any | null>(null);
+  //const movie = useMovieOfTheDay();
 
   useEffect(() => {
     async function loadMovie() {
       const data = await GetMovieOfTheDayCache();
-      setMovie(prev => {
+      setMovie((prev:any) => {
         if (prev?.movie_id === data?.movie_id)
           return prev;
         return data;
@@ -93,7 +95,7 @@ function MovieOfTheDay() {
 
   const handlePress = useCallback(() => {
     router.navigate({
-      pathname: "/(app)/movie_details",
+      pathname: "/(app)/movie",
       params: {
         movieID: movie?.movie_id,
         backdropPath: movie?.backdrop_path,
@@ -124,7 +126,8 @@ function MovieOfTheDay() {
           <View style={styles.view}>
             <AnimatedFastText
               style={[
-                textStyle.white24
+                textStyle.white24,
+                { fontStyle: "italic"}
               ]}
               sharedTransitionTag={`movie-${movie?.movie_id}-title`}
               numberOfLines={1}
@@ -132,7 +135,10 @@ function MovieOfTheDay() {
             >
               {movie?.title}
             </AnimatedFastText>
-            <Text style={textStyle.white24}>
+            <Text style={[
+              textStyle.white24,
+              { fontStyle: "italic"}
+            ]}>
               {`(${movie?.release_date?.slice(0, 4)})`}
             </Text>
           </View>

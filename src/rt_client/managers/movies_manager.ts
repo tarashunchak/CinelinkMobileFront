@@ -4,6 +4,7 @@ import { create } from "zustand";
 import { EntityManager } from "./base_class";
 import { useEffect } from "react";
 import { useShallow } from "zustand/react/shallow";
+import { jwtHeaders } from "@/utils/utils";
 
 type Movie_T = {
   id: number;
@@ -25,7 +26,7 @@ interface MovieState {
   _update: (movieID: MovieID, data: Partial<Movie_T>) => void;
 };
 
-const useMovieStore = create<MovieState>((set) => ({
+export const useMovieStore = create<MovieState>((set) => ({
   movies: {},
   _add: (movieID, movie) => set((s) => ({
     movies: {...s.movies, [movieID]: movie}
@@ -60,15 +61,17 @@ export class MoviesManager extends EntityManager<Movie_T> {
   };
 
   public async load(movieID: MovieID = 0) {
-    let resp:any;
-    if(!movieID)
-      resp = await fetch(`${API_URL}/users/${this.currUserID}/movies`);
-    const data = await resp.json();
-    if(!resp.ok || data?.status !== 200)
-      return;
+    if(!movieID){
+      const resp = await fetch(`${API_URL}/users/${this.currUserID}/movies`, {
+        headers: jwtHeaders(undefined),
+      });
+      const data = await resp.json();
+      if(!resp.ok || data?.status !== 200)
+        return;
 
-    const map = new Map<number, Movie_T>(data?.results?.map((item: Movie_T)=> [item.id, item]));
-    useMovieStore.getState()._addMany(map);
+      const map = new Map<number, Movie_T>(data?.results?.map((item: Movie_T)=> [item.id, item]));
+      useMovieStore.getState()._addMany(map);
+    }
   };
 
   public add(movieID: MovieID, movie: any){

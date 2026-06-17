@@ -56,14 +56,14 @@ const styles = StyleSheet.create({
     minHeight: 40,
     minWidth: "10%",
     maxWidth: "70%",
-    margin: "2%",
+    margin: "1%",
     borderRadius: 8,
     padding: 5,
     flexDirection: "column",
     gap: 5,
   },
   isCurrentUser: {
-    backgroundColor: "#FBDCC4",
+    backgroundColor: "#E0D9D9",
     alignSelf: "flex-end",
   },
   notCurrentUser: {

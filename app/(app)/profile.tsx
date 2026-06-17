@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { memo, useCallback, useMemo, useRef, useState } from "react";
 import { View, StyleSheet } from "react-native";
 import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
@@ -14,69 +14,60 @@ import { useFollowers } from "@/src/features/profile/hooks/useFollowers";
 import { GetDirectChatID } from "@/api/chats";
 import { ScrollView } from "react-native-gesture-handler";
 import UserStats from "@/src/features/profile/components/Stats";
-import { useUser } from "@/src/rt_client/managers/users_manager";
+import { UsersManager, useUser } from "@/src/rt_client/managers/users_manager";
 import PostsList from "@/src/features/profile/components/PostsList";
+import { BlurTargetView, BlurView } from "expo-blur";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useBlurTargetRef } from "@/src/hooks/useBackgroundBlur";
 
-interface Params {
+type Params = {
   userID: number;
   avatarUrl: string;
 };
 
-export default function UserProfileScreen({ isFromTab = false }: {isFromTab: boolean }) {
+function UserProfileScreen({ isFromTab = false }: { isFromTab: boolean }) {
   const router = useRouter();
-  let { userID, avatarUrl }:Params = useLocalSearchParams();
-  if(!userID) userID = getCurrentUserID();
+  const params: Params = useLocalSearchParams();
+  const userID: number = params.userID ?? getCurrentUserID();
+  const isCurrUser = isCurrentUser(userID ?? 0);
   //const { user, loadUser, userLoading } = useUserProfile(userID);
   //const { followings, loadFollowings, followingsLoading } = useFollowings(userID);
   //const { followers, loadFollowers, followersLoading } = useFollowers(userID);
-  const [isCurrUser, setIsCurrUser] = useState<boolean>(false);
-  const [list, setList] = useState<string>("Posts");
+  //const [isCurrUser, setIsCurrUser] = useState<boolean>(false);
+  const [list, setList] = useState<string>("Followers");
   const [chatID, setChatID] = useState<number>(0);
-  const user = useUser(Number(userID));
+  const user = useUser(userID);
 
   useFocusEffect(
     useCallback(() => {
-      /*loadUser();
-      loadFollowings();
-      loadFollowers();*/
-      setIsCurrUser(isCurrentUser(userID))
-      //console.warn(`User info: ${user?.followings}`);
       async function load() {
-        console.warn("LOAD DIRECT CHATID");
-        const chatID = await GetDirectChatID(userID);
-        setChatID(chatID);
+        //console.warn("LOAD DIRECT CHATID");
+        await GetDirectChatID(userID).then(setChatID);
       };
-      console.warn("IsFromTab: ", isFromTab, " Type: ", typeof isFromTab);
+      //console.warn("IsFromTab: ", isFromTab, " Type: ", typeof isFromTab);
       load();
-  }, [user]));
+    }, []));
 
-  const sections = [
-    { type: "header" },
-    { type: "main" },
-    { type: "stats" },
-    { type: "line" },
-    { type: "list" },
-  ];
-
-  const renterItem = useCallback(({ item }: any) => {
-    switch (item.type) {
-      case "main":
-        return
-      case "stats":
-        return
-      case "line":
-        return
-      case "list":
-        return <>
-
-        </>
+  const currentList = useMemo(() => {
+    return <>{
+      list === "Followings"
+      && <FollowingsList userID={userID} />
     }
-  }, []);
+      {
+        list === "Followers"
+        && <FollowersList userID={userID} />
+      }
+      {
+        list === "Posts"
+        && <PostsList userID={userID} />
+      }</>
+  }, [list]);
 
   return (
     <ScrollView
       nestedScrollEnabled
       showsVerticalScrollIndicator={false}
+      style={StyleSheet.absoluteFill}
     >
       <ProfileHeader
         bgUrl={user?.bg_img_url}
@@ -91,44 +82,35 @@ export default function UserProfileScreen({ isFromTab = false }: {isFromTab: boo
         onEdit={() => { }}
         onToggleFollow={async () => {
           if (user?.is_following)
-            await UnfollowUser(userID) && loadUser();
+            await UnfollowUser(userID).finally(()=> UsersManager.getInstance().load(userID));
           else
-            await FollowUser(userID) && loadUser();
+            await FollowUser(userID).finally(()=> UsersManager.getInstance().load(userID));
         }}
         onChat={() => {
-          console.warn("On chat");
-          router.push({
-            pathname: "/direct_chat", 
-            params: { 
-              chatID: chatID, 
-              imgUrl: user?.avatar_url, 
-              name: `${user?.first_name} ${user?.last_name}` 
+          router.navigate({
+            pathname: "/direct_chat",
+            params: {
+              chatID: chatID,
+              imgUrl: user?.avatar_url,
+              name: `${user?.first_name} ${user?.last_name}`,
+              peerID: userID,
             }
           });
         }}
       />
       <UserStats
-        followersCnt={user?.followers_ids?.length ?? 0}
-        followingsCnt={user?.followings_ids?.length ?? 0}
+        followersCnt={user?.followers_ids?.length}
+        followingsCnt={user?.followings_ids?.length}
         postsCnt={user?.posts?.length}
         onPress={setList}
       />
       <View style={styles.line} />
-      {
-        list === "Followings"
-        && <FollowingsList userID={userID} />
-      }
-      {
-        list === "Followers"
-        && <FollowersList userID={userID} />
-      }
-      {
-        list === "Posts"
-        && <PostsList userID={userID} />
-      }
+      {currentList}
     </ScrollView>
   );
 };
+
+export default memo(UserProfileScreen);
 
 const styles = StyleSheet.create({
   line: {

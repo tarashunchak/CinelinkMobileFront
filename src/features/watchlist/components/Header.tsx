@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, useCallback } from "react";
 import ReturnArrowButton from "@/src/components/ui/returnArrowButton";
 import React from "react";
 import { Text, TouchableOpacity, View, StyleSheet } from "react-native";
@@ -8,11 +8,19 @@ import HeaderContainer from "@/src/components/ui/header-container";
 import AnimatedFastImage from "@/src/components/ui/animated-fast-image";
 import { textStyle } from "@/styles/textStyles";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen"
-import { useNavigation } from "expo-router";
+import { useNavigation, useRouter } from "expo-router";
 import { Info } from "lucide-react-native";
 
 export default function Header({ watchlist }: { watchlist: any }) {
-  const navigator = useNavigation();
+  const router = useRouter();
+  const handlePress = useCallback(()=>{
+    router.push({
+      pathname: "/profile",
+      params: {
+        userID: watchlist?.creator_id,
+      }
+    })
+  }, []);
   return (
     <HeaderContainer style={{height: hp(45), flexDirection: "column", justifyContent: "space-between"}}>
       <Image
@@ -52,7 +60,7 @@ export default function Header({ watchlist }: { watchlist: any }) {
               </Text>
               <TouchableOpacity
                 style={styles.creatorTileView}
-                onPress={() => navigator.navigate("UserProfileScreen", { userID: watchlist?.creator_id })}>
+                onPress={handlePress}>
                 <Text style={textStyle.gray14}>Creator:</Text>
                 <Text style={textStyle.yellow14}>
                   {watchlist?.creator_username}
@@ -78,7 +86,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    padding: hp(1),
+    paddingHorizontal: hp(1),
   },
   infoBtnView: {
     height: 26,

@@ -107,15 +107,13 @@ function SVGBottomBar() {
   );
 };*/
 
-
-
 const height = 54;
 const width = wp(92);
 const indicatorWidth: number = width / 5;
 const indicatorBase = rrect(rect(0, 1, indicatorWidth, 52), 24, 24);
 const indicatorStroke = rrect(rect(0, 1, indicatorWidth, 52), 24, 24);
 const r = rrect(rect(0, 0, width, height), 27, 27);
-const mainStroke = rrect(rect(1, 1, width - 2, height - 2), 27, 27);
+const mainStroke = rrect(rect(0, 0, width, height), 27, 27);
 
 const TAB_OFFSET_X: Record<string, number> = {
   "/library": 1,
@@ -153,101 +151,55 @@ const Indicator = ({ x }: any) => {
       <RoundedRect rect={dynamicStroke} style="stroke" strokeWidth={0.1} />
     </>
   )
-};
 
-const SkiaBottomBar = memo(({ x }: any) => {
+};
+  /*const scale = useDerivedValue(() => {
+    //return withSpring(x.value === 0)
+  });
+
   const matrix = useDerivedValue(() => {
     const m3 = Skia.Matrix();
-    m3.translate(x.value, 0);
+    m3.translate(x.value, 0)
     return m3;
-  });
-  const dynamicBase = useDerivedValue(() => {
+  });*/
+  /*const dynamicBase = useDerivedValue(() => {
     return rrect(rect(x.value, 1, indicatorWidth, 52), 24, 24);
   });
   const dynamicStroke = useDerivedValue(() => {
     return rrect(rect(x.value, 1, indicatorWidth, 52), 24, 24);
-  });
+  });*/
+
+const SkiaBottomBar = memo(({ x }: any) => {
+
   return (
     <Canvas style={StyleSheet.absoluteFill}>
       <RoundedRect rect={r} style="stroke" strokeWidth={1} >
         <RadialGradient
           c={vec(width / 2, 0)}
-          r={50}
-          colors={["rgba(255, 255, 255, 0.8)", "rgba(220, 220, 220, 0.1)"]}
+          r={180}
+          colors={["rgba(255, 255, 255, 0.5)", "rgba(220, 220, 220, 0.1)"]}
         />
       </RoundedRect>
-      <RoundedRect rect={mainStroke} style="stroke" strokeWidth={0.1} >
+      <RoundedRect rect={r} style="fill">
         <LinearGradient
-          start={vec(0, 0)}
-          end={vec(width * 0.5, 10)}
-          colors={[
-            "rgba(255, 255, 255, 0.4)",
-            "rgba(140, 140, 140, 0.01)",
-          ]}
+          start={vec(5, 5)}
+          end={vec(width / 2, 5)}
+          colors={["rgba(0, 0, 0, 0.15)", "rgba(0, 0, 0, 0.08)"]}
         />
       </RoundedRect>
-
-      <RoundedRect rect={r}>
-        <ColorMatrix
-          matrix={[
-            0.19, 0.587, 0.424, 0, 0,
-            0.19, 0.587, 0.424, 0, 0,
-            0.19, 0.587, 0.424, 0, 0,
-            0, 0, 0, 0.1, 0
-          ]}
-        />
-        <FractalNoise
-          freqX={0.5}
-          freqY={0.5}
-          octaves={1}
-        />
-      </RoundedRect>
-      <RoundedRect rect={r}>
-        <RadialGradient
-          c={vec(width / 2, height / 2)}
-          r={100}
-          colors={["rgba(0, 0, 0, 0.5)", "rgba(0, 0, 0, 0.01)"]}
-        />
-      </RoundedRect>
-      <Group matrix={matrix}>
-        <RoundedRect rect={indicatorBase} >
-          <LinearGradient
-            start={vec(x.value, 0)}
-            end={vec(x.value + indicatorWidth, 40)}
-            colors={[
-              "rgba(255, 255, 255, 1)",
-              "rgba(140, 140, 140, 1)",
-            ]}
-          />
-        </RoundedRect>
-        <RoundedRect rect={indicatorStroke} style="stroke" strokeWidth={0.1} color="rgba(255, 255, 255, 0.2)"/>
-      </Group>
     </Canvas>
   );
 });
-/*<Group>
-        <Blur blur={1} />
-        <RoundedRect rect={dynamicBase} strokeWidth={1} color="rgba(180, 190, 190, 0.2)" />
-        <RoundedRect rect={dynamicStroke} style="stroke" strokeWidth={0.1} />
-      </Group>*/
-
 
 function BottomBar() {
-  //const router = useRouter();
   const blurTarget = useBlurTargetRef();
   const isReadyToBlur = useBlurTargetReady();
   const tabX = useSharedValue(TAB_OFFSET_X["/home"]);
-  //const pathname = usePathname();
   const segments = useSegments();
-
-  //const blurTargetRef = useBlurStore(state => state.blurTargetRef);
-
 
   const handlePress = useCallback((route: any) => {
     const x = TAB_OFFSET_X[route];
-    if (x)
-      tabX.value = withSpring(x, SPRING_CONFIG);
-    //router.navigate(route);
+    if (x) tabX.value = withSpring(x, SPRING_CONFIG);
   }, [segments]);
 
   const translateX = useAnimatedStyle(() => ({
@@ -257,27 +209,26 @@ function BottomBar() {
   const insets = useSafeAreaInsets();
 
   return (
-    <View style={[styles_.view, { bottom: insets.bottom | wp(4) }]}>
+    <View style={[styles_.view, { bottom: insets.bottom || wp(2) }]}>
       {isReadyToBlur && <BlurView
-        intensity={70}
+        intensity={25}
         style={StyleSheet.absoluteFill}
         blurTarget={blurTarget}
         blurMethod="dimezisBlurView"
-        blurReductionFactor={10}
-        tint="systemThinMaterialDark"
+        tint="systemUltraThinMaterialDark"
       />}
       <SkiaBottomBar x={tabX} />
-
-      <BottomBarButtons onPress={handlePress} />
-    </View>
-  )
-};
-/*<Animated.View
+      <Animated.View
         style={[
           styles_.indicator,
           translateX
         ]}
-      />*/
+      />
+      <BottomBarButtons onPress={handlePress} />
+    </View>
+  )
+};
+
 export default memo(BottomBar);
 
 const styles_ = StyleSheet.create({
@@ -299,10 +250,11 @@ const styles_ = StyleSheet.create({
     height: 52,
     width: indicatorWidth,
     borderRadius: 24,
-    backgroundColor: "#606a85",
+    //backgroundColor: "#202f45a0",
+    backgroundColor: "#00000060",
     opacity: 0.8,
-    borderWidth: 0.5,
-    borderColor: "rgba(130, 130, 130, 0.8)",
+    borderWidth: 0.2,
+    borderColor: "rgba(130, 130, 130, 0.5)",
   },
 });
 
@@ -409,4 +361,74 @@ translateX,
 </Group>
       </Canvas>
 */
+
+/**
+ * <RoundedRect rect={r}>
+        <ColorMatrix
+          matrix={[
+            0.19, 0.587, 0.424, 0, 0,
+            0.19, 0.587, 0.424, 0, 0,
+            0.19, 0.587, 0.424, 0, 0,
+            0, 0, 0, 0.1, 0
+          ]}
+        />
+        <FractalNoise
+          freqX={0.05}
+          freqY={0.05}
+          octaves={1}
+        />
+      </RoundedRect>
+ */
+
+/*
+      <Group matrix={matrix}>
+        <RoundedRect rect={indicatorBase}>
+          <LinearGradient
+            start={vec(0, 0)}
+            end={vec(0, 52)}
+            colors={[
+              "rgba(255,255,255,0.48)",
+              "rgba(255,255,255,0.12)",
+              "rgba(255,255,255,0.06)",
+            ]}
+          />
+          <Blur blur={1} />
+        </RoundedRect>
+
+        <RoundedRect rect={indicatorBase} >
+          <LinearGradient
+            start={vec(0, 0)}
+            end={vec(40, 52)}
+            colors={[
+              "rgba(255, 255, 255, 0.3)",
+              "rgba(255, 255, 255, 0.2)",
+              "rgba(255, 255, 255, 0.15)",
+              "rgba(140, 140, 140, 0.1)",
+            ]}
+          />
+          <Blur blur={1} />
+        </RoundedRect>
+
+        <RoundedRect
+          rect={indicatorBase}
+        >
+          <LinearGradient
+            start={vec(0, 0)}
+            end={vec(5, 10)}
+            colors={[
+              "rgba(255,255,255,0.3)",
+              "rgba(255,255,255,0.2)",
+              "rgba(255,255,255,0.1)",
+              "rgba(255,255,255,0)"
+            ]}
+          />
+        </RoundedRect>
+        <RoundedRect
+          rect={indicatorStroke}
+          style="stroke"
+          strokeWidth={0.5}
+          color="rgba(255,255,255,0.25)"
+        />
+      </Group>>*/
+
 

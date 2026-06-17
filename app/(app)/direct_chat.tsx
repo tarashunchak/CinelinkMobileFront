@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import {
   FlatList,
   KeyboardAvoidingView,
@@ -21,6 +21,7 @@ import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-nat
 import Animated, { useAnimatedKeyboard, useAnimatedStyle } from "react-native-reanimated";
 import { MessagesManager, useChatMessages } from "@/src/rt_client/managers/messages_manager";
 import { useChat } from "@/src/rt_client/managers/chats_manager";
+import { BlurTargetView } from "expo-blur";
 
 interface Params {
   chatID: number;
@@ -30,7 +31,7 @@ interface Params {
 };
 
 export default function DirectChatScreen() {
-  const { chatID, imgUrl, name, peerID }: Params  = useLocalSearchParams();
+  const { chatID, imgUrl, name, peerID }: Params = useLocalSearchParams();
   const chat = useChat(chatID);
   const [isFloatButtonVisible, setFloatButtonVisible] = useState<boolean>(false);
   const { isEditMode, enable, disable, toggle } = useEditMode(3);
@@ -49,7 +50,7 @@ export default function DirectChatScreen() {
         await RTClient.setChatEntering(chatID, getCurrentUserID());
       };
       loadContent();
-      console.warn("Chat: ", chat);
+      console.warn("PeerID: ", peerID);
 
       return () => {
         isActive = false;
@@ -60,45 +61,51 @@ export default function DirectChatScreen() {
     }, [chatID, setBottomBarVisible])
   );
 
+  const ref = useRef<View | null>(null);
   const renderItem = useCallback(({ item }: any) => {
     if (item?.message_type === "text")
       return <TextMessage message={item} />
   }, [chatID]);
 
   return (
-    <View style={{ height: hp(100), width: wp(100) }}>
+    <View style={StyleSheet.absoluteFill}>
+      {isEditMode
+        ? <EditHeader />
+        :
+        <Header
+          chatID={chatID}
+          peerID={peerID}
+          imgUrl={imgUrl ?? chat?.info?.image}
+          name={name}
+          ref={ref}
+        />
+      }
       <KeyboardAvoidingView
         style={StyleSheet.absoluteFill}
-        behavior={"padding"}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
         keyboardVerticalOffset={Platform.OS === "ios" ? 60 : 0}
         enabled={true}
       >
-        {isEditMode
-          ? <EditHeader />
-          :
-          <Header
-            chatID={chatID}
-            peerID={peerID}
-            imgUrl={imgUrl ?? chat?.info?.image}
-            name={name}
-          />
-        }
-        <FlatList
+        <Animated.FlatList
           data={messages}
           scrollEventThrottle={16}
-          onScrollBeginDrag={Keyboard.dismiss}
-          style={{ height: hp(100) }}
+          style={StyleSheet.absoluteFill}
           keyExtractor={(item) => String(item.message_id)}
           renderItem={renderItem}
           contentContainerStyle={{
             paddingTop: hp(8),
+            paddingBottom: hp(12),
           }}
           keyboardShouldPersistTaps="always"
           inverted
           onEndReached={() => { MessagesManager.getInstance().load(chatID) }}
+          onEndReachedThreshold={0.3}
         />
       </KeyboardAvoidingView>
       <Input chatID={chatID} />
+
     </View>
   );
 };
+
+//onScrollBeginDrag={Keyboard.dismiss}

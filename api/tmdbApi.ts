@@ -89,7 +89,7 @@ export async function getSimilarMovies(movieID: number) {
     movieID,
     data?.results,
   )
-  return data?.results;
+  return data?.results?.movies;
 };
 
 export async function getFilmographyByPerson(personID: number) {

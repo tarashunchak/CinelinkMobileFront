@@ -8,6 +8,7 @@ import Animated, { SharedTransition } from "react-native-reanimated";
 import { Skeleton } from "react-native-skeletons";
 import { Image } from "expo-image";
 import AnimatedFastImage from "@/src/components/ui/animated-fast-image";
+import { BlurView } from "expo-blur";
 
 export interface Watchlist {
   id: number;
@@ -21,51 +22,59 @@ export interface Watchlist {
   movies_quantity: number;
 };
 
-function WatchlistCard({ watchlist }: { watchlist: Watchlist | null }) {
+function WatchlistCard({ watchlist, ref }: { watchlist: Watchlist | null, ref: any }) {
   const router = useRouter();
 
   if (!watchlist) return <Skeleton style={styles.view} />;
 
   return (
-    <PressableScale style={styles.view}
-      onPress={() => { 
-        router.push({
-          pathname: "/watchlist", 
-          params: { watchlist: JSON.stringify(watchlist) },
-        }) 
+    <BlurView
+      style={styles.view}
+      blurTarget={ref}
+      blurMethod="dimezisBlurView"
+      tint="dark"
+      intensity={80}
+    >
+      <PressableScale style={{ flex: 1 }}
+        onPress={() => {
+          router.push({
+            pathname: "/watchlist",
+            params: { watchlist: JSON.stringify(watchlist) },
+          })
         }}>
-      <View style={{ width: "80%", height: "100%", flexDirection: "row" }}>
-        <View style={{ flexDirection: "row", gap: 5 }}>
+        <View style={{ width: "80%", height: "100%", flexDirection: "row" }}>
+          <View style={{ flexDirection: "row", gap: 5 }}>
 
-          <AnimatedFastImage
-            sharedTransitionTag={`watchlist-fg-${watchlist?.id}`}
-            source={
-             { uri: watchlist?.fg_img_url }
-            }
-            style={styles.image}
-            cachePolicy="disk"
-          />
+            <AnimatedFastImage
+              sharedTransitionTag={`watchlist-${watchlist?.id}-fg`}
+              source={
+                { uri: watchlist?.fg_img_url }
+              }
+              style={styles.image}
+              cachePolicy="disk"
+            />
 
-          <View style={styles.textView}>
-            <Text style={textStyle.white22}>{watchlist.name}</Text>
-            <Text style={[textStyle.gray18, styles.description]}
-              pointerEvents="none"
-              numberOfLines={2}
-              ellipsizeMode="tail"
-            >
-              {watchlist.description}
-            </Text>
-            <View style={styles.creator}>
-              <Text style={textStyle.gray14}>Creator:</Text>
-              <Text style={textStyle.yellow14}>{watchlist?.creator_username}</Text>
+            <View style={styles.textView}>
+              <Text style={textStyle.white22}>{watchlist.name}</Text>
+              <Text style={[textStyle.gray18, styles.description]}
+                pointerEvents="none"
+                numberOfLines={2}
+                ellipsizeMode="tail"
+              >
+                {watchlist.description}
+              </Text>
+              <View style={styles.creator}>
+                <Text style={textStyle.gray14}>Creator:</Text>
+                <Text style={textStyle.yellow14}>{watchlist?.creator_username}</Text>
+              </View>
             </View>
           </View>
+          <Text style={textStyle.gray14}>
+            {`${watchlist.movies_quantity} ${watchlist.movies_quantity === 1 ? "movie" : "movies"}`}
+          </Text>
         </View>
-        <Text style={textStyle.gray14}>
-          {`${watchlist.movies_quantity} ${watchlist.movies_quantity === 1 ? "movie" : "movies"}`}
-        </Text>
-      </View>
-    </PressableScale>
+      </PressableScale>
+    </BlurView>
   );
 };
 

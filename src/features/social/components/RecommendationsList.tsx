@@ -1,12 +1,12 @@
 import { textStyle } from "@/styles/textStyles";
 import { useNavigation, useRouter } from "expo-router";
-import React, { memo, useCallback } from "react";
+import React, { memo, useCallback, useMemo } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { PressableScale } from "react-native-pressable-scale";
 import { createAnimatedComponent } from "react-native-reanimated";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
-import { Image } from "expo-image";
+import { Image, useImage } from "expo-image";
 import { useUserRecommendations } from "@/src/rt_client/managers/recommendations_manager";
 
 type RecommendedBy_T = {
@@ -31,7 +31,7 @@ const RecommendationItem = memo(({ item }: { item: RecommendedCard_T }) => {
   const router = useRouter();
   const handlePress = useCallback(()=>{
     router.navigate({ 
-      pathname: "/movie_details", 
+      pathname: "/movie", 
       params: { 
         movieID: item.movie_id, 
         posterPath: item.poster_path,
@@ -39,6 +39,13 @@ const RecommendationItem = memo(({ item }: { item: RecommendedCard_T }) => {
       }
     });
   }, [item?.movie_id]);
+
+  const sourceUri = useMemo(()=>(
+`https://image.tmdb.org/t/p/w300${item?.poster_path}`
+  ), [item.movie_id]);
+
+  const image = useImage(sourceUri);
+
   return (
     <PressableScale
       activeScale={0.98}
@@ -46,9 +53,9 @@ const RecommendationItem = memo(({ item }: { item: RecommendedCard_T }) => {
       onPress={handlePress}
     >
       <AnimatedFastImage 
+        source={image} 
         sharedTransitionTag={`movie-${item?.movie_id}-poster`}
-        style={styles.poster} 
-        source={{ uri: `https://image.tmdb.org/t/p/w300${item?.poster_path}` }} 
+        style={[styles.poster, {aspectRatio: image?.width / image?.height}]} 
         cachePolicy="memory"
       />
       <View style={styles.infoColumn}>
@@ -89,13 +96,13 @@ function RecommendationsList() {
   const items = useUserRecommendations();
   const renderItem = useCallback(({ item }: any) => (
     <RecommendationItem item={item} />
-  ), []);
+  ), [items]);
 
   //console.warn("Recommendations: ", items);
   return (
     <FlatList
       data={items}
-      keyExtractor={(item: RecommendedCard_T, index) => String(item?.movie_id)}
+      keyExtractor={(item: RecommendedCard_T, index) => item?.movie_id ? `rec-${item?.movie_id}` : String(index)}
       renderItem={renderItem}
       contentContainerStyle={styles.contentContainer}
     />
@@ -109,7 +116,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 10,
     width: "100%",
-    height: hp("14.5%"),
+    minHeight: 110,
+    maxHeight: 120,
     backgroundColor: "rgba(255, 255, 255, 0.03)",
     borderColor: "rgba(255, 255, 255, 0.2)",
     borderWidth: 0.5,
@@ -119,7 +127,6 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   poster: {
-    width: 73,
     height: "100%",
     borderRadius: 5,
     borderWidth: 1,
@@ -148,7 +155,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   recommendedSection: {
-    height: "40%",
+    height: "45%",
     width: 130,
     flexDirection: "column",
     justifyContent: "space-evenly",

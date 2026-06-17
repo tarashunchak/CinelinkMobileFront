@@ -21,7 +21,7 @@ function MovieCard({ data }: { data: MovieCard_I }) {
   if (!data) return <Skeleton style={styles.view} />
   const handlePress = useCallback(() => {
     router.navigate({
-      pathname: "/(app)/movie_details",
+      pathname: "/(app)/movie",
       params: {
         movieID: data?.movie_id,
         inCinemas: data?.inCinemas,

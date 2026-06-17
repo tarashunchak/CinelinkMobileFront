@@ -3,15 +3,23 @@ import { Image, Text, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
 import { textStyle } from "@/styles/textStyles";
 
-export default function EmptyCreditCard({ movieID, poster_path }: { movieID: number, poster_path: string }) {
+interface Props {
+  movieID: number; 
+  posterPath: string, 
+  title: string,
+};
+
+export default function EmptyCreditCard({ movieID, posterPath, title}: Props) {
   const router = useRouter();
   return (
     <TouchableOpacity
       onPress={() =>
-        router.navigate({
+        router.push({
           pathname:  "/(app)/movie_credits",
           params: {
-            movieID, poster_path
+            movieID, 
+            posterPath,
+            title,
           }
         })
       }

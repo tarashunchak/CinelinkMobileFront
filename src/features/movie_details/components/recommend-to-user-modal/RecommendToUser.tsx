@@ -8,6 +8,7 @@ import { getCurrentUserID } from "@/utils/utils";
 import Button from "./components/Button";
 import { GetUserFollowers } from "@/api/followers";
 import { useBlurStore } from "@/src/components/ui/screen-background";
+import { useUsers } from "@/src/rt_client/managers/users_manager";
 
 export type UserSheetRef = {
   open: () => void;
@@ -24,15 +25,12 @@ const UserSheet = forwardRef<UserSheetRef, UserSheetProps>(({ setIsActive }, ref
   const sheetRef = useRef<BottomSheet>(null);
   const [state, setState] = useState<boolean>(false);
   const [value, setValue] = useState<string>("");
-  const [users, setUsers] = useState<any[]>([]);
+  const users = useUsers();
   const [picked, setPicked] = useState<Map<number, boolean>>(new Map());
   const setBottomBarVisible = useBlurStore(state => state.setBottomBarVisible);
 
   useEffect(() => {
     async function loadContent() {
-      const data = await GetUserFollowers(getCurrentUserID());
-      if (data) setUsers(data);
-      console.warn("users: ", data);
     };
     if(state)
       loadContent();

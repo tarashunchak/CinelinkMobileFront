@@ -22,7 +22,7 @@ interface MovieInfo {
   vote_average: number;
 };
 
-function InfoBlock({ movieInfo, cast }: { movieInfo: Movie | undefined, cast: any[] | undefined }) {
+export default function InfoBlock({ movieInfo, cast }: { movieInfo: Movie | undefined, cast: any[] | undefined }) {
   if (!movieInfo) return <Skeleton style={styles.mainView} />
   const openIMDb = useCallback(async ()=>{
     const url = `https://www.imdb.com/title/${movieInfo?.imdb_id}`;
@@ -31,20 +31,20 @@ function InfoBlock({ movieInfo, cast }: { movieInfo: Movie | undefined, cast: an
   },[movieInfo?.imdb_id]);
   return (
     <View style={styles.mainView}>
-      <InfoRow left="Year" right={movieInfo?.release_date?.slice(0, 4)} />
-      <InfoRow left="Director" right={movieInfo?.directors[0]} />
+      <InfoRow left="Year" right={movieInfo?.release_date?.slice(0, 4) || "N/A"} />
+      <InfoRow left="Director" right={movieInfo?.directors?.[0] || "N/A"} />
 
       <View style={styles.starsView}>
         <Text style={textStyle.yellow16}>{"Stars: "}</Text>
         {
           cast?.map((star, _) =>
             <Text 
-              key={star.id} 
+              key={star?.id} 
               style={[textStyle.white16, {marginLeft: 10, maxWidth:"90%", minWidth:"80%" }]}
               ellipsizeMode="tail"
               numberOfLines={1}
             >
-              {`* ${star.name}`}
+              {`* ${star?.name}`}
             </Text>
           )
         }
@@ -66,8 +66,6 @@ function InfoBlock({ movieInfo, cast }: { movieInfo: Movie | undefined, cast: an
     </View >
   )
 };
-
-export default memo(InfoBlock);
 
 const styles = StyleSheet.create({
   mainView: {

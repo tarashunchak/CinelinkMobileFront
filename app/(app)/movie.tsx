@@ -21,6 +21,7 @@ import TrailerBlock from "@/src/features/movie_details/components/TrailerBlock";
 import WatchlistSheet, { WatchlistSheetRef } from "@/src/features/movie_details/components/add-to-watchlist-modal/AddToWatchlistModal";
 import UserSheet, { UserSheetRef } from "@/src/features/movie_details/components/recommend-to-user-modal/RecommendToUser";
 import { BlurTargetView } from "expo-blur";
+import Header from "@/src/features/movie_details/components/Header";
 
 const sections = [
   { type: "actions" },
@@ -88,27 +89,33 @@ export default function MovieDetailScreen() {
       case "details":
         return <DetailsBlock movie={movie} />
       case "cast":
-        return (<>
-          <Text style={styles.title}>Cast</Text>
-          <CreditCardsList
-            movieID={movieID}
-            credits={credits?.cast}
-            poster_path={movie?.poster_path}
-          /></>)
+        if (movie?.credits?.cast?.length === 0) return null;
+        return (
+          <>
+            <Text style={styles.title}>Cast</Text>
+            <CreditCardsList
+              movieID={movieID}
+              credits={credits?.cast}
+              posterPath={movie?.poster_path}
+              title={movie?.title}
+            />
+          </>)
       case "crew":
         return (<>
           <Text style={styles.title}>Crew</Text>
           <CreditCardsList
             movieID={movieID}
             credits={credits?.crew}
-            poster_path={movie?.poster_path}
+            posterPath={movie?.poster_path}
+            title={movie?.title}
           /></>)
       case "similar":
         return (<>
-          <Text style={styles.title}>Similar movies</Text>
+          <Text style={styles.title}>{"Similar movies"}</Text>
           <MovieCardList
             movieID={movie?.id}
             movieGenre={movie?.genres?.[0]?.id}
+            posterPath={posterPath}
           /></>)
     };
   }, [movieID, credits, movie]);

@@ -4,34 +4,23 @@ import CreditCard from "./CreditCard";
 import EmptyCreditCard from "./EmptyCreditCard";
 import { useRouter } from "expo-router";
 
+interface Props {
+  movieID: number;
+  credits: any[];
+  posterPath: string;
+  title: string;
+}
+
 export default function CreditCardsList(
-  { movieID, credits, poster_path }:
-    {
-      movieID: number,
-      credits: any[],
-      poster_path: string
-    }
+  { movieID, credits, posterPath, title }: Props
 ) {
 
   const router = useRouter();
-
   const isLoading = !credits || credits.length === 0;
-
-  const posterPath = useMemo(()=> poster_path, [movieID]);
-
   const data = isLoading ? Array.from({ length: 10 }) : credits;
 
   const renderItem = useCallback(({ item }: any) =>
-    <CreditCard credit={item}
-      onPress={() => router.navigate({
-        pathname: "/credit_details",
-        params: {
-          creditID: item.id,
-          creditName: item.name,
-          profilePath: item.profile_path
-        }
-      })}
-    />
+    <CreditCard credit={item}/>
     , [movieID])
 
   return (
@@ -44,7 +33,8 @@ export default function CreditCardsList(
       ListFooterComponent={
         credits?.[0] ? <EmptyCreditCard
           movieID={movieID}
-          poster_path={posterPath}
+          posterPath={posterPath}
+          title={title}
         />
         : null
       }

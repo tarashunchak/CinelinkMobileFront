@@ -8,20 +8,25 @@ import { PressableScale } from "react-native-pressable-scale";
 import { Send } from "lucide-react-native";
 import Animated, { useAnimatedKeyboard, useAnimatedStyle } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { BlurView } from "expo-blur";
 
-function Input({ chatID }: { chatID: number }) {
+function Input({ chatID, ref }: { chatID: number, ref:any }) {
   const { height } = useAnimatedKeyboard();
   const [isFocused, setIsFocused] = useState(false);
   const [text, setText] = useState<string>("");
 
   async function handleFocus() {
-    await RTClient.setTypingStatus(chatID, getCurrentUserID(), true);
-    setIsFocused(true);
+    if(!isFocused){
+      await RTClient.setTypingStatus(chatID, getCurrentUserID(), true);
+      setIsFocused(true);
+    }
   };
 
   async function handleBlur() {
-    await RTClient.setTypingStatus(chatID, getCurrentUserID(), false);
-    setIsFocused(false);
+    if(isFocused){
+      await RTClient.setTypingStatus(chatID, getCurrentUserID(), false);
+      setIsFocused(false);
+    }
   };
 
   const animatedStyle = useAnimatedStyle(() => ({
@@ -31,7 +36,7 @@ function Input({ chatID }: { chatID: number }) {
   const insets = useSafeAreaInsets();
 
   return (
-      <Animated.View style={[styles.view, animatedStyle, {marginBottom: insets.bottom}]}>
+      <Animated.View style={[styles.view, animatedStyle, {bottom: insets.bottom | 10}]}>
         <TextInput
           value={text}
           onChangeText={setText}
@@ -39,6 +44,8 @@ function Input({ chatID }: { chatID: number }) {
           placeholder="Message..."
           placeholderTextColor={"rgba(255, 255, 255, 0.3)"}
           onFocus={handleFocus}
+          onEndEditing={handleBlur}
+          onChange={handleFocus}
           onBlur={handleBlur}
           multiline={true}
           numberOfLines={10}
@@ -70,23 +77,18 @@ export default memo(Input);
 const styles = StyleSheet.create({
   view: {
     position: "absolute",
-    width: "94%",
-    bottom: 0,
-    left: "3%",
-    right: 0,
-    zIndex: 3,
-    height: 46,
-    backgroundColor: "rgba(20, 20, 20, 1)",
-    borderColor: "rgba(255, 255, 255, 0.5)",
+    width: "90%",
+    backgroundColor: "#2C2C2C",
+    borderColor: "rgba(255, 255, 255, 0.8)",
     borderWidth: 0.4,
-    borderRadius: 21,
-    paddingLeft: "5%",
+    borderRadius: 22,
+    paddingLeft: "2%",
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
+    alignSelf: "center",
   },
   input:  {
-    width: "88%",
+    width: "80%",
     alignSelf: "center",
     alignContent: "center",
   },

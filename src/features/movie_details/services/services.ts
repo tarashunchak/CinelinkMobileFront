@@ -6,12 +6,16 @@ export async function GetMovieDetails(movieID: number) {
     headers: jwtHeaders(undefined)
   });
   const data = await response.json();
+  console.warn("MOVIE FROM WATCHLIST: ", data?.results)
   return data?.results;
 }
 
 export function GetMovieDirectors(credits: any[]) {
-  return credits?.filter(member => member.job === "Director")
+  const directors = credits?.filter(member => member.known_for_department === "Directing")
     ?.map(member => member.name);
+  //if(directors?.length === 0) return 
+  
+  return directors;
 }
 
 export async function LoadMovieDetails(movieID: number) {

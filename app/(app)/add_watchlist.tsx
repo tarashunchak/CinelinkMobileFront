@@ -11,6 +11,7 @@ import { TextInput, View, Text, StyleSheet, Keyboard } from "react-native";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { PressableScale } from "react-native-pressable-scale";
 import { TouchableWithoutFeedback } from "@gorhom/bottom-sheet";
+import { WatchlistsManager } from "@/src/rt_client/managers/watchlists_manager";
 
 export default function AddWatchlist() {
   const navigator = useNavigation();
@@ -72,8 +73,10 @@ export default function AddWatchlist() {
               </PressableScale>
               <PressableScale style={styles.createBtn}
                 onPress={async () => {
-                  if (await CreateWatchlist(text))
+                  if (await CreateWatchlist(text)){
+                    WatchlistsManager.getInstance().load();
                     router.back();
+                  }
                 }}>
                 <Text style={[textStyle.white22, {fontWeight: "bold"}]}>Create</Text>
               </PressableScale>

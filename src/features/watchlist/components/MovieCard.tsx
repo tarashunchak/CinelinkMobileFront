@@ -16,7 +16,7 @@ function MovieCard({ movie }: { movie: Movie | null }) {
   const handlerPress = useCallback(()=>{
     if(!movie) return;
     router?.push({
-      pathname: "/movie_details", 
+      pathname: "/movie", 
       params: { 
       movieID: movie?.movie_id, 
       posterPath: movie?.poster_path,

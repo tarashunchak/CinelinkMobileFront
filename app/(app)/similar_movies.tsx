@@ -11,36 +11,41 @@ import { useBlurStore } from "@/src/components/ui/screen-background";
 import { BlurTargetView, BlurView } from "expo-blur";
 import { textStyle } from "@/styles/textStyles";
 import AnimatedFastText from "@/src/components/ui/animated-fast-text";
+import { getSimilarMovies } from "@/api/tmdbApi";
+import { useMovieStore } from "@/src/rt_client/managers/movies_manager";
 import Header from "@/src/features/movie_details/components/Header";
+import MovieCard from "@/src/features/movie_details/components/MovieCard";
 
-type Credit = {
+
+type Movie = {
   id: number;
   name: string;
   original_name: string;
   profile_path: string;
-  credit_id: string;
+  Movie_id: string;
   known_for_department: string;
   character: string;
 }
 
-interface Credits {
-  cast: Credit[];
-  crew: Credit[];
+interface Movies {
+  cast: Movie[];
+  crew: Movie[];
 }
-//<ReturnArrowButton />
 
-export default function MovieCreditsScreen() {
+export default function SimilarMoviesScreen() {
   const router = useRouter();
-  const [credits, setCredits] = useState<any>();
-  const { movieID, posterPath, title } = useLocalSearchParams();
+  const [movies, setMovies] = useState<any>();
+  const { movieID, posterPath } = useLocalSearchParams();
+  const movie = useMovieStore(s => s.movies[movieID]);
 
   const setBottomBarVisible = useBlurStore(s => s.setBottomBarVisible);
 
   useEffect(() => {
     setBottomBarVisible(false);
     async function load() {
-      const data = await GetMovieCredits(movieID);
-      if (data) setCredits(data)
+      const data = await getSimilarMovies(movieID);
+      if (data && data.length !== 0) setMovies(data)
+        console.warn("SIMILAR MOVIES: ", data),
       console.warn("POSTER PATH: ", posterPath);
     };
     load();
@@ -50,9 +55,17 @@ export default function MovieCreditsScreen() {
   }, [movieID])
 
   const renderItem = useCallback(({ item }: any) =>
-    <CreditCard credit={item} />
-    , [movieID])
-
+    <MovieCard movie={item}
+      onPress={() => router.navigate({
+        pathname: "/movie_details",
+        params: {
+          movieID: item.id,
+          title: item.name,
+          posterPath: item.profile_path
+        }
+      })}
+    />
+    , [movieID]);
   const ref = useRef<View | null>(null);
 
   return (
@@ -68,10 +81,7 @@ export default function MovieCreditsScreen() {
           style={styles.listView}
           contentContainerStyle={[styles.contentContainer]}
           showsVerticalScrollIndicator={false}
-          data={[
-            ...credits?.cast ?? [],
-            ...credits?.crew ?? [],
-          ]}
+          data={movies}
           numColumns={3}
           maximumZoomScale={2}
           initialNumToRender={12}
@@ -80,7 +90,7 @@ export default function MovieCreditsScreen() {
           renderItem={renderItem}
         />
       </BlurTargetView>
-      <Header title={title} ref={ref} movieID={movieID} />
+      <Header title={movie?.title} ref={ref} movieID={movieID} />
     </View>
   )
 };

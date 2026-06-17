@@ -1,45 +1,96 @@
-import React, { memo, useState } from "react";
+import React, { memo, useCallback, useRef, useState } from "react";
 import { View, Text } from "react-native";
 import { textStyle } from "@/styles/textStyles";
 import { StyleSheet } from "react-native";
 import { PressableScale } from "react-native-pressable-scale";
-import Animated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated";
+import Animated, { useAnimatedStyle, useSharedValue, withSpring, withTiming } from "react-native-reanimated";
+import { widthPercentageToDP } from "react-native-responsive-screen";
+import HeaderContainer from "@/src/components/ui/header-container";
 
 export let getActiveTab = () => { };
+
+let TAB_OFFSET_X = [
+  {
+    name: "Chats",
+    offset: 0,
+    width: 0,
+  },
+  {
+    name: "Recommendations",
+    offset: 0,
+    width: 0,
+  },
+  {
+    name: "Activity",
+    offset: 0,
+    width: 0,
+  },
+  {
+    name: "Friends",
+    offset: 0,
+    width: 0,
+  },
+];
 
 function SocialPageTopBar({ onTabChange }: { onTabChange: (tab: string) => void }) {
   const tabs = ["Chats", "Recommendations", "Activity", "Friends"];
   const [activeTab, setActiveTab] = useState("Chats");
+  const layouts = useRef<Record<string, {x: number; width: number}>>({});
+  const isReady = useRef(false);
 
-  /*const offsetX = useSharedValue<number>(0);
+  const offsetX = useSharedValue<number>(0);
+  const sliderWidth = useSharedValue<number>(0);
+  const radius = useSharedValue<number>(4);
 
-  const animatedStyle = useAnimatedStyle(()=>({
-    transform: [{translateX: offsetX.value}]
-  }));*/
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ translateX: offsetX.value }],
+    width: sliderWidth.value,
+    borderRadius: radius.value,
+  }));
 
   return (
-    <View style={styles.mainContainer}>
+    <HeaderContainer style={styles.view}>
+      <View style={styles.mainContainer}>
+      <Animated.View style={[styles.buttonView, styles.activeButtonView, animatedStyle]} />
       {
-        tabs.map((tab, index) => (
+        TAB_OFFSET_X.map(({ name, offset, width }: any, index) => (
           <PressableScale
-            key={tab}
+            key={name}
             onPress={
               () => {
-                setActiveTab(tab);
-                onTabChange(tab);
-                offsetX.value = withSpring(index)
+                setActiveTab(name);
+                onTabChange(name);
+                radius.value = 14;
+                offsetX.value = withSpring(layouts.current[name].x)
+                sliderWidth.value = withSpring(layouts.current[name].width, {}, ()=>{
+                  radius.value = withSpring(4);
+                })
               }
             }
             style={[
               styles.buttonView,
-              activeTab === tab && styles.activeButtonView,
             ]}
+            onLayout={(event) => {
+              if(isReady.current) return;
+
+              layouts.current[name] = {
+                x: event.nativeEvent.layout.x,
+                width: event.nativeEvent.layout.width,
+              };
+              if(name === activeTab){
+                offsetX.value = withSpring(event.nativeEvent.layout.x)
+                sliderWidth.value = withSpring(event.nativeEvent.layout.width)
+              }
+
+              isReady.current = false;
+            }}
           >
-            <Text style={[textStyle.white18, {fontWeight: "bold"}]}>{tab}</Text>
+            <Text style={[textStyle.white18, { fontWeight: "bold" }]}>{name}</Text>
           </PressableScale>
         ))
       }
-    </View>
+</View>
+    </HeaderContainer>
   );
 };
 
@@ -50,24 +101,27 @@ function SocialPageTopBar({ onTabChange }: { onTabChange: (tab: string) => void 
 export default memo(SocialPageTopBar);
 
 const styles = StyleSheet.create({
+  view: {
+    backgroundColor: "#2D3C59",
+    borderRadius: 6,
+    elevation: 5,
+  },
   mainContainer: {
-    height: 52,
     width: "100%",
     alignSelf: "center",
-    borderWidth: 0.5,
-    borderColor: "rgba(255, 255, 255, 0.2)",
+    borderWidth: 0.2,
+    borderColor: "rgba(255, 255, 255, 0.1)",
     borderRadius: 6,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     padding: "0.5%",
     backgroundColor: "#222831",
-    elevation: 10,
   },
   buttonView: {
     paddingLeft: "2%",
     paddingRight: "2%",
-    height: "98%",
+    height: 50,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -76,6 +130,7 @@ const styles = StyleSheet.create({
     borderColor: "rgba(255, 255, 255, 0.2)",
     borderRadius: 4,
     borderWidth: 0.5,
-    elevation: 5,
+    position: "absolute",
+    height: "96%",
   },
 });

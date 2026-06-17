@@ -32,7 +32,7 @@ export default function MessageContainer({
 
   return (
     <Pressable
-      style={isSelected ? picked.view : notPicked.mainView}
+      style={isSelected ? picked.view : notPicked.view}
       onPress={() => {
         if (isEditMode) {
           Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
@@ -47,15 +47,8 @@ export default function MessageContainer({
       }
       }
     >
-      <PressableScale
-        style={style}
-        delayLongPress={350}
-        activeScale={0.99}
-      >
-        {children}
-      </PressableScale>
-      {
-        <View
+{
+        isSelected && <View
           style={isSelected ?
             picked.pickedToggle :
             notPicked.pickedToggle
@@ -71,6 +64,14 @@ export default function MessageContainer({
           }
         </View>
       }
+      <PressableScale
+        style={style}
+        delayLongPress={350}
+        activeScale={0.99}
+      >
+        {children}
+      </PressableScale>
+      
     </Pressable >
   );
 };
@@ -79,8 +80,8 @@ const picked = StyleSheet.create({
   view: {
     width: wp(100),
     backgroundColor: "rgba(255, 255, 255, 0.1)",
-    flexDirection: "column",
-    justifyContent: "space-between",
+    flexDirection: "row",
+    alignItems: "flex-end",
     paddingVertical: 3,
     marginVertical: 2,
   },
@@ -103,9 +104,11 @@ const notPicked = StyleSheet.create({
   view: {
     width: wp(100),
     backgroundColor: "transparent",
-    flexDirection: "column",
     paddingVertical: "1%",
     marginVertical: "1%",
+    //justifyContent: "space-between",
+    //alignItems: "flex-end",
+    paddingHorizontal: 5
   },
   pickedToggle: {
     width: 20,

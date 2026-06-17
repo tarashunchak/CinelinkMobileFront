@@ -9,7 +9,6 @@ import { heightPercentageToDP } from "react-native-responsive-screen";
 
 export default function BiographyModal({ bio }: { bio: string }) {
   const [open, setOpen] = useState(false);
-
   const blurTargetRef = useBlurTargetRef();
 
   return (
@@ -28,12 +27,11 @@ export default function BiographyModal({ bio }: { bio: string }) {
         statusBarTranslucent={true}
         visible={open}
         transparent={true}
-        animationType="slide"
+        animationType="fade"
       >
         <BlurView 
           tint="systemChromeMaterialDark"
-          intensity={90}
-          blurReductionFactor={20}
+          intensity={40}
           blurMethod="dimezisBlurView"
           blurTarget={blurTargetRef}
           style={styles.imageBackground}

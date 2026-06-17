@@ -1,12 +1,13 @@
 import { useAuthStore } from "@/local_storage/user/asyncStorage/store";
 import { textStyle } from "@/styles/textStyles";
-import { getCurrentUserID } from "@/utils/utils";
-import { useNavigation, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import React from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
 import { heightPercentageToDP as hp, widthPercentageToDP } from "react-native-responsive-screen";
 import { PressableScale } from "react-native-pressable-scale";
 import HeaderContainer from "@/src/components/ui/header-container";
+import { Plus, Search } from "lucide-react-native";
+import AnimatedFastImage from "@/src/components/ui/animated-fast-image";
 
 export default function LibraryHeader() {
   const router = useRouter();
@@ -19,9 +20,11 @@ export default function LibraryHeader() {
             pathname: "/profile",
           })}
         >
-          <Image
+          <AnimatedFastImage
             style={styles.left.avatar}
             source={{ uri: useAuthStore.getState().user?.avatar_url }}
+            sharedTransitionTag={`user-${useAuthStore.getState().user?.user_id}-avatar`}
+            cachePolicy="disk"
           />
         </PressableScale>
         <Text style={styles.left.text}>
@@ -29,11 +32,11 @@ export default function LibraryHeader() {
         </Text>
       </View>
       <View style={styles.right.view}>
-        <PressableScale>
-          <Image style={styles.right.img} source={require("@/assets/images/icon.png")} />
+        <PressableScale style={{ justifyContent: "center", alignItems: "center" }} onPress={() => router.push({ pathname: "/add_watchlist", })}>
+          <Search size={34} color="white" strokeWidth={1} />
         </PressableScale>
-        <PressableScale onPress={() => router.push({pathname: "/add_watchlist",})}>
-          <Image style={styles.right.img} source={require("@/assets/images/plus.png")} />
+        <PressableScale style={{ justifyContent: "center", alignItems: "center" }} onPress={() => router.push({ pathname: "/add_watchlist", })}>
+          <Plus size={38} color="white" strokeWidth={1} />
         </PressableScale>
       </View>
     </HeaderContainer>
@@ -41,15 +44,16 @@ export default function LibraryHeader() {
 };
 
 const stylesR = StyleSheet.create({
+  blur: {
+    elevation: 5,
+  },
   view: {
     backgroundColor: "#222831",
-    zIndex: 3,
-    width: widthPercentageToDP("100%"),
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     padding: "2%",
-    elevation: 10,
+    elevation: 5,
   },
 });
 
@@ -69,9 +73,10 @@ const styles = {
       gap: 10,
     },
     avatar: {
-      height: hp(6.5),
-      width: hp(6.5),
-      borderRadius: hp(6.5)/2,
+      minHeight: 50,
+      maxHeight: 60,
+      aspectRatio: 1,
+      borderRadius: hp(6.5) / 2,
       backgroundColor: "white",
     },
     text: [textStyle.white26, {

@@ -26,7 +26,7 @@ export default function WatchlistScreen() {
   return (
     <FlatList
       data={movies}
-      keyExtractor={(item, index) => String(item?.imdb_id ?? index)}
+      keyExtractor={(item, index) => item?.imdb_id ? `movie-${item.imdb_id}` : String(index)}
       showsVerticalScrollIndicator={false}
       ListHeaderComponent={<Header watchlist={watchlistObj} />}
       renderItem={({ item }) => (

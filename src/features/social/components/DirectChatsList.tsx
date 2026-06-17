@@ -1,14 +1,15 @@
-import React, { memo, useCallback } from "react";
+import React, { memo, useCallback, useEffect } from "react";
 import { textStyle } from "@/styles/textStyles";
 import { FlatList, View, Text, StyleSheet } from "react-native";
 import { PressableScale } from "react-native-pressable-scale";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { useRouter } from "expo-router";
-import { useLastChatMessage, useUnseenMessagesCount, useTypingStatus, useUserChats } from "@/src/rt_client/managers/chats_manager";
+import { useLastChatMessage, useUnseenMessagesCount, useTypingStatus, useUserChats, Chat_T, ChatsManager } from "@/src/rt_client/managers/chats_manager";
 import AnimatedFastImage from "@/src/components/ui/animated-fast-image";
 import { useUserStatus } from "@/src/rt_client/managers/users_manager";
 import AnimatedFastText from "@/src/components/ui/animated-fast-text";
 import Spacer from "@/src/components/ui/spacer";
+import { getCurrentUserID } from "@/utils/utils";
 
 const EMPTY_CHATS_LIST = Array.from({length: 10});
 
@@ -74,32 +75,31 @@ const DirectChatCard = memo(({ item, onPress }: { item: any, onPress: any}) => {
 });
 
 export default function ChatsList() {
-  const chats = useUserChats();
+  const chats: Chat_T[] = useUserChats();
   const router = useRouter();
 
-  const handlePress = useCallback(({chatID, imgUrl, name, peerID}: any) => {
+  const handlePress = useCallback((item: any) => {
     router.navigate({
       pathname: "/direct_chat",
-      params: {
-        chatID,
-        imgUrl,
-        name,
-        peerID,
-      }
+      params: item,
     });
   }, []);
 
-  const renderItem = useCallback(({ item }: any) => (
+  const renderItem = useCallback(({ item }: {item: Chat_T}) => (
     <DirectChatCard item={item} onPress={handlePress}/>
-  ), []);
+  ), [handlePress]);
+
+  useEffect(()=>{
+    ChatsManager.getInstance().init(getCurrentUserID())
+  }, []);
 
   return (
     <FlatList
       data={chats}
-      keyExtractor={(item: any, index: number) => String(item?.chat_id ?? index)}
+      keyExtractor={(item: any, index: number) => item?.chat_id ? `${item?.chat_id}-chat` : String(index)}
       renderItem={renderItem}
       contentContainerStyle={styles.contentContainer}
-      ListFooterComponent={<Spacer orientation="v" spacing={hp(14)}/>}
+      ListFooterComponent={<Spacer orientation="v" spacing={hp(10)}/>}
     />
   );
 };

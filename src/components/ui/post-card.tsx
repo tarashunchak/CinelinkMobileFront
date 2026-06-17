@@ -8,6 +8,7 @@ import { Bookmark, Heart, MessageCircleMore, Share } from "lucide-react-native";
 import { Image, useImage } from "expo-image";
 import * as Haptics from "expo-haptics";
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
+import { widthPercentageToDP } from "react-native-responsive-screen";
 
 const BookMarkButton = memo(({ isMarked }: { isMarked: boolean }) => {
   const [isMarkedState, setIsMarkedState] = useState<boolean>(isMarked);
@@ -21,21 +22,23 @@ const BookMarkButton = memo(({ isMarked }: { isMarked: boolean }) => {
   );
 });
 
-const LikeButton = memo(({ isLiked }: { isLiked: boolean }) => {
+const LikeButton = memo(({ isLiked, cnt }: { isLiked: boolean, cnt: number}) => {
   const [isLikedState, setIsLikedState] = useState<boolean>(isLiked);
+  const [count, setCount] = useState<number>(cnt ?? 0);
   const handlePress = useCallback(() => {
     setIsLikedState(!isLikedState);
+    setCount(isLikedState ? count+1: count-1)
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
   }, [isLikedState]);
   return (
     <View style={{ flexDirection: "row", gap: 5, alignItems: "center" }}>
       <PressableScale
-        activeScale={0.9}
+        activeScale={0.85}
         onPress={handlePress}
       >
-        <Heart size={28} strokeWidth={1} color="white" fill={isLikedState ? "red" : "transparent"} />
+        <Heart size={28} strokeWidth={Number(!isLikedState)} color="white" fill={isLikedState ? "red" : "transparent"} />
       </PressableScale>
-      <Text style={[textStyle.white14, { fontWeight: "bold" }]}>10</Text>
+      <Text style={[textStyle.white14, { fontWeight: "bold" }]}>{count}</Text>
     </View>
   );
 });
@@ -167,8 +170,8 @@ export const PostCard = memo((post) => {
 
       </View>
       <View style={{
-        height: Math.min(image?.height, 600),
-        aspectRatio: image?.height / image?.width,
+        width: widthPercentageToDP(100),
+        aspectRatio: image?.width / image?.height,
       }}>
         <Image
           source={image}
@@ -183,7 +186,7 @@ export const PostCard = memo((post) => {
       <View style={styles.postFooterView}>
         <View style={{ flexDirection: "row", justifyContent: "space-between", width: "100%" }}>
           <View style={{ flexDirection: "row", gap: 10 }}>
-            <LikeButton isLiked={false} />
+            <LikeButton isLiked={false} cnt={11}/>
             <ShareButton postID={post.post_id} />
             <CommentsButton postID={post.post_id} />
           </View>
@@ -206,8 +209,6 @@ const styles = StyleSheet.create({
     minHeight: 328,
     maxHeight: 728,
     backgroundColor: "#222831",
-    borderColor: "rgba(255, 255, 255, 0.1)",
-    borderWidth: 0.3,
     alignSelf: "center",
     justifyContent: "space-between",
     alignItems: "center",

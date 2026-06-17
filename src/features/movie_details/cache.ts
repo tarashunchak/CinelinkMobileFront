@@ -11,6 +11,7 @@ const TTL = 60 * 1000 * 5;
 
 export async function GetMovieDetailsCached(movieID: number){
   const cached = movieCache.get(movieID);
+  console.warn("Cached movie: ", cached);
 
   if(cached && cached.expiresAt > Date.now()) {
     console.warn("Get movie details from cache: ", movieID);
@@ -19,7 +20,12 @@ export async function GetMovieDetailsCached(movieID: number){
   };
 
   const data = await LoadMovieDetails(movieID);
-  const backdropPath = `https://image.tmdb.org/t/p/w500${data?.images?.backdrops[data?.images?.backdrops?.length - 1]?.file_path}`;
+  let backdropPath: string = "";
+  
+  if (data?.images?.backdrops?.length !== 0)
+    backdropPath = `https://image.tmdb.org/t/p/w500${data?.images?.backdrops?.[data?.images?.backdrops?.length - 1]?.file_path}`;
+  else
+    backdropPath = `https://image.tmdb.org/t/p/w500${data?.poster_path}`;
 
   const formattedData = {
         movie: { ...data },

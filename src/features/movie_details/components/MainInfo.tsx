@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { StyleSheet, Text, View } from "react-native";
 import ReturnArrowButton from "@/src/components/ui/returnArrowButton";
@@ -28,19 +28,23 @@ export default function MainInfo(
 ) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
+  const inCinemasTill = useMemo(()=>
+    maximum?.slice(8, 10) + ' ' + MONTH[maximum?.slice(5, 7)]
+  , [movie?.imdb_id]);
+
   const poster = (
     <>
       <AnimatedFastImage
         sharedTransitionTag={`movie-${movie?.id}-poster`}
         source={{ uri: `https://image.tmdb.org/t/p/w300${posterPath}` }}
         style={styles.posterImage}
-        cachePolicy="memory-disk"
+        cachePolicy="disk"
       />
       {
         inCinemas && maximum && (
           <View style={styles.inCinemasStripe}>
             <Text style={[textStyle.white12, styles.inCinemasStripeText]}>
-              {`In cinemas till ${maximum?.slice(8, 10) + ' ' + MONTH[maximum.slice(5, 7)]}`}
+              {`In cinemas till ${inCinemasTill}`}
             </Text>
           </View>
         )
@@ -119,8 +123,7 @@ const styles = StyleSheet.create({
     height: "100%"
   },
   posterView: {
-    minWidth: "40%",
-    maxWidth: "44%",
+    aspectRatio: 0.67,
     height: "100%",
     backgroundColor: "rgba(255, 255, 255, 0.05)",
     position: "relative",

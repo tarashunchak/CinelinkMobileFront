@@ -1,13 +1,24 @@
 import { textStyle } from "@/styles/textStyles";
 import React, { useState } from "react";
-import { Modal, StyleSheet, Text, View } from "react-native";
+import { FlatList, Modal, StyleSheet, Text, View } from "react-native";
 import { Image } from "expo-image";
 import { PressableScale } from "react-native-pressable-scale";
-import { FlashList } from "@shopify/flash-list";
+import { BlurView } from "expo-blur";
+import { useBlurTargetRef } from "@/src/hooks/useBackgroundBlur";
+import { widthPercentageToDP } from "react-native-responsive-screen";
+//import { FlashList } from "@shopify/flash-list";
 
-export default function PhotosModal({ images, backdrop }: { images: any[], backdrop: string[] }) {
+interface Image_I {
+  h: number;
+  w: number | string;
+  aspectRatio: number;
+  filePath: string;
+};
+
+export default function PhotosModal({ images, backdrop }: { images: Image_I[], backdrop: string[] }) {
   const [open, setOpen] = useState(false);
-  const [currImg, setCurrImg] = useState({})
+  const [currImg, setCurrImg] = useState<Image_I>();
+  const blurTargetRef = useBlurTargetRef();
 
   const imageHeight = 124;
   const [h, w] = [120, 220];
@@ -18,12 +29,14 @@ export default function PhotosModal({ images, backdrop }: { images: any[], backd
         <Text style={textStyle.yellow20}>
           {`Photos ${images?.length + backdrop?.length}`}
         </Text>
-        <FlashList
+        <FlatList
           data={images}
-          renderItem={({ item }) => (
+          initialNumToRender={5}
+          horizontal
+          renderItem={({ item }: any) => (
             <PressableScale onPress={() => {
               setOpen(true);
-              setCurrImg({ path: item?.file_path, h: imageHeight, w: imageHeight * item?.aspect_ratio });
+              setCurrImg({ filePath: item?.file_path, w: "90%", h: 0, aspectRatio: item.aspect_ratio });
             }}
               style={{ height: imageHeight, width: imageHeight * item?.aspect_ratio, borderRadius: 4, marginRight: 5 }}  >
               <Image
@@ -34,11 +47,13 @@ export default function PhotosModal({ images, backdrop }: { images: any[], backd
             </PressableScale>
           )}
         />
-        <FlashList
+        <FlatList
           data={backdrop}
-          renderItem={({ item }) => {
+          horizontal
+          initialNumToRender={5}
+          renderItem={({ item }: any) => {
             return (
-              <PressableScale onPress={() => { setOpen(true); setCurrImg({ path: item, h, w }); }}
+              <PressableScale onPress={() => { setOpen(true); setCurrImg({ filePath: item.file_path, h, w, aspectRatio: item.aspect_ratio }); }}
                 style={{ height: h, width: w, borderRadius: 4, marginRight: 5 }}  >
                 <Image
                   source={{ uri: "https://image.tmdb.org/t/p/w300" + item }}
@@ -51,29 +66,40 @@ export default function PhotosModal({ images, backdrop }: { images: any[], backd
         />
       </View>
 
-      <Modal visible={open} transparent={true} animationType="slide">
-        <View style={styles.modalView}>
+      <Modal
+        visible={open}
+        transparent={true}
+        animationType="fade"
+        statusBarTranslucent
+      >
+        <BlurView
+          style={[styles.modalView, StyleSheet.absoluteFill]}
+          tint="systemChromeMaterialDark"
+          intensity={40}
+          blurMethod="dimezisBlurView"
+          blurTarget={blurTargetRef}
+        >
           <View style={{
             width: "90%",
-            backgroundColor: "#0F0E1A",
+            //backgroundColor: "#0F0E1A",
             padding: 15,
             borderRadius: 12,
             maxHeight: "80%"
           }}>
             <Image
-              source={{ uri: "https://image.tmdb.org/t/p/w500" + currImg?.path }}
-              style={{ minHeight: currImg?.h, minWidth: "90%", maxHeight: "90%", maxWidth: "90%", alignSelf: "center" }}
+              source={{ uri: "https://image.tmdb.org/t/p/w500" + currImg?.filePath }}
+              style={{ width: "100%", height: 500 }}
               cachePolicy="memory-disk"
             />
 
-            <PressableScale style={{ backgroundColor: "rgba(255, 255, 255, 0.1)", marginTop: 10, justifyContent: "center", width: "40%", alignSelf: "center", height: 42, borderRadius: 6 }}
+            <PressableScale style={styles.cancelBtn}
               onPress={() => setOpen(false)}>
-              <Text style={[textStyle.yellow22, { textAlign: "center" }]}>
+              <Text style={[textStyle.black22, { textAlign: "center", fontWeight: "bold" }]}>
                 Close
               </Text>
             </PressableScale>
           </View>
-        </View>
+        </BlurView >
       </Modal>
     </>
   );
@@ -97,5 +123,15 @@ const styles = StyleSheet.create({
     height: "100%",
     justifyContent: "center",
     alignItems: "center"
+  },
+  cancelBtn: {
+    backgroundColor: "rgba(255, 255, 255, 0.6)",
+    marginTop: 10,
+    justifyContent: "center",
+    width: "40%",
+    alignSelf: "center",
+    height: 42,
+    borderRadius: 6,
+    elevation: 5
   }
 });

@@ -1,47 +1,38 @@
-import { GetUserFollowers } from "@/api/followers";
 import UserCard from "@/src/components/user-card";
 import { textStyle } from "@/styles/textStyles";
 import { heightPercentageToDP as hp, } from "react-native-responsive-screen";
 import { useFocusEffect } from "expo-router";
-import React, { memo, useCallback, useEffect, useState } from "react";
-import { UserCard_T } from "@/src/types/user";
+import React, { memo, useCallback, useMemo } from "react";
 import Spacer from "@/src/components/ui/spacer";
-import { Text, FlatList, StyleSheet } from "react-native";
-import { UsersManager, useUser, useUsers, useUserStore } from "@/src/rt_client/managers/users_manager";
+import { Text, StyleSheet } from "react-native";
+import { UsersManager, useUser, useUsers } from "@/src/rt_client/managers/users_manager";
+import { FlashList } from "@shopify/flash-list";
 
 function FollowersList({ userID }: { userID: number }) {
-  //const {followers, loadFollowers, followersLoading} = useFollowers(userID);
-  const [followers, setFollowers] = useState<UserCard_T[]>();
   const userProfile = useUser(userID);
   const users = useUsers();
 
+  const followers = useMemo(() => {
+    console.warn("Followers ids: ", userProfile?.followers_ids)
+    return userProfile?.followers_ids?.map((id) => users[id]).filter(Boolean) ?? [];
+  }, [userProfile?.followers_ids, users])
+
   useFocusEffect(
     useCallback(() => {
-      let mounted = true;
-      async function loadContent() {
-        const data: UserCard_T[] = await GetUserFollowers(userID);
-        if (mounted && data) setFollowers(data);
-        if (mounted === false) {
-          setFollowers(userProfile.followers_ids?.map((id) => {
-            return users[id];
-          }))
-        }
-      }
-      loadContent();
-      return () => { mounted = false }
-    }, [userID])
-  );
+      userProfile?.followers_ids?.forEach((id) => {
+        if (!users[id]) UsersManager.getInstance().load(id);
+      });
+    }
+    , [userProfile?.followers_ids]
+  ));
 
-  const renderItem = ({ item }: any) => {
-    return <UserCard user={item} />;
-  };
+  const renderItem = useCallback(({ item }: any) => <UserCard user={item} />, []);
 
   return (
-    <FlatList
+    <FlashList
       scrollEnabled={false}
       style={styles.view}
       data={followers}
-      initialNumToRender={10}
       keyExtractor={(item: any, index: number) => String(item?.user_id ?? index)}
       showsVerticalScrollIndicator={false}
       renderItem={renderItem}

@@ -2,7 +2,7 @@ import { API_URL } from "@/api/API_CONFIG";
 import { EMPTY_OBJECT, UserID } from "../models/models";
 import { create } from "zustand";
 import { EntityManager } from "./base_class";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useShallow } from "zustand/react/shallow";
 import { jwtHeaders } from "@/utils/utils";
 
@@ -14,6 +14,7 @@ type User_T = {
 };
 
 type UserProfile_T = {
+  user_id: number;
   first_name: string;
   last_name: string;
   username: string;
@@ -27,6 +28,8 @@ type UserProfile_T = {
   posts: number;
   followers_ids: number[];
   followings_ids: number[];
+  is_online: boolean;
+  updated_at: Date | number;
 };
 
 interface UserState {
@@ -53,14 +56,16 @@ export const useUserStore = create<UserState>((set) => ({
     onlineStatus: { ...s.onlineStatus, ...Object.fromEntries(statuses) }
   })),
   _add: (userID, user) => set((s) => ({
-    userProfiles: { ...s.userProfiles, [userID]: user }
+    userProfiles: { 
+      ...s.userProfiles, 
+      [userID]: user  }
   })),
   _addUserProfile: (userID, user) => set((s) => ({
     userProfiles: { ...s.userProfiles, [userID]: user }
   })),
   _addMany: (newUsers) => set((s) => ({
     //users: { ...s.users, ...Object.fromEntries(newUsers) }
-    userProfiles: { ...s.userProfiles, ...Object.fromEntries(newUsers)}
+    userProfiles: { ...s.userProfiles, ...Object.fromEntries(newUsers) }
   })),
   _remove: (userID) => set((s) => {
     const { [userID]: _, ...remainingUsers } = s.userProfiles;
@@ -71,10 +76,11 @@ export const useUserStore = create<UserState>((set) => ({
   })),
 }));
 
-export class UsersManager extends EntityManager<User_T> {
+export class UsersManager extends EntityManager<UserProfile_T> {
   private currUserID: number = 0;
   private static instance: UsersManager;
-  private isLoading: boolean = false;
+  private loadingState = new Map<UserID, boolean>();
+  private isInitLoading: boolean = false;
 
   public static getInstance(): UsersManager {
     if (!UsersManager.instance)
@@ -84,55 +90,64 @@ export class UsersManager extends EntityManager<User_T> {
 
   public init(userID: UserID) {
     this.currUserID = userID;
-    this.load();
+    this.initLoading();
   };
 
-  public async load(userID: UserID = 0) {
-    if (this.isLoading) return;
-    this.isLoading = true;
+  public async initLoading() {
+    if (this.isInitLoading) return;
+    this.isInitLoading = true;
     try {
-      if (userID === 0) {
-        const resp = await fetch(`${API_URL}/users/init/${this.currUserID}`, {
-          headers: jwtHeaders(undefined)
-        });
-        
-        const data = await resp.json();
-        if (!resp.ok || data?.status !== 200) {
-          console.log("Users init err: ", resp);
-          return;
-        };
+      const resp = await fetch(`${API_URL}/users/init/${this.currUserID}`, {
+        headers: jwtHeaders(undefined)
+      });
 
-        const map = new Map();
-        const statuses = new Map();
+      const data = await resp.json();
+      if (!resp.ok || data?.status !== 200) {
+        console.log("Users init err: ", resp);
+        return;
+      };
 
-        data?.results?.forEach((user: User_T) => {
-          if (!user.avatar_url || user.avatar_url.length === 0)
-            user.avatar_url = "https://i.pinimg.com/736x/56/65/e3/5665e34f05ce5e1270b81ee0f64922f3.jpg";
-          map.set(user.user_id, user);
-          statuses.set(user.user_id, user.is_online);
-          console.log("user ", user?.user_id, " is online: ", user.is_online);
-        });
+      const map = new Map();
+      const statuses = new Map();
 
-        this.addMany(map);
-        useUserStore.getState()._setManyOnlineStatus(statuses);
-      } else {
-        const resp = await fetch(`${API_URL}/users/${userID}`, {
-          headers: jwtHeaders(undefined)
-        });
-        const data = await resp.json();
-        if (!resp.ok || data?.status !== 200) {
-          console.log("Users init err: ", resp);
-          return;
-        };
+      data?.results?.forEach((user: UserProfile_T) => {
+        if (!user.avatar_url || user.avatar_url.length === 0)
+          user.avatar_url = "https://i.pinimg.com/736x/56/65/e3/5665e34f05ce5e1270b81ee0f64922f3.jpg";
+        map.set(user.user_id, user);
+        statuses.set(user.user_id, user.is_online);
+        console.log("user ", user?.user_id, " is online: ", user.is_online);
+        user.updated_at = Date.now();
+      });
 
-        const results = data.results;
+      this.addMany(map);
+      useUserStore.getState()._setManyOnlineStatus(statuses);
+    } finally {
+      this.isInitLoading = false;
+    }
+  };
 
-        this.add(userID, results);
-        this.setOnlineStatus(userID, results?.is_online)
-      }
+  public async load(userID: UserID) {
+    console.warn("LOAD USER: ", userID);
+    try {
+      //if (this.loadingState.get(userID)) return;
+      //this.loadingState.set(userID, true);
+      const resp = await fetch(`${API_URL}/users/${userID}`, {
+        headers: jwtHeaders(undefined)
+      });
+      const data = await resp.json();
+      if (!resp.ok || data?.status !== 200) {
+        console.log("Users init err: ", resp);
+        return;
+      };
+
+      const results = data.results;
+      results.updated_at = Date.now();
+
+      this.add(userID, results);
+      this.setOnlineStatus(userID, results?.is_online)
 
     } finally {
-      this.isLoading = false;
+      //this.loadingState.set(userID, false);
     }
   };
 
@@ -144,11 +159,11 @@ export class UsersManager extends EntityManager<User_T> {
     useUserStore.getState()._add(userID, user);
   };
 
-  public addMany(users: Map<number, User_T>) {
+  public addMany(users: Map<number, UserProfile_T>) {
     useUserStore.getState()._addMany(users);
   };
 
-  public addArray(id: number, items: User_T[]): void {
+  public addArray(id: number, items: UserProfile_T[]): void {
 
   };
 
@@ -170,13 +185,13 @@ async function load(userID: UserID = 0) {
   await UsersManager.getInstance().load(userID);
 };
 
-export function useUsers(): UserProfile_T[] {
-  const users = useUserStore(useShallow((s) => Object.values(s.userProfiles)));
+export function useUsers(): {} {
+  const users = useUserStore(useShallow((s) => s.userProfiles));
   useEffect(() => {
     console.warn("useUsers");
-    if (users.length === 0)
-      load();
-  }, [users?.length]);
+    if (!users)
+      UsersManager.getInstance().initLoading();
+  }, [users]);
   return users;
 };
 
@@ -190,10 +205,17 @@ export function useUserStatus(userID: UserID): boolean {
 
 export function useUser(userID: UserID): UserProfile_T {
   const user = useUserStore(s => s.userProfiles[userID]);
+  const lastUpdated = user?.updated_at;
+  const loadingRef = useRef(false);
   useEffect(() => {
-    if (!user)
-      UsersManager.getInstance().load(userID);
-    console.warn("useUser: ", user);
-  }, [userID, user]);
-  return user || EMPTY_OBJECT;
+    const now = Date.now();
+    const lastUpdatedTs = typeof lastUpdated === "number" ? lastUpdated : 0;
+    if (!loadingRef.current && now - lastUpdatedTs > 3000){
+      loadingRef.current = true;
+      UsersManager.getInstance().load(userID).finally(()=>{
+        loadingRef.current = false  
+      })
+    }
+  }, [userID]);
+  return user;
 };

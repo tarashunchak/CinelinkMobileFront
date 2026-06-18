@@ -1,8 +1,6 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { memo, useCallback, useRef, useState } from "react";
 import {
-  FlatList,
   KeyboardAvoidingView,
-  Keyboard,
   Platform,
   StyleSheet,
   View,
@@ -13,15 +11,14 @@ import { useFocusEffect, useLocalSearchParams } from "expo-router";
 import { RTClient } from "@/src/rt_client/rt_client";
 import TextMessage from "@/src/features/chats/components/TextMessage";
 import { getCurrentUserID } from "@/utils/utils";
-import FloatingButton from "@/src/features/chats/components/FloatingButton";
 import { useBlurStore } from "@/src/components/ui/screen-background";
 import { useEditMode } from "@/src/features/chats/hooks";
 import EditHeader from "@/src/features/chats/components/EditHeader";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
-import Animated, { useAnimatedKeyboard, useAnimatedStyle } from "react-native-reanimated";
+import Animated from "react-native-reanimated";
 import { MessagesManager, useChatMessages } from "@/src/rt_client/managers/messages_manager";
 import { useChat } from "@/src/rt_client/managers/chats_manager";
-import { BlurTargetView } from "expo-blur";
+import { ChatID } from "@/src/rt_client/models/models";
 
 interface Params {
   chatID: number;
@@ -30,8 +27,12 @@ interface Params {
   peerID: number;
 };
 
-export default function DirectChatScreen() {
-  const { chatID, imgUrl, name, peerID }: Params = useLocalSearchParams();
+function onEndReachedO(chatID: ChatID){
+ MessagesManager.getInstance().load(chatID);
+};
+
+function DirectChatScreen() {
+  const { chatID, imgUrl, name, peerID } = useLocalSearchParams();
   const chat = useChat(chatID);
   const [isFloatButtonVisible, setFloatButtonVisible] = useState<boolean>(false);
   const { isEditMode, enable, disable, toggle } = useEditMode(3);
@@ -39,6 +40,8 @@ export default function DirectChatScreen() {
 
   const setBottomBarVisible = useBlurStore((state) => state.setBottomBarVisible);
   const messages = useChatMessages(chatID);
+
+  const onEndReached = useCallback(()=> onEndReachedO(chatID), [chatID]);
 
   useFocusEffect(
     useCallback(() => {
@@ -90,22 +93,27 @@ export default function DirectChatScreen() {
           data={messages}
           scrollEventThrottle={16}
           style={StyleSheet.absoluteFill}
-          keyExtractor={(item) => String(item.message_id)}
+          keyExtractor={(item, index) => item.message_id ? `msg-${item.message_id}` : String(index)}
           renderItem={renderItem}
-          contentContainerStyle={{
-            paddingTop: hp(8),
-            paddingBottom: hp(12),
-          }}
+          contentContainerStyle={styles.contentContainer}
           keyboardShouldPersistTaps="always"
           inverted
-          onEndReached={() => { MessagesManager.getInstance().load(chatID) }}
+          onEndReached={onEndReached}
           onEndReachedThreshold={0.3}
         />
       </KeyboardAvoidingView>
       <Input chatID={chatID} />
-
     </View>
   );
 };
 
+export default memo(DirectChatScreen);
+
 //onScrollBeginDrag={Keyboard.dismiss}
+
+const styles = StyleSheet.create({
+  contentContainer: {
+    paddingTop: hp(5),
+    paddingBottom: hp(12),
+  }
+});

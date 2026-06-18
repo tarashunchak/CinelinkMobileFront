@@ -31,6 +31,7 @@ export default function RootLayout() {
 
   useEffect(()=>{
     useAuthStore.getState().init();
+    onReconnect();
   }, []);
 
   useEffect(() => {

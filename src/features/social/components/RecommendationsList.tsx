@@ -8,6 +8,7 @@ import { createAnimatedComponent } from "react-native-reanimated";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { Image, useImage } from "expo-image";
 import { useUserRecommendations } from "@/src/rt_client/managers/recommendations_manager";
+import AnimatedFastImage from "@/src/components/ui/animated-fast-image";
 
 type RecommendedBy_T = {
   user_id: number;
@@ -25,12 +26,10 @@ export type RecommendedCard_T = {
   recommended_by: RecommendedBy_T[];
 };
 
-const AnimatedFastImage = createAnimatedComponent(Image);
-
 const RecommendationItem = memo(({ item }: { item: RecommendedCard_T }) => {
   const router = useRouter();
   const handlePress = useCallback(()=>{
-    router.navigate({ 
+    router.push({ 
       pathname: "/movie", 
       params: { 
         movieID: item.movie_id, 
@@ -77,13 +76,15 @@ const RecommendationItem = memo(({ item }: { item: RecommendedCard_T }) => {
           </Text>
           <View style={styles.avatarRow}>
             {
-              item?.recommended_by?.slice(0, 3)?.map((user: any, index: number) => (
-                <Image key={user?.user_id} style={styles.avatarItem} source={{ uri: user?.avatar_url }} />
-              ))
+              item?.recommended_by?.slice(0, 3)?.map((user: any, index: number) => {
+                if(user?.user_id)
+                  return <Image key={`user-${user?.user_id}`} style={styles.avatarItem} source={{ uri: user?.avatar_url }} />
+                return null;
+              })
             }
             {
               item?.recommended_by?.length > 3 &&
-              <Text style={[textStyle?.gray14]}>{`+${item?.recommended_by?.length}`}</Text>
+              <Text style={[textStyle?.gray14]}>{`+${item?.recommended_by?.length - 3}`}</Text>
             }
           </View>
         </View>
@@ -94,6 +95,7 @@ const RecommendationItem = memo(({ item }: { item: RecommendedCard_T }) => {
 
 function RecommendationsList() {
   const items = useUserRecommendations();
+  console.warn("Recommendations: ",items[0]?.recommended_by);
   const renderItem = useCallback(({ item }: any) => (
     <RecommendationItem item={item} />
   ), [items]);
@@ -102,7 +104,10 @@ function RecommendationsList() {
   return (
     <FlatList
       data={items}
-      keyExtractor={(item: RecommendedCard_T, index) => item?.movie_id ? `rec-${item?.movie_id}` : String(index)}
+      keyExtractor={
+        (item: RecommendedCard_T, index) => 
+        item?.movie_id ? `rec-${item?.movie_id}` : String(index)
+      }
       renderItem={renderItem}
       contentContainerStyle={styles.contentContainer}
     />

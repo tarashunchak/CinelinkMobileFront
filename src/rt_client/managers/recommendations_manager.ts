@@ -59,7 +59,7 @@ export class RecommendationsManager extends EntityManager<Recommendation_T> {
     }
   };
 
-  public async load(userID: UserID = 0) {
+  public async load(userID: UserID) {
     try {
       if(!userID) return;
       const resp = await fetch(`${API_URL}/users/recommendations`, {

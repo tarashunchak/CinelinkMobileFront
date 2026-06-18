@@ -14,6 +14,7 @@ import UserStats from "@/src/features/profile/components/Stats";
 import { UsersManager, useUser } from "@/src/rt_client/managers/users_manager";
 import PostsList from "@/src/features/profile/components/PostsList";
 
+
 type Params = {
   userID: number;
   avatarUrl: string;
@@ -23,14 +24,14 @@ function UserProfileScreen({ isFromTab = false }: { isFromTab: boolean }) {
   const router = useRouter();
   const params: Params = useLocalSearchParams();
   const userID: number = params.userID ?? getCurrentUserID();
-  const user = useUser(userID);
-  const isCurrUser = isCurrentUser(userID);
+  const isCurrUser = isCurrentUser(userID ?? 0);
   //const { user, loadUser, userLoading } = useUserProfile(userID);
   //const { followings, loadFollowings, followingsLoading } = useFollowings(userID);
   //const { followers, loadFollowers, followersLoading } = useFollowers(userID);
   //const [isCurrUser, setIsCurrUser] = useState<boolean>(false);
   const [list, setList] = useState<string>("Followers");
   const [chatID, setChatID] = useState<number>(0);
+  const user = useUser(userID);
 
   useFocusEffect(
     useCallback(() => {

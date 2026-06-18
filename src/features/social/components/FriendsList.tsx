@@ -6,6 +6,8 @@ import { UsersManager, useUser, useUsers } from "@/src/rt_client/managers/users_
 import Spacer from "@/src/components/ui/spacer";
 import  UserCard from "@/src/components/user-card";
 import { getCurrentUserID } from "@/utils/utils";
+import { useRouter } from "expo-router";
+import { UserID } from "@/src/rt_client/models/models";
 
 interface Props {
   user_id: number;
@@ -19,23 +21,31 @@ interface Props {
 function FriendsList() {
   const userProfile = useUser(getCurrentUserID());
   const users = useUsers();
+  const router = useRouter();
+
+  const handlePress = useCallback((userID: UserID)=>{
+    router.push({
+      pathname: "profile",
+      params: { userID },
+    });
+  }, []);
 
   const friendsIds = useMemo(()=>
     Array.from(new Set([...userProfile?.followers_ids, ...userProfile?.followings_ids])?.values()),
-  [userProfile?.followers_ids, userProfile?.followings_ids]);
+  [userProfile!.followers_ids, userProfile!.followings_ids]);
 
   const friends = useMemo(()=>{
-    return friendsIds?.map((id) => users[id])
+    return friendsIds?.map((id) => users?.[id])
   }, [getCurrentUserID(), users]);
 
   useEffect(()=>{
     friendsIds.forEach(id => {
-      if(!users[id]) UsersManager.getInstance().load(id);
+      if(!users?.[id]) UsersManager.getInstance().load(id);
     })
-  }, [userProfile?.followers_ids, userProfile?.followings_ids]);
+  }, [userProfile!.followers_ids, userProfile!.followings_ids]);
 
   const renderItem = useCallback(({ item }: any) => (
-    <UserCard user={item} />
+    <UserCard user={item} onPress={handlePress}/>
   ), [getCurrentUserID(), users]);
 
   return (

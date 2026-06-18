@@ -1,4 +1,4 @@
-import { useFocusEffect } from "expo-router";
+import { useFocusEffect, useRouter } from "expo-router";
 import { heightPercentageToDP as hp, } from "react-native-responsive-screen";
 import React, { useMemo, useCallback } from "react";
 import { StyleSheet } from "react-native";
@@ -11,6 +11,14 @@ export default function FollowingsList({ userID }: { userID: number }) {
   //const [followings, setFollowings] = useState<any[]>([]);
   const userProfile = useUser(userID);
   const users = useUsers();
+  const router = useRouter();
+
+  const handlePress = useCallback((userID: number)=>{
+    router.push({
+      pathname: "/profile",
+      params: {userID}
+    });
+  }, []);
 
   const followings = useMemo(()=>{
     console.warn("Followers ids: ", userProfile?.followings_ids)
@@ -25,7 +33,7 @@ export default function FollowingsList({ userID }: { userID: number }) {
     }
       , [userProfile?.followers_ids]));
 
-  const renderItem = useCallback(({ item }: any) => <UserCard user={item} /> , []);
+  const renderItem = useCallback(({ item }: any) => <UserCard user={item} onPress={handlePress}/> , []);
 
   return (
     <FlatList

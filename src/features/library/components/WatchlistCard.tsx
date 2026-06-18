@@ -1,14 +1,11 @@
-import React, { memo } from "react";
+import React, { memo, useCallback, useMemo } from "react";
 import { StyleSheet, View, Text } from "react-native";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen"
 import { textStyle } from "@/styles/textStyles";
-import { useNavigation, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import { PressableScale } from "react-native-pressable-scale";
-import Animated, { SharedTransition } from "react-native-reanimated";
 import { Skeleton } from "react-native-skeletons";
-import { Image } from "expo-image";
 import AnimatedFastImage from "@/src/components/ui/animated-fast-image";
-import { BlurView } from "expo-blur";
 
 export interface Watchlist {
   id: number;
@@ -22,59 +19,52 @@ export interface Watchlist {
   movies_quantity: number;
 };
 
-function WatchlistCard({ watchlist, ref }: { watchlist: Watchlist | null, ref: any }) {
+function WatchlistCard({ watchlist }: { watchlist: Watchlist | null }) {
   const router = useRouter();
-
   if (!watchlist) return <Skeleton style={styles.view} />;
 
+  const handlePress = useCallback(()=>{
+    router.push({
+      pathname: "/watchlist",
+      params: { watchlist: JSON.stringify(watchlist) },
+    });
+  }, [watchlist.id]);
+
+  const source = useMemo(()=> ({ uri: watchlist?.fg_img_url }), [watchlist.id]);
+
   return (
-    <BlurView
+    <PressableScale 
       style={styles.view}
-      blurTarget={ref}
-      blurMethod="dimezisBlurView"
-      tint="dark"
-      intensity={80}
+      onPress={handlePress}
     >
-      <PressableScale style={{ flex: 1 }}
-        onPress={() => {
-          router.push({
-            pathname: "/watchlist",
-            params: { watchlist: JSON.stringify(watchlist) },
-          })
-        }}>
-        <View style={{ width: "80%", height: "100%", flexDirection: "row" }}>
-          <View style={{ flexDirection: "row", gap: 5 }}>
-
-            <AnimatedFastImage
-              sharedTransitionTag={`watchlist-${watchlist?.id}-fg`}
-              source={
-                { uri: watchlist?.fg_img_url }
-              }
-              style={styles.image}
-              cachePolicy="disk"
-            />
-
-            <View style={styles.textView}>
-              <Text style={textStyle.white22}>{watchlist.name}</Text>
-              <Text style={[textStyle.gray18, styles.description]}
-                pointerEvents="none"
-                numberOfLines={2}
-                ellipsizeMode="tail"
-              >
-                {watchlist.description}
-              </Text>
-              <View style={styles.creator}>
-                <Text style={textStyle.gray14}>Creator:</Text>
-                <Text style={textStyle.yellow14}>{watchlist?.creator_username}</Text>
-              </View>
+      <View style={styles.container}>
+        <View style={{ flexDirection: "row", gap: 5 }}>
+          <AnimatedFastImage
+            sharedTransitionTag={`watchlist-${watchlist?.id}-fg`}
+            source={source}
+            style={styles.image}
+            cachePolicy="disk"
+          />
+          <View style={styles.textView}>
+            <Text style={textStyle.white22}>{watchlist.name}</Text>
+            <Text style={[textStyle.gray18, styles.description]}
+              pointerEvents="none"
+              numberOfLines={2}
+              ellipsizeMode="tail"
+            >
+              {watchlist.description}
+            </Text>
+            <View style={styles.creator}>
+              <Text style={textStyle.gray14}>Creator:</Text>
+              <Text style={textStyle.yellow14}>{watchlist?.creator_username}</Text>
             </View>
           </View>
-          <Text style={textStyle.gray14}>
-            {`${watchlist.movies_quantity} ${watchlist.movies_quantity === 1 ? "movie" : "movies"}`}
-          </Text>
         </View>
-      </PressableScale>
-    </BlurView>
+        <Text style={textStyle.gray14}>
+          {`${watchlist.movies_quantity} ${watchlist.movies_quantity === 1 ? "movie" : "movies"}`}
+        </Text>
+      </View>
+    </PressableScale>
   );
 };
 
@@ -95,6 +85,11 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     marginBottom: "1%",
   },
+  container: {
+    width: "80%", 
+    height: "100%", 
+    flexDirection: "row",
+  },
   image: {
     height: "100%",
     width: "35%",
@@ -108,7 +103,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     padding: "1%",
   },
-
   description: {
     maxWidth: "70%",
     minWidth: "70%",

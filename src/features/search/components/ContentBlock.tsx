@@ -8,6 +8,8 @@ import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import CreditCard from "./CreditCard";
 import { textStyle } from "@/styles/textStyles";
 import Spacer from "@/src/components/ui/spacer";
+import { UserID } from "@/src/rt_client/models/models";
+import { useRouter } from "expo-router";
 
 interface Props {
   query: string;
@@ -18,6 +20,7 @@ interface Props {
 export default function ContentBlock({ query, category }: Props) {
   const specification = false;
   const [_data, setData] = useState([]);
+  const router = useRouter();
 
   const fetchData = useCallback(async () => {
     try {
@@ -48,13 +51,27 @@ export default function ContentBlock({ query, category }: Props) {
   const renderItem = useCallback(({ item }: any) => {
     console.warn("Item: ", item)
 
+  const onUserPress = (userID: UserID)=>{
+    router.push({
+      pathname: "profile",
+      params: {userID}
+    })
+  };
+
+  const onMoviePress = useCallback((movieID: number)=>{
+    router.push({
+      pathname: "movie",
+      params: {movieID}
+    })
+  }, []);
+
     switch (item?.type) {
       case "movies":
         return <MovieCard movie={item} />;
       case "credits":
         return <CreditCard credit={item} />;
       case "users":
-        return <UserCard user={item} />;
+        return <UserCard user={item} onPress={onUserPress}/>;
       case "watchlists":
         return <WatchlistCard watchlist={item} />;
       default:

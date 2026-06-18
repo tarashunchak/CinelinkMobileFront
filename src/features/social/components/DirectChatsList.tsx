@@ -4,15 +4,21 @@ import { FlatList, View, Text, StyleSheet } from "react-native";
 import { PressableScale } from "react-native-pressable-scale";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { useRouter } from "expo-router";
-import { useLastChatMessage, useUnseenMessagesCount, useTypingStatus, useUserChats, Chat_T, ChatsManager } from "@/src/rt_client/managers/chats_manager";
+import { 
+  useLastChatMessage, 
+  useUnseenMessagesCount, 
+  useTypingStatus, 
+  useUserChats, 
+  Chat_T, 
+  ChatsManager,
+} from "@/src/rt_client/managers/chats_manager";
 import AnimatedFastImage from "@/src/components/ui/animated-fast-image";
 import { useUserStatus } from "@/src/rt_client/managers/users_manager";
 import AnimatedFastText from "@/src/components/ui/animated-fast-text";
 import Spacer from "@/src/components/ui/spacer";
 import { getCurrentUserID } from "@/utils/utils";
 
-const EMPTY_CHATS_LIST = Array.from({length: 10});
-
+//const EMPTY_CHATS_LIST = Array.from({length: 10});
 const DirectChatCard = memo(({ item, onPress }: { item: any, onPress: any}) => {
   const chatID = item?.chat_id;
   const peerID = item?.peer_id?.["Int32"];
@@ -34,7 +40,7 @@ const DirectChatCard = memo(({ item, onPress }: { item: any, onPress: any}) => {
       })}
     >
       <View style={styles.infoView}>
-        <View style={{ flexDirection: "row", alignItems: "center" }}>
+        <View style={styles.imageContainer}>
           <AnimatedFastImage
             sharedTransitionTag={`chat-${item?.chat_id}-image`}
             style={styles.image}
@@ -64,10 +70,7 @@ const DirectChatCard = memo(({ item, onPress }: { item: any, onPress: any}) => {
         justifyContent: "space-between",
         margin: 5,
       }}>
-        {
-          unSeenMessageCnt && 
-            <Text style={[textStyle.black14, { fontWeight: "bold", textAlign: "center" }]}>{unSeenMessageCnt}</Text>
-        }
+        
         <Text style={textStyle.white14}>{lastMessage.time}</Text>
       </View>
     </PressableScale>
@@ -108,7 +111,7 @@ const styles = StyleSheet.create({
   mainView: {
     flexDirection: "row",
     width: "100%",
-    height: hp("8.5%"),
+    height: hp(8.5),
     backgroundColor: "rgba(255, 255, 255, 0.03)",
     borderColor: "rgba(255, 255, 255, 0.2)",
     borderWidth: 0.5,
@@ -162,5 +165,16 @@ const styles = StyleSheet.create({
     alignSelf: "flex-end",
     margin: "2%",
     alignItems: "center",
-  }
+  },
+  imageContainer: { 
+    flexDirection: "row", 
+    alignItems: "center",
+  },
 });
+
+/*
+{
+  unSeenMessageCnt && 
+    <Text style={[textStyle.black14, { fontWeight: "bold", textAlign: "center" }]}>{unSeenMessageCnt}</Text>
+}
+*/

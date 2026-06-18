@@ -1,14 +1,17 @@
+import { jwtHeaders } from "@/utils/utils";
 import { API_URL } from "./API_CONFIG";
 
 export async function GetUserLastSeenTimestamp(userID: number): Promise<string> {
-  const response = await fetch(`${API_URL}/users/${userID}/last-seen`);
-  const text = await response.text();
-  let data;
+  const response = await fetch(`${API_URL}/users/${userID}/last-seen`,
+    {headers: jwtHeaders(undefined)}
+  );
   try {
-    data = JSON.parse(text);
+    const text = await response.text();
+    const data = await JSON.parse(text);
+    if(data) return data?.results;
   } catch (err) {
-  } finally {
-    console.warn("data: ", data);
+    console.warn("GetUserLastSeenTimestamp err: ", err);
   }
-  return data?.results;
+
+  return "";
 };

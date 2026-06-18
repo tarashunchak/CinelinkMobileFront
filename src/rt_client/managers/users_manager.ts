@@ -1,5 +1,5 @@
 import { API_URL } from "@/api/API_CONFIG";
-import { EMPTY_OBJECT, UserID } from "../models/models";
+import { EMPTY_ARRAY, EMPTY_OBJECT, UserID } from "../models/models";
 import { create } from "zustand";
 import { EntityManager } from "./base_class";
 import { useEffect, useRef } from "react";
@@ -192,7 +192,7 @@ export function useUsers(): {} {
     if (!users)
       UsersManager.getInstance().initLoading();
   }, [users]);
-  return users;
+  return users ?? EMPTY_ARRAY;
 };
 
 export function useUserStatus(userID: UserID): boolean {
@@ -201,6 +201,25 @@ export function useUserStatus(userID: UserID): boolean {
     console.warn("useUserStatus");
   }, [userID, status]);
   return status;
+};
+
+const EMPTY_USER_OBJECT: UserProfile_T = {
+  user_id: 0,
+  first_name: "",
+  last_name: "",
+  username: "",
+  created_at: "",
+  bio: "",
+  avatar_url: "",
+  bg_img_url: "",
+  followers: 0,
+  followings: 0,
+  is_following: false,
+  posts: 0,
+  followers_ids: [],
+  followings_ids: [],
+  is_online: false,
+  updated_at: 0,
 };
 
 export function useUser(userID: UserID): UserProfile_T {
@@ -217,5 +236,5 @@ export function useUser(userID: UserID): UserProfile_T {
       })
     }
   }, [userID]);
-  return user;
+  return user ?? EMPTY_USER_OBJECT;
 };

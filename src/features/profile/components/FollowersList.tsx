@@ -1,7 +1,7 @@
 import UserCard from "@/src/components/user-card";
 import { textStyle } from "@/styles/textStyles";
 import { heightPercentageToDP as hp, } from "react-native-responsive-screen";
-import { useFocusEffect } from "expo-router";
+import { useFocusEffect, useRouter } from "expo-router";
 import React, { memo, useCallback, useMemo } from "react";
 import Spacer from "@/src/components/ui/spacer";
 import { Text, StyleSheet } from "react-native";
@@ -11,11 +11,19 @@ import { FlashList } from "@shopify/flash-list";
 function FollowersList({ userID }: { userID: number }) {
   const userProfile = useUser(userID);
   const users = useUsers();
+  const router = useRouter();
 
   const followers = useMemo(() => {
     console.warn("Followers ids: ", userProfile?.followers_ids)
     return userProfile?.followers_ids?.map((id) => users[id]).filter(Boolean) ?? [];
   }, [userProfile?.followers_ids, users])
+
+  const handlePress = useCallback((userID: number)=>{
+    router.push({
+      pathname: "/profile",
+      params: {userID}
+    });
+  }, []);
 
   useFocusEffect(
     useCallback(() => {
@@ -26,7 +34,9 @@ function FollowersList({ userID }: { userID: number }) {
     , [userProfile?.followers_ids]
   ));
 
-  const renderItem = useCallback(({ item }: any) => <UserCard user={item} />, []);
+  const renderItem = useCallback(({ item }: any) => 
+    <UserCard user={item} onPress={handlePress}/>, 
+  []);
 
   return (
     <FlashList

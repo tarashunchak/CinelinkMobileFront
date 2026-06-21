@@ -106,7 +106,7 @@ function MovieOfTheDay() {
   }, [movie]);
 
   return (
-    <>
+    <View>
       <SkiaBackdrop backdropPath={movie?.backdrop_path} />
       <View style={[styles.background]} />
       <HeaderContainer>
@@ -151,7 +151,7 @@ function MovieOfTheDay() {
           />
         </PressableScale>
       </HeaderContainer>
-    </>
+    </View>
   )
 };
 
@@ -162,12 +162,17 @@ const styles = StyleSheet.create({
     height: 40,
     aspectRatio: 2,
   },
+  mainView:{
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+  },
   backdrop: {
     height: hp("45%"),
-    width: "104%",
+    width: "100%",
     alignSelf: "center",
     position: "absolute",
-    marginHorizontal: "-1%",
     top: 0,
     right: 0,
     left: 0,
@@ -177,7 +182,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     height: hp("45%"),
     width: "104%",
-    paddingHorizontal: "2%",
+    //paddingHorizontal: "2%",
   },
   view: {
     flexDirection: "row",

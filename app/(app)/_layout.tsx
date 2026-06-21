@@ -25,15 +25,15 @@ const managers: any[] = [
 ];
 
 export default function AppLayout() {
-  const currentUserID = useAuthStore(state => state.user?.user_id);
+  //const currentUserID = useAuthStore(state => state.user?.user_id);
   const isBottomBarVisible = useBlurStore(state => state.isBottomBarVisible);
 
-  useEffect(() => {
-    /*if (currentUserID) {
+  /*useEffect(() => {
+    if (currentUserID) {
       RTClient.connect(currentUserID);
       //managers.forEach(it => it.getInstance().init(currentUserID));
-    }*/
-  }, [currentUserID]);
+    }
+  }, [currentUserID]);*/
 
   return (
     <>
@@ -45,6 +45,7 @@ export default function AppLayout() {
               animation: "ios_from_right",
               contentStyle: { backgroundColor: undefined },
               freezeOnBlur: true,
+              animationTypeForReplace:"push",
             }}>
               <Stack.Screen name="(tabs)" />
               <Stack.Screen name="movie" />

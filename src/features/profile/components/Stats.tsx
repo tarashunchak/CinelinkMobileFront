@@ -37,7 +37,6 @@ function UserStats(props: Props) {
 
   return (
     <View style={styles.mainView}>
-
       <PressableScale
         activeScale={0.9}
         style={statsStyle("Posts")}

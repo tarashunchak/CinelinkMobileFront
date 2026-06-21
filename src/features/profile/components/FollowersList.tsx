@@ -4,9 +4,9 @@ import { heightPercentageToDP as hp, } from "react-native-responsive-screen";
 import { useFocusEffect, useRouter } from "expo-router";
 import React, { memo, useCallback, useMemo } from "react";
 import Spacer from "@/src/components/ui/spacer";
-import { Text, StyleSheet } from "react-native";
+import { Text, StyleSheet, FlatList } from "react-native";
 import { UsersManager, useUser, useUsers } from "@/src/rt_client/managers/users_manager";
-import { FlashList } from "@shopify/flash-list";
+import FriendCard from "@/src/components/friend-card";
 
 function FollowersList({ userID }: { userID: number }) {
   const userProfile = useUser(userID);
@@ -16,7 +16,7 @@ function FollowersList({ userID }: { userID: number }) {
   const followers = useMemo(() => {
     console.warn("Followers ids: ", userProfile?.followers_ids)
     return userProfile?.followers_ids?.map((id) => users[id]).filter(Boolean) ?? [];
-  }, [userProfile?.followers_ids, users])
+  }, [userProfile?.followers_ids?.length, users])
 
   const handlePress = useCallback((userID: number)=>{
     router.push({
@@ -35,11 +35,11 @@ function FollowersList({ userID }: { userID: number }) {
   ));
 
   const renderItem = useCallback(({ item }: any) => 
-    <UserCard user={item} onPress={handlePress}/>, 
+    <FriendCard user={item} onPress={handlePress}/>, 
   []);
 
   return (
-    <FlashList
+    <FlatList
       scrollEnabled={false}
       style={styles.view}
       data={followers}

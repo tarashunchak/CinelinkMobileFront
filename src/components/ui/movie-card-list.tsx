@@ -65,7 +65,7 @@ export default function MovieCardList({ selectedGenre, movieID, movieGenre, post
         movieID,
       },
     });
-  }, [movieID])
+  }, [movieID]);
 
   return (
     <View style={styles.mainView}>

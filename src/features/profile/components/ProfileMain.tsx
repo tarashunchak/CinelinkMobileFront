@@ -42,9 +42,12 @@ export default function ProfileMain({
   }, [isLoading, user?.user_id]);
 
   const fetchJoinedAt = useMemo(() => {
-    const date = new Date(user?.created_at ?? null);
-    return new Intl.DateTimeFormat('en-US').format(date ?? new Date())
-  }, [isLoading, user?.user_id]);
+    let date:any = Date.now();
+    if(user?.created_at && user?.created_at?.length !== 0)
+      date = new Date(user?.created_at);
+    return new Intl.DateTimeFormat('en-US').format(date)
+    //return ""
+  }, [user?.created_at, user?.user_id]);
 
 
   return (

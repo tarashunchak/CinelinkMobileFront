@@ -1,18 +1,17 @@
-import React, { memo, useCallback, useMemo, useState } from "react";
-import { View, StyleSheet } from "react-native";
-import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
-import { widthPercentageToDP as wp } from "react-native-responsive-screen";
+import React, { memo, useCallback, useEffect, useMemo, useState } from "react";
+import { FlatList, View, StyleSheet } from "react-native";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { heightPercentageToDP, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { getCurrentUserID, isCurrentUser } from "@/utils/utils";
 import ProfileHeader from "@/src/features/profile/components/ProfileHeader";
 import ProfileMain from "@/src/features/profile/components/ProfileMain";
 import { FollowUser, UnfollowUser } from "@/api/followers/followers";
-import FollowingsList from "@/src/features/profile/components/FollowingsList";
-import FollowersList from "@/src/features/profile/components/FollowersList";
 import { GetDirectChatID } from "@/api/chats";
-import { ScrollView } from "react-native-gesture-handler";
 import UserStats from "@/src/features/profile/components/Stats";
-import { UsersManager, useUser } from "@/src/rt_client/managers/users_manager";
-import PostsList from "@/src/features/profile/components/PostsList";
+import { UsersManager, useUser, useUserStore } from "@/src/rt_client/managers/users_manager";
+import { useFollowers, useFollowings } from "@/src/features/profile/hooks/useFollowers";
+import FriendCard from "@/src/components/friend-card";
+import Spacer from "@/src/components/ui/spacer";
 
 type Params = {
   userID: number;
@@ -23,46 +22,57 @@ function UserProfileScreen({ isFromTab = false }: { isFromTab: boolean }) {
   const router = useRouter();
   const params: Params = useLocalSearchParams();
   const userID: number = params.userID ?? getCurrentUserID();
-  const user = useUser(userID);
+  const user = useUserStore(s => s.userProfiles[userID]);
   const isCurrUser = isCurrentUser(userID);
-  //const { user, loadUser, userLoading } = useUserProfile(userID);
-  //const { followings, loadFollowings, followingsLoading } = useFollowings(userID);
-  //const { followers, loadFollowers, followersLoading } = useFollowers(userID);
-  //const [isCurrUser, setIsCurrUser] = useState<boolean>(false);
   const [list, setList] = useState<string>("Followers");
   const [chatID, setChatID] = useState<number>(0);
+  const followers = useFollowers(userID);
+  const followings = useFollowings(userID);
+  const posts: any = [];
 
-  useFocusEffect(
-    useCallback(() => {
-      async function load() {
-        //console.warn("LOAD DIRECT CHATID");
-        await GetDirectChatID(userID).then(setChatID);
-      };
-      //console.warn("IsFromTab: ", isFromTab, " Type: ", typeof isFromTab);
-      load();
-    }, []));
+  useEffect(() => {
+    async function load() {
+      //console.warn("LOAD DIRECT CHATID");
+      await GetDirectChatID(userID).then(setChatID);
+    };
+    //console.warn("IsFromTab: ", isFromTab, " Type: ", typeof isFromTab);
+    load();
+  }, [user]);
 
-  const currentList = useMemo(() => {
-    return <>{
-      list === "Followings"
-      && <FollowingsList userID={userID} />
-    }
-      {
-        list === "Followers"
-        && <FollowersList userID={userID} />
+  const data = useMemo(() => {
+    switch (list) {
+      case "Followers":
+        return followers;
+      case "Followings":
+        return followings;
+      case "Posts":
+        return posts;
+    };
+  }, [list, followings, followers, posts]);
+
+  const onFriendPress = useCallback((userID: number, avatarUrl: string, fullName: string) => {
+    router.push({
+      pathname: "/profile",
+      params: {
+        userID,
+        avatarUrl,
       }
-      {
-        list === "Posts"
-        && <PostsList userID={userID} />
-      }</>
+    })
+  }, []);
+
+  const renderItem = useCallback(({ item }: any) => {
+    switch (list) {
+      case "Followers":
+        return <FriendCard user={item} onFollowingQuit={() => { }} onMessage={() => { }} onPress={onFriendPress} />;
+      case "Followings":
+        return <FriendCard user={item} onFollowingQuit={() => { }} onMessage={() => { }} onPress={onFriendPress} />;
+      case "Posts":
+        return null;
+    };
   }, [list]);
 
-  return (
-    <ScrollView
-      nestedScrollEnabled
-      showsVerticalScrollIndicator={false}
-      style={StyleSheet.absoluteFill}
-    >
+  const header = useMemo(() =>
+    <View>
       <ProfileHeader
         bgUrl={user?.bg_img_url}
         isCurrentUser={isCurrUser}
@@ -76,9 +86,15 @@ function UserProfileScreen({ isFromTab = false }: { isFromTab: boolean }) {
         onEdit={() => { }}
         onToggleFollow={async () => {
           if (user?.is_following)
-            await UnfollowUser(userID).finally(()=> UsersManager.getInstance().load(userID));
+            await UnfollowUser(userID).finally(() => {
+              UsersManager.getInstance().load(userID);
+              UsersManager.getInstance().load(getCurrentUserID());
+            });
           else
-            await FollowUser(userID).finally(()=> UsersManager.getInstance().load(userID));
+            await FollowUser(userID).finally(() => {
+              UsersManager.getInstance().load(userID);
+              UsersManager.getInstance().load(getCurrentUserID());
+            });
         }}
         onChat={() => {
           router.navigate({
@@ -99,8 +115,19 @@ function UserProfileScreen({ isFromTab = false }: { isFromTab: boolean }) {
         onPress={setList}
       />
       <View style={styles.line} />
-      {currentList}
-    </ScrollView>
+    </View>
+    , [user]);
+
+  return (
+    <FlatList
+      data={data}
+      renderItem={renderItem}
+      keyExtractor={(_: any, index: number) => String(index)}
+      showsVerticalScrollIndicator={false}
+      style={StyleSheet.absoluteFill}
+      ListHeaderComponent={header}
+      ListFooterComponent={<Spacer orientation="v" spacing={heightPercentageToDP(8)}/>}
+    />
   );
 };
 
@@ -113,7 +140,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#ACACAC",
     alignSelf: "center",
     borderRadius: 2,
-    marginTop: 10,
+    marginVertical: 10,
   },
   editBtn: {
     flexDirection: "row",

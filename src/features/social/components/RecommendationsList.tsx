@@ -28,19 +28,19 @@ export type RecommendedCard_T = {
 
 const RecommendationItem = memo(({ item }: { item: RecommendedCard_T }) => {
   const router = useRouter();
-  const handlePress = useCallback(()=>{
-    router.push({ 
-      pathname: "/movie", 
-      params: { 
-        movieID: item.movie_id, 
+  const handlePress = useCallback(() => {
+    router.push({
+      pathname: "/movie",
+      params: {
+        movieID: item.movie_id,
         posterPath: item.poster_path,
         title: item.title,
       }
     });
   }, [item?.movie_id]);
 
-  const sourceUri = useMemo(()=>(
-`https://image.tmdb.org/t/p/w300${item?.poster_path}`
+  const sourceUri = useMemo(() => (
+    `https://image.tmdb.org/t/p/w300${item?.poster_path}`
   ), [item.movie_id]);
 
   const image = useImage(sourceUri);
@@ -51,10 +51,10 @@ const RecommendationItem = memo(({ item }: { item: RecommendedCard_T }) => {
       style={styles.view}
       onPress={handlePress}
     >
-      <AnimatedFastImage 
-        source={image} 
+      <AnimatedFastImage
+        source={image}
         sharedTransitionTag={`movie-${item?.movie_id}-poster`}
-        style={[styles.poster, {aspectRatio: image?.width / image?.height}]} 
+        style={[styles.poster, { aspectRatio: image?.width / image?.height }]}
         cachePolicy="memory"
       />
       <View style={styles.infoColumn}>
@@ -77,7 +77,7 @@ const RecommendationItem = memo(({ item }: { item: RecommendedCard_T }) => {
           <View style={styles.avatarRow}>
             {
               item?.recommended_by?.slice(0, 3)?.map((user: any, index: number) => {
-                if(user?.user_id)
+                if (user?.user_id)
                   return <Image key={`user-${user?.user_id}`} style={styles.avatarItem} source={{ uri: user?.avatar_url }} />
                 return null;
               })
@@ -95,7 +95,7 @@ const RecommendationItem = memo(({ item }: { item: RecommendedCard_T }) => {
 
 function RecommendationsList() {
   const items = useUserRecommendations();
-  console.warn("Recommendations: ",items[0]?.recommended_by);
+  console.warn("Recommendations: ", items[0]?.recommended_by);
   const renderItem = useCallback(({ item }: any) => (
     <RecommendationItem item={item} />
   ), [items]);
@@ -105,11 +105,25 @@ function RecommendationsList() {
     <FlatList
       data={items}
       keyExtractor={
-        (item: RecommendedCard_T, index) => 
-        item?.movie_id ? `rec-${item?.movie_id}` : String(index)
+        (item: RecommendedCard_T, index) =>
+          item?.movie_id ? `rec-${item?.movie_id}` : String(index)
       }
       renderItem={renderItem}
       contentContainerStyle={styles.contentContainer}
+      ListEmptyComponent={
+        <View style={{
+          height: hp("50%"),
+          justifyContent: "center",
+        }}>
+          <Text
+            style={[
+              textStyle.gray32,
+              styles.emptyList
+            ]}>
+            {"No items... :(\n yet"}
+          </Text>
+        </View>
+      }
     />
   );
 };
@@ -185,5 +199,11 @@ const styles = StyleSheet.create({
   contentContainer: {
     paddingHorizontal: "1%",
     paddingTop: "3%",
+  },
+  emptyList: {
+    alignSelf: "center",
+    opacity: 0.4,
+    marginTop: "25%",
+    textAlign: "center"
   },
 });

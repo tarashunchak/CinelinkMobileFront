@@ -48,10 +48,10 @@ export async function LoadGenresCached(){
 };
 
 export async function LoadHomeCached() {
-  /*if (cachedHomeMovies && cachedHomeMovies.data && cachedHomeMovies.expiresAt > Date.now()) {
+  if (cachedHomeMovies && cachedHomeMovies.data && cachedHomeMovies.expiresAt > Date.now()) {
     console.log("Cached home: ", cachedHomeMovies);
     return cachedHomeMovies?.data;
-  }*/
+  }
 
   if(useHomeStore.getState().movies.popular.length  && useHomeStore.getState().movies.now_playing.length)
     return;
@@ -59,12 +59,12 @@ export async function LoadHomeCached() {
   const data = await GetHomeMovies();
   useHomeStore.getState().setMovies(data);
 
-  /*cachedHomeMovies = {
+  cachedHomeMovies = {
     data,
     expiresAt: Date.now() + homeMoviesTTL,
   };
 
-  return data;*/
+  //return data;
 };
 
 interface MovieOfTheDay {

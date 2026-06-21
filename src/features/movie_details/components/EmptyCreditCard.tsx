@@ -14,7 +14,7 @@ export default function EmptyCreditCard({ movieID, posterPath, title}: Props) {
   return (
     <TouchableOpacity
       onPress={() =>
-        router.push({
+        router.navigate({
           pathname:  "/(app)/movie_credits",
           params: {
             movieID, 

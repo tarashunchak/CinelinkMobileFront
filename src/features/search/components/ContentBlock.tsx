@@ -15,7 +15,7 @@ interface Props {
   query: string;
   specification: string | undefined;
   category: string;
-}
+};
 
 export default function ContentBlock({ query, category }: Props) {
   const specification = false;
@@ -26,11 +26,10 @@ export default function ContentBlock({ query, category }: Props) {
     try {
       const data = await GetQueryResult(query);
       if (!data) return;
-
       setData(data?.results);
     } catch (exception: any) {
-    }
-  }, [query])
+    }  
+  }, []);
 
   useEffect(() => {
     async function load() {

@@ -242,6 +242,7 @@ const styles_ = StyleSheet.create({
     paddingVertical: 2,
     paddingHorizontal: 2,
     borderColor: "transparent",
+    elevation: 20,
   },
   indicator: {
     position: "absolute",

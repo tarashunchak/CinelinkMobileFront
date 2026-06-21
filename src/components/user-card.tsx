@@ -7,6 +7,7 @@ import { useUserStatus } from "@/src/rt_client/managers/users_manager";
 import { Skeleton } from "react-native-skeletons";
 import AnimatedFastImage from "@/src/components/ui/animated-fast-image";
 import AnimatedFastText from "./ui/animated-fast-text";
+import { UserRoundX } from "lucide-react-native";
 
 interface Props {
   user: {
@@ -16,7 +17,7 @@ interface Props {
     last_name?: string;
     avatar_url?: string;
   },
-  onPress: (_: number)=>void;
+  onPress: (_: number) => void;
 };
 
 function UserCard({ user, onPress }: Props) {
@@ -29,7 +30,7 @@ function UserCard({ user, onPress }: Props) {
     <PressableScale
       activeScale={0.98}
       style={styles.cardContainer}
-      onPress={()=> onPress(user?.user_id)}
+      onPress={() => onPress(user?.user_id)}
     >
       <View style={styles.mainView}>
         <View style={styles.infoView}>
@@ -42,7 +43,7 @@ function UserCard({ user, onPress }: Props) {
           {isOnline && <View style={styles.isOnlineDot}></View>}
         </View>
         <View style={styles.textView}>
-          <AnimatedFastText 
+          <AnimatedFastText
             style={textStyle.white18}
             sharedTransitionTag={`user-${user?.user_id}-full_name`}
           >
@@ -53,8 +54,7 @@ function UserCard({ user, onPress }: Props) {
           </Text>
         </View>
       </View>
-
-    </PressableScale>
+    </PressableScale >
   );
 };
 /*
@@ -70,7 +70,8 @@ const styles = StyleSheet.create({
   mainView: {
     flexDirection: "row",
     height: "100%",
-    gap: "6%",
+    width: "60%",
+    gap: 8,
     alignItems: "center",
   },
   image: {
@@ -124,6 +125,9 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingLeft: "3%",
     marginBottom: 5,
+    //flexDirection: "row",
+    paddingHorizontal: "1%",
+    paddingVertical: "3%",
   },
   avatar: {
     width: 60,
@@ -139,7 +143,17 @@ const styles = StyleSheet.create({
     margin: 5,
   },
   contentContainer: {
+    flexDirection: "row",
     paddingHorizontal: "1%",
-    paddingTop: "3%",
+    paddingVertical: "3%",
+  },
+  messageBtn: {
+    height: 26,
+    backgroundColor: "white",
+    padding: "1%",
+    paddingHorizontal: "4%",
+    borderRadius: 4,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

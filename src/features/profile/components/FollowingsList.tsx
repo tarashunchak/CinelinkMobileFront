@@ -6,6 +6,7 @@ import UserCard from "@/src/components/user-card";
 import Spacer from "@/src/components/ui/spacer";
 import { FlatList } from "react-native-gesture-handler";
 import { UsersManager, useUser, useUsers } from "@/src/rt_client/managers/users_manager";
+import FriendCard from "@/src/components/friend-card";
 
 export default function FollowingsList({ userID }: { userID: number }) {
   //const [followings, setFollowings] = useState<any[]>([]);
@@ -28,12 +29,14 @@ export default function FollowingsList({ userID }: { userID: number }) {
   useFocusEffect(
     useCallback(() => {
       userProfile?.followings_ids?.forEach((id)=>{
-          if (!users[id]) UsersManager.getInstance().load(id);
+          UsersManager.getInstance().load(id);
       });
     }
       , [userProfile?.followers_ids]));
 
-  const renderItem = useCallback(({ item }: any) => <UserCard user={item} onPress={handlePress}/> , []);
+  const renderItem = useCallback(({ item }: any) => 
+    <FriendCard user={item} onPress={handlePress}/> , 
+  []);
 
   return (
     <FlatList

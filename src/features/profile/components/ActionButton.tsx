@@ -9,9 +9,9 @@ import { SkiaGlassButton } from "./GlassButton";
 import { heightPercentageToDP, widthPercentageToDP } from "react-native-responsive-screen";
 
 interface Props {
-  isLoading: boolean;
-  isCurrentUser: boolean;
-  isFollowed: boolean;
+  isLoading?: boolean;
+  isCurrentUser?: boolean;
+  isFollowed?: boolean;
   onEdit: () => void;
   onToggleFollow: () => void;
   onChat: () => void;
@@ -32,9 +32,8 @@ export function ActionButton({
 
   let text;
   if (isLoading) text = "* * *";
-  else if (isCurrentUser) text = "Edit";
-  else if (!isCurrentUser) text = isFollowed ? "Unfollow" : "Follow";
-
+  else if (isCurrentUser || isCurrentUser === undefined) text = "Edit";
+  else if (isCurrentUser === false) text = isFollowed ? "Unfollow" : "Follow";
 
   return (
     <View style={{ flexDirection: "row", gap: 10 }}>

@@ -47,6 +47,7 @@
     "expo-web-browser": "~55.0.15",
     "glob": "^13.0.6",
     "lucide-react-native": "^1.16.0",
+    "chalk": "4.0.0",
     "react": "19.2.0",
     "react-dom": "19.2.0",
     "react-native": "0.83.6",

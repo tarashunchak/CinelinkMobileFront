@@ -58,7 +58,7 @@ export const useUserStore = create<UserState>((set) => ({
   _add: (userID, user) => set((s) => ({
     userProfiles: { 
       ...s.userProfiles, 
-      [userID]: user  }
+      [userID]: user }
   })),
   _addUserProfile: (userID, user) => set((s) => ({
     userProfiles: { ...s.userProfiles, [userID]: user }
@@ -185,14 +185,14 @@ async function load(userID: UserID = 0) {
   await UsersManager.getInstance().load(userID);
 };
 
-export function useUsers(): {} {
-  const users = useUserStore(useShallow((s) => s.userProfiles));
+export function useUsers(): Record<number, UserProfile_T> {
+  const users = useUserStore((s) => s.userProfiles);
   useEffect(() => {
     console.warn("useUsers");
     if (!users)
       UsersManager.getInstance().initLoading();
   }, [users]);
-  return users ?? EMPTY_ARRAY;
+  return users;
 };
 
 export function useUserStatus(userID: UserID): boolean {
@@ -223,7 +223,7 @@ const EMPTY_USER_OBJECT: UserProfile_T = {
 };
 
 export function useUser(userID: UserID): UserProfile_T {
-  const user = useUserStore(s => s.userProfiles[userID]);
+  const user = useUserStore((s) => s.userProfiles[userID]);
   const lastUpdated = user?.updated_at;
   const loadingRef = useRef(false);
   useEffect(() => {
@@ -235,6 +235,6 @@ export function useUser(userID: UserID): UserProfile_T {
         loadingRef.current = false  
       })
     }
-  }, [userID]);
-  return user ?? EMPTY_USER_OBJECT;
+  }, [userID, lastUpdated]);
+  return user;
 };

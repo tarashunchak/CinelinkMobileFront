@@ -53,12 +53,12 @@ function DirectChatScreen() {
         await RTClient.setChatEntering(chatID, getCurrentUserID());
       };
       loadContent();
-      console.warn("PeerID: ", peerID);
+      //console.warn("PeerID: ", peerID);
 
       return () => {
         isActive = false;
         RTClient.setChatLeaving(chatID, getCurrentUserID());
-        console.log("Screen unfocused");
+        //console.log("Screen unfocused");
         setBottomBarVisible(true);
       };
     }, [chatID, setBottomBarVisible])
@@ -69,6 +69,8 @@ function DirectChatScreen() {
     if (item?.message_type === "text")
       return <TextMessage message={item} />
   }, [chatID]);
+
+  if(!chatID) return;
 
   return (
     <View style={StyleSheet.absoluteFill}>

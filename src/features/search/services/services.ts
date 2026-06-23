@@ -2,15 +2,15 @@ import { API_URL } from "@/api/API_CONFIG";
 import { jwtHeaders } from "@/utils/utils";
 
 export async function GetQueryResult(query: string) {
-  const response = await fetch(`${API_URL}/search/${query}`, {
+  const resp = await fetch(`${API_URL}/search?query=${query}`, {
     headers: jwtHeaders(undefined)
   });
-  if (!response.ok)
-    return;
-  const text = await response.text()
-  const data = text ? JSON.parse(text) : undefined;
-  return data ? data?.results : undefined;
-}
+  /*if (!resp.ok || !resp?.status)
+    return;*/
+  const data = await resp.json()
+  console.warn("SEARCH RESULTS: ", data?.results?.results);
+  return data?.results?.results;
+};
 
 export async function SearchUser(query: string) {
   const response = await fetch(`${API_URL}/search/users/${query}`, {

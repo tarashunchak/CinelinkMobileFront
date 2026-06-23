@@ -22,10 +22,10 @@
     },
     "android": {
       "package": "com.cinelink.app",
+      "ndkVersion": "27.1.12297006",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/cinelinkIconNew.png"
       },
-      "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
       "softwareKeyboardLayoutMode": "resize"
     },
@@ -47,7 +47,6 @@
           }
         }
       ]
-      //"expo-font",
     ],
     "experiments": {
       "typedRoutes": true,

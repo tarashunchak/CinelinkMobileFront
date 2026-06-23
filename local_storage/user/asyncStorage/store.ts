@@ -4,6 +4,7 @@ import { UserRepository } from "./repository";
 import { TokenRepository } from "./repository";
 import * as Notifications from "@/utils/notifications";
 import { useState } from "react";
+import { useChatStore } from "@/src/rt_client/managers/chats_manager";
 
 type AuthState = {
   user: User | null;
@@ -60,6 +61,7 @@ export const useAuthStore = create<AuthState>((set) => ({
       UserRepository.clear(),
       TokenRepository.clear(),
     ]);
+    useChatStore.getState()._clear();
     set({
       user: null,
       isAuthenticated: false,

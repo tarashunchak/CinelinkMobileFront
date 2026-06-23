@@ -6,29 +6,29 @@ import AnimatedFastImage from "@/src/components/ui/animated-fast-image";
 import AnimatedFastText from "@/src/components/ui/animated-fast-text";
 import { useRouter } from "expo-router";
 
-export default function MovieCard({movie}: any){
-  const router = useRouter();
+export default function MovieCard({movie, onPress }: any){
+  //const router = useRouter();
 
-  const handlePress = useCallback(()=>{
+  /*const handlePress = useCallback(()=>{
     router.push({
         pathname: "/movie_details",
         params: {
           movieID: movie.id,
-          movieName: movie.name,
+          movieName: movie.title,
           profilePath: movie.profile_path
         }
     })
-  }, [movie?.id]);
+  }, [movie?.id]);*/
 
   return (
     <PressableScale
       style={styles.view}
-      onPress={handlePress}>
+      onPress={() => onPress(movie)}>
       <AnimatedFastImage
         sharedTransitionTag={`movie-${movie.id}-profile`}
-        source={movie.poster_path}
+        source={{uri: `https://image.tmdb.org/t/p/w500${movie.poster_path}`}}
         style={styles.img}
-        cachePolicy="disk"
+        cachePolicy="memory-disk"
       />
     </PressableScale>    
   );
@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
   view: {
     flexDirection: "column",
     height: 175,
-    width: 110,
+    aspectRatio: 0.67,
     backgroundColor: "rgba(255, 255, 255, 0.05)",
     borderRadius: 8,
     borderWidth: 1,
@@ -50,9 +50,9 @@ const styles = StyleSheet.create({
     padding: 0.5,
   },
   img: {
-    height: "70%",
+    height: "100%",
     width: "100%",
-    borderTopLeftRadius: 6,
-    borderTopRightRadius: 6
+    borderRadius: 6,
+    //borderTopRightRadius: 6
   },
 });

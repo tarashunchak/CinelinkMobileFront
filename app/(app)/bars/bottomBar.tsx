@@ -1,4 +1,4 @@
-import React, { memo, useCallback } from "react";
+import React, { memo, useCallback, useEffect } from "react";
 import BottomBarButtons from "./components/BottomBarIconButton";
 import { View, Platform, StyleSheet } from "react-native";
 import { Circle, Path, Svg } from "react-native-svg";
@@ -121,6 +121,7 @@ const TAB_OFFSET_X: Record<string, number> = {
   "/home": indicatorWidth * 2,
   "/social": indicatorWidth * 3,
   "/tab_profile": indicatorWidth * 4,
+  "/profile": indicatorWidth * 4,
 };
 
 const SPRING_CONFIG = {
@@ -173,7 +174,7 @@ const SkiaBottomBar = memo(({ x }: any) => {
 
   return (
     <Canvas style={StyleSheet.absoluteFill}>
-      <RoundedRect rect={r} style="stroke" strokeWidth={1} >
+      <RoundedRect rect={r} style="stroke" strokeWidth={0.5} >
         <RadialGradient
           c={vec(width / 2, 0)}
           r={180}
@@ -197,21 +198,23 @@ function BottomBar() {
   const tabX = useSharedValue(TAB_OFFSET_X["/home"]);
   const segments = useSegments();
 
-  const handlePress = useCallback((route: any) => {
-    const x = TAB_OFFSET_X[route];
-    if (x) tabX.value = withSpring(x, SPRING_CONFIG);
-  }, [segments]);
-
   const translateX = useAnimatedStyle(() => ({
     transform: [{ translateX: tabX.value }]
   }));
 
   const insets = useSafeAreaInsets();
 
+  useEffect(()=>{
+    const route = segments[segments.length-1] || "home";
+    const targetX = TAB_OFFSET_X[`/${route}`];
+    if(targetX !== undefined)
+      tabX.value = withSpring(targetX, SPRING_CONFIG);
+  }, [segments])
+
   return (
     <View style={[styles_.view, { bottom: insets.bottom || wp(2) }]}>
       {isReadyToBlur && <BlurView
-        intensity={25}
+        intensity={30}
         style={StyleSheet.absoluteFill}
         blurTarget={blurTarget}
         blurMethod="dimezisBlurView"
@@ -224,7 +227,7 @@ function BottomBar() {
           translateX
         ]}
       />
-      <BottomBarButtons onPress={handlePress} />
+      <BottomBarButtons />
     </View>
   )
 };

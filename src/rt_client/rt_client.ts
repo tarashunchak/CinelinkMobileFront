@@ -7,14 +7,15 @@ import { useEffect } from "react";
 import { useChatStore } from "./app_state";
 import { ChatMessage } from "./message_storage/message_storage";
 import { MessagesManager } from "./managers/messages_manager";
-import { jwtHeaders } from "@/utils/utils";
+import { RTCLIENT_CONFIG } from "./config";
 
-const WS_ADDRESS = (userID: UserID): string =>
-  `wss://cinelink.lol/ws/${userID}`;
+const WS_ADDRESS = (userID: UserID): string => 
+  `${RTCLIENT_CONFIG.WS_URL}/ws/${userID}`
+  //`wss://cinelink.lol/ws/${userID}`;
   //`${process.env.EXPO_PUBLIC_WS_URL}/ws/${userID}`;
 
 const HTTP_ADDRESS = (chatID: ChatID): string =>
-  `${process.env.EXPO_PUBLIC_API_URL}/chats/${chatID}/messages`;
+  `${RTCLIENT_CONFIG.API_URL}/chats/${chatID}/messages`;
 
 class RTClient_ {
   private wsConnections: Map<UserID, WSConnector> = new Map();
@@ -34,11 +35,8 @@ class RTClient_ {
   };
 
   public connect(userID: UserID) {
-    console.warn("User id in connect: ", userID);
     this.currUserID = userID;
-    //const url = `${process.env.EXPO_PUBLIC_WS_URL}/` + userID;
     const url = WS_ADDRESS(userID);
-    //const url = `wss://164.90.163.24:8080/ws/${userID}`
     console.warn("url: ", url);
     this.wsConnections?.set(userID, new WSConnector(
       url,
@@ -85,7 +83,7 @@ class RTClient_ {
   };
 
   public async setTypingStatus(chatID: ChatID, userID: UserID, isTyping: boolean) {
-    console.warn(`User: ${userID} is ${!isTyping ? "not" : ''} typing in chat ${chatID}`);
+    //console.warn(`User: ${userID} is ${!isTyping ? "not" : ''} typing in chat ${chatID}`);
     this.wsConnections.get(userID)?.send(
       Makers.makeTypingMessage({ user_id: userID, chat_id: chatID, is_typing: isTyping })
     );
@@ -128,7 +126,7 @@ class RTClient_ {
       {
         method: "POST",
         headers: { "Content-Type": "application/json",
-          ...jwtHeaders(undefined)
+          ...RTCLIENT_CONFIG.JWT_SELECTOR(undefined)
         },
         body: JSON.stringify(Makers.makeMessageSendingMessage(message))
       }

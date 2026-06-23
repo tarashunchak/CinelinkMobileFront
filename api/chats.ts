@@ -3,7 +3,9 @@ import { getCurrentUserID, jwtHeaders } from "@/utils/utils";
 import { useAuthStore } from "@/local_storage/user/asyncStorage/store";
 
 export async function GetUserChats(userID: number) {
-  const response = await fetch(`${API_URL}/users/${userID}/chats`);
+  const response = await fetch(`${API_URL}/users/${userID}/chats`, {
+    headers: jwtHeaders(undefined),
+  });
   if (!response.ok) {
     switch (response.status) {
       case 404:
@@ -41,12 +43,12 @@ export async function GetChatMessages(chatID: number) {
 
 export async function GetDirectChatID(userID: number): Promise<number> {
   //if (1) return 3;
-  console.warn("GETDirectChatID");
+  //console.warn("GETDirectChatID");
   const response = await fetch(`${API_URL}/chats/get-or-create/${userID}`, {
     headers: jwtHeaders(undefined),
   });
   const text = await response.text();
   const data = JSON.parse(text);
-  console.warn("GETDIRECTCHATID: ", data?.results);
+  //console.warn("GETDIRECTCHATID: ", data?.results);
   return data?.results;
 };

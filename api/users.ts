@@ -10,7 +10,7 @@ export async function GetUserLastSeenTimestamp(userID: number): Promise<string> 
     const data = await JSON.parse(text);
     if(data) return data?.results;
   } catch (err) {
-    console.warn("GetUserLastSeenTimestamp err: ", err);
+    //console.warn("GetUserLastSeenTimestamp err: ", err);
   }
 
   return "";

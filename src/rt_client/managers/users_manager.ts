@@ -1,10 +1,9 @@
-import { API_URL } from "@/api/API_CONFIG";
 import { EMPTY_ARRAY, EMPTY_OBJECT, UserID } from "../models/models";
 import { create } from "zustand";
 import { EntityManager } from "./base_class";
 import { useEffect, useRef } from "react";
 import { useShallow } from "zustand/react/shallow";
-import { jwtHeaders } from "@/utils/utils";
+import { RTCLIENT_CONFIG } from "./../config";
 
 type User_T = {
   user_id: number;
@@ -69,7 +68,7 @@ export const useUserStore = create<UserState>((set) => ({
   })),
   _remove: (userID) => set((s) => {
     const { [userID]: _, ...remainingUsers } = s.userProfiles;
-    return { users: remainingUsers }
+    return { usersProfiles: remainingUsers }
   }),
   _update: (userID, data) => set((s) => ({
 
@@ -90,20 +89,20 @@ export class UsersManager extends EntityManager<UserProfile_T> {
 
   public init(userID: UserID) {
     this.currUserID = userID;
-    this.initLoading();
+    this.initLoading(userID);
   };
 
-  public async initLoading() {
+  public async initLoading(userID: number) {
     if (this.isInitLoading) return;
     this.isInitLoading = true;
     try {
-      const resp = await fetch(`${API_URL}/users/init/${this.currUserID}`, {
-        headers: jwtHeaders(undefined)
+      const resp = await fetch(`${RTCLIENT_CONFIG.API_URL}/users/init/${userID ?? this.currUserID}`, {
+        headers: RTCLIENT_CONFIG.JWT_SELECTOR(undefined)
       });
 
       const data = await resp.json();
       if (!resp.ok || data?.status !== 200) {
-        console.log("Users init err: ", resp);
+        //console.log("Users init err: ", resp);
         return;
       };
 
@@ -115,7 +114,7 @@ export class UsersManager extends EntityManager<UserProfile_T> {
           user.avatar_url = "https://i.pinimg.com/736x/56/65/e3/5665e34f05ce5e1270b81ee0f64922f3.jpg";
         map.set(user.user_id, user);
         statuses.set(user.user_id, user.is_online);
-        console.log("user ", user?.user_id, " is online: ", user.is_online);
+        //console.log("user ", user?.user_id, " is online: ", user.is_online);
         user.updated_at = Date.now();
       });
 
@@ -127,16 +126,16 @@ export class UsersManager extends EntityManager<UserProfile_T> {
   };
 
   public async load(userID: UserID) {
-    console.warn("LOAD USER: ", userID);
+    //console.warn("LOAD USER: ", userID);
     try {
       //if (this.loadingState.get(userID)) return;
       //this.loadingState.set(userID, true);
-      const resp = await fetch(`${API_URL}/users/${userID}`, {
-        headers: jwtHeaders(undefined)
+      const resp = await fetch(`${RTCLIENT_CONFIG.API_URL}/users/${userID}`, {
+        headers: RTCLIENT_CONFIG.JWT_SELECTOR(undefined)
       });
       const data = await resp.json();
       if (!resp.ok || data?.status !== 200) {
-        console.log("Users init err: ", resp);
+        //console.log("Users GET err: ", resp);
         return;
       };
 
@@ -188,19 +187,36 @@ async function load(userID: UserID = 0) {
 export function useUsers(): Record<number, UserProfile_T> {
   const users = useUserStore((s) => s.userProfiles);
   useEffect(() => {
-    console.warn("useUsers");
+    //console.warn("useUsers");
     if (!users)
-      UsersManager.getInstance().initLoading();
+      UsersManager.getInstance().initLoading(0);
   }, [users]);
   return users;
 };
 
 export function useUserStatus(userID: UserID): boolean {
-  const status = useUserStore(state => state.onlineStatus[userID] ?? false);
+  const status = useUserStore(state => state.onlineStatus[userID]);
   useEffect(() => {
-    console.warn("useUserStatus");
+    //console.warn("useUserStatus");
   }, [userID, status]);
   return status;
+};
+
+export function useUser(userID: UserID): UserProfile_T {
+  const user = useUserStore((s) => s.userProfiles[userID]);
+  const lastUpdated = user?.updated_at;
+  const loadingRef = useRef(false);
+  useEffect(() => {
+    const now = Date.now();
+    const lastUpdatedTs = typeof lastUpdated === "number" ? lastUpdated : 0;
+    if (!loadingRef.current && now - lastUpdatedTs > 3000){
+      loadingRef.current = true;
+      UsersManager.getInstance().load(userID).finally(()=>{
+        loadingRef.current = false  
+      })
+    }
+  }, [userID, lastUpdated]);
+  return user;
 };
 
 const EMPTY_USER_OBJECT: UserProfile_T = {
@@ -222,19 +238,3 @@ const EMPTY_USER_OBJECT: UserProfile_T = {
   updated_at: 0,
 };
 
-export function useUser(userID: UserID): UserProfile_T {
-  const user = useUserStore((s) => s.userProfiles[userID]);
-  const lastUpdated = user?.updated_at;
-  const loadingRef = useRef(false);
-  useEffect(() => {
-    const now = Date.now();
-    const lastUpdatedTs = typeof lastUpdated === "number" ? lastUpdated : 0;
-    if (!loadingRef.current && now - lastUpdatedTs > 3000){
-      loadingRef.current = true;
-      UsersManager.getInstance().load(userID).finally(()=>{
-        loadingRef.current = false  
-      })
-    }
-  }, [userID, lastUpdated]);
-  return user;
-};

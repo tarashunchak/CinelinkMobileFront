@@ -61,6 +61,7 @@ const styles = {
     borderColor: "rgba(255, 255, 255, 0.2)",
     borderRadius: 12,
     marginTop: "5%",
+    minHeight: 40,
   },
   genreCellView: {
     height: 30,

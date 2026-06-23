@@ -2,13 +2,13 @@ import { getMoviesByGenre, getPopularMovies, getSimilarMovies } from "@/api/tmdb
 import { getCurrentGenre, setCurrentGenre } from "@/utils/homePage";
 import { nowPlayingMoviesId } from "@/utils/nowPlaying";
 import { useNavigation } from "@react-navigation/native";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { memo, useCallback, useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Float } from "react-native/Libraries/Types/CodegenTypes";
 import MovieCard from "./movie-card";
 import { textStyle } from "@/styles/textStyles";
 import { PressableScale } from "react-native-pressable-scale";
-import { Link, router } from "expo-router";
+import { Link, router, useFocusEffect } from "expo-router";
 
 interface Genre {
   id: number;
@@ -30,32 +30,32 @@ interface MovieCardListParams {
   selectedGenre: number | any;
   movieID: number | any;
   movieGenre: number | any;
-  posterPath?: string,
+  posterPath?: string;
+  title?: string;
 }
 
-export default function MovieCardList({ selectedGenre, movieID, movieGenre, posterPath }: MovieCardListParams) {
+export default function MovieCardList({ selectedGenre, movieID, movieGenre, posterPath, title }: MovieCardListParams) {
   const [movies, setMovies] = useState<Movie[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  useEffect(() => {
-    async function loadmovies() {
-      console.warn("prevGenre: ", getCurrentGenre(), "\n");
-      console.warn("current: ", selectedGenre, "\n");
-      if (movieID) {
-        const data = await getSimilarMovies(movieID) || await getMoviesByGenre(movieGenre);
-        setMovies(data);
-        return;
-      } else {
-        if (getCurrentGenre() !== selectedGenre || !selectedGenre) {
-          setCurrentGenre(selectedGenre);
-          const data = getCurrentGenre() ? await getMoviesByGenre(getCurrentGenre()) : await getPopularMovies();
-          if (data) setMovies(data);
-          return;
-        }
+  useFocusEffect(useCallback(() => {
+    let cancelled = false;
+    async function load() {
+      setIsLoading(true);
+      let data = await getSimilarMovies(movieID)
+      if(!data)
+        data = await getMoviesByGenre(movieGenre);
+      if(!cancelled){
+        setMovies(data ?? []);
+        setIsLoading(false);
       }
-      console.log("same genre pressed — no reload");
     }
-    loadmovies()
-  }, [selectedGenre, movieID]);
+    load()
+    return ()=>{
+      cancelled = true;
+      setMovies([]);
+    };
+  }, [movieID, movieGenre]));
 
   const handlePress = useCallback(()=>{
     router.push({
@@ -63,6 +63,8 @@ export default function MovieCardList({ selectedGenre, movieID, movieGenre, post
       params: {
         posterPath,
         movieID,
+        title,
+        genre: movieGenre,
       },
     });
   }, [movieID]);

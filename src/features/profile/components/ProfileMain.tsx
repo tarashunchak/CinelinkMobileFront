@@ -34,7 +34,7 @@ export default function ProfileMain({
   const isOnline = useUserStatus(user?.user_id);
 
   const fullName = useMemo(() => {
-    return user?.first_name ? `${user?.first_name} ${user?.last_name}` : "*******";
+    return user?.first_name ? `${user?.first_name} ${user?.last_name}` : `User #${user?.user_id}`;
   }, [isLoading, user]);
 
   const username: string = useMemo(()=>{

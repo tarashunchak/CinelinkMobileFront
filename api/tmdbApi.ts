@@ -74,12 +74,12 @@ export async function getDetailedMovieByID(movieID: number) {
   return data?.results;
 }
 
-export async function getSimilarMovies(movieID: number) {
+export async function getSimilarMovies(movieID: number, page: number) {
   const cache = similarMoviesCache.get(movieID);
   if (cache && cache.expiresAt > Date.now())
     return cache;
 
-  const response = await fetch(`${API_URL}/movies/${movieID}/similar`, {
+  const response = await fetch(`${API_URL}/movies/${movieID}/similar?page=${page ?? 1}`, {
     headers: jwtHeaders(undefined)
   });
   if (!response.ok)

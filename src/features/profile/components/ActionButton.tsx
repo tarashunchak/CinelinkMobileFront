@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet } from "react-native";
 import { textStyle } from "@/styles/textStyles";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useNavigation } from "expo-router";
 import { PressableScale } from "react-native-pressable-scale";
 import { GlassSurface } from "./GlassSurface";
@@ -18,8 +18,6 @@ interface Props {
   bgUrl: string;
 };
 
-const buttonLayout = { x: (widthPercentageToDP(98) * 0.1) - 100, y: -((heightPercentageToDP(95) * 0.1)+50), width: 100, height: 50 };
-
 export function ActionButton({
   isLoading,
   isCurrentUser,
@@ -30,10 +28,11 @@ export function ActionButton({
   bgUrl,
 }: Props) {
 
-  let text;
-  if (isLoading) text = "* * *";
-  else if (isCurrentUser || isCurrentUser === undefined) text = "Edit";
-  else if (isCurrentUser === false) text = isFollowed ? "Unfollow" : "Follow";
+  const text = useMemo(()=>{
+    if (isLoading) return "* * *";
+    else if (isCurrentUser || isCurrentUser === undefined) return "Edit";
+    else if (isCurrentUser === false) return isFollowed ? "Unfollow" : "Follow";
+  }, [isCurrentUser, isFollowed]);
 
   return (
     <View style={{ flexDirection: "row", gap: 10 }}>
@@ -52,7 +51,7 @@ export function ActionButton({
           :
           (<PressableScale
             style={isFollowed ? styles.transparent : styles.white}
-            onPress={async () => await onToggleFollow()}
+            onPress={onToggleFollow}
           >
             <Text
               style={isFollowed ? textStyle.white20 : textStyle.black20}
@@ -62,7 +61,7 @@ export function ActionButton({
           </PressableScale>)
       }
       {
-        isFollowed ?
+        !isCurrentUser?
           (<PressableScale
             style={styles.transparent}
             onPress={onChat}

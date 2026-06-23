@@ -11,6 +11,7 @@ import {
   useUserChats, 
   Chat_T, 
   ChatsManager,
+  useChatStore,
 } from "@/src/rt_client/managers/chats_manager";
 import AnimatedFastImage from "@/src/components/ui/animated-fast-image";
 import { useUserStatus } from "@/src/rt_client/managers/users_manager";
@@ -18,15 +19,14 @@ import AnimatedFastText from "@/src/components/ui/animated-fast-text";
 import Spacer from "@/src/components/ui/spacer";
 import { getCurrentUserID } from "@/utils/utils";
 
-//const EMPTY_CHATS_LIST = Array.from({length: 10});
-const DirectChatCard = memo(({ item, onPress }: { item: any, onPress: any}) => {
+const DirectChatCard = memo(({ item, onPress}: any) => {
   const chatID = item?.chat_id;
   const peerID = item?.peer_id?.["Int32"];
   const isTyping = useTypingStatus(chatID, peerID);
   const lastMessage = useLastChatMessage(chatID);
   const isOnline = useUserStatus(peerID);
 
-  const unSeenMessageCnt = useUnseenMessagesCount(chatID);
+  //const unSeenMessageCnt = useUnseenMessagesCount(chatID);
   
   return (
     <PressableScale
@@ -89,7 +89,7 @@ export default function ChatsList() {
   }, []);
 
   const renderItem = useCallback(({ item }: {item: Chat_T}) => (
-    <DirectChatCard item={item} onPress={handlePress}/>
+    <DirectChatCard item={item} onPress={handlePress} />
   ), [handlePress]);
 
   useEffect(()=>{

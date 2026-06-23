@@ -1,16 +1,12 @@
-import React, { memo, useCallback, useEffect, useRef, useState } from "react";
-import { Text, FlatList, View, StyleSheet } from "react-native";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { FlatList, View, StyleSheet } from "react-native";
 import CreditCard from "@/src/features/movie_details/components/CreditCard";
 import { GetMovieCredits } from "@/src/features/movie_details/services/services";
-import ReturnArrowButton from "@/src/components/ui/returnArrowButton";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 import AnimatedFastImage from "@/src/components/ui/animated-fast-image";
 import { useBlurStore } from "@/src/components/ui/screen-background";
-import { BlurTargetView, BlurView } from "expo-blur";
-import { textStyle } from "@/styles/textStyles";
-import AnimatedFastText from "@/src/components/ui/animated-fast-text";
+import { BlurTargetView } from "expo-blur";
 import Header from "@/src/features/movie_details/components/Header";
 
 type Credit = {
@@ -23,14 +19,8 @@ type Credit = {
   character: string;
 }
 
-interface Credits {
-  cast: Credit[];
-  crew: Credit[];
-}
-//<ReturnArrowButton />
-
 export default function MovieCreditsScreen() {
-  const router = useRouter();
+  //const router = useRouter();
   const [credits, setCredits] = useState<any>();
   const { movieID, posterPath, title } = useLocalSearchParams();
 
@@ -57,7 +47,7 @@ export default function MovieCreditsScreen() {
 
   return (
     <View style={{ flex: 1 }}>
-      <BlurTargetView ref={ref} style={{ flex: 1 }}>
+      <BlurTargetView ref={ref} style={StyleSheet.absoluteFill}>
         <AnimatedFastImage
           source={{ uri: `https://image.tmdb.org/t/p/w500${posterPath}` }}
           style={styles.view}

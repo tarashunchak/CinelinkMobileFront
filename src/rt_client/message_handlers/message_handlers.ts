@@ -19,7 +19,7 @@ async function handleOnline(msg: WSMessage, manager: ChatManager) {
   //manager.callbacks?.onOnline?.get(chat_id)?.(msg);
   //useChatStore.getState()._setOnline(msg.content?.user_id, msg.content?.is_online);
   console.warn("ONLINE: ",msg);
-  UsersManager.getInstance().setOnlineStatus(msg.content?.user_id, msg.content?.is_online);
+  UsersManager.getInstance().setOnlineStatus(user_id, is_online);
 };
 
 async function handleSeenAll(msg: WSMessage, manager: ChatManager) {

@@ -1,5 +1,5 @@
 import React, { memo, useCallback, useEffect, useMemo, useState } from "react";
-import { FlatList, View, StyleSheet } from "react-native";
+import { FlatList, View, StyleSheet, Text } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { heightPercentageToDP, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { getCurrentUserID, isCurrentUser } from "@/utils/utils";
@@ -12,6 +12,7 @@ import { UsersManager, useUser, useUserStore } from "@/src/rt_client/managers/us
 import { useFollowers, useFollowings } from "@/src/features/profile/hooks/useFollowers";
 import FriendCard from "@/src/components/friend-card";
 import Spacer from "@/src/components/ui/spacer";
+import { textStyle } from "@/styles/textStyles";
 
 type Params = {
   userID: number;
@@ -22,22 +23,24 @@ function UserProfileScreen({ isFromTab = false }: { isFromTab: boolean }) {
   const router = useRouter();
   const params: Params = useLocalSearchParams();
   const userID: number = params.userID ?? getCurrentUserID();
-  const user = useUserStore(s => s.userProfiles[userID]);
+  const user = useUser(userID);
   const isCurrUser = isCurrentUser(userID);
   const [list, setList] = useState<string>("Followers");
   const [chatID, setChatID] = useState<number>(0);
   const followers = useFollowers(userID);
   const followings = useFollowings(userID);
+  //const followers = user?.followers_ids;
+  //const followings = user?.followings_ids;
   const posts: any = [];
 
   useEffect(() => {
     async function load() {
-      //console.warn("LOAD DIRECT CHATID");
-      await GetDirectChatID(userID).then(setChatID);
+      if (!isCurrUser)
+        await GetDirectChatID(userID).then(setChatID);
     };
     //console.warn("IsFromTab: ", isFromTab, " Type: ", typeof isFromTab);
     load();
-  }, [user]);
+  }, []);
 
   const data = useMemo(() => {
     switch (list) {
@@ -48,7 +51,7 @@ function UserProfileScreen({ isFromTab = false }: { isFromTab: boolean }) {
       case "Posts":
         return posts;
     };
-  }, [list, followings, followers, posts]);
+  }, [list, followings, followers, posts, user]);
 
   const onFriendPress = useCallback((userID: number, avatarUrl: string, fullName: string) => {
     router.push({
@@ -60,12 +63,52 @@ function UserProfileScreen({ isFromTab = false }: { isFromTab: boolean }) {
     })
   }, []);
 
+  const onMessage = useCallback(async (userID: number, imgUrl: string, name: string) => {
+    const chatID = await GetDirectChatID(userID);
+    if (chatID)
+      router.push({
+        pathname: "/(app)/direct_chat",
+        params: {
+          chatID,
+          peerID: userID,
+          imgUrl,
+          name,
+        }
+      });
+  }, []);
+
+  const onToggleFollow = useCallback(async () => {
+    const currentUserID = getCurrentUserID();
+    if (user?.is_following)
+      await UnfollowUser(userID).finally(() => {
+        UsersManager.getInstance().load(userID);
+        UsersManager.getInstance().load(currentUserID);
+      });
+    else
+      await FollowUser(userID).finally(() => {
+        UsersManager.getInstance().load(userID);
+        UsersManager.getInstance().load(currentUserID);
+      });
+  }, [])
+
+  const onChat = useCallback(async () => {
+    router.navigate({
+      pathname: "/direct_chat",
+      params: {
+        chatID: await GetDirectChatID(user?.user_id),
+        imgUrl: user?.avatar_url,
+        name: `${user?.first_name} ${user?.last_name}`,
+        peerID: userID,
+      }
+    });
+  }, []);
+
   const renderItem = useCallback(({ item }: any) => {
     switch (list) {
       case "Followers":
-        return <FriendCard user={item} onFollowingQuit={() => { }} onMessage={() => { }} onPress={onFriendPress} />;
+        return <FriendCard user={item} onFollowingQuit={undefined} onMessage={onMessage} onPress={onFriendPress} />;
       case "Followings":
-        return <FriendCard user={item} onFollowingQuit={() => { }} onMessage={() => { }} onPress={onFriendPress} />;
+        return <FriendCard user={item} onFollowingQuit={isCurrUser && UnfollowUser} onMessage={onMessage} onPress={onFriendPress} />;
       case "Posts":
         return null;
     };
@@ -84,29 +127,8 @@ function UserProfileScreen({ isFromTab = false }: { isFromTab: boolean }) {
         isCurrentUser={isCurrUser}
         isFollowed={user?.is_following}
         onEdit={() => { }}
-        onToggleFollow={async () => {
-          if (user?.is_following)
-            await UnfollowUser(userID).finally(() => {
-              UsersManager.getInstance().load(userID);
-              UsersManager.getInstance().load(getCurrentUserID());
-            });
-          else
-            await FollowUser(userID).finally(() => {
-              UsersManager.getInstance().load(userID);
-              UsersManager.getInstance().load(getCurrentUserID());
-            });
-        }}
-        onChat={() => {
-          router.navigate({
-            pathname: "/direct_chat",
-            params: {
-              chatID: chatID,
-              imgUrl: user?.avatar_url,
-              name: `${user?.first_name} ${user?.last_name}`,
-              peerID: userID,
-            }
-          });
-        }}
+        onToggleFollow={onToggleFollow}
+        onChat={onChat}
       />
       <UserStats
         followersCnt={user?.followers_ids?.length}
@@ -126,7 +148,16 @@ function UserProfileScreen({ isFromTab = false }: { isFromTab: boolean }) {
       showsVerticalScrollIndicator={false}
       style={StyleSheet.absoluteFill}
       ListHeaderComponent={header}
-      ListFooterComponent={<Spacer orientation="v" spacing={heightPercentageToDP(8)}/>}
+      ListFooterComponent={<Spacer orientation="v" spacing={heightPercentageToDP(8)} />}
+      ListEmptyComponent={
+        <Text
+          style={[
+            textStyle.gray32,
+            styles.emptyList
+          ]}>
+          {"No items :(\n yet"}
+        </Text>
+      }
     />
   );
 };
@@ -190,5 +221,11 @@ const styles = StyleSheet.create({
     paddingBottom: 1,
     gap: 5,
     backgroundColor: "transparent",
+  },
+  emptyList: {
+    alignSelf: "center",
+    opacity: 0.4,
+    marginTop: "25%",
+    textAlign: "center"
   },
 });

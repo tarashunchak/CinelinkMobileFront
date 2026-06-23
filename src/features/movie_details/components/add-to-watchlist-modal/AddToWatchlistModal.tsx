@@ -1,19 +1,16 @@
-import React, { useState, forwardRef, useImperativeHandle, useMemo, useRef, useEffect, memo, useCallback } from "react";
-import BottomSheet, { BottomSheetBackdrop, BottomSheetView, TouchableWithoutFeedback, useBottomSheet, useBottomSheetInternal } from "@gorhom/bottom-sheet";
+import React, { useState, forwardRef, useImperativeHandle, useRef, memo, useCallback } from "react";
+import BottomSheet, { BottomSheetBackdrop, BottomSheetView} from "@gorhom/bottom-sheet";
 import { View, StyleSheet, TextInput, Keyboard } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import WatchlistCard from "./components/WatchlistCard";
-import { GetUserWatchlists } from "@/api/watchlist/watchlist";
-import { getCurrentUserID } from "@/utils/utils";
 import { useBlurStore } from "@/src/components/ui/screen-background";
 import { Search } from "lucide-react-native";
 import { textStyle } from "@/styles/textStyles";
 import { useUserWatchlists } from "@/src/rt_client/managers/watchlists_manager";
-import { BlurView } from "expo-blur";
-import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import Button from "./components/Button";
-import Animated, { Extrapolate, interpolate, useAnimatedStyle, useDerivedValue, useSharedValue, withTiming } from "react-native-reanimated";
-import { opacity } from "react-native-reanimated/lib/typescript/Colors";
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
+import Spacer from "@/src/components/ui/spacer";
+import { heightPercentageToDP } from "react-native-responsive-screen";
 
 export type WatchlistSheetRef = {
   open: () => void;
@@ -116,7 +113,7 @@ const WatchlistSheet = forwardRef<WatchlistSheetRef, WatchlistSheetProps>(({ set
       >
         <BottomSheetView
           style={{
-            height: "100%",
+            maxHeight: heightPercentageToDP(90),
             backgroundColor: "#090405",
           }}>
           <View style={styles.mainView}>
@@ -129,9 +126,11 @@ const WatchlistSheet = forwardRef<WatchlistSheetRef, WatchlistSheetProps>(({ set
               <Search width={34} height={34} color="white" strokeWidth={1} />
             </View>
             <FlatList
-              style={{ height: "100%" }}
+              contentContainerStyle={{
+                alignItems: "center",
+                paddingBottom: heightPercentageToDP(8),
+              }}
               data={watchlists}
-              numColumns={3}
               keyExtractor={(item, index) => String(index)}
               renderItem={renderItem}
             />

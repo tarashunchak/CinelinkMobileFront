@@ -21,13 +21,13 @@ function MovieCard({ movie }: { movie: MovieCard_I | null }) {
   const router = useRouter();
   if (!movie) return <Skeleton style={styles.view} />
 
-  const providers = movie?.providers?.["US"]?.flatrate?.slice(0, (Math.min(8, movie?.providers?.["US"]?.flatrate?.length)))?.map((flat: any, index: number) => (
+  /*const providers = movie?.providers?.["US"]?.flatrate?.slice(0, (Math.min(8, movie?.providers?.["US"]?.flatrate?.length)))?.map((flat: any, index: number) => (
     <Image
       source={{ uri: "https://image.tmdb.org/t/p/w200" + movie?.providers?.["US"]?.flatrate?.[index]?.logo_path }}
       style={{ height: 20, width: 20 }}
       cachePolicy="memory-disk"
     />
-  ));
+  ));*/
 
   const providersRow = useMemo(()=>
     movie?.providers?.["US"]?.flatrate?.slice(0, (Math.min(8, movie?.providers?.["US"]?.flatrate?.length)))?.map((flat: any, index: number) => (
@@ -78,7 +78,7 @@ function MovieCard({ movie }: { movie: MovieCard_I | null }) {
               style={[textStyle.gray16, styles.year]}
               pointerEvents="none"
             >
-              {` (${movie?.release_date.slice(0, 4)})`}
+              {` (${movie?.release_date?.slice(0, 4)})`}
             </Text>
           </View>
           <Text
@@ -94,7 +94,7 @@ function MovieCard({ movie }: { movie: MovieCard_I | null }) {
           onPress={openIMDb}
         >
           <Text style={[textStyle.black12, styles.imdbText]}>
-            {`IMDb: ${movie?.vote_average?.toFixed(1)}`}
+            {`IMDb: ${movie?.vote_average?.toFixed(1) ?? "N/A"}`}
           </Text>
         </TouchableOpacity>
       </View>

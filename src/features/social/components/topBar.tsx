@@ -126,7 +126,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   activeButtonView: {
-    backgroundColor: "#2D3C59",
+    //backgroundColor: "#2D3C59",
+    backgroundColor: "#ffffff10",
     borderColor: "rgba(255, 255, 255, 0.2)",
     borderRadius: 4,
     borderWidth: 0.5,

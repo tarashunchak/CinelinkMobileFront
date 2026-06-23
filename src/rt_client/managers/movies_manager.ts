@@ -8,7 +8,7 @@ import { jwtHeaders } from "@/utils/utils";
 
 type Movie_T = {
   id: number;
-  name: string;
+  title: string;
   fg_img_url?: string;
   bg_img_url?: string;
   creator_id?: number;

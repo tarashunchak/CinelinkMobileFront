@@ -16,7 +16,7 @@ const TABS_CONFIG = [
 
 const tabs = ["/library", "/search", "/home", "/social", "/tab_profile"];
 
-export default function BottomBarButtons({ onPress }: { onPress: (route: string) => void }) {
+export default function BottomBarButtons(/*{ onPress }: { onPress: (route: string) => void }*/) {
   const [activeTab, setActiveTab] = useState<string>("/home");
   const router = useRouter();
   const handleTabPress = useCallback((route: string) => {
@@ -26,7 +26,7 @@ export default function BottomBarButtons({ onPress }: { onPress: (route: string)
         isFromTab: "1", 
       }
     });
-    onPress(route);
+    //onPress(route);
     setActiveTab(route);
     //requestAnimationFrame(() => {
 
@@ -35,7 +35,7 @@ export default function BottomBarButtons({ onPress }: { onPress: (route: string)
 
   tabs.map((tab: string, index: number) => {
     return () => {
-      onPress(tab);
+      //onPress(tab);
       setActiveTab(tab);
       requestAnimationFrame(() => {
         router.navigate({

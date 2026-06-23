@@ -8,6 +8,8 @@ import  UserCard from "@/src/components/user-card";
 import { getCurrentUserID } from "@/utils/utils";
 import { useRouter } from "expo-router";
 import { UserID } from "@/src/rt_client/models/models";
+import { AnimatedFlashList } from "@shopify/flash-list";
+import Animated from "react-native-reanimated";
 
 interface Props {
   user_id: number;
@@ -31,22 +33,23 @@ function FriendsList() {
   }, []);
 
   const friendsIds = useMemo(()=>
-    Array.from(new Set([...userProfile?.followers_ids, ...userProfile?.followings_ids])?.values()),
-  [userProfile!.followers_ids, userProfile!.followings_ids]);
+    Array.from(new Set([...(userProfile?.followers_id || []), ...(userProfile?.followings_ids || [])])?.values()),
+  [userProfile?.followers_ids, userProfile?.followings_ids]);
 
   const friends = useMemo(()=>{
     return friendsIds?.map((id) => users?.[id])
-  }, [getCurrentUserID(), users]);
+  }, [users]);
 
   useEffect(()=>{
     friendsIds.forEach(id => {
       if(!users?.[id]) UsersManager.getInstance().load(id);
     })
-  }, [userProfile!.followers_ids, userProfile!.followings_ids]);
+  }, [userProfile?.followers_ids, userProfile?.followings_ids]);
 
-  const renderItem = useCallback(({ item }: any) => (
-    <UserCard user={item} onPress={handlePress}/>
-  ), [getCurrentUserID(), users]);
+  const renderItem = useCallback(({ item }: any) => {
+    if(!item) return null;
+    return <UserCard user={item} onPress={handlePress}/>
+  }, [users]);
 
   return (
     <FlatList

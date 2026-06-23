@@ -20,7 +20,7 @@ function MovieCard({ data }: { data: MovieCard_I }) {
   const router = useRouter();
   if (!data) return <Skeleton style={styles.view} />
   const handlePress = useCallback(() => {
-    router.navigate({
+    router.push({
       pathname: "/(app)/movie",
       params: {
         movieID: data?.movie_id,
@@ -70,8 +70,8 @@ export default memo(MovieCard, (prev, next) => {
 const styles = StyleSheet.create({
   view: {
     marginRight: 5,
-    width: 100,
     height: "99%",
+    aspectRatio: 0.67,
     backgroundColor: "rgba(255, 255, 255, 0.03)",
     borderRadius: 6,
     borderWidth: 1,
@@ -94,6 +94,7 @@ const styles = StyleSheet.create({
   inCinemasText: {
     textTransform: "uppercase",
     textAlign: "center",
-    alignSelf: "center"
+    alignSelf: "center",
+    fontWeight: "bold"
   }
 });

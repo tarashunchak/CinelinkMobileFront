@@ -10,6 +10,6 @@ export async function RemoveMessage(chatID: number, messageID: number): Promise<
 
   const text = await response.text();
   const data = JSON.parse(text);
-  console.warn("Deleting result: ", data);
+  //console.warn("Deleting result: ", data);
   return response.ok && data?.status === 200;
 };

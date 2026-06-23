@@ -1,17 +1,19 @@
-import React, { memo } from "react";
+import React, { memo, useState } from "react";
 import { textStyle } from "@/styles/textStyles";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { View, Text, StyleSheet } from "react-native";
 import { PressableScale } from "react-native-pressable-scale";
 import { useUserStatus } from "@/src/rt_client/managers/users_manager";
-import { Skeleton } from "react-native-skeletons";
+//import { Skeleton } from "react-native-skeletons";
 import AnimatedFastImage from "@/src/components/ui/animated-fast-image";
 import AnimatedFastText from "./ui/animated-fast-text";
 import { UserRoundX } from "lucide-react-native";
 import { isCurrentUser } from "@/utils/utils";
+import { FollowUser } from "@/api/followers";
 
 interface Props {
-  user: {
+  //userID: number;
+  user?: {
     user_id?: number;
     username?: string;
     first_name?: string;
@@ -20,27 +22,29 @@ interface Props {
   },
   onPress: (_1: number, _2: string, _3: string) => void;
   isFollowerCard?: boolean;
-  onFollowingQuit?: () => void;
-  onMessage?: () => void;
+  onFollowingQuit?: (_1: number) => any;
+  onMessage: (_1: number, _2: string, _3: string) => void;
 };
 
 function FriendCard({ user, onPress, onFollowingQuit, onMessage }: Props) {
   //const router = useRouter();
-  const isOnline = useUserStatus(user?.user_id);
-  const isCurrUser = isCurrentUser(user.user_id);
+  const [followed, setFollowed] = useState<boolean>(onFollowingQuit);
+  const userID = user?.user_id;
+  const isOnline = useUserStatus(userID);
+  const isCurrUser = isCurrentUser(userID);
   if (user === undefined) return null;
-  if (!user?.user_id) return <Skeleton style={styles.cardContainer} />
-  console.warn("user: ", user);
+  //if (!userID) return <Skeleton style={styles.cardContainer} />
+  //console.warn("user: ", user);
   return (
     <PressableScale
       activeScale={0.98}
       style={styles.cardContainer}
-      onPress={() => onPress(user?.user_id)}
+      onPress={() => onPress(userID)}
     >
       <View style={styles.mainView}>
         <View style={styles.infoView}>
           <AnimatedFastImage
-            sharedTransitionTag={`user-${user?.user_id}-avatar`}
+            sharedTransitionTag={`user-${userID}-avatar`}
             style={styles.image}
             source={{ uri: user?.avatar_url }}
             cachePolicy="disk"
@@ -50,7 +54,7 @@ function FriendCard({ user, onPress, onFollowingQuit, onMessage }: Props) {
         <View style={styles.textView}>
           <AnimatedFastText
             style={textStyle.white18}
-            sharedTransitionTag={`user-${user?.user_id}-full_name`}
+            sharedTransitionTag={`user-${userID}-full_name`}
           >
             {`${user?.first_name ?? ''} ${user?.last_name ?? ''}`}
           </AnimatedFastText >
@@ -60,10 +64,22 @@ function FriendCard({ user, onPress, onFollowingQuit, onMessage }: Props) {
         </View>
       </View>
       {!isCurrUser && <View style={{ flexDirection: "row", gap: 10, width: "40%", justifyContent: "flex-end", alignItems: "center"}}>
-        <PressableScale style={styles.messageBtn}>
-          <Text style={textStyle.black14}>{"Message"}</Text>
+        <PressableScale 
+          style={styles.messageBtn}
+          onPress={async ()=>{
+            if(followed)
+              onMessage(userID, user?.avatar_url, user?.username)
+            else
+              await FollowUser(userID).then(()=>{
+                setFollowed(true);
+              });
+          }}
+        >
+          <Text style={textStyle.black14}>{followed ? "Message" : "Follow"}</Text>
         </PressableScale>
-        {isCurrUser &&<UserRoundX color="white" strokeWidth={1} size={26} onPress={onFollowingQuit} />}
+        {followed && <UserRoundX color="white" strokeWidth={1} size={26} onPress={()=>{onFollowingQuit(userID).then(()=>{
+          setFollowed(false);
+        })}} />}
       </View>}
     </PressableScale >
   );
@@ -154,6 +170,7 @@ const styles = StyleSheet.create({
   },
   messageBtn: {
     height: 24,
+    width: 80,
     backgroundColor: "white",
     paddingHorizontal: "5%",
     borderRadius: 4,

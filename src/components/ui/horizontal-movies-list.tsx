@@ -1,8 +1,8 @@
 import React, { memo, useCallback, useEffect, useState } from "react";
 import { FlatList, StyleSheet } from "react-native";
-import MovieCard from "./MovieCard";
-import { Movie_I } from "../models/movie";
-import EmptyMovieCard from "./EmptyMovieCard";
+import MovieCard from "./MovieCard"
+import { Movie_I } from "../../features/home/models/movie";
+import EmptyMovieCard from "../../features/home/components/EmptyMovieCard";
 
 function HorizontalMoviesList(
   { moviesList, inCinemas }:
@@ -16,7 +16,7 @@ function HorizontalMoviesList(
   useEffect(() => {
     async function loadContent() {
       if (moviesList.length)
-        setMovies([...moviesList])
+        setMovies(moviesList);
     }
     loadContent();
   }, [moviesList]);
@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     borderColor: "rgba(255, 255, 255, 0.2)",
     borderRadius: 12,
-    marginTop: "3%",
+    //marginTop: "3%",
     marginLeft: "-1%",
     marginRight: "-1%",
   },

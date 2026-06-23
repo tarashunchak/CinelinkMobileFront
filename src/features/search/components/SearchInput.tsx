@@ -9,8 +9,8 @@ interface Props {
   placeholder: string;
   query: string;
   setQuery: (_: string) => void;
-  onChangeText: () => void;
-}
+  onChangeText?: () => void;
+};
 
 export default function SearchInput(
   { query, setQuery, placeholder, onChangeText }: Props
@@ -29,10 +29,7 @@ export default function SearchInput(
         }
         ]}
         value={query}
-        onChangeText={text => {
-          setQuery(text);
-          onChangeText();
-        }}
+        onChangeText={setQuery}
       />
       <PressableScale style={
         {

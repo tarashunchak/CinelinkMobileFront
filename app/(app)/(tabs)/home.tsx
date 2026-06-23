@@ -1,22 +1,23 @@
 import GenresList from "@/src/components/ui/genres-list";
 import { textStyle } from "@/styles/textStyles";
-import React, { memo, useCallback, useEffect, useMemo, useState } from "react";
+import React, { memo, useCallback, useEffect, useState } from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
-import HorizontalMoviesList from "@/src/features/home/components/HorizontalMoviesList";
+import HorizontalMoviesList from "@/src/components/ui/horizontal-movies-list";
 import MovieOfTheDay from "@/src/features/home/components/MovieOfTheDay";
-import { Movie_I } from "@/src/features/home/models/movie";
 import { LoadHomeCached, useHomeStore } from "@/src/features/home/cache";
 import { heightPercentageToDP as hp, widthPercentageToDP } from "react-native-responsive-screen";
 import UsersCarousel from "@/src/components/ui/users-carousel";
-import Spacer from "@/src/components/ui/spacer";
-import { useFocusEffect } from "expo-router";
 
-interface Movies_I {
-  popular: Movie_I[],
-  now_playing: Movie_I[],
-};
+const SECTIONS = [
+  { type: "Header" },
+  { type: "Movie of the day" },
+  { type: "Now in Cinemas" },
+  { type: "Tranding" },
+  { type: "Genres" },
+  { type: "Following suggestions" },
+];
 
-function HomePageScreen() {
+function HomePageScreen_() {
   useEffect(() => {
     async function load() {
       await LoadHomeCached();
@@ -31,26 +32,21 @@ function HomePageScreen() {
   );
 };
 
-const SECTIONS = [
-  { type: "Header" },
-  { type: "Movie of the day" },
-  { type: "Now in Cinemas" },
-  { type: "Tranding" },
-  { type: "Genres" },
-  { type: "Following suggestions" },
-];
-
-const HomeContent = memo(() => {
+export default function HomePageScreen(){
   const [selectedGenre, setSelectedGenre] = useState<number>(0);
+  useEffect(() => {
+    async function load() {
+      await LoadHomeCached();
+    };
+    load();
+  }, []);
   const movies = useHomeStore(s => s.movies);
 
-  const nowPlaying = useMemo(() => movies?.now_playing, [movies?.now_playing]);
-  const popular = useMemo(() => movies?.popular, [movies?.popular]);
+  const nowPlaying = movies?.now_playing;
+  const popular = movies?.popular;
 
   const renderItem = useCallback(({ item }: any) => {
     switch (item.type) {
-      case "Movie of the day":
-        return <MovieOfTheDay />;
       case "Now in Cinemas":
         return (
           <>
@@ -80,20 +76,21 @@ const HomeContent = memo(() => {
           <UsersCarousel />
         </>)
     }
-  }, []);
+  }, [])
 
   return (
     <FlatList
       data={SECTIONS}
       keyExtractor={(_: any, index: number) => String(index)}
       renderItem={renderItem}
-      ListFooterComponent={<Spacer orientation="v" spacing={hp(8)} />}
+      ListHeaderComponent={<MovieOfTheDay/>}
+      contentContainerStyle={{ paddingBottom: hp(10) }}
+      nestedScrollEnabled
+      windowSize={5}
       showsVerticalScrollIndicator={false}
     />
   )
-})
-
-export default memo(HomePageScreen);
+};
 
 const styles = StyleSheet.create({
   scrollView: {

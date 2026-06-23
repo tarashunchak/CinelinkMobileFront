@@ -2,11 +2,10 @@ import { create } from "zustand";
 import { EntityManager } from "./base_class";
 import { ChatID } from "../models/models";
 import { useEffect } from "react";
-import { API_URL } from "@/api/API_CONFIG";
 import { UsersManager } from "./users_manager";
 import { timestamp } from "@/src/features/chats/utils";
 import { ChatsManager } from "./chats_manager";
-import { jwtHeaders } from "@/utils/utils";
+import { RTCLIENT_CONFIG } from "./../config";
 
 type Message_T = {
   user_id: number;
@@ -75,11 +74,10 @@ export class MessagesManager extends EntityManager<Message_T> {
     this.isLoading = true;
     const pageInfo = useMessageStore.getState().page_info[chatID]; 
     if(pageInfo && !pageInfo?.has_next_page) return;
-    const jwt = jwtHeaders(undefined);
-    console.warn("JWT: ", jwt);
     try {
-      const response = await fetch(`${API_URL}/chats/${chatID}/messages?cursor=${pageInfo?.next_cursor ?? 1}`, {
-        headers: jwt,
+      //console.warn("JWT BEFORE MESSAGES: ", RTCLIENT_CONFIG.JWT_SELECTOR(undefined))
+      const response = await fetch(`${RTCLIENT_CONFIG.API_URL}/chats/${chatID}/messages?cursor=${pageInfo?.next_cursor ?? 1}`, {
+        headers: RTCLIENT_CONFIG.JWT_SELECTOR(undefined)
       })
       const data = await response?.json();
       if (data?.results) {
@@ -88,7 +86,7 @@ export class MessagesManager extends EntityManager<Message_T> {
         if (JSON.stringify(current) !== JSON.stringify(reversed)) {
           this.addArray(chatID, reversed);
           ChatsManager.getInstance().setLastMessage(chatID, reversed[0])
-          console.warn("\n\n\nPAGE INFO: ", data.results.page_info)
+          //console.warn("\n\n\nPAGE INFO: ", data.results.page_info)
           useMessageStore.getState()._setPageInfo(chatID, data.results.page_info)
         }
         //this.lastSeenMessageId = reversed[0]?.message_id;

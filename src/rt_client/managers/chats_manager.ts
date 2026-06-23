@@ -1,13 +1,12 @@
-import { API_URL } from "@/api/API_CONFIG";
-import { ChatID, EMPTY_OBJECT, UserID } from "../models/models";
+import { ChatID, UserID } from "../models/models";
 import { create } from "zustand";
 import { EntityManager } from "./base_class";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useShallow } from "zustand/react/shallow";
 import { timestamp } from "@/src/features/chats/utils";
 import { UsersManager } from "./users_manager";
-import { jwtHeaders } from "@/utils/utils";
-import { useAuthStore } from "@/local_storage/user/asyncStorage/store";
+import { getCurrentUser, getCurrentUserID } from "@/utils/utils";
+import {RTCLIENT_CONFIG} from "./../config";
 
 export type Chat_T = {
   chat_id: number;
@@ -39,9 +38,28 @@ interface ChatState {
   _addMany: (chats: Map<ChatID, Chat_T>) => void;
   _remove: (chatID: ChatID) => void;
   _update: (chatID: ChatID, data: Partial<Chat_T>) => void;
+  _clear: () => void;
 };
 
-const useChatStore = create<ChatState>((set) => ({
+const initialState = {
+  chats: {},
+  orderedChatIDs: [],
+  typingStatus: {},
+  lastMessages: {},
+  lastSeenMessagesIDs: {},
+  /*_setLastMessage: () => {},
+  _setTypingStatus: () => {},
+  _setLastSeenMessagesIDs: () => {},
+  _setManyLastSeenMessagesIDs: () => {},
+  _pushChatID: () => {},
+  _add: () => {},
+  _addMany: () => {},
+  _remove: () => {},
+  _update: () => {},
+  _clear: ()=>{},*/
+};
+
+export const useChatStore = create<ChatState>((set) => ({
   chats: {},
   orderedChatIDs: [],
   typingStatus: {},
@@ -82,6 +100,13 @@ const useChatStore = create<ChatState>((set) => ({
   _update: (chatID, data) => set((s) => ({
 
   })),
+  _clear: () => set(() => ({
+    chats: {},
+    orderedChatIDs: [],
+    typingStatus: {},
+    lastMessages: {},
+    lastSeenMessagesIDs: {},
+  })),
 }));
 
 export class ChatsManager extends EntityManager<Chat_T> {
@@ -105,8 +130,8 @@ export class ChatsManager extends EntityManager<Chat_T> {
   };
 
   public async loadInit() {
-    const resp = await fetch(`${API_URL}/users/chats`, {
-      headers: jwtHeaders(undefined),
+    const resp = await fetch(`${RTCLIENT_CONFIG.API_URL}/users/chats`, {
+      headers: RTCLIENT_CONFIG.JWT_SELECTOR(undefined),
     });
     const data = await resp.json();
     if (!resp.ok || data?.status !== 200)
@@ -122,8 +147,8 @@ export class ChatsManager extends EntityManager<Chat_T> {
     if (this.isLoading) return;
     try {
       if (chatID && this.currUserID) {
-        const resp = await fetch(`${API_URL}/chats/${chatID}`, {
-          headers: jwtHeaders(undefined)
+        const resp = await fetch(`${RTCLIENT_CONFIG.API_URL}/chats/${chatID}`, {
+          headers: RTCLIENT_CONFIG.JWT_SELECTOR(undefined)
         });
         const data = await resp.json();
         if (!resp.ok || data?.status !== 200)
@@ -138,7 +163,7 @@ export class ChatsManager extends EntityManager<Chat_T> {
   };
 
   public setTypingStatus(chatID: ChatID, userID: UserID, status: boolean) {
-    console.warn("SET TYPING STATUS: ", chatID, " ", userID, " ", status);
+    //console.warn("SET TYPING STATUS: ", chatID, " ", userID, " ", status);
     useChatStore.getState()._setTypingStatus(chatID, userID, status);
   };
 
@@ -172,29 +197,39 @@ export class ChatsManager extends EntityManager<Chat_T> {
   public get(chatID: number): void {
     // nothing
   };
+
+  public static clear() {
+    useChatStore.getState()._clear();
+  };
 };
 
 async function load(chatID: ChatID = 0) {
-  if(chatID)
+  if (chatID)
     await ChatsManager.getInstance().load(chatID);
   else
     await ChatsManager.getInstance().loadInit();
 };
 
 export function useUserChats(): Chat_T[] {
-  const chats = useChatStore(useShallow((s) => Object.values(s.chats)));
+  const chatEntries = useChatStore((s) => s.chats);
   const lastMessages = useChatStore(s => s.lastMessages);
 
-  useEffect(() => {
-    if(!chats || chats.length === 0)
-      load();
-  }, [chats, lastMessages]);
+  const chats = useMemo(()=>{
+    const arr = Object.values(chatEntries);
 
-  return [...chats]?.sort((a: Chat_T, b: Chat_T) => {
-    const aTime = new Date(lastMessages[a.chat_id]?.timestamp).getTime();
-    const bTime = new Date(lastMessages[b.chat_id]?.timestamp).getTime();
-    return bTime - aTime;
-  });
+    return arr.sort((a: Chat_T, b: Chat_T) => {
+      const aTime = new Date(lastMessages[a.chat_id]?.timestamp).getTime();
+      const bTime = new Date(lastMessages[b.chat_id]?.timestamp).getTime();
+      return bTime - aTime;
+    });
+  }, [chatEntries, lastMessages]);
+
+  useEffect(() => {
+    if (Object.keys(chatEntries).length === 0)
+      load();
+  }, [chatEntries]);
+
+  return chats;
 };
 
 export function useChat(chatID: ChatID): any {
@@ -202,7 +237,7 @@ export function useChat(chatID: ChatID): any {
   useEffect(() => {
     if (!chat)
       load(chatID);
-    console.warn("useChat");
+    //console.warn("useChat");
   }, [chatID, chat]);
   return chat;
 };
@@ -210,7 +245,7 @@ export function useChat(chatID: ChatID): any {
 export function useTypingStatus(chatID: ChatID, userID: UserID): boolean {
   const status = useChatStore(s => s.typingStatus[chatID]?.[userID])
   useEffect(() => {
-    console.warn("STATUS: ", status);
+    //console.warn("STATUS: ", status);
   }, [chatID, userID, status]);
   return status;
 };
@@ -224,7 +259,7 @@ export function useLastChatMessage(chatID: ChatID): any {
     return "";
 
   const user = UsersManager.getInstance().get(message?.user_id);
-  const username = user?.username ?? "You";
+  const username = getCurrentUserID() === message?.user_id ? "You" : user?.username;
   return {
     text: `${username}: ${message?.message}`,
     time: timestamp(new Date(message?.timestamp)),

@@ -6,7 +6,7 @@ import { StyleSheet, Text } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
 import AnimatedFastImage from "./animated-fast-image";
-import { useUser } from "@/src/rt_client/managers/users_manager";
+import { UsersManager, useUser, useUserStore } from "@/src/rt_client/managers/users_manager";
 import { textStyle } from "@/styles/textStyles";
 import { PressableScale } from "react-native-pressable-scale";
 import { useRouter } from "expo-router";
@@ -21,33 +21,37 @@ async function GetUserSuggestions(){
   const resp = await fetch(`${API_URL}/users/suggestions`, {
     headers: jwtHeaders(undefined),
   });
-  const text = await resp.text();
-  const data = await JSON.parse(text);
+  const data = await resp.json();
   console.warn("Suggestions: ", data?.results);
   return data?.results;
 }
 
 const UserCard = memo(({item, onPress, onFollow}: any)=>{
   const userID = item?.user_id;
-  const user = useUser(userID)
-  console.warn("User: ", item)
+  const user = useUser(userID);
+
+  useEffect(()=>{
+    UsersManager.getInstance().load(userID);
+  }, []);
+
   return (
     <PressableScale 
       style={styles.cardView}
       onPress={()=>onPress({userID, avatarUrl: user?.avatar_url})}
     >
-      <AnimatedFastImage
-        source={{uri: user?.avatar_url}}
-        style={styles.avatarImage}
-        cachePolicy="disk"
-      />
-      {user?.first_name && <Text style={textStyle.white16}>{`${user?.first_name} ${user?.last_name}`}</Text>}
-      <Text style={textStyle.gray14}>{`@${user?.username}`}</Text>
+        <AnimatedFastImage
+          source={{uri: user?.avatar_url}}
+          style={styles.avatarImage}
+          cachePolicy="disk"
+        />
+        {user?.first_name && <Text style={textStyle.white16}>{`${user?.first_name} ${user?.last_name}`}</Text>}
+        <Text style={textStyle.gray14}>{`@${user?.username}`}</Text>
+        <Text style={textStyle.yellow12}>{`${item?.count} mutual`}</Text>
       <PressableScale style={styles.followBtn} onPress={()=>onFollow(userID)}>
         <Text style={[textStyle.white16, {fontWeight: "bold"}]}>{"Follow"}</Text>
       </PressableScale>
     </PressableScale >
-  )
+  );
 });
 
 function UsersCarousel(){
@@ -136,6 +140,5 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 6,
-    elevation: 2,
   },
 });

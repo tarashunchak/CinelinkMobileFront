@@ -1,4 +1,3 @@
-import { jwtHeaders } from "@/utils/utils";
 import { API_URL } from "../API_CONFIG";
 
 export async function GetHomeMovies() {

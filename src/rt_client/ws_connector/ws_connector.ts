@@ -36,14 +36,17 @@ export class WSConnector {
     private onOpen: () => void,
     private onClose: () => void,
   ) {
-    this.connect();
+    this.connect(url);
   }
 
-  public connect() {
+  public connect(url: string) {
     //console.warn("WS URL: ", this.url);
     //this.ws = new WebSocket(`ws://192.168.0.187:8080/ws/2`);
+    if(url?.length === 0) {
+      throw new Error("INVALID WebSocket URL");
+    };
     this.ws = new WebSocket(this.url);
-    //console.warn("WS URL: ", this.url);
+    console.warn("WS URL: ", this.url, " \n", url);
 
     this.ws.onopen = () => {
       console.warn("WS is open!!")
@@ -77,8 +80,8 @@ export class WSConnector {
       ++this.reconnectAttempts;
       setTimeout(() => {
         console.warn(`reconnect attempt #${this.reconnectAttempts}`)
-        this.connect();
-      }, 5000 * this.reconnectAttempts);
+        this.connect(this.url);
+      }, 5000);
     }
   };
 

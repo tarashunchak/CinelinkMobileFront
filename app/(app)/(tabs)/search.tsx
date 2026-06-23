@@ -8,7 +8,7 @@ import SearchInput from "@/src/features/search/components/SearchInput";
 import HeaderContainer from "@/src/components/ui/header-container";
 
 export default function SearchResultBlock() {
-  const [data, setData] = useState<any>();
+  const [data, setData] = useState<any[]>([]);
   const [category, setCategory] = useState<string>("All");
   const [query, setQuery] = useState<string>("");
 
@@ -16,11 +16,8 @@ export default function SearchResultBlock() {
   console.warn(`QUERY: ${query}`);*/
 
   async function load() {
-    let resp = {
-      movies: [],
-      users: [],
-    }
-    switch (query) {
+    
+    /*switch (query) {
       case "popular": {
         resp.movies = await getPopularMovies();
         break;
@@ -32,8 +29,13 @@ export default function SearchResultBlock() {
       default: {
         resp = await GetQueryResult(query);
       }
-    }
-    if (data?.movies || data?.users) setData(data)
+    }*/
+    /*if(query.length === 0) {
+      setData([]);
+      return;
+    };
+    const resp = await GetQueryResult(query);
+    setData(resp);*/
   }
 
   useEffect(() => {

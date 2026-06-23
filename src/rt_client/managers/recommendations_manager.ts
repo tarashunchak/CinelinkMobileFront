@@ -1,10 +1,9 @@
-import { API_URL } from "@/api/API_CONFIG";
 import { create } from "zustand";
 import { EntityManager } from "./base_class";
 import { useEffect } from "react";
 import { useShallow } from "zustand/react/shallow";
-import { jwtHeaders } from "@/utils/utils";
 import { UserID } from "../models/models";
+import { RTCLIENT_CONFIG } from "./../config";
 
 type Recommendation_T = {
   id: number;
@@ -62,8 +61,8 @@ export class RecommendationsManager extends EntityManager<Recommendation_T> {
   public async load(userID: UserID) {
     try {
       if(!userID) return;
-      const resp = await fetch(`${API_URL}/users/recommendations`, {
-        headers: jwtHeaders(undefined),
+      const resp = await fetch(`${RTCLIENT_CONFIG.API_URL}/users/recommendations`, {
+        headers: RTCLIENT_CONFIG.JWT_SELECTOR(undefined),
       });
       const data = await resp.json();
       if (!resp.ok || data?.status !== 200)

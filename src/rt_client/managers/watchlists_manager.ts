@@ -1,10 +1,9 @@
-import { API_URL } from "@/api/API_CONFIG";
 import { UserID, WatchlistID } from "../models/models";
 import { create } from "zustand";
 import { EntityManager } from "./base_class";
 import { useEffect } from "react";
 import { useShallow } from "zustand/react/shallow";
-import { jwtHeaders } from "@/utils/utils";
+import { RTCLIENT_CONFIG } from "./../config";
 
 type Watchlist_T = {
   id: number;
@@ -61,8 +60,8 @@ export class WatchlistsManager extends EntityManager<Watchlist_T> {
   public async load(watchlistID: WatchlistID = 0) {
     let resp: any;
     if (!watchlistID)
-      resp = await fetch(`${API_URL}/users/watchlists`, {
-        headers: jwtHeaders(undefined)
+      resp = await fetch(`${RTCLIENT_CONFIG.API_URL}/users/watchlists`, {
+        headers: RTCLIENT_CONFIG.JWT_SELECTOR(undefined)
       });
     const data = await resp.json();
     if (!resp.ok || data?.status !== 200)

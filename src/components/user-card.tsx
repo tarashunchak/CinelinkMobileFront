@@ -25,7 +25,7 @@ function UserCard({ user, onPress }: Props) {
   const isOnline = useUserStatus(user?.user_id);
   if (user === undefined) return null;
   if (!user?.user_id) return <Skeleton style={styles.cardContainer} />
-  console.warn("user: ", user);
+  //console.warn("user: ", user);
   return (
     <PressableScale
       activeScale={0.98}

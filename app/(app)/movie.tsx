@@ -116,6 +116,7 @@ export default function MovieDetailScreen() {
             movieID={movie?.id}
             movieGenre={movie?.genres?.[0]?.id}
             posterPath={posterPath}
+            title={movie?.title}
           /></>)
     };
   }, [movieID, credits, movie]);

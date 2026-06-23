@@ -1,16 +1,17 @@
+import { textStyle } from "@/styles/textStyles";
 import { Image } from "expo-image";
 import React, { useState, useMemo } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { PressableScale } from "react-native-pressable-scale";
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
 
 export default function WatchlistCard({ watchlist, onPick }: { watchlist: any, onPick: (id: number, state: boolean) => void }) {
   const [status, setStatus] = useState<boolean>(false);
 
-  const styles = useMemo(() => {
+  /*const styles = useMemo(() => {
     if (status) return picked;
     else return notPicked;
-  }, [status]);
+  }, [status]);*/
 
   return (
     <PressableScale style={styles.view} onPress={() => {
@@ -18,26 +19,46 @@ export default function WatchlistCard({ watchlist, onPick }: { watchlist: any, o
       setStatus(newStatus)
       onPick(watchlist?.id, newStatus);
     }}>
-      <Image
-        source={{ uri: watchlist?.fg_img_url }}
-        cachePolicy={"memory"}
-        style={styles.img}
-      />
+      <View style={styles.leftContainer}>
+        <Image
+          source={{ uri: watchlist?.fg_img_url }}
+          cachePolicy={"memory"}
+          style={styles.img}
+        />
+        <View>
+          <Text style={textStyle.white20}>
+            {watchlist.name}
+          </Text>
+          <Text style={textStyle.gray18}>
+            {watchlist.description}
+          </Text>
+        </View>
+      </View>
     </PressableScale>
   );
 };
 
-const notPicked = StyleSheet.create({
+const styles = StyleSheet.create({
   view: {
-    height: wp(27),
-    width: wp(27),
+    height: wp(25),
+    //width: wp(27),
     margin: wp(6.3333 / 2),
     borderRadius: 8,
-    opacity: 0.4,
+    //opacity: 0.4,
+    backgroundColor: "rgba(255, 255, 255, 0.33)",
+    width: wp(98),
+    alignItems: "center",
+    flexDirection: "row",
+    padding: "1%",
   },
   img: {
-    flex: 1,
+    height: wp(22),
+    width: wp(22),
     borderRadius: 8,
+  },
+  leftContainer: {
+    flexDirection: "row",
+    gap: 10,
   },
 });
 

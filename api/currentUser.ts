@@ -28,6 +28,6 @@ export async function getUserProfileData(userID: number): Promise<UserProfile_T>
     }
   );
   const data = await response.json();
-  //console.warn("UserProfile: ", data);
+  ////console.warn("UserProfile: ", data);
   return data.results;
 }

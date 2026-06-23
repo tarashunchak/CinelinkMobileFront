@@ -16,7 +16,6 @@ export default function LoginScreen() {
   const [password, setPassword] = useState<string>("");
 
   const onSignIn = (text: string) => {
-
   };
 
   return (

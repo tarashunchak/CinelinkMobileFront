@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     marginTop: "3%",
     flexDirection: "column",
-    minHeight: 100,
+    minHeight: 40,
   },
   text: {
     width: "100%",

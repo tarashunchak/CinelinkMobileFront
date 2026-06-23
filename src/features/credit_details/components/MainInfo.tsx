@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { StyleSheet, View } from "react-native";
 import ReturnArrowButton from "@/src/components/ui/returnArrowButton";
@@ -30,6 +30,7 @@ export default function MainInfo(
     }
 ) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const onClose = useCallback(()=>setIsOpen(false), []);
   return (
     <View>
       <AnimatedFastImage
@@ -68,7 +69,7 @@ export default function MainInfo(
       </View>
       <ProfileModal
         isOpen={isOpen}
-        onClose={() => { setIsOpen(false) }}
+        onClose={onClose}
         profilePath={profilePath}
         ref={ref}
         creditID={credit?.id}

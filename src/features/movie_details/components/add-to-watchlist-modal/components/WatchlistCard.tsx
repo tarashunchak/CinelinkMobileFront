@@ -1,3 +1,4 @@
+import AnimatedFastImage from "@/src/components/ui/animated-fast-image";
 import { textStyle } from "@/styles/textStyles";
 import { Image } from "expo-image";
 import React, { useState, useMemo } from "react";
@@ -14,7 +15,7 @@ export default function WatchlistCard({ watchlist, onPick }: { watchlist: any, o
   }, [status]);*/
 
   return (
-    <PressableScale style={styles.view} onPress={() => {
+    <PressableScale style={[styles.view, {backgroundColor: (status ? "rgba(255, 255, 255, 0.2)" : "")}]} onPress={() => {
       const newStatus = !status;
       setStatus(newStatus)
       onPick(watchlist?.id, newStatus);
@@ -22,7 +23,7 @@ export default function WatchlistCard({ watchlist, onPick }: { watchlist: any, o
       <View style={styles.leftContainer}>
         <Image
           source={{ uri: watchlist?.fg_img_url }}
-          cachePolicy={"memory"}
+          cachePolicy="memory"
           style={styles.img}
         />
         <View>
@@ -40,20 +41,20 @@ export default function WatchlistCard({ watchlist, onPick }: { watchlist: any, o
 
 const styles = StyleSheet.create({
   view: {
-    height: wp(25),
+    minHeight: 44,
+    maxHeight: 64,
     //width: wp(27),
-    margin: wp(6.3333 / 2),
     borderRadius: 8,
     //opacity: 0.4,
-    backgroundColor: "rgba(255, 255, 255, 0.33)",
+    backgroundColor: "rgba(255, 255, 255, 0.03)",
     width: wp(98),
     alignItems: "center",
     flexDirection: "row",
     padding: "1%",
   },
   img: {
-    height: wp(22),
-    width: wp(22),
+    height: "100%",
+    aspectRatio: 1,
     borderRadius: 8,
   },
   leftContainer: {
@@ -68,7 +69,7 @@ const picked = StyleSheet.create({
     width: wp(27),
     margin: wp(6.3333 / 2),
     borderRadius: 10,
-    borderColor: "#909090",
+    borderColor: "#9090900f",
     borderWidth: 2,
     padding: 4,
   },

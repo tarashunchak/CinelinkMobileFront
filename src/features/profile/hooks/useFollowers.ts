@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from "react";
-import { UsersManager, useUser, useUsers, useUserStore } from "@/src/rt_client/managers/users_manager";
+import { UsersManager, useUser, useUsers, useUserStore } from "@/src/rt_client/src/managers/users_manager";
 
 async function LoadManyUsers(usersIds: number[]) {
   const users = useUserStore.getState().userProfiles;

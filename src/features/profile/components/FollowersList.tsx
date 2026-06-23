@@ -5,7 +5,7 @@ import { useFocusEffect, useRouter } from "expo-router";
 import React, { memo, useCallback, useMemo } from "react";
 import Spacer from "@/src/components/ui/spacer";
 import { Text, StyleSheet, FlatList } from "react-native";
-import { UsersManager, useUser, useUsers } from "@/src/rt_client/managers/users_manager";
+import { UsersManager, useUser, useUsers } from "@/src/rt_client/src/managers/users_manager";
 import FriendCard from "@/src/components/friend-card";
 
 function FollowersList({ userID }: { userID: number }) {

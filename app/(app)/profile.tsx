@@ -8,7 +8,7 @@ import ProfileMain from "@/src/features/profile/components/ProfileMain";
 import { FollowUser, UnfollowUser } from "@/api/followers/followers";
 import { GetDirectChatID } from "@/api/chats";
 import UserStats from "@/src/features/profile/components/Stats";
-import { UsersManager, useUser, useUserStore } from "@/src/rt_client/managers/users_manager";
+import { UsersManager, useUser, useUserStore } from "@/src/rt_client/src/managers/users_manager";
 import { useFollowers, useFollowings } from "@/src/features/profile/hooks/useFollowers";
 import FriendCard from "@/src/components/friend-card";
 import Spacer from "@/src/components/ui/spacer";
@@ -80,19 +80,19 @@ function UserProfileScreen({ isFromTab = false }: { isFromTab: boolean }) {
   const onToggleFollow = useCallback(async () => {
     const currentUserID = getCurrentUserID();
     if (user?.is_following)
-      await UnfollowUser(userID).finally(() => {
+      await UnfollowUser(userID).then(() => {
         UsersManager.getInstance().load(userID);
         UsersManager.getInstance().load(currentUserID);
       });
     else
-      await FollowUser(userID).finally(() => {
+      await FollowUser(userID).then(() => {
         UsersManager.getInstance().load(userID);
         UsersManager.getInstance().load(currentUserID);
       });
-  }, [])
+  }, []);
 
   const onChat = useCallback(async () => {
-    router.navigate({
+    router.push({
       pathname: "/direct_chat",
       params: {
         chatID: await GetDirectChatID(user?.user_id),
@@ -108,7 +108,7 @@ function UserProfileScreen({ isFromTab = false }: { isFromTab: boolean }) {
       case "Followers":
         return <FriendCard user={item} onFollowingQuit={undefined} onMessage={onMessage} onPress={onFriendPress} />;
       case "Followings":
-        return <FriendCard user={item} onFollowingQuit={isCurrUser && UnfollowUser} onMessage={onMessage} onPress={onFriendPress} />;
+        return <FriendCard user={item} onFollowingQuit={(id: any)=>{}} onMessage={onMessage} onPress={onFriendPress} />;
       case "Posts":
         return null;
     };

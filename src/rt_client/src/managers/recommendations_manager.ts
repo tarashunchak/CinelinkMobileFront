@@ -2,8 +2,7 @@ import { create } from "zustand";
 import { EntityManager } from "./base_class";
 import { useEffect } from "react";
 import { useShallow } from "zustand/react/shallow";
-import { UserID } from "../models/models";
-import { RTCLIENT_CONFIG } from "./../config";
+import { RTCLIENT_CONFIG } from "../../config";
 
 type Recommendation_T = {
   id: number;
@@ -43,7 +42,6 @@ const useRecommendationStore = create<RecommendationState>((set) => ({
 
 export class RecommendationsManager extends EntityManager<Recommendation_T> {
   public static instance: RecommendationsManager;
-  private currUserID: number = 0;
 
   public static getInstance(): RecommendationsManager {
     if (!RecommendationsManager.instance)
@@ -51,16 +49,15 @@ export class RecommendationsManager extends EntityManager<Recommendation_T> {
     return RecommendationsManager.instance
   };
 
-  public init(userID: number) {
-    if (userID) {
-      this.currUserID = userID;
-      this.load(userID);
-    }
+  public init() {
+    if(!RTCLIENT_CONFIG.CURR_USER_ID_SELECTOR) 
+      throw new Error("CURR_USER_ID_SELECTOR is not specified!");
+    this.load();
   };
 
-  public async load(userID: UserID) {
+  public async load() {
     try {
-      if(!userID) return;
+      if(!RTCLIENT_CONFIG.CURR_USER_ID_SELECTOR) return;
       const resp = await fetch(`${RTCLIENT_CONFIG.API_URL}/users/recommendations`, {
         headers: RTCLIENT_CONFIG.JWT_SELECTOR(undefined),
       });

@@ -31,7 +31,7 @@ export default function MovieCreditsScreen() {
     async function load() {
       const data = await GetMovieCredits(movieID);
       if (data) setCredits(data)
-      console.warn("POSTER PATH: ", posterPath);
+      //console.warn("POSTER PATH: ", posterPath);
     };
     load();
     return () => {

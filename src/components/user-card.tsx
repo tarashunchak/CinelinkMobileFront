@@ -3,7 +3,7 @@ import React, { memo } from "react";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { View, Text, StyleSheet } from "react-native";
 import { PressableScale } from "react-native-pressable-scale";
-import { useUserStatus } from "@/src/rt_client/managers/users_manager";
+import { useUserStatus } from "@/src/rt_client/src/managers/users_manager";
 import { Skeleton } from "react-native-skeletons";
 import AnimatedFastImage from "@/src/components/ui/animated-fast-image";
 import AnimatedFastText from "./ui/animated-fast-text";

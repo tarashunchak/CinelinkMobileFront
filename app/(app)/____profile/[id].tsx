@@ -11,7 +11,7 @@ import FollowersList from "@/src/features/profile/components/FollowersList";
 import { GetDirectChatID } from "@/api/chats";
 import { ScrollView } from "react-native-gesture-handler";
 import UserStats from "@/src/features/profile/components/Stats";
-import { UsersManager, useUser } from "@/src/rt_client/managers/users_manager";
+import { UsersManager, useUser } from "@/src/rt_client/src/managers/users_manager";
 import PostsList from "@/src/features/profile/components/PostsList";
 
 

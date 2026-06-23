@@ -40,6 +40,11 @@ type CacheEntry<T> = {
 const homeMoviesTTL = 60000;
 let cachedHomeMovies: CacheEntry<HomeMovies> = {};
 
+export function useHomeMovies(){
+  const home = useHomeStore();
+  return home;
+};
+
 export async function LoadGenresCached(){
   if(useHomeStore.getState().genres.length)
     return;
@@ -49,7 +54,7 @@ export async function LoadGenresCached(){
 
 export async function LoadHomeCached() {
   if (cachedHomeMovies && cachedHomeMovies.data && cachedHomeMovies.expiresAt > Date.now()) {
-    console.log("Cached home: ", cachedHomeMovies);
+    //console.log("Cached home: ", cachedHomeMovies);
     return cachedHomeMovies?.data;
   }
 
@@ -76,7 +81,7 @@ let cachedMovieOfTheDay: CacheEntry<MovieOfTheDay> = {};
 
 export async function GetMovieOfTheDayCache() {
   if (cachedMovieOfTheDay && cachedMovieOfTheDay.data && cachedMovieOfTheDay.expiresAt > Date.now()) {
-    console.log("Cached movie of the day: ", cachedMovieOfTheDay);
+    //console.log("Cached movie of the day: ", cachedMovieOfTheDay);
     return cachedMovieOfTheDay?.data;
   }
 

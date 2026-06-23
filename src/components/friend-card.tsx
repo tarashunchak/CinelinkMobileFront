@@ -1,9 +1,9 @@
-import React, { memo, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { textStyle } from "@/styles/textStyles";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { View, Text, StyleSheet } from "react-native";
 import { PressableScale } from "react-native-pressable-scale";
-import { useUserStatus } from "@/src/rt_client/managers/users_manager";
+import { useUserStatus } from "@/src/rt_client/src/managers/users_manager";
 //import { Skeleton } from "react-native-skeletons";
 import AnimatedFastImage from "@/src/components/ui/animated-fast-image";
 import AnimatedFastText from "./ui/animated-fast-text";
@@ -28,12 +28,14 @@ interface Props {
 
 function FriendCard({ user, onPress, onFollowingQuit, onMessage }: Props) {
   //const router = useRouter();
-  const [followed, setFollowed] = useState<boolean>(onFollowingQuit);
   const userID = user?.user_id;
   const isOnline = useUserStatus(userID);
   const isCurrUser = isCurrentUser(userID);
+  const [followed, setFollowed] = useState<boolean>(false);
   if (user === undefined) return null;
   //if (!userID) return <Skeleton style={styles.cardContainer} />
+  useEffect(()=>{setFollowed(!(onFollowingQuit === undefined))}, [])
+  useEffect(()=>{}, [followed]);
   //console.warn("user: ", user);
   return (
     <PressableScale
@@ -77,9 +79,11 @@ function FriendCard({ user, onPress, onFollowingQuit, onMessage }: Props) {
         >
           <Text style={textStyle.black14}>{followed ? "Message" : "Follow"}</Text>
         </PressableScale>
-        {followed && <UserRoundX color="white" strokeWidth={1} size={26} onPress={()=>{onFollowingQuit(userID).then(()=>{
-          setFollowed(false);
-        })}} />}
+        <PressableScale onPress={()=>{onFollowingQuit?.(userID)?.then(()=>{
+            setFollowed(false);
+          })}}>
+          {followed && <UserRoundX color="white" strokeWidth={1} size={26}  />}
+        </PressableScale>
       </View>}
     </PressableScale >
   );

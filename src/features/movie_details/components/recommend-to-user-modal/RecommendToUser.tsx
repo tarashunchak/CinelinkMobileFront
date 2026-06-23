@@ -8,7 +8,7 @@ import { getCurrentUserID } from "@/utils/utils";
 import Button from "./components/Button";
 import { GetUserFollowers } from "@/api/followers";
 import { useBlurStore } from "@/src/components/ui/screen-background";
-import { useUsers } from "@/src/rt_client/managers/users_manager";
+import { useUsers } from "@/src/rt_client/src/managers/users_manager";
 
 export type UserSheetRef = {
   open: () => void;

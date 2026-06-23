@@ -12,7 +12,7 @@ import { BlurTargetView, BlurView } from "expo-blur";
 import { textStyle } from "@/styles/textStyles";
 import AnimatedFastText from "@/src/components/ui/animated-fast-text";
 import { getMoviesByGenre, getSimilarMovies } from "@/api/tmdbApi";
-import { useMovieStore } from "@/src/rt_client/managers/movies_manager";
+import { useMovieStore } from "@/src/rt_client/src/managers/movies_manager";
 import Header from "@/src/features/movie_details/components/Header";
 import MovieCard from "@/src/features/movie_details/components/MovieCard";
 
@@ -57,7 +57,7 @@ export default function SimilarMoviesScreen() {
         setMovies(data);
       };
       //console.warn("SIMILAR MOVIES: ", data),
-      console.warn("POSTER PATH: ", posterPath);
+      //console.warn("POSTER PATH: ", posterPath);
     };
     load();
     return () => {
@@ -67,15 +67,16 @@ export default function SimilarMoviesScreen() {
 
   const onEndReached = useCallback(async ()=>{
     const newPage = page+1;
-    let data = await getSimilarMovies(movieID, newPage)
+    if(newPage === page) return;
+    let data = await getSimilarMovies(Number(movieID), newPage)
     if(!data)
       data = await getMoviesByGenre(genre);
     setMovies([...movies, ...data])
     setPage(newPage);
-  }, []);
+  }, [movieID]);
 
   const renderItem = useCallback(({ item }: any) => {
-    console.warn("MOVIE: ", item);
+    //console.warn("MOVIE: ", item);
     return <MovieCard movie={item} onPress={handlePress}/>
   }
     , [movieID]);
@@ -99,7 +100,7 @@ export default function SimilarMoviesScreen() {
           maximumZoomScale={2}
           initialNumToRender={12}
           columnWrapperStyle={{ justifyContent: "space-between"}}
-          keyExtractor={(item: any, index: number) => String(item?.id ?? index)}
+          keyExtractor={(item: any, index: number) => String(item?.id)}
           renderItem={renderItem}
           onEndReached={onEndReached}
         />

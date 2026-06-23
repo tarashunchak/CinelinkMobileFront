@@ -1,6 +1,6 @@
 import { ChatManager } from "../chat_manager/chat_manager";
 import { Content, WSMessage } from "../ws_connector/ws_connector";
-import { useChatStore } from "../app_state";
+import { useChatStore } from "../../app_state";
 import { ChatsManager } from "../managers/chats_manager";
 import { MessagesManager } from "../managers/messages_manager";
 import { UsersManager } from "../managers/users_manager";

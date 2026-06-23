@@ -1,7 +1,7 @@
 import { useAuthStore } from "@/local_storage/user/asyncStorage/store";
 import { textStyle } from "@/styles/textStyles";
-import { useRouter } from "expo-router";
-import React from "react";
+import { router } from "expo-router";
+import React, { useCallback } from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
 import { heightPercentageToDP as hp, widthPercentageToDP } from "react-native-responsive-screen";
 import { PressableScale } from "react-native-pressable-scale";
@@ -10,15 +10,17 @@ import { Plus, Search } from "lucide-react-native";
 import AnimatedFastImage from "@/src/components/ui/animated-fast-image";
 
 export default function LibraryHeader() {
-  const router = useRouter();
+  const onPress = useCallback(()=>{ 
+    router.navigate({
+      pathname: "/profile",
+    })
+  }, []);
   return (
     <HeaderContainer style={stylesR.view}>
       <View style={styles.left.view}>
         <PressableScale
           activeScale={0.9}
-          onPress={() => router.navigate({
-            pathname: "/profile",
-          })}
+          onPress={onPress}
         >
           <AnimatedFastImage
             style={styles.left.avatar}

@@ -1,18 +1,16 @@
-import { ChatID, UserID } from "./models/models";
-import { WSConnector, WSMessage } from "./ws_connector/ws_connector";
-import { Chat, ChatManager } from "./chat_manager/chat_manager";
-import * as Makers from "./message_makers/message_makers";
-import { Handlers } from "./message_handlers/message_handlers";
-import { useEffect } from "react";
-import { useChatStore } from "./app_state";
-import { ChatMessage } from "./message_storage/message_storage";
-import { MessagesManager } from "./managers/messages_manager";
+import { ChatID, UserID } from "./src/models/models";
+import { WSConnector, WSMessage } from "./src/ws_connector/ws_connector";
+import { Chat, ChatManager } from "./src/chat_manager/chat_manager";
+import * as Makers from "./src/event_driven/message_makers";
+import { Handlers } from "./src/event_driven/message_handlers";
+//import { useEffect } from "react";
+//import { useChatStore } from "./app_state";
+import { ChatMessage } from "./src/message_storage/message_storage";
+import { MessagesManager } from "./src/managers/messages_manager";
 import { RTCLIENT_CONFIG } from "./config";
 
 const WS_ADDRESS = (userID: UserID): string => 
   `${RTCLIENT_CONFIG.WS_URL}/ws/${userID}`
-  //`wss://cinelink.lol/ws/${userID}`;
-  //`${process.env.EXPO_PUBLIC_WS_URL}/ws/${userID}`;
 
 const HTTP_ADDRESS = (chatID: ChatID): string =>
   `${RTCLIENT_CONFIG.API_URL}/chats/${chatID}/messages`;
@@ -20,12 +18,7 @@ const HTTP_ADDRESS = (chatID: ChatID): string =>
 class RTClient_ {
   private wsConnections: Map<UserID, WSConnector> = new Map();
   private chatManager: ChatManager = new ChatManager();
-  private currUserID: UserID = 0;
   private onReconnect: ()=> void = ()=>{};
-
-  public getCurrUserID(): number {
-    return this.currUserID;
-  };
 
   private onWSMessage(data: any) {
     const type = data?.type;
@@ -34,8 +27,8 @@ class RTClient_ {
       handler(data, this.chatManager);
   };
 
-  public connect(userID: UserID) {
-    this.currUserID = userID;
+  public connect() {
+    const userID = RTCLIENT_CONFIG.CURR_USER_ID_SELECTOR();
     const url = WS_ADDRESS(userID);
     console.warn("url: ", url);
     this.wsConnections?.set(userID, new WSConnector(
@@ -98,8 +91,8 @@ class RTClient_ {
       Makers.makeSeenAllMessage({ chat_id: chatID, user_id: userID })
     );
 
-    const messageID: number = [...useChatStore.getState().messages[chatID] || []].reverse()[0]?.message_id ?? 0;
-    useChatStore.getState()._setLastSeenMessageID(chatID, messageID);
+    //const messageID: number = [...useChatStore.getState().messages[chatID] || []].reverse()[0]?.message_id ?? 0;
+    //useChatStore.getState()._setLastSeenMessageID(chatID, messageID);
   };
 
   public async setChatLeaving(chatID: ChatID, userID: UserID) {
@@ -141,8 +134,8 @@ class RTClient_ {
   };
 
   public getLastSeenMessageID(chatID: ChatID) {
-    const messageID = useChatStore.getState().lastSeenMessageID[chatID];
-    return messageID;
+    //const messageID = useChatStore.getState().lastSeenMessageID[chatID];
+    //return messageID;
   };
 
   public createMessageStorage = this.chatManager.connect;
@@ -163,7 +156,7 @@ const EMPTY_ARRAY: ChatMessage[] = [];
   return messages;
 };*/
 
-export function useChatLastMessage(chatID: ChatID): string {
+/*export function useChatLastMessage(chatID: ChatID): string {
   const lastMessage = useChatStore(state => state.lastMessage[chatID] ?? "");
   //const typing = useChatStore(state => state.typingStatus[userID] || false);
   useEffect(() => { }, [chatID, lastMessage]);
@@ -201,6 +194,6 @@ export function useChatTypingUsers(chatID: ChatID): string {
 export function useChat(chatID: ChatID){
   const typingListener = (e: Event)=>{
     if(typeof e === FocusEvent)
-    RTClient.setTypingStatus(chatID, RTClient.getCurrUserID(), status);
+    RTClient.setTypingStatus(chatID, RTCLIENT_CONFIG.CURR_USER_ID_SELECTOR(), status);
   };
-};
+};*/

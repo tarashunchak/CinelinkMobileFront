@@ -11,8 +11,6 @@ import { MONTH } from "@/utils/month";
 import AnimatedFastImage from "@/src/components/ui/animated-fast-image";
 import AnimatedFastText from "@/src/components/ui/animated-fast-text";
 import HeaderContainer from "@/src/components/ui/header-container";
-import animatedFastImage from "@/src/components/ui/animated-fast-image";
-import { Image } from "expo-image";
 
 export default function MainInfo(
   { movie, inCinemas = false, maximum, posterPath, backdropPath, title, cast }

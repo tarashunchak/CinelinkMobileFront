@@ -1,16 +1,14 @@
-import React, { useState, forwardRef, useImperativeHandle, useRef, memo, useCallback } from "react";
+import React, { useState, forwardRef, useImperativeHandle, useRef, memo, useCallback, useMemo } from "react";
 import BottomSheet, { BottomSheetBackdrop, BottomSheetView} from "@gorhom/bottom-sheet";
-import { View, StyleSheet, TextInput, Keyboard } from "react-native";
+import { View, StyleSheet, TextInput, Keyboard, Text } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import WatchlistCard from "./components/WatchlistCard";
 import { useBlurStore } from "@/src/components/ui/screen-background";
-import { Search } from "lucide-react-native";
 import { textStyle } from "@/styles/textStyles";
-import { useUserWatchlists } from "@/src/rt_client/managers/watchlists_manager";
-import Button from "./components/Button";
-import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
-import Spacer from "@/src/components/ui/spacer";
+import { useUserWatchlists } from "@/src/rt_client/src/managers/watchlists_manager";
 import { heightPercentageToDP } from "react-native-responsive-screen";
+import { PressableScale } from "react-native-pressable-scale";
+import { router } from "expo-router";
 
 export type WatchlistSheetRef = {
   open: () => void;
@@ -36,6 +34,11 @@ const WatchlistSheet = forwardRef<WatchlistSheetRef, WatchlistSheetProps>(({ set
   const watchlists = useUserWatchlists();
   const [picked, setPicked] = useState<Map<number, boolean>>(new Map());
   const setBottomBarVisible = useBlurStore(state => state.setBottomBarVisible);
+  const [query, setQuery] = useState<string>("");
+
+  const fetchedData = useMemo(()=>{
+    
+  }, [query]);
 
   useImperativeHandle(ref, () => ({
     open: () => {
@@ -55,6 +58,10 @@ const WatchlistSheet = forwardRef<WatchlistSheetRef, WatchlistSheetProps>(({ set
     }} />
   ), []);
 
+  const handleNewWatchlistPress = useCallback(()=>{
+    router.push("/(app)/add_watchlist");
+  }, []);
+
   //const animatedIndex = use
 
   /*const buttonOpacity = useDerivedValue(() => {
@@ -65,14 +72,7 @@ const WatchlistSheet = forwardRef<WatchlistSheetRef, WatchlistSheetProps>(({ set
       Extrapolate.CLAMP,
     );
   });*/
-  const buttonOpacity = useSharedValue(0);
-
-  const buttonAnimatedStyle = useAnimatedStyle(() => ({
-    opacity: buttonOpacity.value,
-  }))
-
   const onClose = useCallback(() => {
-    buttonOpacity.value = withTiming(0);
     requestAnimationFrame(() => {
       setBottomBarVisible(true);
       sheetRef.current?.close();
@@ -82,65 +82,58 @@ const WatchlistSheet = forwardRef<WatchlistSheetRef, WatchlistSheetProps>(({ set
   }, []);
 
   return (
-    <>
-      <BottomSheet
-        ref={sheetRef}
-        index={0}
-        enableBlurKeyboardOnGesture
-        animateOnMount={true}
-        animationConfigs={animationConfigs}
-        onChange={(index) => {
-          if (index >= 0)
-            buttonOpacity.value = withTiming(100);
-          else
-            buttonOpacity.value = withTiming(0);
-        }}
-        onClose={onClose}
-        snapPoints={snapPoints}
-        enablePanDownToClose
-        handleIndicatorStyle={styles.handleIndicator}
-        handleStyle={styles.handle}
-        containerStyle={[styles.container]}
-        backdropComponent={(props) =>
-          <BottomSheetBackdrop
-            {...props}
-            appearsOnIndex={0}
-            disappearsOnIndex={-1}
-            pressBehavior="close"
-            enableTouchThrough={false}
-          />
-        }
-      >
-        <BottomSheetView
-          style={{
-            maxHeight: heightPercentageToDP(90),
-            backgroundColor: "#090405",
-          }}>
-          <View style={styles.mainView}>
-            <View style={styles.searchBlockContainer}>
-              <TextInput
-                placeholder="Search"
-                placeholderTextColor={"grey"}
-                style={[styles.textInput, textStyle.white18]}
-              />
-              <Search width={34} height={34} color="white" strokeWidth={1} />
-            </View>
-            <FlatList
-              contentContainerStyle={{
-                alignItems: "center",
-                paddingBottom: heightPercentageToDP(8),
-              }}
-              data={watchlists}
-              keyExtractor={(item, index) => String(index)}
-              renderItem={renderItem}
+    <BottomSheet
+      ref={sheetRef}
+      index={0}
+      enableBlurKeyboardOnGesture
+      animateOnMount={true}
+      animationConfigs={animationConfigs}
+      onClose={onClose}
+      snapPoints={snapPoints}
+      enablePanDownToClose
+      handleIndicatorStyle={styles.handleIndicator}
+      handleStyle={styles.handle}
+      containerStyle={[styles.container]}
+      backdropComponent={(props) =>
+        <BottomSheetBackdrop
+          {...props}
+          appearsOnIndex={0}
+          disappearsOnIndex={-1}
+          pressBehavior="close"
+          enableTouchThrough={false}
+        />
+      }
+    >
+      <BottomSheetView
+        style={{
+          maxHeight: heightPercentageToDP(90),
+          //backgroundColor: "#090405",
+          backgroundColor: "#101010",
+        }}>
+        <View style={styles.mainView}>
+          <View style={styles.searchBlockContainer}>
+            <TextInput
+              placeholder="Search"
+              placeholderTextColor={"grey"}
+              style={[styles.textInput, textStyle.white18]}
             />
+            <PressableScale onPress={handleNewWatchlistPress}>
+              <Text style={[textStyle.yellow14]}>New watchlist</Text>
+            </PressableScale>
           </View>
-        </BottomSheetView>
-      </BottomSheet >
-      <Animated.View style={buttonAnimatedStyle}>
-        <Button />
-      </Animated.View>
-    </>
+          <FlatList
+            contentContainerStyle={{
+              alignItems: "center",
+              paddingVertical: "1%",
+              gap: "1%",
+            }}
+            data={watchlists}
+            keyExtractor={(item, index) => String(index)}
+            renderItem={renderItem}
+          />
+        </View>
+      </BottomSheetView>
+    </BottomSheet >
   )
 });
 
@@ -155,13 +148,14 @@ const styles = StyleSheet.create({
     flexDirection: "column",
   },
   textInput: {
-    width: "80%",
+    minWidth: "70%",
+    maxWidth: "80%",
     height: 46,
-    backgroundColor: "#0C0C0C",
+    //backgroundColor: "#0C0C0C",
+    backgroundColor: "#101010",
     borderColor: "rgba(255,255, 255, 0.3)",
     borderWidth: 1,
     borderRadius: 8,
-    margin: "2%",
     paddingLeft: "2%",
     color: "white",
     elevation: 10,
@@ -181,10 +175,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-evenly",
-    paddingRight: "5%",
+    padding: "2%",
+    gap: 10,
     alignSelf: "flex-start",
     backgroundColor: "#222831",
     width: "100%",
-    elevation: 10,
+    elevation: 5,
   },
 });

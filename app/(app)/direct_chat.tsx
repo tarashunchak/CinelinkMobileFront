@@ -16,9 +16,9 @@ import { useEditMode } from "@/src/features/chats/hooks";
 import EditHeader from "@/src/features/chats/components/EditHeader";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import Animated from "react-native-reanimated";
-import { MessagesManager, useChatMessages } from "@/src/rt_client/managers/messages_manager";
-import { useChat } from "@/src/rt_client/managers/chats_manager";
-import { ChatID } from "@/src/rt_client/models/models";
+import { MessagesManager, useChatMessages } from "@/src/rt_client/src/managers/messages_manager";
+import { useChat } from "@/src/rt_client/src/managers/chats_manager";
+import { ChatID } from "@/src/rt_client/src/models/models";
 
 interface Params {
   chatID: number;

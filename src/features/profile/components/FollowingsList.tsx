@@ -5,7 +5,7 @@ import { StyleSheet } from "react-native";
 import UserCard from "@/src/components/user-card";
 import Spacer from "@/src/components/ui/spacer";
 import { FlatList } from "react-native-gesture-handler";
-import { UsersManager, useUser, useUsers } from "@/src/rt_client/managers/users_manager";
+import { UsersManager, useUser, useUsers } from "@/src/rt_client/src/managers/users_manager";
 import FriendCard from "@/src/components/friend-card";
 
 export default function FollowingsList({ userID }: { userID: number }) {

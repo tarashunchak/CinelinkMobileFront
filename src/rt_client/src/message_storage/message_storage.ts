@@ -1,4 +1,4 @@
-import { useChatStore } from "../app_state";
+import { useChatStore } from "../../app_state";
 import { ChatID } from "../models/models";
 
 export interface ChatMessage {

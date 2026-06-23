@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useEffect } from "react";
+import React, { memo, useCallback, useEffect, useMemo } from "react";
 import { textStyle } from "@/styles/textStyles";
 import { FlatList, View, Text, StyleSheet } from "react-native";
 import { PressableScale } from "react-native-pressable-scale";
@@ -6,15 +6,14 @@ import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { useRouter } from "expo-router";
 import { 
   useLastChatMessage, 
-  useUnseenMessagesCount, 
   useTypingStatus, 
   useUserChats, 
   Chat_T, 
   ChatsManager,
-  useChatStore,
-} from "@/src/rt_client/managers/chats_manager";
+}
+from "@/src/rt_client/src/managers/chats_manager";
 import AnimatedFastImage from "@/src/components/ui/animated-fast-image";
-import { useUserStatus } from "@/src/rt_client/managers/users_manager";
+import { useUserStatus } from "@/src/rt_client/src/managers/users_manager";
 import AnimatedFastText from "@/src/components/ui/animated-fast-text";
 import Spacer from "@/src/components/ui/spacer";
 import { getCurrentUserID } from "@/utils/utils";
@@ -25,6 +24,10 @@ const DirectChatCard = memo(({ item, onPress}: any) => {
   const isTyping = useTypingStatus(chatID, peerID);
   const lastMessage = useLastChatMessage(chatID);
   const isOnline = useUserStatus(peerID);
+
+  const visibleContent = useMemo(()=>{
+    return (isOnline && isTyping) ? "typing..." : lastMessage.text
+  }, [lastMessage, isOnline, isTyping]);
 
   //const unSeenMessageCnt = useUnseenMessagesCount(chatID);
   
@@ -61,7 +64,7 @@ const DirectChatCard = memo(({ item, onPress}: any) => {
             ellipsizeMode="tail"
             style={[textStyle.gray16, { maxWidth: "100%" }]}
           >
-            {isTyping ? "typing..." : lastMessage.text}
+            {visibleContent}
           </AnimatedFastText>
         </View>
       </View>

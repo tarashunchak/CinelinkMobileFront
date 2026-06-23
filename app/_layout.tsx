@@ -3,11 +3,10 @@ import { Slot, useRouter, useSegments } from "expo-router";
 import { useEffect } from "react";
 //import { MessagesManager } from "@/src/rt_client/managers/messages_manager";
 import { useAuthStore } from "@/local_storage/user/asyncStorage/store";
-import { ChatsManager } from "@/src/rt_client/managers/chats_manager";
-import { WatchlistsManager } from "@/src/rt_client/managers/watchlists_manager";
-import { UsersManager } from "@/src/rt_client/managers/users_manager";
-import { ScreenBackground } from "@/src/components/ui/screen-background";
-import { RecommendationsManager } from "@/src/rt_client/managers/recommendations_manager";
+import { ChatsManager } from "@/src/rt_client/src/managers/chats_manager";
+import { WatchlistsManager } from "@/src/rt_client/src/managers/watchlists_manager";
+import { UsersManager } from "@/src/rt_client/src/managers/users_manager";
+import { RecommendationsManager } from "@/src/rt_client/src/managers/recommendations_manager";
 import { RTClient } from "@/src/rt_client/rt_client";
 
 const managers: any[] = [

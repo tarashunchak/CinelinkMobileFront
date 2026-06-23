@@ -6,7 +6,7 @@ export async function GetMovieDetails(movieID: number) {
     headers: jwtHeaders(undefined)
   });
   const data = await response.json();
-  console.warn("MOVIE FROM WATCHLIST: ", data?.results)
+  //console.warn("MOVIE FROM WATCHLIST: ", data?.results)
   return data?.results;
 }
 

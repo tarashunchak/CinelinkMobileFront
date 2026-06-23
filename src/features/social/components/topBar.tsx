@@ -60,10 +60,12 @@ function SocialPageTopBar({ onTabChange }: { onTabChange: (tab: string) => void 
               () => {
                 setActiveTab(name);
                 onTabChange(name);
-                radius.value = 14;
+                radius.value = 20;
                 offsetX.value = withSpring(layouts.current[name].x)
                 sliderWidth.value = withSpring(layouts.current[name].width, {}, ()=>{
-                  radius.value = withSpring(4);
+                  radius.value = withSpring(4, {
+                    stiffness: 100,
+                  });
                 })
               }
             }

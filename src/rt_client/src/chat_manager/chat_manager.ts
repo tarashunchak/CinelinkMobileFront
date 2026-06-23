@@ -1,11 +1,10 @@
-import { jwtHeaders } from "@/utils/utils";
 import { ChatID } from "../models/models";
-import { useAuthStore } from "@/local_storage/user/asyncStorage/store";
 import { WSMessage } from "../ws_connector/ws_connector";
 import { MessagesQueue } from "../messages_queue/messages_queue";
 import { MessageStorage } from "../message_storage/message_storage";
 import { ChatMessage } from "../message_storage/message_storage";
-import { useChatStore } from "../app_state";
+import { useChatStore } from "../../app_state";
+import { RTCLIENT_CONFIG } from "../../config";
 
 export type Chat = {
   info: {
@@ -13,7 +12,7 @@ export type Chat = {
     chat_type: string,
     img_url: string,
     name: string,
-  },
+  };
   peer: {
     avatar_url: string,
     is_online: boolean,
@@ -42,7 +41,6 @@ type Callbacks = {
 };
 
 export class ChatManager {
-  private messages: Map<ChatID, MessageStorage> = new Map();
   private loadedStatus: Map<ChatID, boolean> = new Map();
   private messagesQueue: MessagesQueue = new MessagesQueue();
   private listeners: ((event: ChatEvent) => void)[] = [];
@@ -55,8 +53,6 @@ export class ChatManager {
   };
 
   public connect(chatID: ChatID) {
-    this.messages?.set(chatID, new MessageStorage(chatID));
-    this.messages?.get(chatID)?.loadMessages();
   };
 
   public async onEvent(handler: (event: ChatEvent) => void) {
@@ -71,12 +67,12 @@ export class ChatManager {
   };
 
   public async setOnOnline(chatID: ChatID, callback: (_: WSMessage) => void) {
-    console.warn("Set on online: ", chatID, " ", callback);
+    //console.warn("Set on online: ", chatID, " ", callback);
     this.callbacks?.onOnline?.set(chatID, callback);
   };
 
   public async setOnTyping(chatID: ChatID, callback: (_: WSMessage) => void) {
-    console.warn("Set on typing: ", chatID, " ", callback);
+    //console.warn("Set on typing: ", chatID, " ", callback);
     this.callbacks?.onTyping?.set(chatID, callback);
   };
 
@@ -87,15 +83,14 @@ export class ChatManager {
   public async handleIncommingMessage(chatID: ChatID, message: ChatMessage) {
     console.warn("HandleIncommingMessage: ", message);
     this.messages.get(chatID)?.addMessage(message);
-    //this.messages.set(chatID, [message, ...current]);
   };
 
   public async getChat(chatID: ChatID): Promise<Chat> {
-    console.warn("Chat ID in getChat: ", chatID)
-    const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/chats/${chatID}`,
+    //console.warn("Chat ID in getChat: ", chatID)
+    const response = await fetch(`${RTCLIENT_CONFIG.API_URL}/chats/${chatID}`,
       {
         method: "GET",
-        headers: jwtHeaders(undefined)
+        headers: RTCLIENT_CONFIG.JWT_SELECTOR(undefined),
       }
     );
     const text = await response?.text();
@@ -113,17 +108,8 @@ export class ChatManager {
     return data?.results;
   };
 
-  public async getChatMessages(chatID: ChatID) {
-    let storage = this.messages?.get(chatID);
-    if (!storage) {
-      storage = new MessageStorage(chatID);
-      this.messages?.set(chatID, storage);
-    }
-    await storage.loadMessages();
-  };
-
   public addMessage(chatID: ChatID, msg: ChatMessage) {
-    console.warn("Add message in chatManager");
+    //console.warn("Add message in chatManager");
     this.messages?.get(chatID)?.addMessage(msg);
   }
 

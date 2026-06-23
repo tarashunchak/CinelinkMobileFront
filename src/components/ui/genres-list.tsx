@@ -20,7 +20,7 @@ export default function GenresList({ setSelectedGenre }: { setSelectedGenre: (ic
     <View style={genreStyle.genreCellView}>
       <FlatList
         data={genreItems}
-        horizontal={true}
+        horizontal
         style={styles.flatList}
         contentContainerStyle={styles.contentContainerStyle}
         showsHorizontalScrollIndicator={false}
@@ -46,6 +46,6 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(58, 53, 53, 0.03)" 
   },
   contentContainerStyle: {
-    paddingHorizontal: 10 
+    paddingHorizontal: 10,
   },
 });

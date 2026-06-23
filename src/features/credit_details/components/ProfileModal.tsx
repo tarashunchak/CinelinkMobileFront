@@ -17,7 +17,7 @@ interface Props {
 
 export default function ProfileModal( props : Props) {
   const { isOpen, profilePath, onClose, creditID } = props;
-  console.warn("Props: ", props);
+  //console.warn("Props: ", props);
   const blurTargetRef = useBlurTargetRef();
   return (
     <Modal

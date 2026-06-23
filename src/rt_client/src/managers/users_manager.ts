@@ -3,7 +3,7 @@ import { create } from "zustand";
 import { EntityManager } from "./base_class";
 import { useEffect, useRef } from "react";
 import { useShallow } from "zustand/react/shallow";
-import { RTCLIENT_CONFIG } from "./../config";
+import { RTCLIENT_CONFIG } from "../../config";
 
 type User_T = {
   user_id: number;
@@ -76,7 +76,6 @@ export const useUserStore = create<UserState>((set) => ({
 }));
 
 export class UsersManager extends EntityManager<UserProfile_T> {
-  private currUserID: number = 0;
   private static instance: UsersManager;
   private loadingState = new Map<UserID, boolean>();
   private isInitLoading: boolean = false;
@@ -88,15 +87,15 @@ export class UsersManager extends EntityManager<UserProfile_T> {
   };
 
   public init(userID: UserID) {
-    this.currUserID = userID;
     this.initLoading(userID);
   };
 
   public async initLoading(userID: number) {
     if (this.isInitLoading) return;
     this.isInitLoading = true;
+    const currUserID = RTCLIENT_CONFIG.CURR_USER_ID_SELECTOR();
     try {
-      const resp = await fetch(`${RTCLIENT_CONFIG.API_URL}/users/init/${userID ?? this.currUserID}`, {
+      const resp = await fetch(`${RTCLIENT_CONFIG.API_URL}/users/init/${userID ?? currUserID}`, {
         headers: RTCLIENT_CONFIG.JWT_SELECTOR(undefined)
       });
 
@@ -218,23 +217,3 @@ export function useUser(userID: UserID): UserProfile_T {
   }, [userID, lastUpdated]);
   return user;
 };
-
-const EMPTY_USER_OBJECT: UserProfile_T = {
-  user_id: 0,
-  first_name: "",
-  last_name: "",
-  username: "",
-  created_at: "",
-  bio: "",
-  avatar_url: "",
-  bg_img_url: "",
-  followers: 0,
-  followings: 0,
-  is_following: false,
-  posts: 0,
-  followers_ids: [],
-  followings_ids: [],
-  is_online: false,
-  updated_at: 0,
-};
-

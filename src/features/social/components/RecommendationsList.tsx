@@ -7,7 +7,7 @@ import { PressableScale } from "react-native-pressable-scale";
 import { createAnimatedComponent } from "react-native-reanimated";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { Image, useImage } from "expo-image";
-import { useUserRecommendations } from "@/src/rt_client/managers/recommendations_manager";
+import { useUserRecommendations } from "@/src/rt_client/src/managers/recommendations_manager";
 import AnimatedFastImage from "@/src/components/ui/animated-fast-image";
 
 type RecommendedBy_T = {

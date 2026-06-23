@@ -7,7 +7,7 @@ import ProfilePhotoModal from "./ProfilePhotoModal";
 import { PressableScale } from "react-native-pressable-scale";
 import { Image } from "expo-image";
 import AnimatedFastImage from "@/src/components/ui/animated-fast-image";
-import { useUserStatus } from "@/src/rt_client/managers/users_manager";
+import { useUserStatus } from "@/src/rt_client/src/managers/users_manager";
 import AnimatedFastText from "@/src/components/ui/animated-fast-text";
 
 type Props = {

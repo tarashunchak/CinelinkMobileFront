@@ -1,10 +1,11 @@
 import { API_URL } from "@/api/API_CONFIG";
-import { UserID, MovieID } from "../models/models";
+import { MovieID } from "../models/models";
 import { create } from "zustand";
 import { EntityManager } from "./base_class";
 import { useEffect } from "react";
 import { useShallow } from "zustand/react/shallow";
 import { jwtHeaders } from "@/utils/utils";
+import { RTCLIENT_CONFIG } from "../../config";
 
 type Movie_T = {
   id: number;
@@ -45,7 +46,6 @@ export const useMovieStore = create<MovieState>((set) => ({
 
 export class MoviesManager extends EntityManager<Movie_T> {
   public static instance: MoviesManager;
-  private currUserID: number = 0;
 
   public static getInstance(): MoviesManager {
     if(!MoviesManager.instance)
@@ -53,16 +53,17 @@ export class MoviesManager extends EntityManager<Movie_T> {
     return MoviesManager.instance
   };
 
-  public init({userID, watchlistID}: {userID: number | null, watchlistID: number | null}){
-    if(userID)
-      this.currUserID = userID;
+  public init({watchlistID}: {watchlistID: number | null}){
+    if(!RTCLIENT_CONFIG.CURR_USER_ID_SELECTOR) 
+      throw new Error("CURR_USER_ID_SELECTOR is not specified!");
     if(watchlistID)
       this.load(watchlistID);
   };
 
   public async load(movieID: MovieID = 0) {
+    const currUserID = RTCLIENT_CONFIG.CURR_USER_ID_SELECTOR();
     if(!movieID){
-      const resp = await fetch(`${API_URL}/users/${this.currUserID}/movies`, {
+      const resp = await fetch(`${API_URL}/users/${currUserID}/movies`, {
         headers: jwtHeaders(undefined),
       });
       const data = await resp.json();

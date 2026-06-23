@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { UsersManager } from "./users_manager";
 import { timestamp } from "@/src/features/chats/utils";
 import { ChatsManager } from "./chats_manager";
-import { RTCLIENT_CONFIG } from "./../config";
+import { RTCLIENT_CONFIG } from "../../config";
 
 type Message_T = {
   user_id: number;
@@ -98,6 +98,8 @@ export class MessagesManager extends EntityManager<Message_T> {
   };
 
   public add(id: number, item: Message_T): void {
+    if(useMessageStore.getState().messages?.[item.chat_id]?.find(value => value.message_id === item.message_id))
+      return;
     useMessageStore.getState()._add(id, item)
     ChatsManager.getInstance().setLastMessage(id, item)
   };

@@ -2,23 +2,12 @@ import { textStyle } from "@/styles/textStyles";
 import React, { memo, useCallback, useEffect, useMemo } from "react";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { FlatList, StyleSheet } from "react-native";
-import { UsersManager, useUser, useUsers } from "@/src/rt_client/managers/users_manager";
+import { UsersManager, useUser, useUsers } from "@/src/rt_client/src/managers/users_manager";
 import Spacer from "@/src/components/ui/spacer";
 import  UserCard from "@/src/components/user-card";
 import { getCurrentUserID } from "@/utils/utils";
 import { useRouter } from "expo-router";
-import { UserID } from "@/src/rt_client/models/models";
-import { AnimatedFlashList } from "@shopify/flash-list";
-import Animated from "react-native-reanimated";
-
-interface Props {
-  user_id: number;
-  username: string;
-  first_name: string | undefined;
-  last_name: string | undefined;
-  avatar_url: string | undefined;
-  is_online: boolean;
-}
+import { UserID } from "@/src/rt_client/src/models/models";
 
 function FriendsList() {
   const userProfile = useUser(getCurrentUserID());
@@ -33,7 +22,7 @@ function FriendsList() {
   }, []);
 
   const friendsIds = useMemo(()=>
-    Array.from(new Set([...(userProfile?.followers_id || []), ...(userProfile?.followings_ids || [])])?.values()),
+    Array.from(new Set([...(userProfile?.followers_ids || []), ...(userProfile?.followings_ids || [])])?.values()),
   [userProfile?.followers_ids, userProfile?.followings_ids]);
 
   const friends = useMemo(()=>{

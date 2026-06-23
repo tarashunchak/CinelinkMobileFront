@@ -3,7 +3,7 @@ import { View, FlatList, StyleSheet } from "react-native";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen"
 import WatchlistCard from "@/src/features/library/components/WatchlistCard";
 import LibraryHeader from "@/src/features/library/components/LibraryHeader";
-import { useUserWatchlists } from "@/src/rt_client/managers/watchlists_manager";
+import { useUserWatchlists } from "@/src/rt_client/src/managers/watchlists_manager";
 import Spacer from "@/src/components/ui/spacer";
 import { FlashList } from "@shopify/flash-list";
 

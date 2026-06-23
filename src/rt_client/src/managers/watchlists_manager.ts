@@ -3,7 +3,7 @@ import { create } from "zustand";
 import { EntityManager } from "./base_class";
 import { useEffect } from "react";
 import { useShallow } from "zustand/react/shallow";
-import { RTCLIENT_CONFIG } from "./../config";
+import { RTCLIENT_CONFIG } from "../../config";
 
 type Watchlist_T = {
   id: number;

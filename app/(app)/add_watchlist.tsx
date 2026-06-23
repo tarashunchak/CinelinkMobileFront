@@ -5,19 +5,20 @@ import { useBlurStore } from "@/src/components/ui/screen-background";
 import { textStyle } from "@/styles/textStyles";
 import { BlurTargetView, BlurView } from "expo-blur";
 import { Image } from "expo-image";
-import { router, useNavigation } from "expo-router";
-import React, { useEffect, useRef, useState } from "react";
+import { router } from "expo-router";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { TextInput, View, Text, StyleSheet, Keyboard } from "react-native";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { PressableScale } from "react-native-pressable-scale";
 import { TouchableWithoutFeedback } from "@gorhom/bottom-sheet";
-import { WatchlistsManager } from "@/src/rt_client/managers/watchlists_manager";
+import { WatchlistsManager } from "@/src/rt_client/src/managers/watchlists_manager";
+import { getCurrentUserID } from "@/utils/utils";
 
 export default function AddWatchlist() {
-  const navigator = useNavigation();
   const inputRef = useRef(null);
   const [text, setText] = useState<string>("My Watchlist");
   const setBottomBarVisible = useBlurStore(state => state.setBottomBarVisible);
+  const currentUserID = getCurrentUserID();
 
   const ref = useRef<View | null>(null);
 
@@ -28,17 +29,27 @@ export default function AddWatchlist() {
 
     setBottomBarVisible(false);
 
-    return ()=> {
+    return () => {
       setBottomBarVisible(true);
     }
   }, []);
 
+  const handleCreateButtonPress = useCallback(async () => {
+    if (await CreateWatchlist(text)) {
+      WatchlistsManager.getInstance().load().then(() => {
+        router.back();
+      });
+    }
+  }, []);
+
+  const source = useMemo(()=>(
+    { uri: "https://i.pinimg.com/736x/16/47/66/164766dccc0a7083e1cd9e2167811026.jpg" }
+  ), [currentUserID]);
+
   return (
     <View style={StyleSheet.absoluteFill}>
       <BlurTargetView ref={ref} style={StyleSheet.absoluteFill}>
-        <Image style={StyleSheet.absoluteFill}
-          source={{ uri: "https://i.pinimg.com/736x/16/47/66/164766dccc0a7083e1cd9e2167811026.jpg" }}
-        />
+        <Image style={StyleSheet.absoluteFill} source={source} />
       </BlurTargetView>
       <BlurView
         style={StyleSheet.absoluteFill}
@@ -49,42 +60,37 @@ export default function AddWatchlist() {
         blurReductionFactor={5}
       />
       <TouchableWithoutFeedback style={StyleSheet.absoluteFill} onPress={Keyboard.dismiss}>
-      <HeaderContainer style={{ flex: 1, paddingHorizontal: "1%" }}>
-        <ReturnArrowButton />
-        <View style={{ height: hp(80), alignItems: "center", justifyContent: "center"}}>
-          <View style={{ gap: 30 }}>
-            <Text style={[textStyle.white36, { fontWeight: "bold", textAlign: "center" }]}>
-              Create your watchlist name
-            </Text>
-            <View>
-              <TextInput
-                ref={inputRef}
-                value={text}
-                onChangeText={setText}
-                placeholderTextColor={"#304732"}
-                style={[textStyle.white28, { textAlign: "center" }]}
-                selectTextOnFocus
-              />
-              <View style={styles.line} />
-            </View>
-            <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
-              <PressableScale style={styles.cancelBtn} onPress={router.back}>
-                <Text style={[textStyle.black22, {fontWeight: "bold"}]}>Cancel</Text>
-              </PressableScale>
-              <PressableScale style={styles.createBtn}
-                onPress={async () => {
-                  if (await CreateWatchlist(text)){
-                    WatchlistsManager.getInstance().load();
-                    router.back();
-                  }
-                }}>
-                <Text style={[textStyle.white22, {fontWeight: "bold"}]}>Create</Text>
-              </PressableScale>
+        <HeaderContainer style={{ flex: 1, paddingHorizontal: "1%" }}>
+          <ReturnArrowButton />
+          <View style={{ height: hp(80), alignItems: "center", justifyContent: "center" }}>
+            <View style={{ gap: 30 }}>
+              <Text style={[textStyle.white36, { fontWeight: "bold", textAlign: "center" }]}>
+                Create your watchlist name
+              </Text>
+              <View>
+                <TextInput
+                  ref={inputRef}
+                  value={text}
+                  onChangeText={setText}
+                  placeholderTextColor={"#304732"}
+                  style={[textStyle.white28, { textAlign: "center" }]}
+                  selectTextOnFocus
+                />
+                <View style={styles.line} />
+              </View>
+              <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
+                <PressableScale style={styles.cancelBtn} onPress={router.back}>
+                  <Text style={[textStyle.black22, { fontWeight: "bold" }]}>Cancel</Text>
+                </PressableScale>
+                <PressableScale style={styles.createBtn}
+                  onPress={handleCreateButtonPress}>
+                  <Text style={[textStyle.white22, { fontWeight: "bold" }]}>Create</Text>
+                </PressableScale>
+              </View>
             </View>
           </View>
-        </View>
-      </HeaderContainer>
-</TouchableWithoutFeedback>
+        </HeaderContainer>
+      </TouchableWithoutFeedback>
     </View>
   );
 };

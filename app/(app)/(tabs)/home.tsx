@@ -1,23 +1,21 @@
 import GenresList from "@/src/components/ui/genres-list";
 import { textStyle } from "@/styles/textStyles";
-import React, { memo, useCallback, useEffect, useState } from "react";
+import React, { memo, useCallback, useEffect, useMemo, useState } from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import HorizontalMoviesList from "@/src/components/ui/horizontal-movies-list";
 import MovieOfTheDay from "@/src/features/home/components/MovieOfTheDay";
 import { LoadHomeCached, useHomeStore } from "@/src/features/home/cache";
-import { heightPercentageToDP as hp, widthPercentageToDP } from "react-native-responsive-screen";
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import UsersCarousel from "@/src/components/ui/users-carousel";
 
 const SECTIONS = [
-  { type: "Header" },
-  { type: "Movie of the day" },
   { type: "Now in Cinemas" },
-  { type: "Tranding" },
+  { type: "Trending" },
   { type: "Genres" },
   { type: "Following suggestions" },
 ];
 
-function HomePageScreen_() {
+function HomePageScreen() {
   useEffect(() => {
     async function load() {
       await LoadHomeCached();
@@ -32,65 +30,66 @@ function HomePageScreen_() {
   );
 };
 
-export default function HomePageScreen(){
+function HomeContent() {
   const [selectedGenre, setSelectedGenre] = useState<number>(0);
-  useEffect(() => {
-    async function load() {
-      await LoadHomeCached();
-    };
-    load();
-  }, []);
   const movies = useHomeStore(s => s.movies);
 
   const nowPlaying = movies?.now_playing;
   const popular = movies?.popular;
 
+  const trendingSection = useMemo(() => (
+    <>
+      <Text style={[textStyle.white22, styles.titleText]}>Trending</Text>
+      <HorizontalMoviesList
+        moviesList={popular}
+        inCinemas={false}
+      />
+    </>
+  ), [popular]);
+
+  const nowInCinemasSection = useMemo(() => (
+    <>
+      <Text style={[textStyle.white22, styles.titleText]}>Now in Cinemas</Text>
+      <HorizontalMoviesList
+        moviesList={nowPlaying}
+        inCinemas={true}
+      />
+    </>
+  ), [nowPlaying]);
+
   const renderItem = useCallback(({ item }: any) => {
     switch (item.type) {
       case "Now in Cinemas":
-        return (
-          <>
-            <Text style={[textStyle.white22, styles.titleText]}>Now in Cinemas</Text>
-            <HorizontalMoviesList
-              moviesList={nowPlaying}
-              inCinemas={true}
-            />
-          </>
-        )
-      case "Tranding":
-        return (<>
-          <Text style={[textStyle.white22, styles.titleText]}>Trending</Text>
-          <HorizontalMoviesList
-            moviesList={popular}
-            inCinemas={false}
-          />
-        </>)
+        return nowInCinemasSection;
+      case "Trending":
+        return trendingSection;
       case "Genres":
         return (<>
           <Text style={[textStyle.white22, styles.titleText]}>Genres</Text>
           <GenresList setSelectedGenre={setSelectedGenre} />
         </>)
       case "Following suggestions":
-        return (<>
+        return (<View style={{marginTop: 0, paddinTop: 0,}}>
           <Text style={[textStyle.white22, styles.titleText]}>Following suggestions</Text>
           <UsersCarousel />
-        </>)
+        </View>)
     }
-  }, [])
+  }, [trendingSection, nowInCinemasSection]);
 
   return (
     <FlatList
       data={SECTIONS}
       keyExtractor={(_: any, index: number) => String(index)}
       renderItem={renderItem}
-      ListHeaderComponent={<MovieOfTheDay/>}
-      contentContainerStyle={{ paddingBottom: hp(10) }}
+      ListHeaderComponent={<MovieOfTheDay />}
+      contentContainerStyle={{ paddingBottom: hp(9) }}
       nestedScrollEnabled
-      windowSize={5}
       showsVerticalScrollIndicator={false}
     />
   )
 };
+
+export default memo(HomePageScreen);
 
 const styles = StyleSheet.create({
   scrollView: {
@@ -98,16 +97,7 @@ const styles = StyleSheet.create({
     paddingBottom: hp(9),
   },
   titleText: {
-    marginTop: "5%",
-  },
-  header: {
-    width: widthPercentageToDP(100),
-    //backgroundColor: "black", 
-    backgroundColor: "#0C0C0C",
-    top: 0, left: 0, right: 0,
-    position: "absolute", zIndex: 3,
-    paddingBottom: "2%",
-    elevation: 10,
+    marginTop: hp("2.5%"),
   },
   logo: {
     height: 40,

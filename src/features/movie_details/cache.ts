@@ -11,10 +11,10 @@ const TTL = 60 * 1000 * 5;
 
 export async function GetMovieDetailsCached(movieID: number){
   const cached = movieCache.get(movieID);
-  console.warn("Cached movie: ", cached);
+  //console.warn("Cached movie: ", cached);
 
   if(cached && cached.expiresAt > Date.now()) {
-    console.warn("Get movie details from cache: ", movieID);
+    //console.warn("Get movie details from cache: ", movieID);
     await Image.prefetch(`https://image.tmdb.org/t/p/w500${cached.data.backdropPath}`);
     return cached.data;
   };
@@ -34,7 +34,7 @@ export async function GetMovieDetailsCached(movieID: number){
       };
 
   if(formattedData) {
-    console.warn("Get movie details from api: ", movieID);
+    //console.warn("Get movie details from api: ", movieID);
     movieCache.set(movieID, {
       data: formattedData,
       expiresAt: Date.now() + TTL,

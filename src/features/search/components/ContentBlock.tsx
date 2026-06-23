@@ -8,7 +8,7 @@ import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import CreditCard from "./CreditCard";
 import { textStyle } from "@/styles/textStyles";
 import Spacer from "@/src/components/ui/spacer";
-import { UserID } from "@/src/rt_client/models/models";
+import { UserID } from "@/src/rt_client/src/models/models";
 import { useRouter } from "expo-router";
 
 interface Props {

@@ -1,10 +1,10 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
+//import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export class MessagesQueue {
   private queue: any[] = new Array();
 
   public push(item: any) {
-    AsyncStorage.setItem("", "")
+    //AsyncStorage.setItem("", "")
     this.queue.push(item);
   };
 

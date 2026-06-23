@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { ChatMessage } from "./message_storage/message_storage";
+import { ChatMessage } from "./src/message_storage/message_storage";
 
 interface Chat {
   chat_id: number;

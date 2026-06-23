@@ -40,8 +40,6 @@ export class WSConnector {
   }
 
   public connect(url: string) {
-    //console.warn("WS URL: ", this.url);
-    //this.ws = new WebSocket(`ws://192.168.0.187:8080/ws/2`);
     if(url?.length === 0) {
       throw new Error("INVALID WebSocket URL");
     };

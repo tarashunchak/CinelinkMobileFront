@@ -1,9 +1,8 @@
 import { API_URL } from "@/api/API_CONFIG";
-import { CURRENT_USER } from "../currentUser";
-import { WatchlistItem_T, WatchlistCard } from "./types";
+import { WatchlistItem_T } from "./types";
 import { useAuthStore } from "@/local_storage/user/asyncStorage/store";
 import { jwtHeaders } from "@/utils/utils";
-import { WatchlistsManager } from "@/src/rt_client/managers/watchlists_manager";
+import { WatchlistsManager } from "@/src/rt_client/src/managers/watchlists_manager";
 
 export async function AddWatchlistItem(item: WatchlistItem_T) {
   try{
@@ -22,7 +21,7 @@ export async function AddWatchlistItem(item: WatchlistItem_T) {
   }finally{
     WatchlistsManager.getInstance().load();
   }
-  console.log("AddWatchlistItem");
+  //console.log("AddWatchlistItem");
 };
 
 export async function GetUserWatchlists(userID: number) {
@@ -42,9 +41,8 @@ export async function GetWatchlistMovies(watchlistID: number) {
 };
 
 export async function CreateWatchlist(name: string): Promise<boolean> {
-  const userID = useAuthStore.getState().user?.user_id;
   const jwt = useAuthStore.getState().user?.jwt;
-  console.log("Current user: ", userID);
+  //console.log("Current user: ", userID);
   const response = await fetch(`${API_URL}/users/watchlists`,
     {
       method: "POST",
@@ -52,8 +50,8 @@ export async function CreateWatchlist(name: string): Promise<boolean> {
       body: JSON.stringify({ name }),
     }
   );
-  console.warn("WATCHLIST RETURN DATA 1: ", response)
+  //console.warn("WATCHLIST RETURN DATA 1: ", response)
   const data = await response.json();
-  console.warn("WATCHLIST RETURN DATA 2: ", data)
+  //console.warn("WATCHLIST RETURN DATA 2: ", data)
   return data?.status == 200;
 }

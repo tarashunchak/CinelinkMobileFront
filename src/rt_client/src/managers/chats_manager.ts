@@ -2,11 +2,9 @@ import { ChatID, UserID } from "../models/models";
 import { create } from "zustand";
 import { EntityManager } from "./base_class";
 import { useEffect, useMemo } from "react";
-import { useShallow } from "zustand/react/shallow";
 import { timestamp } from "@/src/features/chats/utils";
-import { UsersManager } from "./users_manager";
-import { getCurrentUser, getCurrentUserID } from "@/utils/utils";
-import {RTCLIENT_CONFIG} from "./../config";
+import { UsersManager, useUser, useUserStore } from "./users_manager";
+import {RTCLIENT_CONFIG} from "../../config";
 
 export type Chat_T = {
   chat_id: number;
@@ -39,24 +37,6 @@ interface ChatState {
   _remove: (chatID: ChatID) => void;
   _update: (chatID: ChatID, data: Partial<Chat_T>) => void;
   _clear: () => void;
-};
-
-const initialState = {
-  chats: {},
-  orderedChatIDs: [],
-  typingStatus: {},
-  lastMessages: {},
-  lastSeenMessagesIDs: {},
-  /*_setLastMessage: () => {},
-  _setTypingStatus: () => {},
-  _setLastSeenMessagesIDs: () => {},
-  _setManyLastSeenMessagesIDs: () => {},
-  _pushChatID: () => {},
-  _add: () => {},
-  _addMany: () => {},
-  _remove: () => {},
-  _update: () => {},
-  _clear: ()=>{},*/
 };
 
 export const useChatStore = create<ChatState>((set) => ({
@@ -98,7 +78,6 @@ export const useChatStore = create<ChatState>((set) => ({
     return { chats: remainingChats }
   }),
   _update: (chatID, data) => set((s) => ({
-
   })),
   _clear: () => set(() => ({
     chats: {},
@@ -111,7 +90,6 @@ export const useChatStore = create<ChatState>((set) => ({
 
 export class ChatsManager extends EntityManager<Chat_T> {
   private static instance: ChatsManager;
-  private currUserID: number = 0;
   private isLoading: boolean = false;
 
   constructor() {
@@ -124,8 +102,9 @@ export class ChatsManager extends EntityManager<Chat_T> {
     return ChatsManager.instance;
   };
 
-  public init(userID: UserID) {
-    this.currUserID = userID;
+  public init() {
+    if(!RTCLIENT_CONFIG.CURR_USER_ID_SELECTOR) 
+      throw new Error("CURR_USER_ID_SELECTOR is not specified!");
     this.loadInit();
   };
 
@@ -146,7 +125,7 @@ export class ChatsManager extends EntityManager<Chat_T> {
   public async load(chatID: ChatID) {
     if (this.isLoading) return;
     try {
-      if (chatID && this.currUserID) {
+      if (chatID && RTCLIENT_CONFIG.CURR_USER_ID_SELECTOR()) {
         const resp = await fetch(`${RTCLIENT_CONFIG.API_URL}/chats/${chatID}`, {
           headers: RTCLIENT_CONFIG.JWT_SELECTOR(undefined)
         });
@@ -258,8 +237,8 @@ export function useLastChatMessage(chatID: ChatID): any {
   if (!message || !message.message)
     return "";
 
-  const user = UsersManager.getInstance().get(message?.user_id);
-  const username = getCurrentUserID() === message?.user_id ? "You" : user?.username;
+  const user = useUser(message.user_id);
+  const username = RTCLIENT_CONFIG.CURR_USER_ID_SELECTOR() === message?.user_id ? "You" : user?.username;
   return {
     text: `${username}: ${message?.message}`,
     time: timestamp(new Date(message?.timestamp)),

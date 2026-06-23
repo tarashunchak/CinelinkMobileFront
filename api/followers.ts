@@ -1,6 +1,6 @@
 import { API_URL } from "@/api/API_CONFIG";
 import { useAuthStore } from "@/local_storage/user/asyncStorage/store";
-import { UsersManager } from "@/src/rt_client/managers/users_manager";
+import { UsersManager } from "@/src/rt_client/src/managers/users_manager";
 import { getCurrentUserID, jwtHeaders } from "@/utils/utils";
 
 export async function GetUserFollowers(userID: number): Promise<any> {

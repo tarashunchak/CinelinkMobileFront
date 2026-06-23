@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { ActionButton } from "./ActionButton";
 import { UserProfile_T } from "../types";
@@ -9,6 +9,7 @@ import { Image } from "expo-image";
 import AnimatedFastImage from "@/src/components/ui/animated-fast-image";
 import { useUserStatus } from "@/src/rt_client/src/managers/users_manager";
 import AnimatedFastText from "@/src/components/ui/animated-fast-text";
+import { useEditMode } from "../../chats/hooks";
 
 type Props = {
   isLoading: boolean;
@@ -35,11 +36,11 @@ export default function ProfileMain({
 
   const fullName = useMemo(() => {
     return user?.first_name ? `${user?.first_name} ${user?.last_name}` : `User #${user?.user_id}`;
-  }, [isLoading, user]);
+  }, [isLoading, user?.first_name, user?.last_name, user?.user_id]);
 
   const username: string = useMemo(()=>{
     return user?.username ?? "********";
-  }, [isLoading, user?.user_id]);
+  }, [isLoading, user?.username]);
 
   const fetchJoinedAt = useMemo(() => {
     let date:any = Date.now();
@@ -47,7 +48,7 @@ export default function ProfileMain({
       date = new Date(user?.created_at);
     return new Intl.DateTimeFormat('en-US').format(date)
     //return ""
-  }, [user?.created_at, user?.user_id]);
+  }, [user?.created_at]);
 
 
   return (

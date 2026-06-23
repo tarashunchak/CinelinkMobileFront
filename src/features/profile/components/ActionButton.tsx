@@ -11,11 +11,11 @@ import { heightPercentageToDP, widthPercentageToDP } from "react-native-responsi
 interface Props {
   isLoading?: boolean;
   isCurrentUser?: boolean;
-  isFollowed?: boolean;
+  isFollowed: boolean;
   onEdit: () => void;
   onToggleFollow: () => void;
   onChat: () => void;
-  bgUrl: string;
+  bgUrl?: string;
 };
 
 export function ActionButton({
@@ -32,7 +32,7 @@ export function ActionButton({
     if (isLoading) return "* * *";
     else if (isCurrentUser || isCurrentUser === undefined) return "Edit";
     else if (isCurrentUser === false) return isFollowed ? "Unfollow" : "Follow";
-  }, [isCurrentUser, isFollowed]);
+  }, [isCurrentUser, isFollowed, isLoading ]);
 
   return (
     <View style={{ flexDirection: "row", gap: 10 }}>

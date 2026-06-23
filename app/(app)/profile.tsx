@@ -8,7 +8,7 @@ import ProfileMain from "@/src/features/profile/components/ProfileMain";
 import { FollowUser, UnfollowUser } from "@/api/followers/followers";
 import { GetDirectChatID } from "@/api/chats";
 import UserStats from "@/src/features/profile/components/Stats";
-import { UsersManager, useUser, useUserStore } from "@/src/rt_client/src/managers/users_manager";
+import { UsersManager, useUser } from "@/src/rt_client/src/managers/users_manager";
 import { useFollowers, useFollowings } from "@/src/features/profile/hooks/useFollowers";
 import FriendCard from "@/src/components/friend-card";
 import Spacer from "@/src/components/ui/spacer";
@@ -24,13 +24,12 @@ function UserProfileScreen({ isFromTab = false }: { isFromTab: boolean }) {
   const params: Params = useLocalSearchParams();
   const userID: number = params.userID ?? getCurrentUserID();
   const user = useUser(userID);
+  const currentUserID = getCurrentUserID();
   const isCurrUser = isCurrentUser(userID);
   const [list, setList] = useState<string>("Followers");
   const [chatID, setChatID] = useState<number>(0);
   const followers = useFollowers(userID);
   const followings = useFollowings(userID);
-  //const followers = user?.followers_ids;
-  //const followings = user?.followings_ids;
   const posts: any = [];
 
   useEffect(() => {
@@ -38,7 +37,6 @@ function UserProfileScreen({ isFromTab = false }: { isFromTab: boolean }) {
       if (!isCurrUser)
         await GetDirectChatID(userID).then(setChatID);
     };
-    //console.warn("IsFromTab: ", isFromTab, " Type: ", typeof isFromTab);
     load();
   }, []);
 
@@ -78,17 +76,11 @@ function UserProfileScreen({ isFromTab = false }: { isFromTab: boolean }) {
   }, []);
 
   const onToggleFollow = useCallback(async () => {
-    const currentUserID = getCurrentUserID();
-    if (user?.is_following)
-      await UnfollowUser(userID).then(() => {
-        UsersManager.getInstance().load(userID);
-        UsersManager.getInstance().load(currentUserID);
-      });
-    else
-      await FollowUser(userID).then(() => {
-        UsersManager.getInstance().load(userID);
-        UsersManager.getInstance().load(currentUserID);
-      });
+    if (user?.is_following) {
+      await UnfollowUser(userID);
+    } else {
+      await FollowUser(userID)
+    };
   }, []);
 
   const onChat = useCallback(async () => {
@@ -108,11 +100,11 @@ function UserProfileScreen({ isFromTab = false }: { isFromTab: boolean }) {
       case "Followers":
         return <FriendCard user={item} onFollowingQuit={undefined} onMessage={onMessage} onPress={onFriendPress} />;
       case "Followings":
-        return <FriendCard user={item} onFollowingQuit={(id: any)=>{}} onMessage={onMessage} onPress={onFriendPress} />;
+        return <FriendCard user={item} onFollowingQuit={(id: any) => { }} onMessage={onMessage} onPress={onFriendPress} />;
       case "Posts":
         return null;
     };
-  }, [list]);
+  }, [list, onMessage, onFriendPress, user]);
 
   const header = useMemo(() =>
     <View>
@@ -127,7 +119,13 @@ function UserProfileScreen({ isFromTab = false }: { isFromTab: boolean }) {
         isCurrentUser={isCurrUser}
         isFollowed={user?.is_following}
         onEdit={() => { }}
-        onToggleFollow={onToggleFollow}
+        onToggleFollow={async () => {
+          if (user?.is_following) {
+            await UnfollowUser(userID);
+          } else {
+            await FollowUser(userID)
+          };
+        }}
         onChat={onChat}
       />
       <UserStats
@@ -138,7 +136,7 @@ function UserProfileScreen({ isFromTab = false }: { isFromTab: boolean }) {
       />
       <View style={styles.line} />
     </View>
-    , [user]);
+    , [user, user?.is_following, onToggleFollow, onChat, isCurrUser]);
 
   return (
     <FlatList

@@ -57,7 +57,7 @@ export const useUserStore = create<UserState>((set) => ({
   _add: (userID, user) => set((s) => ({
     userProfiles: { 
       ...s.userProfiles, 
-      [userID]: user }
+      [userID]: {...user, updated_at: Date.now()} }
   })),
   _addUserProfile: (userID, user) => set((s) => ({
     userProfiles: { ...s.userProfiles, [userID]: user }
@@ -114,7 +114,6 @@ export class UsersManager extends EntityManager<UserProfile_T> {
         map.set(user.user_id, user);
         statuses.set(user.user_id, user.is_online);
         //console.log("user ", user?.user_id, " is online: ", user.is_online);
-        user.updated_at = Date.now();
       });
 
       this.addMany(map);

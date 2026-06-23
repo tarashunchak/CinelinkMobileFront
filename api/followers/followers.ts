@@ -1,6 +1,7 @@
 import { API_URL } from "@/api/API_CONFIG";
 import { useAuthStore } from "@/local_storage/user/asyncStorage/store";
-import { jwtHeaders } from "@/utils/utils";
+import { UsersManager } from "@/src/rt_client/src/managers/users_manager";
+import { getCurrentUserID, jwtHeaders } from "@/utils/utils";
 
 export async function GetUserFollowers(userID: number) {
   console.log("USER ID followers: ", userID)
@@ -17,7 +18,7 @@ export async function GetUserFollowings(userID: number) {
 };
 
 export async function FollowUser(userID: number) {
-  console.log("USER ID following: ", userID)
+  //console.log("USER ID following: ", userID)
   const response = await fetch(`${API_URL}/users/${userID}/followers`, {
     method: "POST",
     headers: { 
@@ -27,6 +28,8 @@ export async function FollowUser(userID: number) {
     body: JSON.stringify({ follower_id: useAuthStore.getState().user?.user_id })
   })
   const data = await response.json();
+  await UsersManager.getInstance().load(userID);
+  await UsersManager.getInstance().load(getCurrentUserID());
   return data?.status === 200;
 };
 
@@ -36,6 +39,9 @@ export async function UnfollowUser(userID: number) {
     method: "DELETE",
     headers: jwtHeaders(jwt)
   })
-  const data = await response.json();
-  return data.status == 200;
+  const data = await response.json().finally(()=>{
+    UsersManager.getInstance().load(userID);
+    UsersManager.getInstance().load(getCurrentUserID());
+  });
+  return data.status === 200;
 };

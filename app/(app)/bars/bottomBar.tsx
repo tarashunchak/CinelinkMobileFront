@@ -154,21 +154,21 @@ const Indicator = ({ x }: any) => {
   )
 
 };
-  /*const scale = useDerivedValue(() => {
-    //return withSpring(x.value === 0)
-  });
+/*const scale = useDerivedValue(() => {
+  //return withSpring(x.value === 0)
+});
 
-  const matrix = useDerivedValue(() => {
-    const m3 = Skia.Matrix();
-    m3.translate(x.value, 0)
-    return m3;
-  });*/
-  /*const dynamicBase = useDerivedValue(() => {
-    return rrect(rect(x.value, 1, indicatorWidth, 52), 24, 24);
-  });
-  const dynamicStroke = useDerivedValue(() => {
-    return rrect(rect(x.value, 1, indicatorWidth, 52), 24, 24);
-  });*/
+const matrix = useDerivedValue(() => {
+  const m3 = Skia.Matrix();
+  m3.translate(x.value, 0)
+  return m3;
+});*/
+/*const dynamicBase = useDerivedValue(() => {
+  return rrect(rect(x.value, 1, indicatorWidth, 52), 24, 24);
+});
+const dynamicStroke = useDerivedValue(() => {
+  return rrect(rect(x.value, 1, indicatorWidth, 52), 24, 24);
+});*/
 
 const SkiaBottomBar = memo(({ x }: any) => {
 
@@ -204,17 +204,17 @@ function BottomBar() {
 
   const insets = useSafeAreaInsets();
 
-  useEffect(()=>{
-    const route = segments[segments.length-1] || "home";
+  useEffect(() => {
+    const route = segments[segments.length - 1] || "home";
     const targetX = TAB_OFFSET_X[`/${route}`];
-    if(targetX !== undefined)
+    if (targetX !== undefined)
       tabX.value = withSpring(targetX, SPRING_CONFIG);
   }, [segments])
 
   return (
     <View style={[styles_.view, { bottom: insets.bottom || wp(2) }]}>
       {isReadyToBlur && <BlurView
-        intensity={30}
+        intensity={20}
         style={StyleSheet.absoluteFill}
         blurTarget={blurTarget}
         blurMethod="dimezisBlurView"

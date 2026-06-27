@@ -1,4 +1,5 @@
 import AnimatedFastImage from "@/src/components/ui/animated-fast-image";
+import CircleCheckbox from "@/src/components/ui/circle-checkbox";
 import { textStyle } from "@/styles/textStyles";
 import { Image } from "expo-image";
 import React, { useState, useMemo } from "react";
@@ -14,26 +15,36 @@ export default function WatchlistCard({ watchlist, onPick }: { watchlist: any, o
     else return notPicked;
   }, [status]);*/
 
+  const toggleStyles = useMemo(() => ({
+    backgroundColor: (status ? "rgba(255, 255, 255, 0.1)" : "transparent")
+  }), [status]);
+
   return (
-    <PressableScale style={[styles.view, {backgroundColor: (status ? "rgba(255, 255, 255, 0.2)" : "")}]} onPress={() => {
+    <PressableScale style={[styles.view, toggleStyles]} onPress={() => {
       const newStatus = !status;
       setStatus(newStatus)
       onPick(watchlist?.id, newStatus);
     }}>
       <View style={styles.leftContainer}>
-        <Image
-          source={{ uri: watchlist?.fg_img_url }}
-          cachePolicy="memory"
-          style={styles.img}
-        />
-        <View>
-          <Text style={textStyle.white20}>
-            {watchlist.name}
-          </Text>
-          <Text style={textStyle.gray18}>
-            {watchlist.description}
-          </Text>
+        <View style={{
+          flexDirection: "row",
+          gap: 10,
+        }}>
+          <Image
+            source={{ uri: watchlist?.fg_img_url }}
+            cachePolicy="memory"
+            style={styles.img}
+          />
+          <View>
+            <Text style={textStyle.white20}>
+              {watchlist.name}
+            </Text>
+            <Text style={textStyle.gray18}>
+              {watchlist.description}
+            </Text>
+          </View>
         </View>
+        <CircleCheckbox onPress={() => { }} size={20} state={status} />
       </View>
     </PressableScale>
   );
@@ -44,22 +55,27 @@ const styles = StyleSheet.create({
     minHeight: 44,
     maxHeight: 64,
     //width: wp(27),
-    borderRadius: 8,
+    //borderRadius: 8,
     //opacity: 0.4,
     backgroundColor: "rgba(255, 255, 255, 0.03)",
-    width: wp(98),
+    width: wp(100),
     alignItems: "center",
     flexDirection: "row",
     padding: "1%",
+    paddingHorizontal: "2%",
   },
   img: {
     height: "100%",
     aspectRatio: 1,
-    borderRadius: 8,
+    borderWidth: 0.5,
+    borderColor: "#ffffff2f",
   },
   leftContainer: {
     flexDirection: "row",
-    gap: 10,
+    //gap: 10,
+    alignItems: "center",
+    justifyContent: "space-between",
+    width: "100%",
   },
 });
 
@@ -68,9 +84,9 @@ const picked = StyleSheet.create({
     height: wp(27),
     width: wp(27),
     margin: wp(6.3333 / 2),
-    borderRadius: 10,
+    //borderRadius: 10,
     borderColor: "#9090900f",
-    borderWidth: 2,
+    borderWidth: 1,
     padding: 4,
   },
   img: {

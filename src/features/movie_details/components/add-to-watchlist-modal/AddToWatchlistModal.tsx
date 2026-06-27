@@ -1,12 +1,12 @@
 import React, { useState, forwardRef, useImperativeHandle, useRef, memo, useCallback, useMemo } from "react";
-import BottomSheet, { BottomSheetBackdrop, BottomSheetView} from "@gorhom/bottom-sheet";
+import BottomSheet, { BottomSheetBackdrop, BottomSheetView } from "@gorhom/bottom-sheet";
 import { View, StyleSheet, TextInput, Keyboard, Text } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import WatchlistCard from "./components/WatchlistCard";
 import { useBlurStore } from "@/src/components/ui/screen-background";
 import { textStyle } from "@/styles/textStyles";
 import { useUserWatchlists } from "@/src/rt_client/src/managers/watchlists_manager";
-import { heightPercentageToDP } from "react-native-responsive-screen";
+import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import { PressableScale } from "react-native-pressable-scale";
 import { router } from "expo-router";
 
@@ -36,8 +36,8 @@ const WatchlistSheet = forwardRef<WatchlistSheetRef, WatchlistSheetProps>(({ set
   const setBottomBarVisible = useBlurStore(state => state.setBottomBarVisible);
   const [query, setQuery] = useState<string>("");
 
-  const fetchedData = useMemo(()=>{
-    
+  const fetchedData = useMemo(() => {
+
   }, [query]);
 
   useImperativeHandle(ref, () => ({
@@ -58,7 +58,7 @@ const WatchlistSheet = forwardRef<WatchlistSheetRef, WatchlistSheetProps>(({ set
     }} />
   ), []);
 
-  const handleNewWatchlistPress = useCallback(()=>{
+  const handleNewWatchlistPress = useCallback(() => {
     router.push("/(app)/add_watchlist");
   }, []);
 
@@ -91,10 +91,11 @@ const WatchlistSheet = forwardRef<WatchlistSheetRef, WatchlistSheetProps>(({ set
       onClose={onClose}
       snapPoints={snapPoints}
       enablePanDownToClose
+      maxHeight={hp(90)}
       handleIndicatorStyle={styles.handleIndicator}
       handleStyle={styles.handle}
       containerStyle={[styles.container]}
-      backdropComponent={(props) =>
+      backdropComponent={(props: any) =>
         <BottomSheetBackdrop
           {...props}
           appearsOnIndex={0}
@@ -106,7 +107,7 @@ const WatchlistSheet = forwardRef<WatchlistSheetRef, WatchlistSheetProps>(({ set
     >
       <BottomSheetView
         style={{
-          maxHeight: heightPercentageToDP(90),
+          maxHeight: "100%",
           //backgroundColor: "#090405",
           backgroundColor: "#101010",
         }}>
@@ -122,11 +123,7 @@ const WatchlistSheet = forwardRef<WatchlistSheetRef, WatchlistSheetProps>(({ set
             </PressableScale>
           </View>
           <FlatList
-            contentContainerStyle={{
-              alignItems: "center",
-              paddingVertical: "1%",
-              gap: "1%",
-            }}
+            contentContainerStyle={styles.contentContainer}
             data={watchlists}
             keyExtractor={(item, index) => String(index)}
             renderItem={renderItem}
@@ -181,5 +178,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#222831",
     width: "100%",
     elevation: 5,
+  },
+  contentContainer: {
+    alignItems: "center",
+    paddingVertical: "1%",
+    paddingBottom: "5%",
+    //gap: "1%",
   },
 });

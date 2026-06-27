@@ -1,4 +1,4 @@
-import { MessagesQueue } from "../messages_queue/messages_queue";
+//import { MessagesQueue } from "../messages_queue/messages_queue";
 
 type MessageHandler = (message: any) => void;
 
@@ -28,7 +28,7 @@ export class WSConnector {
   private reconnectAttempts = 0;
   private maxReconnectAttempts = 5;
   private pingInterval: any;
-  private messagesQueue: MessagesQueue = new MessagesQueue();
+  //private messagesQueue: MessagesQueue = new MessagesQueue();
 
   constructor(
     private url: string,
@@ -40,7 +40,7 @@ export class WSConnector {
   }
 
   public connect(url: string) {
-    if(url?.length === 0) {
+    if (url?.length === 0) {
       throw new Error("INVALID WebSocket URL");
     };
     this.ws = new WebSocket(this.url);
@@ -48,9 +48,9 @@ export class WSConnector {
 
     this.ws.onopen = () => {
       console.warn("WS is open!!")
-      this.messagesQueue.flush().forEach((message) => {
+      /*this.messagesQueue.flush().forEach((message) => {
         this.send(message);
-      });
+      });*/
       this.reconnectAttempts = 0;
       this.startPing();
       this.onOpen();
@@ -94,7 +94,7 @@ export class WSConnector {
   };
 
   public send(data: WSMessage) {
-    this.messagesQueue.push(data);
+    //this.messagesQueue.push(data);
     if (this.ws?.readyState === WebSocket.OPEN) {
       this.ws?.send(JSON.stringify(data));
     } else {

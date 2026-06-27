@@ -3,7 +3,7 @@ import ChatsList from "@/src/features/social/components/DirectChatsList";
 import { RTClient } from "@/src/rt_client/rt_client";
 import { getCurrentUserID } from "@/utils/utils";
 import FriendsList from "@/src/features/social/components/FriendsList";
-import SocialPageTopBar from "@/src/features/social/components/TopBar";
+import SocialPageTopBar from "@/src/features/social/components/topBar";
 import RecommendationsList from "@/src/features/social/components/RecommendationsList";
 import HeaderContainer from "@/src/components/ui/header-container";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
